@@ -80,3 +80,19 @@ Decision: If Action Center cannot render the evidence packet clearly, use a Case
 Rationale: Demo legibility matters. The human reviewer must see evidence, agent output, policy decision, block reason, and allowed actions.
 
 Status: Accepted, pending validation.
+
+## D-010: Product Narrative Boundary
+
+Decision: Pitch this as a concrete telecom service-recovery solution whose architecture can generalize, not as a generic governance platform.
+
+Rationale: The data model contains reusable internal concepts, but the hackathon judging requires a real business problem. A generic platform pitch would conflict with the scope boundary and weaken business impact.
+
+Status: Accepted.
+
+## D-011: Override Persistence As Eval Requirement
+
+Decision: Eval scenarios must assert that raw agent recommendations and policy decisions persist as linked events, not only that the final route is correct.
+
+Rationale: The visible policy override is the central proof that agents advise while policy decides. An implementation that discards the raw recommendation can appear correct while failing the architecture.
+
+Status: Accepted.

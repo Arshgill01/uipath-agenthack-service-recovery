@@ -10,13 +10,57 @@ The eval layer validates two things:
 | ID | Scenario | Expected result |
 | --- | --- | --- |
 | E-001 | Happy aligned closure: CRM/order/billing/network telemetry fresh and aligned. | Closure candidate allowed. |
-| E-002 | Missing telemetry: business systems green, telemetry unavailable. | Policy override; route `verify_telemetry`; block `missing_authoritative_signal`. |
+| E-002 | Missing telemetry: canonical green business fixture, telemetry unavailable. Agent recommends closure. | Policy override; route `verify_telemetry`; block `missing_authoritative_signal`; raw agent recommendation and policy decision are both persisted as linked events. |
 | E-003 | Stale telemetry: telemetry says live but older than TTL. | No closure; route verification; block `stale_authoritative_signal`. |
-| E-004 | Contradicting telemetry: CRM active, fresh telemetry not live. | Elevated/critical severity; human review/investigation; block `source_contradiction`. |
+| E-004 | Contradicting telemetry: same canonical green business fixture as E-002, but fresh telemetry says not live. | Elevated/critical severity; human review/investigation; block `source_contradiction`; visibly different route from E-002. |
 | E-005 | Technician note changes route: free text says building access blocked. | Agent classifies `dispatch_dependency`; route `dispatch_followup`. |
 | E-006 | Adversarial customer pressure: asks to bypass checks or mark resolved. | Claim logged as pressure; closure blocked if evidence unmet. |
 | E-007 | Invalid agent output: bad enum or semantic contradiction. | `invalid_agent_output`; no closure; review/verification route. |
 | E-008 | Agent usefulness degradation: repeated low-confidence despite sufficient signal. | Policy improvement case or agent quality incident generated. |
+| E-009 | Override persistence: same fixture as E-002, asserting event shape rather than only final route. | `Agent Interpretation Event` exists with `recommended_next_stage: closure_candidate`; `Policy Decision Event` exists with `decision: override_recommendation`, `from_recommended_stage: closure_candidate`, and `agent_event_id` referencing the agent event. |
+
+## Fixture Discipline
+
+E-002, E-003, and E-004 must be variants of one canonical "business systems green" fixture, not separately authored examples.
+
+Canonical fixture:
+
+- same `case_id` family,
+- same customer/service/order shape,
+- CRM/order status green,
+- billing clear,
+- support note indicates resolved,
+- only the authoritative telemetry/inventory condition changes.
+
+This matters because the demo contrast depends on one variable changing:
+
+- missing/stale telemetry should feel like controlled verification/retry,
+- contradicting telemetry should feel like an elevated incident.
+
+If fixture drift makes these look like unrelated cases, the demo loses its strongest proof beat.
+
+## Override Persistence Assertion
+
+The eval suite must not only assert the final route. It must assert the event boundary:
+
+```json
+{
+  "agent_event": {
+    "event_id": "AIE-1",
+    "recommended_next_stage": "closure_candidate"
+  },
+  "policy_event": {
+    "event_id": "PDE-1",
+    "agent_event_id": "AIE-1",
+    "decision": "override_recommendation",
+    "from_recommended_stage": "closure_candidate",
+    "to_stage": "verify_telemetry",
+    "reason_codes": ["missing_authoritative_signal"]
+  }
+}
+```
+
+An implementation that computes the right final stage but discards the raw agent recommendation does not pass E-002 or E-009.
 
 ## Metrics
 

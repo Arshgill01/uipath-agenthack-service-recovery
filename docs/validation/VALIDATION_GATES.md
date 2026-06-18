@@ -2,6 +2,8 @@
 
 Do not scaffold major application code until hard gates are answered or explicitly waived.
 
+Current status: not run. Any implementation work before these gates must be treated as local/provisional and must not assume Maestro Case native state, Action Center rendering, or policy pinning behavior.
+
 ## Hard Gates
 
 These can force architecture changes.

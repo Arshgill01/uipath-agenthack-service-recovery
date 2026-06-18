@@ -21,6 +21,18 @@
 - Every telecom failure type.
 - Unnecessary UI polish outside demo-critical surfaces.
 
+## Pitch Boundary
+
+Say:
+
+> This is a concrete telecom service-recovery solution whose architecture can generalize to other high-risk case workflows.
+
+Do not say:
+
+> This is a general-purpose agent governance platform demonstrated with telecom.
+
+The implementation may contain generic-looking internal objects such as eval scenarios or policy improvement cases, but the product narrative must stay anchored in telecom service recovery, SLA/MTTR reduction, wrongful closure prevention, and auditability.
+
 ## Supported Failure Types First
 
 - missing telemetry,

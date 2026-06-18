@@ -6,7 +6,7 @@ Build core demo path 2B.
 
 ## Tasks
 
-- Set CRM active.
+- Use the same canonical "business systems green" fixture as Wave 17.
 - Set fresh telemetry not live or inventory mismatch.
 - Derive contradiction.
 - Escalate severity.
@@ -15,3 +15,4 @@ Build core demo path 2B.
 ## Exit Criteria
 
 - 2B visibly differs from 2A.
+- Difference is caused by authoritative contradiction, not fixture drift.

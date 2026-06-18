@@ -84,3 +84,5 @@ Do not start application code until these are answered or consciously waived:
 - Agent recommendation visible before policy override.
 
 See [docs/validation/VALIDATION_GATES.md](docs/validation/VALIDATION_GATES.md).
+
+Current status: these hard gates have not been run yet. The existing architecture and data model are provisional scaffolding, not verified UiPath platform facts.

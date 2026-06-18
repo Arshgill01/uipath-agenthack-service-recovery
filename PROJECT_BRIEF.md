@@ -4,6 +4,8 @@
 
 A UiPath Maestro Case workflow for telecom service recovery that prevents unsafe case closure when systems disagree, while using agents to interpret messy evidence and Test Cloud-style evals to keep the agent useful over time.
 
+This is a concrete telecom service-recovery solution. Its architecture is reusable, but the submission should not be pitched as a generic governance platform.
+
 ## Why This Exists
 
 Telecom service recovery breaks down when business systems say a service is active while the customer still lacks working service. A naive agent can make this worse by trusting the cleanest text field or closing a case based on CRM/order status. The project proves a safer pattern:
@@ -90,3 +92,16 @@ Secondary:
 - Full monitoring dashboard.
 - Full Test Cloud product.
 - Every telecom failure type.
+
+## Current Validation Status
+
+This repository currently contains scaffolding and planning documents. UiPath Labs hard gates have not been run yet.
+
+Before major application scaffolding, complete or explicitly waive:
+
+- Maestro Case state/audit reconstruction.
+- Policy version pinning.
+- Human evidence packet rendering.
+- Raw agent recommendation visibility before policy override.
+
+See [docs/validation/VALIDATION_GATES.md](docs/validation/VALIDATION_GATES.md).

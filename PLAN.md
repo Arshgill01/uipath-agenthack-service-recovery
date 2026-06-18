@@ -33,6 +33,14 @@ Create a working UiPath AgentHack submission that proves governed agentic servic
 
 Use [waves/00_WAVES_INDEX.md](waves/00_WAVES_INDEX.md). Do not skip validation waves unless explicitly documented.
 
+Immediate next work is validation, not product implementation:
+
+1. Wave 01: platform access and inventory.
+2. Wave 02: Maestro Case state/audit spike.
+3. Wave 03: policy version pinning spike.
+4. Wave 04: human evidence packet spike.
+5. Wave 05: raw agent recommendation before policy override.
+
 ## Current Highest-Risk Assumptions
 
 - Maestro Case native state/history may not be sufficient for one-view audit reconstruction.

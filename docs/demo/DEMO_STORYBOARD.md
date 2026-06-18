@@ -28,17 +28,28 @@ Show:
 - SLA clock continues.
 - Audit event logged.
 
-This should be the most deliberate staged moment.
+This should be the most deliberate staged moment. The screen must show a before/after boundary:
+
+- `Agent Interpretation Event`: `recommended_next_stage: closure_candidate`.
+- `Policy Decision Event`: `decision: override_recommendation`, `from_recommended_stage: closure_candidate`, `to_stage: verify_telemetry`.
+- `closure_block_reason_code: missing_authoritative_signal` or `stale_authoritative_signal`.
+
+Do not rely on narration. The raw agent recommendation and policy override must both be visible.
 
 ### 2:15-3:15 Contradiction + Escalation
 
 Show:
 
-- Same CRM-active setup.
+- Same canonical green business fixture as the prior beat, with only telemetry/inventory changed.
 - Fresh telemetry or inventory contradicts.
 - Severity escalates.
 - Human evidence packet appears.
 - Route is visibly more serious than missing evidence.
+
+The viewer should understand that 2A and 2B start from the same business-system state. The distinction is the authoritative signal:
+
+- missing/stale authoritative signal -> controlled retry/verification,
+- contradicting authoritative signal -> elevated exception/human review.
 
 ### 3:15-4:00 Unstructured Evidence Changes Route
 
@@ -78,3 +89,4 @@ Close with:
 - Do not demo every failure type.
 - Do not rely on narration for the override. Show it.
 - Do not hide behind dashboards; show case movement and evidence.
+- Do not author 2A and 2B as unrelated examples. They must be fixture variants.
