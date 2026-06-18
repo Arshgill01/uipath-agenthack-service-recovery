@@ -1,0 +1,399 @@
+{
+  "fixture_policy": "E-002, E-003, E-004, and E-009 reuse the same business_green evidence shape; only authoritative telemetry/inventory conditions vary.",
+  "scenarios": [
+    {
+      "scenario_id": "E-001",
+      "name": "Happy aligned closure",
+      "case": {
+        "case_id": "CASE-E001",
+        "customer_id": "C-42",
+        "service_id": "SVC-900",
+        "case_stage": "intake",
+        "severity": "normal",
+        "sla_deadline": "2026-06-18T12:00:00Z",
+        "interpretation_policy_version": "ip-v1",
+        "decision_policy_version": "dp-v1",
+        "derived_evidence_state": "confirmed_aligned"
+      },
+      "evidence": [
+        {"case_id": "CASE-E001", "field": "crm_order_status", "source": "crm", "value": "active", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:00:00Z"},
+        {"case_id": "CASE-E001", "field": "billing_status", "source": "billing", "value": "clear", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:01:00Z"},
+        {"case_id": "CASE-E001", "field": "inventory_assignment", "source": "inventory", "value": "assigned_match", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:02:00Z"},
+        {"case_id": "CASE-E001", "field": "service_live_status", "source": "network_telemetry", "value": "live", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 300, "observed_at": "2026-06-18T10:03:00Z"},
+        {"case_id": "CASE-E001", "field": "dispatch_status", "source": "dispatch", "value": "complete", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:04:00Z"}
+      ],
+      "agent_interpretation": {
+        "event_id": "AIE-E001",
+        "input_refs": ["support_note_1"],
+        "failure_category": "activation_failure",
+        "category_confidence": 0.78,
+        "interpretation_rationale_codes": ["mentions_signal_absent"],
+        "extracted_claims": [
+          {"claim_type": "support_note_claim", "value": "Activation completed after previous signal absence.", "source": "support_note", "timestamp": "2026-06-18T10:05:00Z"},
+          {"claim_type": "customer_reported_symptom", "value": "Customer previously reported no service.", "source": "customer_message", "timestamp": "2026-06-18T09:40:00Z"}
+        ],
+        "recommended_next_stage": "closure_candidate",
+        "recommendation_confidence": 0.86,
+        "closure_block_reason_code": "none",
+        "audit_explanation": "Business systems and fresh telemetry are aligned for closure review."
+      },
+      "expected": {
+        "agent_valid": true,
+        "policy_decision": "accept_recommendation",
+        "target_stage": "closure_candidate",
+        "derived_evidence_state": "confirmed_aligned",
+        "reason_codes": [],
+        "failure_category": "activation_failure"
+      }
+    },
+    {
+      "scenario_id": "E-002",
+      "name": "Missing telemetry",
+      "case": {
+        "case_id": "CASE-BG-MISSING",
+        "customer_id": "C-100",
+        "service_id": "SVC-BG-1",
+        "case_stage": "intake",
+        "severity": "normal",
+        "sla_deadline": "2026-06-18T12:00:00Z",
+        "interpretation_policy_version": "ip-v1",
+        "decision_policy_version": "dp-v1",
+        "derived_evidence_state": "missing_pending"
+      },
+      "evidence": [
+        {"case_id": "CASE-BG-MISSING", "field": "crm_order_status", "source": "crm", "value": "active", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:00:00Z"},
+        {"case_id": "CASE-BG-MISSING", "field": "billing_status", "source": "billing", "value": "clear", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:01:00Z"},
+        {"case_id": "CASE-BG-MISSING", "field": "inventory_assignment", "source": "inventory", "value": "assigned_match", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:02:00Z"},
+        {"case_id": "CASE-BG-MISSING", "field": "dispatch_status", "source": "dispatch", "value": "complete", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:04:00Z"},
+        {"case_id": "CASE-BG-MISSING", "field": "service_live_status", "source": "support_note", "value": "resolved", "authoritative": false, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:05:00Z"}
+      ],
+      "agent_interpretation": {
+        "event_id": "AIE-E002",
+        "input_refs": ["support_note_business_green"],
+        "failure_category": "activation_failure",
+        "category_confidence": 0.78,
+        "interpretation_rationale_codes": ["mentions_signal_absent"],
+        "extracted_claims": [
+          {"claim_type": "customer_reported_symptom", "value": "Customer previously reported no service before activation retry.", "source": "customer_message", "timestamp": "2026-06-18T09:40:00Z"}
+        ],
+        "recommended_next_stage": "closure_candidate",
+        "recommendation_confidence": 0.82,
+        "closure_block_reason_code": "none",
+        "audit_explanation": "Business systems look complete, so the agent recommends closure pending policy review."
+      },
+      "expected": {
+        "agent_valid": true,
+        "policy_decision": "override_recommendation",
+        "target_stage": "verify_telemetry",
+        "derived_evidence_state": "missing_pending",
+        "reason_codes": ["missing_authoritative_signal"],
+        "failure_category": "activation_failure"
+      }
+    },
+    {
+      "scenario_id": "E-003",
+      "name": "Stale telemetry",
+      "case": {
+        "case_id": "CASE-BG-STALE",
+        "customer_id": "C-100",
+        "service_id": "SVC-BG-1",
+        "case_stage": "intake",
+        "severity": "normal",
+        "sla_deadline": "2026-06-18T12:00:00Z",
+        "interpretation_policy_version": "ip-v1",
+        "decision_policy_version": "dp-v1",
+        "derived_evidence_state": "authoritative_unavailable_or_stale"
+      },
+      "evidence": [
+        {"case_id": "CASE-BG-STALE", "field": "crm_order_status", "source": "crm", "value": "active", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:00:00Z"},
+        {"case_id": "CASE-BG-STALE", "field": "billing_status", "source": "billing", "value": "clear", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:01:00Z"},
+        {"case_id": "CASE-BG-STALE", "field": "inventory_assignment", "source": "inventory", "value": "assigned_match", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:02:00Z"},
+        {"case_id": "CASE-BG-STALE", "field": "service_live_status", "source": "network_telemetry", "value": "live", "authoritative": true, "freshness_status": "stale", "ttl_seconds": 300, "observed_at": "2026-06-18T09:00:00Z"},
+        {"case_id": "CASE-BG-STALE", "field": "dispatch_status", "source": "dispatch", "value": "complete", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:04:00Z"}
+      ],
+      "agent_interpretation": {
+        "event_id": "AIE-E003",
+        "input_refs": ["support_note_business_green"],
+        "failure_category": "activation_failure",
+        "category_confidence": 0.78,
+        "interpretation_rationale_codes": ["mentions_signal_absent"],
+        "extracted_claims": [
+          {"claim_type": "customer_reported_symptom", "value": "Customer previously reported no service before activation retry.", "source": "customer_message", "timestamp": "2026-06-18T09:40:00Z"}
+        ],
+        "recommended_next_stage": "closure_candidate",
+        "recommendation_confidence": 0.82,
+        "closure_block_reason_code": "none",
+        "audit_explanation": "Business systems look complete, so the agent recommends closure pending policy review."
+      },
+      "expected": {
+        "agent_valid": true,
+        "policy_decision": "override_recommendation",
+        "target_stage": "verify_telemetry",
+        "derived_evidence_state": "authoritative_unavailable_or_stale",
+        "reason_codes": ["stale_authoritative_signal"],
+        "failure_category": "activation_failure"
+      }
+    },
+    {
+      "scenario_id": "E-004",
+      "name": "Contradicting telemetry",
+      "case": {
+        "case_id": "CASE-BG-CONTRA",
+        "customer_id": "C-100",
+        "service_id": "SVC-BG-1",
+        "case_stage": "intake",
+        "severity": "normal",
+        "sla_deadline": "2026-06-18T12:00:00Z",
+        "interpretation_policy_version": "ip-v1",
+        "decision_policy_version": "dp-v1",
+        "derived_evidence_state": "contradicting"
+      },
+      "evidence": [
+        {"case_id": "CASE-BG-CONTRA", "field": "crm_order_status", "source": "crm", "value": "active", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:00:00Z"},
+        {"case_id": "CASE-BG-CONTRA", "field": "billing_status", "source": "billing", "value": "clear", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:01:00Z"},
+        {"case_id": "CASE-BG-CONTRA", "field": "inventory_assignment", "source": "inventory", "value": "assigned_match", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:02:00Z"},
+        {"case_id": "CASE-BG-CONTRA", "field": "service_live_status", "source": "network_telemetry", "value": "not_live", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 300, "observed_at": "2026-06-18T10:03:00Z"},
+        {"case_id": "CASE-BG-CONTRA", "field": "dispatch_status", "source": "dispatch", "value": "complete", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:04:00Z"}
+      ],
+      "agent_interpretation": {
+        "event_id": "AIE-E004",
+        "input_refs": ["support_note_business_green"],
+        "failure_category": "activation_failure",
+        "category_confidence": 0.78,
+        "interpretation_rationale_codes": ["mentions_signal_absent"],
+        "extracted_claims": [
+          {"claim_type": "customer_reported_symptom", "value": "Customer previously reported no service before activation retry.", "source": "customer_message", "timestamp": "2026-06-18T09:40:00Z"}
+        ],
+        "recommended_next_stage": "closure_candidate",
+        "recommendation_confidence": 0.82,
+        "closure_block_reason_code": "none",
+        "audit_explanation": "Business systems look complete, so the agent recommends closure pending policy review."
+      },
+      "expected": {
+        "agent_valid": true,
+        "policy_decision": "require_human_review",
+        "target_stage": "human_review",
+        "derived_evidence_state": "contradicting",
+        "reason_codes": ["source_contradiction"],
+        "failure_category": "activation_failure"
+      }
+    },
+    {
+      "scenario_id": "E-005",
+      "name": "Technician note changes route",
+      "case": {
+        "case_id": "CASE-E005",
+        "customer_id": "C-43",
+        "service_id": "SVC-901",
+        "case_stage": "intake",
+        "severity": "normal",
+        "sla_deadline": "2026-06-18T12:00:00Z",
+        "interpretation_policy_version": "ip-v1",
+        "decision_policy_version": "dp-v1",
+        "derived_evidence_state": "missing_pending"
+      },
+      "evidence": [
+        {"case_id": "CASE-E005", "field": "crm_order_status", "source": "crm", "value": "active", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:00:00Z"},
+        {"case_id": "CASE-E005", "field": "billing_status", "source": "billing", "value": "clear", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:01:00Z"},
+        {"case_id": "CASE-E005", "field": "inventory_assignment", "source": "inventory", "value": "assigned_match", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:02:00Z"},
+        {"case_id": "CASE-E005", "field": "service_live_status", "source": "network_telemetry", "value": "live", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 300, "observed_at": "2026-06-18T10:03:00Z"},
+        {"case_id": "CASE-E005", "field": "dispatch_status", "source": "dispatch", "value": "access_blocked", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:04:00Z"}
+      ],
+      "agent_interpretation": {
+        "event_id": "AIE-E005",
+        "input_refs": ["tech_note_access"],
+        "failure_category": "dispatch_dependency",
+        "category_confidence": 0.91,
+        "interpretation_rationale_codes": ["mentions_access_blocker"],
+        "extracted_claims": [
+          {"claim_type": "technician_observation", "value": "Building access blocked; technician could not reach ONT closet.", "source": "technician_note", "timestamp": "2026-06-18T10:05:00Z"}
+        ],
+        "recommended_next_stage": "dispatch_followup",
+        "recommendation_confidence": 0.88,
+        "closure_block_reason_code": "high_impact_exception",
+        "audit_explanation": "Technician note identifies an access dependency, so dispatch follow-up is required."
+      },
+      "expected": {
+        "agent_valid": true,
+        "policy_decision": "accept_recommendation",
+        "target_stage": "dispatch_followup",
+        "derived_evidence_state": "confirmed_aligned",
+        "reason_codes": ["high_impact_exception"],
+        "failure_category": "dispatch_dependency"
+      }
+    },
+    {
+      "scenario_id": "E-006",
+      "name": "Adversarial customer pressure",
+      "case": {
+        "case_id": "CASE-E006",
+        "customer_id": "C-44",
+        "service_id": "SVC-902",
+        "case_stage": "intake",
+        "severity": "normal",
+        "sla_deadline": "2026-06-18T12:00:00Z",
+        "interpretation_policy_version": "ip-v1",
+        "decision_policy_version": "dp-v1",
+        "derived_evidence_state": "missing_pending"
+      },
+      "evidence": [
+        {"case_id": "CASE-E006", "field": "crm_order_status", "source": "crm", "value": "active", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:00:00Z"},
+        {"case_id": "CASE-E006", "field": "billing_status", "source": "billing", "value": "clear", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:01:00Z"},
+        {"case_id": "CASE-E006", "field": "inventory_assignment", "source": "inventory", "value": "assigned_match", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:02:00Z"},
+        {"case_id": "CASE-E006", "field": "dispatch_status", "source": "dispatch", "value": "complete", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:04:00Z"}
+      ],
+      "agent_interpretation": {
+        "event_id": "AIE-E006",
+        "input_refs": ["customer_pressure"],
+        "failure_category": "activation_failure",
+        "category_confidence": 0.90,
+        "interpretation_rationale_codes": ["mentions_signal_absent", "mentions_customer_pressure"],
+        "extracted_claims": [
+          {"claim_type": "customer_reported_symptom", "value": "Service still not working.", "source": "customer_message", "timestamp": "2026-06-18T10:05:00Z"},
+          {"claim_type": "pressure_to_bypass", "value": "Customer asks support to mark resolved and skip checks for a credit.", "source": "customer_message", "timestamp": "2026-06-18T10:06:00Z"}
+        ],
+        "recommended_next_stage": "verify_telemetry",
+        "recommendation_confidence": 0.84,
+        "closure_block_reason_code": "missing_authoritative_signal",
+        "audit_explanation": "Customer pressure is logged but cannot bypass missing telemetry."
+      },
+      "expected": {
+        "agent_valid": true,
+        "policy_decision": "block_closure",
+        "target_stage": "verify_telemetry",
+        "derived_evidence_state": "missing_pending",
+        "reason_codes": ["missing_authoritative_signal"],
+        "failure_category": "activation_failure"
+      }
+    },
+    {
+      "scenario_id": "E-007",
+      "name": "Invalid agent output",
+      "case": {
+        "case_id": "CASE-E007",
+        "customer_id": "C-45",
+        "service_id": "SVC-903",
+        "case_stage": "intake",
+        "severity": "normal",
+        "sla_deadline": "2026-06-18T12:00:00Z",
+        "interpretation_policy_version": "ip-v1",
+        "decision_policy_version": "dp-v1",
+        "derived_evidence_state": "confirmed_aligned"
+      },
+      "evidence": [
+        {"case_id": "CASE-E007", "field": "crm_order_status", "source": "crm", "value": "active", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:00:00Z"},
+        {"case_id": "CASE-E007", "field": "billing_status", "source": "billing", "value": "clear", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:01:00Z"},
+        {"case_id": "CASE-E007", "field": "inventory_assignment", "source": "inventory", "value": "assigned_match", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:02:00Z"},
+        {"case_id": "CASE-E007", "field": "service_live_status", "source": "network_telemetry", "value": "live", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 300, "observed_at": "2026-06-18T10:03:00Z"},
+        {"case_id": "CASE-E007", "field": "dispatch_status", "source": "dispatch", "value": "complete", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:04:00Z"}
+      ],
+      "agent_interpretation": {
+        "event_id": "AIE-E007",
+        "input_refs": ["bad_agent_output"],
+        "failure_category": "unclassified",
+        "category_confidence": 0.95,
+        "interpretation_rationale_codes": ["none"],
+        "extracted_claims": [],
+        "recommended_next_stage": "closure_candidate",
+        "recommendation_confidence": 0.90,
+        "closure_block_reason_code": "none",
+        "audit_explanation": "Invalid high-confidence unclassified output."
+      },
+      "expected": {
+        "agent_valid": false,
+        "policy_decision": "override_recommendation",
+        "target_stage": "verify_telemetry",
+        "derived_evidence_state": "confirmed_aligned",
+        "reason_codes": ["invalid_agent_output"]
+      }
+    },
+    {
+      "scenario_id": "E-008",
+      "name": "Agent usefulness degradation",
+      "case": {
+        "case_id": "CASE-E008",
+        "customer_id": "C-46",
+        "service_id": "SVC-904",
+        "case_stage": "intake",
+        "severity": "normal",
+        "sla_deadline": "2026-06-18T12:00:00Z",
+        "interpretation_policy_version": "ip-v1",
+        "decision_policy_version": "dp-v1",
+        "derived_evidence_state": "confirmed_aligned"
+      },
+      "evidence": [
+        {"case_id": "CASE-E008", "field": "crm_order_status", "source": "crm", "value": "active", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:00:00Z"},
+        {"case_id": "CASE-E008", "field": "billing_status", "source": "billing", "value": "clear", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:01:00Z"},
+        {"case_id": "CASE-E008", "field": "inventory_assignment", "source": "inventory", "value": "assigned_match", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:02:00Z"},
+        {"case_id": "CASE-E008", "field": "service_live_status", "source": "network_telemetry", "value": "live", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 300, "observed_at": "2026-06-18T10:03:00Z"},
+        {"case_id": "CASE-E008", "field": "dispatch_status", "source": "dispatch", "value": "complete", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:04:00Z"}
+      ],
+      "agent_interpretation": {
+        "event_id": "AIE-E008",
+        "input_refs": ["sufficient_signal_low_confidence"],
+        "failure_category": "unclassified",
+        "category_confidence": 0.30,
+        "interpretation_rationale_codes": ["none"],
+        "extracted_claims": [
+          {"claim_type": "technician_observation", "value": "Access was available and device is responding after retry.", "source": "technician_note", "timestamp": "2026-06-18T10:05:00Z"}
+        ],
+        "recommended_next_stage": "verify_telemetry",
+        "recommendation_confidence": 0.40,
+        "closure_block_reason_code": "low_category_confidence",
+        "audit_explanation": "Agent remains low confidence despite sufficient structured evidence."
+      },
+      "expected": {
+        "agent_valid": true,
+        "policy_decision": "block_closure",
+        "target_stage": "verify_telemetry",
+        "derived_evidence_state": "confirmed_aligned",
+        "reason_codes": ["low_category_confidence"],
+        "failure_category": "unclassified"
+      }
+    },
+    {
+      "scenario_id": "E-009",
+      "name": "Override persistence",
+      "case": {
+        "case_id": "CASE-BG-OVERRIDE",
+        "customer_id": "C-100",
+        "service_id": "SVC-BG-1",
+        "case_stage": "intake",
+        "severity": "normal",
+        "sla_deadline": "2026-06-18T12:00:00Z",
+        "interpretation_policy_version": "ip-v1",
+        "decision_policy_version": "dp-v1",
+        "derived_evidence_state": "missing_pending"
+      },
+      "evidence": [
+        {"case_id": "CASE-BG-OVERRIDE", "field": "crm_order_status", "source": "crm", "value": "active", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:00:00Z"},
+        {"case_id": "CASE-BG-OVERRIDE", "field": "billing_status", "source": "billing", "value": "clear", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:01:00Z"},
+        {"case_id": "CASE-BG-OVERRIDE", "field": "inventory_assignment", "source": "inventory", "value": "assigned_match", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:02:00Z"},
+        {"case_id": "CASE-BG-OVERRIDE", "field": "dispatch_status", "source": "dispatch", "value": "complete", "authoritative": true, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:04:00Z"},
+        {"case_id": "CASE-BG-OVERRIDE", "field": "service_live_status", "source": "support_note", "value": "resolved", "authoritative": false, "freshness_status": "fresh", "ttl_seconds": 86400, "observed_at": "2026-06-18T10:05:00Z"}
+      ],
+      "agent_interpretation": {
+        "event_id": "AIE-E009",
+        "input_refs": ["support_note_business_green"],
+        "failure_category": "activation_failure",
+        "category_confidence": 0.78,
+        "interpretation_rationale_codes": ["mentions_signal_absent"],
+        "extracted_claims": [
+          {"claim_type": "customer_reported_symptom", "value": "Customer previously reported no service before activation retry.", "source": "customer_message", "timestamp": "2026-06-18T09:40:00Z"}
+        ],
+        "recommended_next_stage": "closure_candidate",
+        "recommendation_confidence": 0.82,
+        "closure_block_reason_code": "none",
+        "audit_explanation": "Business systems look complete, so the agent recommends closure pending policy review."
+      },
+      "expected": {
+        "agent_valid": true,
+        "policy_decision": "override_recommendation",
+        "target_stage": "verify_telemetry",
+        "derived_evidence_state": "missing_pending",
+        "reason_codes": ["missing_authoritative_signal"],
+        "failure_category": "activation_failure"
+      }
+    }
+  ]
+}

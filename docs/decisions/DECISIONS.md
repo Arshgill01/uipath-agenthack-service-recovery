@@ -96,3 +96,11 @@ Decision: Eval scenarios must assert that raw agent recommendations and policy d
 Rationale: The visible policy override is the central proof that agents advise while policy decides. An implementation that discards the raw recommendation can appear correct while failing the architecture.
 
 Status: Accepted.
+
+## D-012: Local Provisional Core Stack
+
+Decision: Use a dependency-free Python package with JSON fixtures, standard-library validators, `unittest` tests, and a small CLI-style eval runner for Waves 07-14 and 22.
+
+Rationale: UiPath Labs access is pending, so the immediate build needs portable domain fixtures, deterministic policy behavior, and repeatable evals without assuming Maestro Case or Test Cloud APIs. Python standard library code keeps the local core easy to inspect and later map to UiPath artifacts.
+
+Status: Accepted for local/provisional core. Revisit after UiPath Labs validation.

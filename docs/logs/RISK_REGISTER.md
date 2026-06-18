@@ -10,3 +10,11 @@
 | R-006 | Agent outputs invalid/low-confidence too often. | High | Medium | Add eval scenarios, schema validation, usefulness incident, and governed improvement loop. | Agent/eval agent | Open |
 | R-007 | Demo becomes too complex for five minutes. | High | Medium | Keep demo to 2A, 2B, unstructured-route change, eval artifact, business metrics. | Demo agent | Open |
 | R-008 | Platform access/lab readiness blocks build. | High | Medium | Validate access before code; keep local simulation path. | Platform spike agent | Open |
+
+## Notes
+
+### 2026-06-18 - Local Core Risk Update
+
+- R-005 mitigation is partially exercised by the local eval harness, but Test Cloud integration remains open.
+- R-004 mitigation is partially exercised locally by separate Agent Interpretation Event and Policy Decision Event persistence, but Maestro visibility remains unvalidated.
+- R-008 remains open; no UiPath Labs validation was attempted.

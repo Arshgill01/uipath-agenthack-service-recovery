@@ -14,10 +14,25 @@ Current project direction:
 
 > Telecom/broadband service activation and restoration exception workflow, proving that UiPath Maestro Case can govern agentic service recovery when evidence is missing, stale, contradicting, or adversarial.
 
-No application code has been scaffolded yet. This repo currently contains build-direction documents for future agents.
+Local provisional core status:
+
+- Python package: `service_recovery_core`
+- Fixtures: `fixtures/eval_scenarios.json`
+- Tests: `python -m unittest discover -s tests`
+- Evals: `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+
+Setup:
+
+```sh
+python -m pip install .
+python -m unittest discover -s tests
+python -m service_recovery_core.evals --output eval_results/local_baseline.json
+```
+
+The local core is intentionally portable and has no runtime dependencies outside the Python standard library. It implements provisional fixtures, schema validation, deterministic policy reconciliation, closure blocking, local case state transitions, and baseline eval scenarios E-001 through E-009.
 
 Validation status:
 
 - UiPath Labs hard gates have not been run.
 - The data model is provisional until validation gates 1-4 are answered or explicitly waived.
-- Start with [waves/01_platform_access_and_inventory.md](waves/01_platform_access_and_inventory.md), then [docs/validation/VALIDATION_GATES.md](docs/validation/VALIDATION_GATES.md).
+- The local core does not implement Maestro-specific behavior; it is ready to map once Labs access is granted.
