@@ -372,3 +372,177 @@ Product feedback:
 Evidence:
 
 - `docs/validation/artifacts/2026-06-25/g003-human-action-placeholder-canvas.png`
+
+## 2026-06-25 01:22 IST - G-003 Action App Schema Inspection
+
+Environment:
+
+- UiPath Automation Cloud org `keepingitlowkey`, tenant `DefaultTenant`.
+- Safari browser session authenticated as `Arshdeep Singh`.
+- Studio Web solution ID `b6446ea0-7ebd-4712-ccbf-08ded1e3ee41`.
+- Action app project URL observed with project ID `986ee0c8-915c-4569-8df9-a74b454589a9`.
+
+Gate:
+
+- G-003: Human Evidence Packet.
+- Assumption tested: `Create new Action app` can expose structured inputs, outcomes, comments, and return fields for a reviewer evidence packet.
+
+Steps:
+
+1. Switched from the logged-in Zen session to Safari at user request.
+2. Opened the existing `SimpleApprovalApp` Studio URL in Safari and confirmed Safari could authenticate into UiPath.
+3. Clicked `Edit here` to move the active editing session from the duplicate Zen browser tab into Safari.
+4. Dismissed the Studio Web local-Assistant migration prompt by selecting `Do this later`, then selected `I'll switch later, just not today` and `Stay on current setup`.
+5. Expanded `SimpleApprovalApp` and opened `ActionSchema`.
+6. Inspected the generated Simple Approval action schema.
+7. Clicked `Add property` once under input properties to test the next schema-edit affordance; it opened a data-type chooser but did not immediately create a visible field row in this observation.
+
+Observed:
+
+- Safari can access the same UiPath Studio project without requesting secrets or credentials in chat.
+- Studio Web showed a duplicate-editing banner: `This project is being edited by you in another tab or browser. You may view it in read-only mode or continue editing here.`
+- `Edit here` moved the editing session to Safari.
+- Studio Web showed an upgrade prompt stating that editing and debugging RPA and app projects are moving to local UiPath Assistant and are required for all Community users starting July 22.
+- Selecting `Stay on current setup` allowed the web-based validation to continue.
+- `SimpleApprovalApp` contains page `SimpleApproval`, workflow files `SimpleApproval_ApproveButton_click.xaml` and `SimpleApproval_RejectButton_click.xaml`, and action `ActionSchema`.
+- The generated review page exposes visible reviewer controls: `Content for Review`, `Comment`, `Approve`, and `Reject`.
+- `ActionSchema` explicitly models outcomes `approve` and `reject`, input property `Content` typed `System.String`, input/output property `Comment` typed `System.String`, an output properties section with `Add property`, and action key `5e4cfd91-d8f9-46f7-83da-fdb3572e6ece`.
+- The action schema text says it defines data exchanged between the app and external workflows or agents and configures inputs, outputs, and outcomes.
+
+Result:
+
+- G-003: PARTIAL. UiPath Action app schema is a credible path for structured human review because it exposes explicit outcomes, typed inputs, input/output comments, and output properties. The gate is not a pass yet because the full service-recovery evidence packet was not configured, rendered to a reviewer, submitted through Action Center, or returned structurally to a running case.
+- G-001/G-002/G-004 remain PARTIAL. This observation does not prove runtime case audit reconstruction, policy version pinning, or raw agent recommendation visibility before policy override.
+
+Decision impact:
+
+- Continue with Action app schema as the primary G-003 path for the next live validation.
+- Keep the Case App/custom evidence-packet fallback open until a real task shows the evidence packet clearly in reviewer context and returns structured outcome data to the case.
+- Do not start broad implementation until a minimal live case instance is published/debugged and G-001, G-002, and G-004 are answered.
+
+Product feedback:
+
+- PF-004 updated with `Create new Action app` / `ActionSchema` findings.
+- PF-005 added for the Studio Web local-Assistant migration prompt and duplicate-browser edit handoff during hackathon validation.
+
+Evidence:
+
+- `docs/validation/artifacts/2026-06-25/g003-safari-simple-approval-upgrade-prompt.png`
+- `docs/validation/artifacts/2026-06-25/g003-action-schema-input-output-properties.png`
+
+## 2026-06-25 01:28 IST - G-003 Generated Evidence Packet Page
+
+Environment:
+
+- UiPath Automation Cloud org `keepingitlowkey`, tenant `DefaultTenant`.
+- Safari browser session authenticated as `Arshdeep Singh`.
+- Studio Web solution ID `b6446ea0-7ebd-4712-ccbf-08ded1e3ee41`.
+- Action app project ID `986ee0c8-915c-4569-8df9-a74b454589a9`.
+
+Gate:
+
+- G-003: Human Evidence Packet.
+- Assumption tested: a generated Action app page can render the service-recovery evidence packet fields needed for human review.
+
+Steps:
+
+1. Added custom `System.String` input properties to `ActionSchema`: `EvidencePacketJson`, `RawAgentRecommendation`, and `PolicyDecisionJson`.
+2. Ran `Generate page` from the Action schema.
+3. Waited for page generation to complete after the initial `Generating page layout...` state.
+4. Inspected the generated review page and attempted to identify a safe manual repair path for the missing policy decision field.
+5. Captured the generated page state.
+
+Observed:
+
+- Studio Web generated `FeedbackSubmissionPagePage` and click workflow files for approve/reject outcomes.
+- The generated page rendered visible reviewer fields for `Content`, `Evidence Packet Json`, `Raw Agent Recommendation`, `Comment`, `Approve`, and `Reject`.
+- Studio Web warned: `Auto-generation of controls failed for few properties` and specifically named `PolicyDecisionJson`.
+- The page showed an `Unnamed String 1` label/value pair, which appears related to the failed or ambiguous field generation, but this was not confirmed.
+- Selecting the `Unnamed String 1` label opened label properties, but the visible `. Edit` affordance edited the control name (`Label4`) rather than clearly editing the displayed field text or binding.
+- Publishing/running the Action app was not yet attempted successfully in this observation.
+
+Result:
+
+- G-003: PARTIAL with a narrower blocker. UiPath can generate most of the evidence packet page from typed Action schema fields, but the proof-critical `PolicyDecisionJson` field did not auto-generate and no Action Center task has yet shown the packet or returned a structured decision to a running case.
+- G-001/G-002/G-004 remain PARTIAL because no live case instance has run and no runtime case history/metadata/linked override events have been inspected.
+
+Decision impact:
+
+- Continue trying the Action app path because evidence packet rendering is now mostly concrete.
+- Before broad implementation, validate whether `PolicyDecisionJson` can be manually bound, the app can be published, and a case/human task can return approve/reject/comment data.
+- Keep Case App/custom evidence-packet fallback open if the generated Action page cannot reliably render all proof-critical fields.
+
+Product feedback:
+
+- PF-004 remains relevant for human-task setup and mapping ambiguity.
+- PF-006 added for generated Action page reliability/repairability when custom schema properties are used.
+
+Evidence:
+
+- `docs/validation/artifacts/2026-06-25/g003-generated-action-page-partial-evidence-packet.png`
+
+## 2026-06-25 01:36 IST - G-001/G-003 Live Case Runtime Attempt
+
+Environment:
+
+- UiPath Automation Cloud org `keepingitlowkey`, tenant `DefaultTenant`.
+- Safari browser session authenticated as `Arshdeep Singh`.
+- Deployed solution version: `Solution v1.0.0`.
+- Orchestrator folder: `Solution`, folder key `9d7ae568-d60e-4395-94d7-db115bfb25de`.
+- Live Maestro case ID: `320c067a-27b9-4c2f-8b26-f6ee38ad97cc`.
+- Live case instance / job key: `e1dbad8e-e37c-409d-8cfb-5f4e6125102b`.
+- Case identifier: `CASE-693515549`.
+
+Gates:
+
+- G-001: Native Case State / Audit Reconstruction.
+- G-003: Human Evidence Packet.
+- G-004 dependency check: whether raw/final event separation can be represented once the case runs.
+
+Steps:
+
+1. Opened `Manage` for `SimpleApprovalApp`.
+2. Started the publish/deploy workflow for version `1.0.0` with release notes `G-003 evidence packet validation`.
+3. Observed deployment pipeline stages: setup, publish package, configure, deploy, activate.
+4. Observed `Deployment successful`; logs showed Orchestrator and Apps activated and `All 2 service(s) activated successfully`.
+5. Opened the deployed Orchestrator `Solution` folder.
+6. Started a `Maestro Case` job from Orchestrator with entry point `Trigger 1` and `{}` input.
+7. Opened the live case instance from Orchestrator using `Open in Maestro`.
+8. Inspected Maestro case execution trail, global variables, action history, and incident details.
+
+Observed:
+
+- Orchestrator process picker listed `Maestro BPMN`, `Maestro Case`, and `SimpleApprovalApp`.
+- Starting `Maestro Case` created a running job with package `Solution.caseManagement.Maestro.Case@1.0.0`.
+- Orchestrator exposed an `Open in Maestro` link for the live case instance.
+- Maestro opened a single case instance view for `CASE-693515549`.
+- The case instance status became `Faulted`.
+- The visible execution trail reconstructed ordered runtime steps with timestamps:
+  - `Trigger 1` completed at `2026-06-24 20:06:14 UTC`.
+  - `Case manager` completed at `2026-06-24 20:06:21 UTC`.
+  - `Human action (placeholder)` completed in `Stage 1` at `2026-06-24 20:06:29 UTC`.
+  - `Case manager` completed at `2026-06-24 20:06:35 UTC`.
+  - `SimpleApprovalApp` failed in `Stage 1` at `2026-06-24 20:06:42 UTC`.
+- Global variables visible in the case view included `caseEndMessageResponse = null`, `CaseId = CASE-693515549`, and `stageHasRun_Stage_1 = false`.
+- Action history showed `No actions yet`.
+- Incidents showed `Failure in the AppTasks request - (170000)` with error `The Title field is required.` and incident ID `D689487C-F874-4E2C-B5ED-B0F6814630AF`.
+
+Result:
+
+- G-001: PARTIAL. A single Maestro case instance view reconstructs runtime order, timestamps, stage/task progression, global variables, incident detail, and job linkage. It does not yet reconstruct the required service-recovery evidence state, policy versions, raw agent recommendation, policy decision, closure block reason, or human reviewer action because the current case is still a scaffold and the Action task faulted before review.
+- G-003: PARTIAL with concrete runtime blocker. Deployment and live case execution work, but the Action app task fails before reviewer rendering because a required Title field is missing from the AppTasks request.
+- G-002: PARTIAL. Live case view exposes runtime instance state but no explicit `interpretation_policy_version`, `decision_policy_version`, or migration event yet.
+- G-004: PARTIAL. The live case has not yet persisted/showed raw `closure_candidate` Agent Interpretation Event linked to Policy Decision Event override.
+
+Decision impact:
+
+- The next fix is not broad implementation. It is a minimal Action task configuration repair: provide/map a required Title for `SimpleApprovalApp`, republish/redeploy, then retry or start a fresh case instance.
+- Maestro's native case instance view is promising for G-001 but must be extended with explicit custom audit/state variables or events for evidence state, policy versions, raw agent event, policy decision, block reason, and reviewer result.
+- The product feedback award ledger should treat `Title field is required` as a high-impact configuration validation issue: deployment succeeded, but the required task field was only surfaced as a runtime incident.
+
+Evidence:
+
+- `docs/validation/artifacts/2026-06-25/g003-action-app-deployment-success.png`
+- `docs/validation/artifacts/2026-06-25/g001-maestro-case-orchestrator-running-job.png`
+- `docs/validation/artifacts/2026-06-25/g001-maestro-live-case-execution-trail-faulted.png`
+- `docs/validation/artifacts/2026-06-25/g003-maestro-action-task-title-required-incident.png`

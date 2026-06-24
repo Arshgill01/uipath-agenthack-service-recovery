@@ -40,8 +40,10 @@ This matrix groups the current evidence into issue classes. Add new observations
 | Labs account and tenant routing clarity | PF-001 | access / UX / docs | high during setup | After Labs login, the builder lands in a usable Automation Cloud org/tenant or gets a clear next action. | Safari login reached `portal_/missingaccount`; no clear account-linking or invite/provisioning status was visible in that session. | User later accessed org `keepingitlowkey` / tenant `DefaultTenant` through a working browser session; Wave 01 was rerun. | Show invite/account/provisioning state on `missingaccount`, including wrong-account, pending-invite, missing-tenant, and switch-org guidance. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-24 Wave 01; PF-001. |
 | Maestro recent-projects diagnostic quality | PF-002 | product defect / UX | medium | Maestro home loads recent projects, shows a clear empty state, or identifies the permission/service/backend condition. | Maestro home showed `There was an error fetching your recent projects` while Studio Web and Maestro Case creation still worked. | Use `Start modeling` and capture the created solution URL directly. | Replace the generic error with diagnostic cause, retry action, and correlation/session ID. | `docs/validation/artifacts/2026-06-24/wave01-maestro-home.png`; `docs/validation/VALIDATION_RESULTS.md` 2026-06-24 20:30 IST; PF-002. |
 | Action Center dependency readiness | PF-003 | access / missing feature / UX | high | Maestro Case human-review dependencies are enabled or the disabled-service page gives the exact self-service/admin path. | Actions route opened an unregistered-service page for `DefaultTenant`; later Admin `DefaultTenant > Services > Add services > Actions > Add` resolved service availability. | Enabled only `Actions` after explicit user approval; G-003 stayed partial until evidence-packet rendering and structured return are validated. | Add a Labs/Maestro readiness checklist and direct enable/request path for Actions, Test Manager, Orchestrator, Integration Service, Data Service, and required roles. | `docs/validation/artifacts/2026-06-24/wave01-actions-not-enabled.png`; `docs/validation/artifacts/2026-06-24/actions-admin-services-list.png`; `docs/validation/artifacts/2026-06-24/actions-enabled-inbox.png`; PF-003. |
-| Maestro Case human-task creation and configuration clarity | PF-004 | UX / accessibility | medium | Filtered task-picker rows are keyboard/click activatable, inserted tasks become clearly configurable, and human-review evidence inputs/outputs are discoverable. | Filtered `Human action` row did not activate in the Zen/computer-use session; unfiltered path inserted `Human action (placeholder)`, but task-level evidence packet fields and return mapping were not visible. | Use `Add first task > Human action > Human action placeholder`; next validation must try `Create new Action app` or another supported task-configuration path. | Make task rows first-class accessible controls; after insertion, select the task and expose `Configure Action app`, `Map inputs`, `Map outputs`, and an evidence-packet starter template. | `docs/validation/artifacts/2026-06-24/g001-maestro-case-json-code-view.png`; `docs/validation/artifacts/2026-06-25/g003-human-action-placeholder-canvas.png`; PF-004. |
-| Future: evidence-packet rendering and structured return | placeholder | unknown until observed | TBD | Human review shows evidence table, raw agent output, policy decision, block reason, recommended options, decision/comment controls, and structured return to case. | Not observed yet. Do not claim. | Run G-003 with `Create new Action app` or equivalent and capture Action Center / Case App screenshots. | TBD after observation. Possible improvement should be based on actual rendering, not assumption. | `docs/validation/VALIDATION_GATES.md` G-003 pass condition; `docs/logs/RISK_REGISTER.md` R-003. |
+| Maestro Case human-task creation and configuration clarity | PF-004 | UX / accessibility | medium | Filtered task-picker rows are keyboard/click activatable, inserted tasks become clearly configurable, and human-review evidence inputs/outputs are discoverable. | Filtered `Human action` row did not activate in the Zen/computer-use session; unfiltered path inserted `Human action (placeholder)`; `Create new Action app` produced an Action schema path, but mapping back to the case is still not obvious from the Case task. | Use `Add first task > Human action > Human action placeholder` or `Create new Action app`; continue validation through publish/debug and case return mapping. | Make task rows first-class accessible controls; after insertion, select the task and expose `Configure Action app`, `Map inputs`, `Map outputs`, and an evidence-packet starter template. | `docs/validation/artifacts/2026-06-24/g001-maestro-case-json-code-view.png`; `docs/validation/artifacts/2026-06-25/g003-human-action-placeholder-canvas.png`; `docs/validation/artifacts/2026-06-25/g003-action-schema-input-output-properties.png`; PF-004. |
+| Studio Web local Assistant migration prompt during hackathon build | PF-005 | UX / integration / docs | medium | A time-boxed hackathon builder can continue or switch environments with clear impact on current project, debugging, and publication. | Studio Web interrupted Action app validation with a prompt saying RPA/app editing and debugging are moving to local UiPath Assistant and are required for all Community users starting July 22. | Selected `Do this later`, then `I'll switch later, just not today` and `Stay on current setup` to keep the current web validation moving. | Add a hackathon-safe readiness banner with exact local Assistant requirements, what still works in web Studio today, deadline impact, and a one-click environment check. | `docs/validation/artifacts/2026-06-25/g003-safari-simple-approval-upgrade-prompt.png`; PF-005. |
+| Action app schema-to-page generation for custom evidence fields | PF-006 | UX / product defect candidate / integration | high for G-003 | All valid string input properties generate readable, bound reviewer controls, or the generator gives precise repair actions before/after generation. | `EvidencePacketJson` and `RawAgentRecommendation` generated visible controls, but `PolicyDecisionJson` triggered an auto-generation warning and the page showed an ambiguous `Unnamed String 1` control. | Manual binding/regeneration still needs validation; keep a custom Case App/evidence-packet fallback if the missing policy decision cannot be repaired reliably. | Add schema preflight, per-property generation status, jump-to-failed-control, and an automatic repair/regenerate option that preserves existing controls. | `docs/validation/artifacts/2026-06-25/g003-generated-action-page-partial-evidence-packet.png`; PF-006. |
+| Action task deployment/runtime validation for required fields | PF-007 | UX / integration / product defect candidate | high for G-003 | Publish/deploy or task configuration validation catches missing required Action task fields before runtime, with a direct link to the field to repair. | Deployment succeeded and Orchestrator/Apps activated, but the live Maestro case faulted at `SimpleApprovalApp` with `Failure in the AppTasks request - (170000)` and `The Title field is required.` | Add/map the required Action task title, republish/redeploy, and retry/start a fresh case instance. | Add a preflight validator for Action task required fields such as Title, show missing mappings in Studio before deployment, and include field-specific repair links in Maestro incidents. | `docs/validation/artifacts/2026-06-25/g003-action-app-deployment-success.png`; `docs/validation/artifacts/2026-06-25/g003-maestro-action-task-title-required-incident.png`; PF-007. |
 | Future: live case audit and override visibility | placeholder | unknown until observed | TBD | One case view or one query reconstructs evidence state, policy versions, raw recommendation, policy decision, closure block, human action, and timestamps. | Not observed yet. Do not claim. | Run minimal live Maestro Case instance for G-001/G-002/G-004. | TBD after observation. | `docs/validation/VALIDATION_GATES.md` G-001, G-002, G-004; `docs/logs/RISK_REGISTER.md` R-001/R-002/R-004. |
 
 ## Best Insights So Far
@@ -49,8 +51,9 @@ This matrix groups the current evidence into issue classes. Add new observations
 - The highest-impact feedback is not a single bug; it is dependency readiness for a first-time Maestro Case builder. PF-003 shows that Action Center was required for the intended human-review path but was not enabled by default, and the disabled-service page did not point to the observed admin resolution path.
 - The strongest product-design insight is that Maestro Case successfully exposes the right primitives for this architecture: Case app, case plan, stages, rules, task types, Human action, Agent, Agentic process, and Case JSON/code view. The remaining friction is discovery and configuration clarity, not lack of conceptual fit.
 - The fairest framing for PF-001 is access/account-state ambiguity, not a confirmed product defect. Later tenant access worked, so this should be submitted as onboarding diagnostics feedback.
-- PF-004 should be framed as two separate observations: the filtered picker activation/accessibility friction, and the post-insertion configuration ambiguity. The first has a workaround; the second is still open and needs more evidence.
-- Do not claim Action Center evidence-packet rendering is poor or sufficient yet. The only observed fact is that Action Center opens and the Case plan can hold a Human action placeholder.
+- PF-004 should be framed as three related observations: filtered picker activation/accessibility friction, post-insertion configuration ambiguity, and the separate Action app path that exposes schema/page primitives but not obvious case return mapping.
+- PF-006 and PF-007 are currently the strongest high-specificity feedback items for G-003: PF-006 covers design-time generation reliability; PF-007 covers deploy/runtime validation gap for a required Action task field.
+- Do not claim Action Center evidence-packet rendering is poor or sufficient yet. The observed facts are that Action Center opens, the Case plan can hold a Human action placeholder, and a generated Action page can show some but not all custom evidence packet fields.
 
 ## Draft Survey Answer Scaffold
 
@@ -59,9 +62,9 @@ Draft only. Evidence-backed but not final submission prose.
 | Survey question | Draft evidence-backed answer components | Evidence to cite before finalizing |
 | --- | --- | --- |
 | Q10 - What UiPath products did you use? | Automation Cloud, Maestro, Maestro Case / Case app, Studio Web, Actions / Action Center, Orchestrator service listing, Integration Service listing, Data Fabric listing, Test Manager listing, UiPath CLI. Note that deep validation has so far centered on Automation Cloud, Maestro, Studio Web, Maestro Case, and Actions. | Wave 01 validation results; product launcher screenshot; CLI help output in `docs/validation/VALIDATION_RESULTS.md`. |
-| Q11 - What worked well? | Automation Cloud eventually landed in org `keepingitlowkey` / tenant `DefaultTenant`; Maestro opened and exposed case/process surfaces; Studio Web created a real `Maestro Case` project; Case designer exposed stages, rules, Case app metadata, task types, and JSON/code view; Action Center opened after Actions was enabled; JSON editor guarded against saving malformed accidental input. | PF-002, PF-003, PF-004; `wave01-studio-maestro-bpmn-created.png`; `g001-maestro-case-project-created.png`; `g001-maestro-case-json-code-view.png`; `actions-enabled-inbox.png`; 2026-06-25 G-003 validation result. |
-| Q12 - What challenges did you encounter? | Group by issue class: account/tenant routing ambiguity, Maestro recent-projects generic fetch error, Action Center dependency not enabled with insufficient disabled-service guidance, Human action picker/configuration ambiguity. Keep user/access uncertainty separate from product defect claims. | Feedback Evidence Matrix rows PF-001 through PF-004. |
-| Q13 - What should UiPath improve? | Recommended top answer: add a Maestro Case readiness and human-review setup path that checks tenant services/roles, links directly to enable Actions when permitted, scaffolds a human evidence-packet task, and shows exact input/output mapping steps. Secondary improvements: better `missingaccount` diagnostics, recent-projects error diagnostics, accessible task-picker rows, post-insertion task configuration affordances. | PF-003 as highest-impact blocker; PF-004 as core G-003 workflow friction; PF-001/PF-002 as supporting onboarding diagnostics. |
+| Q11 - What worked well? | Automation Cloud eventually landed in org `keepingitlowkey` / tenant `DefaultTenant`; Maestro opened and exposed case/process surfaces; Studio Web created a real `Maestro Case` project; Case designer exposed stages, rules, Case app metadata, task types, and JSON/code view; Action Center opened after Actions was enabled; JSON editor guarded against saving malformed accidental input; Action app schema exposed typed inputs, outcomes, and generated a mostly usable evidence review page. | PF-002, PF-003, PF-004, PF-006; `wave01-studio-maestro-bpmn-created.png`; `g001-maestro-case-project-created.png`; `g001-maestro-case-json-code-view.png`; `actions-enabled-inbox.png`; 2026-06-25 G-003 validation results. |
+| Q12 - What challenges did you encounter? | Group by issue class: account/tenant routing ambiguity, Maestro recent-projects generic fetch error, Action Center dependency not enabled with insufficient disabled-service guidance, Human action picker/configuration ambiguity, Studio Web local Assistant migration uncertainty, schema-to-page generation failure for a proof-critical evidence field, and deployment validation passing even though the live Action task was missing a required Title. Keep user/access uncertainty separate from product defect claims. | Feedback Evidence Matrix rows PF-001 through PF-007. |
+| Q13 - What should UiPath improve? | Recommended top answer: add a Maestro Case readiness and human-review setup path that checks tenant services/roles, links directly to enable Actions when permitted, scaffolds a human evidence-packet task, shows exact input/output mapping steps, validates generated Action page controls per schema property, and runs a preflight for required Action task fields before deployment. Secondary improvements: better `missingaccount` diagnostics, recent-projects error diagnostics, accessible task-picker rows, and Studio Web/local Assistant transition guidance. | PF-003 as highest-impact setup blocker; PF-006/PF-007 as proof-critical G-003 build blockers; PF-004 as core human-task workflow friction; PF-001/PF-002/PF-005 as supporting onboarding diagnostics. |
 
 ## Scoring Rubric For Future Feedback
 
@@ -99,6 +102,9 @@ Use accumulated entries to answer the final feedback survey.
 | PF-002 | 2026-06-24 | Maestro | Home/recent projects | Wave 01 | product defect / UX | medium | open | `docs/validation/artifacts/2026-06-24/wave01-maestro-home.png` |
 | PF-003 | 2026-06-24 | Actions / Action Center | Pending task access | Wave 01 / G-003 | access / missing feature | high | resolved | `docs/validation/artifacts/2026-06-24/wave01-actions-not-enabled.png` |
 | PF-004 | 2026-06-24 | Studio Web / Maestro Case | Add Human action task | G-003 | UX / accessibility | medium | repeated / partial | `docs/validation/artifacts/2026-06-25/g003-human-action-placeholder-canvas.png` |
+| PF-005 | 2026-06-25 | Studio Web | Local Assistant migration prompt | G-003 | UX / integration / docs | medium | open | `docs/validation/artifacts/2026-06-25/g003-safari-simple-approval-upgrade-prompt.png` |
+| PF-006 | 2026-06-25 | Studio Web / Action app | Generate page from Action schema | G-003 | UX / product defect candidate / integration | high | open | `docs/validation/artifacts/2026-06-25/g003-generated-action-page-partial-evidence-packet.png` |
+| PF-007 | 2026-06-25 | Maestro Case / Action tasks | Live Action task runtime validation | G-003 | UX / integration / product defect candidate | high | open | `docs/validation/artifacts/2026-06-25/g003-maestro-action-task-title-required-incident.png` |
 
 ## Entry Template
 
@@ -280,8 +286,184 @@ Evidence:
 
 - Screenshot/path/link: `docs/validation/artifacts/2026-06-24/g001-maestro-case-json-code-view.png`.
 - Screenshot/path/link: `docs/validation/artifacts/2026-06-25/g003-human-action-placeholder-canvas.png`.
+- Screenshot/path/link: `docs/validation/artifacts/2026-06-25/g003-action-schema-input-output-properties.png`.
 - Commands/logs: see `docs/validation/VALIDATION_RESULTS.md`, 2026-06-24 21:40 IST Zen Session Maestro Case Designer Checkpoint.
 - Commands/logs: see `docs/validation/VALIDATION_RESULTS.md`, 2026-06-25 01:11 IST G-003 Human Action Placeholder Inserted.
+- Commands/logs: see `docs/validation/VALIDATION_RESULTS.md`, 2026-06-25 01:22 IST G-003 Action App Schema Inspection.
+
+### PF-005 - 2026-06-25 - Studio Web / Local Assistant Migration Prompt
+
+Context:
+
+- ID: PF-005.
+- Status: open.
+- Goal: continue G-003 Action app validation in the logged-in Safari browser without losing the current edit session.
+- Product surface: Studio Web, Action app designer.
+- Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `Arshdeep Singh`.
+- Wave/gate: G-003.
+
+What worked:
+
+- Safari opened the existing `SimpleApprovalApp` Studio project and authenticated without credentials in chat.
+- The duplicate-editing banner allowed moving the active editing session into Safari with `Edit here`.
+- Selecting `Do this later`, then `I'll switch later, just not today`, then `Stay on current setup` allowed validation to continue.
+
+What failed or confused us:
+
+- During a time-boxed hackathon validation, Studio Web interrupted the Action app workflow with a broad environment migration prompt.
+- The prompt said RPA/app editing and debugging are moving to local UiPath Assistant and that the change is required for Community users starting July 22.
+- The prompt did not make the immediate impact concrete enough for the current project: whether publishing, debugging, Action app editing, and Maestro Case validation would continue working fully in the web session today.
+
+Expected:
+
+- A migration prompt should distinguish current-session impact from future deadline impact.
+- For hackathon/community builders, it should provide a fast readiness check: installed Assistant version, required extensions/services, unsupported web-only actions, and whether the current project can safely continue.
+
+Observed:
+
+- The prompt was dismissible, but it consumed validation time and introduced uncertainty about whether the web-only path is durable for final build/demo work.
+
+Impact:
+
+- Build impact: medium. It did not block this session, but it adds environment risk while validating Action app and case workflows.
+- Demo/submission impact: medium if later publish/debug requires local Assistant setup without clear preflight.
+
+Workaround:
+
+- Continued in the current web setup for immediate validation.
+- Logged the prompt and kept UiPath Assistant setup as an environment risk rather than changing architecture.
+
+Suggested improvement:
+
+- Add a hackathon-safe migration/readiness banner with explicit answers for: what works in Studio Web today, what requires Assistant now, what changes after the deadline, and how to validate local Assistant readiness before a demo.
+- Add a `Continue web validation for this project` option that records the choice and suppresses repeated prompts for the session.
+
+Evidence:
+
+- Screenshot/path/link: `docs/validation/artifacts/2026-06-25/g003-safari-simple-approval-upgrade-prompt.png`.
+- Commands/logs: see `docs/validation/VALIDATION_RESULTS.md`, 2026-06-25 01:22 IST G-003 Action App Schema Inspection.
+
+### PF-006 - 2026-06-25 - Studio Web / Action Schema Page Generation
+
+Context:
+
+- ID: PF-006.
+- Status: open.
+- Goal: generate a reviewer-facing evidence packet page from typed Action schema fields for G-003.
+- Product surface: Studio Web, Action app designer, Action schema, generated page layout.
+- Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `Arshdeep Singh`.
+- Wave/gate: G-003.
+
+What worked:
+
+- `ActionSchema` exposed typed input, input/output, output, and outcome sections.
+- Custom `System.String` inputs could be added for `EvidencePacketJson`, `RawAgentRecommendation`, and `PolicyDecisionJson`.
+- `Generate page` produced a reviewer page with approve/reject click workflow files.
+- The generated page rendered visible controls for `Evidence Packet Json`, `Raw Agent Recommendation`, `Comment`, `Approve`, and `Reject`.
+
+What failed or confused us:
+
+- Page generation displayed `Auto-generation of controls failed for few properties` and specifically named `PolicyDecisionJson`.
+- The generated page also showed an ambiguous `Unnamed String 1` label/value, which made it unclear whether the failed policy field was partially generated, blank, or unrelated.
+- Selecting the ambiguous label exposed label properties, but the visible `. Edit` action edited the control name rather than clearly editing the display label or property binding.
+- The builder did not get a direct repair path such as `add missing control`, `jump to failed property`, or `regenerate only failed fields`.
+
+Expected:
+
+- Every valid string input property should generate a readable, bound reviewer control.
+- If generation fails, the designer should show a per-property status table and a safe repair action.
+- Ambiguous fallback labels should not appear without binding/status context.
+
+Observed:
+
+- Two custom string properties generated readable fields, while one proof-critical custom string property did not.
+- The generated page was useful but not pass-worthy for G-003 because the final policy decision field is central to the human evidence packet.
+
+Impact:
+
+- Build impact: high for G-003. The missing policy decision field is proof-critical for showing why the raw `closure_candidate` recommendation was overridden.
+- Demo/submission impact: high if a manual repair cannot be validated quickly, because the human reviewer must see both agent output and policy decision.
+
+Workaround:
+
+- Continue with manual binding/regeneration attempts.
+- Keep a custom Case App/evidence-packet fallback open until the generated Action page can render all proof-critical fields reliably.
+
+Suggested improvement:
+
+- Add schema-generation preflight that validates each field name/type before page generation.
+- After generation, show a table of `property -> generated control -> binding status`.
+- For failed properties, provide `Create missing control`, `Jump to schema property`, and `Regenerate failed controls only`.
+- Preserve existing generated controls during repair so builders can fix one field without losing layout work.
+
+Evidence:
+
+- Screenshot/path/link: `docs/validation/artifacts/2026-06-25/g003-generated-action-page-partial-evidence-packet.png`.
+- Commands/logs: see `docs/validation/VALIDATION_RESULTS.md`, 2026-06-25 01:28 IST G-003 Generated Evidence Packet Page.
+
+### PF-007 - 2026-06-25 - Maestro Case / Action Task Runtime Validation
+
+Context:
+
+- ID: PF-007.
+- Status: open.
+- Goal: run a live Maestro Case instance with a deployed Action app task for G-001/G-003.
+- Product surface: Studio Web deployment workflow, Orchestrator, Maestro Case instance view, Action task runtime.
+- Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `Arshdeep Singh`.
+- Wave/gate: G-001 and G-003.
+
+What worked:
+
+- Studio Web published and deployed `Solution v1.0.0`.
+- Deployment logs reported Orchestrator and Apps activated, with all services activated successfully.
+- Orchestrator created a `Solution` folder and listed runnable processes including `Maestro Case`.
+- Starting `Maestro Case` from Orchestrator created a live job and exposed an `Open in Maestro` link.
+- Maestro opened a single case instance view with ordered execution trail, stage/task progression, timestamps, global variables, incidents, and job linkage.
+
+What failed or confused us:
+
+- The deployment workflow succeeded even though the configured Action task was missing a required Title.
+- The missing required field appeared only after starting a live case, as a runtime incident: `Failure in the AppTasks request - (170000)` and `The Title field is required.`
+- The incident named the missing field but did not link back to the Studio task/property/mapping that needs repair.
+
+Expected:
+
+- Studio/Deployment validation should catch missing required Action task fields before deployment or before runtime.
+- The required Title field should be visible in the Action task configuration and clearly marked as required.
+- Runtime incident detail should include a direct repair path back to the failing task configuration.
+
+Observed:
+
+- Deployment succeeded and activated Orchestrator/Apps.
+- The live case faulted at the `SimpleApprovalApp` user task in `Stage 1`.
+- Maestro showed the fault in the case canvas, execution trail, and incidents panel.
+
+Impact:
+
+- Build impact: high. It blocks G-003 reviewer rendering even though deploy succeeded.
+- Demo/submission impact: high if not fixed, because the live case cannot reach the human evidence packet.
+- Product-feedback impact: high. This is a precise design-time/runtime validation gap with strong evidence and a concrete fix suggestion.
+
+Workaround:
+
+- Return to Studio task configuration.
+- Add/map the required Action task title.
+- Republish/redeploy and retry or start a fresh case instance.
+
+Suggested improvement:
+
+- Add a deployment preflight that validates all required Action task request fields, including Title.
+- In the Case designer, mark required Action task fields and mappings inline.
+- In Maestro incidents, add `Open failing task configuration` or `Open required field mapping` links.
+- Include the failed task name, required field, expected type, and current mapping state in the incident details.
+
+Evidence:
+
+- Screenshot/path/link: `docs/validation/artifacts/2026-06-25/g003-action-app-deployment-success.png`.
+- Screenshot/path/link: `docs/validation/artifacts/2026-06-25/g001-maestro-case-orchestrator-running-job.png`.
+- Screenshot/path/link: `docs/validation/artifacts/2026-06-25/g001-maestro-live-case-execution-trail-faulted.png`.
+- Screenshot/path/link: `docs/validation/artifacts/2026-06-25/g003-maestro-action-task-title-required-incident.png`.
+- Commands/logs: see `docs/validation/VALIDATION_RESULTS.md`, 2026-06-25 01:36 IST G-001/G-003 Live Case Runtime Attempt.
 
 Classification:
 

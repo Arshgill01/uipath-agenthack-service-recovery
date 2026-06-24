@@ -57,3 +57,25 @@
 - R-003 impact remains medium/high until a configured Action app or equivalent task shows the required evidence packet fields and returns structured reviewer outcomes to the case.
 - New product/build risk: selecting the inserted placeholder left the properties panel on stage properties, so task-level configuration may require a separate `Create new Action app` flow or another UI path.
 - R-001, R-002, and R-004 remain open because no live case instance has run.
+
+### 2026-06-25 01:22 IST - Action App Schema Inspected
+
+- R-003 likelihood decreases again but remains open: `SimpleApprovalApp` exposes an `ActionSchema` with typed input, input/output, output, and outcome sections.
+- R-003 impact remains medium because the stock `Content` and `Comment` fields do not yet prove a structured telecom evidence packet, Action Center rendering, or structured return to a running case.
+- New risk: Studio Web announced that RPA/app editing and debugging are moving to local UiPath Assistant and are required for all Community users starting July 22. This may disrupt web-only iteration if the local setup path is required before final submission work.
+- Mitigation: keep the current web setup for immediate validation, log PF-005, and avoid relying on web-only app editing after July 22 without validating UiPath Assistant setup.
+
+### 2026-06-25 01:28 IST - Generated Action Page Partial Evidence Packet
+
+- R-003 likelihood decreases because a generated Action page can display custom evidence-packet fields and reviewer approve/reject/comment controls.
+- R-003 remains open because `PolicyDecisionJson` failed auto-generation, and a complete reviewer packet plus structured return has not been proven in Action Center or a running case.
+- New risk: generated Action pages may silently produce confusing fallback controls (`Unnamed String 1`) when a schema property cannot be rendered, making proof-critical fields easy to miss during a demo build.
+- Mitigation: manually bind or regenerate the missing field, capture the repair path, and keep the custom Case App/evidence-packet fallback available until G-003 passes end to end.
+
+### 2026-06-25 01:36 IST - Live Case Runtime Attempt
+
+- R-001 likelihood decreases: a single Maestro case instance view reconstructed ordered execution trail rows, timestamps, stage/task names, global variables, incident details, and job linkage for a live run.
+- R-001 remains open because the live run did not yet contain service-recovery evidence state, policy versions, raw agent recommendation, policy decision, closure block reason, or reviewer outcome.
+- R-003 remains open with a concrete runtime blocker: the Action app task failed before review with `The Title field is required.`
+- New risk: Studio deployment validation can succeed while a required Action task field is missing, surfacing only as a runtime `AppTasks` incident.
+- Mitigation: add/map the required Action task title, republish/redeploy, rerun the case, and capture whether the Action Center task renders the evidence packet.

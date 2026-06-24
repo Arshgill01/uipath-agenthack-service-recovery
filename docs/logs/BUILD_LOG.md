@@ -479,3 +479,134 @@ Open risks:
 Next:
 
 - Continue hard-gate validation with a minimal live case before implementing bridge adapters or deployment scripts.
+
+### 2026-06-25 01:22 IST - Agent / G-003 Action App Schema Inspection
+
+What changed:
+
+- Switched the live UiPath validation from Zen to Safari at user request.
+- Confirmed Safari can authenticate into the existing UiPath Studio project.
+- Moved the active edit session into Safari with `Edit here`.
+- Inspected the generated `SimpleApprovalApp` Action app and `ActionSchema`.
+- Captured evidence that the generated Action app has typed input/input-output/output sections and approve/reject outcomes.
+- Added product feedback for the Studio Web local-Assistant migration prompt encountered during Action app validation.
+
+Commands run:
+
+- `aerospace list-windows --all --format '%{window-id} | %{app-name} | %{window-title} | %{workspace}'`
+- `open -a Safari 'https://cloud.uipath.com/keepingitlowkey/studio_/designer/986ee0c8-915c-4569-8df9-a74b454589a9?solutionId=b6446ea0-7ebd-4712-ccbf-08ded1e3ee41'`
+- `screencapture -x docs/validation/artifacts/2026-06-25/g003-safari-simple-approval-upgrade-prompt.png`
+- `aerospace focus --window-id 59879`
+- `screencapture -x docs/validation/artifacts/2026-06-25/g003-action-schema-input-output-properties.png`
+- `file docs/validation/artifacts/2026-06-25/g003-action-schema-input-output-properties.png`
+- `rg -n "G-003|PF-00|2026-06-25|Action Center|SimpleApproval|Studio Web" ...`
+- `git status --short`
+
+Validation:
+
+- PASS: Safari session opened the UiPath Studio project without credentials in chat.
+- PASS: `SimpleApprovalApp` generated a visible review app with `Content`, `Comment`, `Approve`, and `Reject`.
+- PASS: `ActionSchema` exposes typed action contract sections for outcomes, input properties, input/output properties, and output properties.
+- PARTIAL: G-003 remains incomplete because the full evidence packet was not configured, rendered in Action Center, submitted, or returned to a running case.
+- NOT RUN YET: local unit/eval suite for this checkpoint; run before commit.
+
+Product feedback:
+
+- PF-004
+- PF-005
+
+Open risks:
+
+- G-001, G-002, and G-004 remain unproven until a minimal live case instance is published/debugged.
+- G-003 remains partial until a reviewer sees the service-recovery evidence packet and the case receives a structured return.
+- Studio Web's July 22 local-Assistant requirement may affect future web-only hackathon iteration if local setup is not completed.
+
+Next:
+
+- Use the Action app schema path to add the smallest service-recovery evidence packet fields.
+- Generate/update the page, publish/debug the minimal case, then inspect Action Center task rendering and case history.
+
+### 2026-06-25 01:28 IST - Agent / G-003 Generated Evidence Packet Page
+
+What changed:
+
+- Added service-recovery evidence input fields to the live UiPath `SimpleApprovalApp` Action schema.
+- Generated a reviewer page from the Action schema.
+- Captured the generated page state showing visible evidence packet and raw recommendation fields.
+- Identified a specific remaining blocker: `PolicyDecisionJson` did not auto-generate into a reviewer control.
+
+Commands run:
+
+- `screencapture -x docs/validation/artifacts/2026-06-25/g003-generated-action-page-partial-evidence-packet.png`
+- `git status --short`
+
+Validation:
+
+- PASS: typed custom Action schema inputs can be added for evidence-packet data.
+- PASS: page generation created a reviewer surface with `Evidence Packet Json`, `Raw Agent Recommendation`, `Comment`, `Approve`, and `Reject`.
+- PARTIAL: `PolicyDecisionJson` failed auto-generation and manual repair/binding is not validated.
+- NOT RUN YET: local unit/eval suite for this checkpoint; run before commit.
+
+Product feedback:
+
+- PF-004
+- PF-006
+
+Open risks:
+
+- G-003 remains partial until all proof-critical fields render and the reviewer outcome returns to a running case.
+- G-001, G-002, and G-004 remain unproven until a minimal live case instance is published/debugged.
+
+Next:
+
+- Try to manually bind or regenerate the missing `PolicyDecisionJson` field.
+- Publish/debug the smallest Action/Case path and inspect Action Center plus case history.
+
+### 2026-06-25 01:36 IST - Agent / Live Maestro Case Runtime Attempt
+
+What changed:
+
+- Published and deployed `Solution v1.0.0` from Studio Web.
+- Opened the deployed Orchestrator `Solution` folder.
+- Started a live `Maestro Case` job.
+- Opened the live case instance in Maestro.
+- Captured the runtime execution trail and incident details.
+
+Commands run:
+
+- `aerospace focus --window-id 59879 && screencapture -x docs/validation/artifacts/2026-06-25/g003-action-app-deployment-success.png`
+- `aerospace focus --window-id 59879 && screencapture -x docs/validation/artifacts/2026-06-25/g001-maestro-case-orchestrator-running-job.png`
+- `aerospace focus --window-id 59879 && screencapture -x docs/validation/artifacts/2026-06-25/g001-maestro-live-case-execution-trail-faulted.png`
+- `aerospace focus --window-id 59879 && screencapture -x docs/validation/artifacts/2026-06-25/g003-maestro-action-task-title-required-incident.png`
+
+Validation:
+
+- PASS: Studio Web deployment workflow published and deployed `Solution v1.0.0`.
+- PASS: Orchestrator and Apps activated successfully.
+- PASS: Orchestrator could start a `Maestro Case` job and exposed `Open in Maestro`.
+- PASS: Maestro case instance view showed ordered runtime execution trail, timestamps, global variables, incident, and job linkage.
+- PARTIAL: G-001 remains incomplete because service-recovery evidence state, policy versions, raw agent recommendation, policy decision, closure block, and human action are not yet present in the live case view.
+- PARTIAL: G-003 remains incomplete because the configured Action task failed with `The Title field is required.`
+- NOT RUN YET: local unit/eval suite for this checkpoint; run before commit.
+
+Product feedback:
+
+- PF-006
+- PF-007
+
+Open risks:
+
+- G-003 runtime path requires a required Title mapping before a reviewer can see the evidence packet.
+- G-001 native case reconstruction is promising but still needs custom evidence/policy/agent audit data.
+- G-002 and G-004 remain unproven in the live platform.
+
+Next:
+
+- Add or map the required Action task title.
+- Republish/redeploy and start a fresh minimal case instance.
+- Inspect whether Action Center receives the task and whether Maestro records reviewer action/return.
+
+Pre-commit validation for this checkpoint:
+
+- PASS: `python -m unittest discover -s tests` ran 16 tests.
+- PASS: `python -m service_recovery_core.evals --output eval_results/local_baseline.json` passed 9/9 eval scenarios.
