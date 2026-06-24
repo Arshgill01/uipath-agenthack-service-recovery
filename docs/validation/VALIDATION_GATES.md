@@ -120,6 +120,9 @@ Result:
 Decision impact:
 - ...
 
+Product feedback:
+- PF-XXX in `docs/product/PRODUCT_FEEDBACK_AWARD.md`, or none observed.
+
 Follow-up:
 - ...
 ```

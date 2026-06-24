@@ -26,3 +26,15 @@ Observed on 2026-06-24:
 - Automation Cloud browser access did not reach a tenant; Safari landed at `portal_/missingaccount`.
 - Product access for Maestro, Maestro Case, Studio Web, Action Center, Test Cloud/Test Manager, Integration Service, and Orchestrator is unconfirmed.
 - Hard gate validation must not start until Automation Cloud tenant access and Maestro Case availability are confirmed.
+
+Observed on 2026-06-24 20:30 IST rerun:
+
+- Automation Cloud access is confirmed for org `keepingitlowkey`, tenant `DefaultTenant`, user `Arshdeep Singh`.
+- Product launcher exposes Studio, Orchestrator, Maestro, Admin, Agents, Apps, Automation Ops, Assistant, Data Fabric, Integration Service, Marketplace, and Test Manager.
+- Maestro access is confirmed. Maestro exposes Case app, Case instances, and Case incidents.
+- Studio Web can create a validation-scoped Maestro BPMN solution.
+- `Add to solution` includes `Maestro Case`, and a `Maestro Case` project can be added to the Studio solution.
+- Case App opens and shows active-case columns for Case ID, Case type, Last modified, Stage, Case SLA, SLA status, and Case state.
+- Actions / Action Center is not enabled for `DefaultTenant`; use Case App/custom evidence packet unless tenant enablement changes.
+- Test Manager is visible from the launcher and home widgets, but no Test Manager projects are accessible yet.
+- Hard gate validation remains partial until a live case instance proves audit reconstruction, policy-version pinning, human evidence packet return, and raw recommendation visibility.

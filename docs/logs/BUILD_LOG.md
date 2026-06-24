@@ -18,6 +18,10 @@ Validation:
 
 - PASS / FAIL / PARTIAL
 
+Product feedback:
+
+- PF-XXX / none
+
 Open risks:
 
 - ...
@@ -127,3 +131,49 @@ Next:
 - Resolve UiPath Labs org/tenant assignment for the logged-in Google account.
 - Re-run Wave 01 inventory after Automation Cloud opens inside an accessible tenant.
 - Continue with G-001 only after Maestro Case access is confirmed.
+
+### 2026-06-24 20:30 IST - Agent / Wave 01 Rerun, G-001/G-003 Stop
+
+What changed:
+
+- Re-ran local validation and UiPath Labs access inventory using Safari and the authorized Google account.
+- Confirmed Automation Cloud org `keepingitlowkey`, tenant `DefaultTenant`, user `Arshdeep Singh`.
+- Confirmed Maestro, Studio Web, Maestro Case project creation, Orchestrator presence, Data Fabric listing, Integration Service listing, Test Manager listing, Agents listing, and CLI availability.
+- Captured screenshots under `docs/validation/artifacts/2026-06-24/`.
+- Added product feedback entries PF-002 and PF-003.
+- Documented Actions / Action Center as not enabled for the tenant.
+
+Commands run:
+
+- `git status --short --branch`
+- `git log --oneline -5`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- `command -v uip && uip --version && git remote -v`
+- `uip --help`
+- `uip skills --help`
+- `screencapture -x docs/validation/artifacts/2026-06-24/...`
+
+Validation:
+
+- PASS: `python -m unittest discover -s tests` ran 16 tests.
+- PASS: `python -m service_recovery_core.evals --output eval_results/local_baseline.json` passed 9/9 eval scenarios.
+- PARTIAL/PASS: Wave 01 access inventory now confirms Automation Cloud, Maestro, Studio Web, Maestro Case project creation, and product launcher surfaces.
+- PARTIAL: G-001/G-002/G-004 are not fully run because no live case instance/audit reconstruction was executed.
+- BLOCKED/PARTIAL: G-003 through Action Center because Actions is not enabled for `DefaultTenant`.
+
+Product feedback:
+
+- PF-002
+- PF-003
+
+Open risks:
+
+- Actions / Action Center service enablement blocks Action Center evidence-packet validation.
+- Native audit reconstruction remains unproven until a live case instance runs.
+- Test Manager is visible but has no accessible projects yet.
+
+Next:
+
+- Decide whether to request Actions enablement or use Case App/custom evidence packet.
+- Run a minimal live Maestro Case instance through at least two stages before broad implementation.

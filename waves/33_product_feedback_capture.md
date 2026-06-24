@@ -17,3 +17,6 @@ Capture useful UiPath product feedback while building.
 
 - Best Product Feedback path has evidence.
 - Feedback entries are specific enough to submit without reconstructing details from memory.
+- Feedback index in `docs/product/PRODUCT_FEEDBACK_AWARD.md` is current.
+- Each UiPath-facing wave has either a linked PF entry or an explicit "none observed" note in validation/build logs.
+- Final survey answers can be drafted from the survey answer map without reconstructing from memory.

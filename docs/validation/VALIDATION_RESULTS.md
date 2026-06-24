@@ -96,3 +96,82 @@ Follow-up:
 - Re-run Wave 01 surface inventory after Automation Cloud lands in a tenant instead of `portal_/missingaccount`.
 - Run `uip login` again only when the browser/device-code flow can be completed interactively.
 - Run G-001 through G-004 only after Maestro Case access is confirmed.
+
+## 2026-06-24 20:30 IST - Wave 01 Rerun And Hard-Gate Stop
+
+Environment:
+
+- Local macOS development machine.
+- Safari with Google login for `arshgill6120@gmail.com`.
+- UiPath Automation Cloud organization slug: `keepingitlowkey`.
+- Tenant observed in URLs: `DefaultTenant`.
+- User observed in UI: `Arshdeep Singh`.
+- UiPath CLI `uip` version `1.196.0`.
+
+Steps:
+
+1. Reconfirmed repo status with `git status --short --branch`.
+2. Reconfirmed recent commits with `git log --oneline -5`.
+3. Re-ran unit tests with `python -m unittest discover -s tests`.
+4. Re-ran eval baseline with `python -m service_recovery_core.evals --output eval_results/local_baseline.json`.
+5. Verified CLI and remote with `command -v uip && uip --version && git remote -v`.
+6. Opened `https://cloud.uipath.com` in Safari.
+7. Continued with Google account `arshgill6120@gmail.com`.
+8. Opened the Automation Cloud product launcher and inventoried visible services.
+9. Opened Maestro, Case app, and Studio Web from Maestro `Start modeling`.
+10. Created a validation-scoped Studio solution named by the platform as `Maestro BPMN`.
+11. Added a `Maestro Case` project to that solution from `Add to solution`.
+12. Opened the Actions / Action Center pending tasks route.
+13. Ran CLI help checks: `uip --help` and `uip skills --help`.
+
+Observed:
+
+- Automation Cloud login now succeeds and lands at `https://cloud.uipath.com/keepingitlowkey/portal_/home`.
+- Product launcher exposes Studio, Orchestrator, Maestro, Admin, Agents, Apps, Automation Ops, Assistant, Data Fabric, Integration Service, Marketplace, and Test Manager.
+- Home shows Orchestrator service `DefaultTenant`.
+- Home shows Test Manager projects, but `No projects are accessible at this time`.
+- Maestro opens at `https://cloud.uipath.com/keepingitlowkey/DefaultTenant/maestro_/home`.
+- Maestro home exposes Process instances, Process incidents, Case app, Case instances, and Case incidents.
+- Maestro home shows `There was an error fetching your recent projects`.
+- Maestro Case app opens at `/maestro_/case-management` and shows active case columns: Case ID, Case type, Last modified, Stage, Case SLA, SLA status, Case state. No active cases exist.
+- Studio Web opens from Maestro `Start modeling` and creates a real solution with `Process.bpmn`.
+- `Add to solution` includes `Maestro Case`; selecting it adds a `Maestro Case` project with a case start event and zero validation issues.
+- Actions / Action Center is not enabled for this tenant. The route redirects to `portal_/unregistered?serviceType=actions&organizationName=keepingitlowkey&tenantName=defaulttenant` and displays session ID `32e450e2-89ca-4a80-a0c9-16df19a3d6b4`.
+- `uip --help` confirms installed CLI tools include `maestro`, `or`, `tasks`, `tm`, `is`, `platform`, `user`, and `skills`.
+- `uip skills --help` confirms Codex skill install target `.agents/skills/<skill>/`.
+
+Result:
+
+- Wave 01: PARTIAL/PASS for access inventory. Automation Cloud, Maestro, Maestro Case creation, Studio Web, Orchestrator presence, Integration Service listing, Data Fabric listing, Test Manager listing, Agents listing, and CLI availability are confirmed.
+- G-001: PARTIAL. Maestro Case project creation and Case app columns are confirmed, but no case instance was run; one-view/one-query audit reconstruction is not proven.
+- G-002: PARTIAL. Platform can add a Maestro Case project where metadata can likely be modeled, but policy version pinning across live case transitions and explicit migration event are not proven.
+- G-003: BLOCKED/PARTIAL. Case App exists, but Actions / Action Center is not enabled for `DefaultTenant`; structured human evidence packet return is not proven.
+- G-004: PARTIAL. Separate raw recommendation and policy decision can likely be modeled as Case fields/events, and the local core already proves the event shape, but UiPath persistence/visibility before override is not proven in a live case.
+
+Decision impact:
+
+- Do not start broad implementation yet.
+- Continue with a focused Maestro Case spike only after deciding whether to use Case App/custom evidence packet instead of Action Center for G-003.
+- Treat Action Center as unavailable unless tenant service enablement changes.
+- Keep custom audit events/Data Service as likely fallback for G-001/G-004 until a real case instance proves native reconstruction.
+
+Product feedback:
+
+- PF-002 in `docs/product/PRODUCT_FEEDBACK_AWARD.md`.
+- PF-003 in `docs/product/PRODUCT_FEEDBACK_AWARD.md`.
+
+Evidence:
+
+- `docs/validation/artifacts/2026-06-24/wave01-automation-cloud-home.png`
+- `docs/validation/artifacts/2026-06-24/wave01-product-launcher.png`
+- `docs/validation/artifacts/2026-06-24/wave01-maestro-home.png`
+- `docs/validation/artifacts/2026-06-24/g001-case-app-empty.png`
+- `docs/validation/artifacts/2026-06-24/wave01-studio-maestro-bpmn-created.png`
+- `docs/validation/artifacts/2026-06-24/g001-maestro-case-project-created.png`
+- `docs/validation/artifacts/2026-06-24/wave01-actions-not-enabled.png`
+
+Follow-up:
+
+- Decide whether to request Actions enablement or proceed with Case App/custom evidence packet for the demo.
+- Run a minimal Maestro Case instance through at least two stages before marking G-001/G-002/G-004 pass.
+- Check Test Manager directly if G-003 unblocks or after the hard-gate decision is logged.

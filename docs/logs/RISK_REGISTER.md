@@ -24,3 +24,11 @@
 - R-008 increased in likelihood for the current run: Safari authentication reached `https://cloud.uipath.com/portal_/missingaccount`, so the logged-in account did not land in an accessible Automation Cloud tenant during validation.
 - `uip` CLI availability is no longer a local blocker after installing `@uipath/cli@1.196.0`, but `uip login` still requires an interactive authentication path tied to a valid tenant.
 - R-001 through R-004 remain open and unvalidated because Maestro Case access was not confirmed.
+
+### 2026-06-24 20:30 IST - Labs Access Rerun
+
+- R-008 is partially mitigated: Safari login now reaches Automation Cloud org `keepingitlowkey` and tenant `DefaultTenant`.
+- Maestro, Studio Web, and Maestro Case project creation are confirmed. R-001 remains open because no live case instance has proven one-view/one-query reconstruction.
+- R-002 remains open: platform modeling is available, but live policy-version pinning and migration events are not validated.
+- R-003 likelihood increased: Actions / Action Center is not enabled for `DefaultTenant`, so the evidence packet likely needs Case App/custom UI unless tenant service enablement changes.
+- R-004 remains open: local override-event persistence is strong, but UiPath live persistence/visibility is not validated.

@@ -104,3 +104,19 @@ Decision: Use a dependency-free Python package with JSON fixtures, standard-libr
 Rationale: UiPath Labs access is pending, so the immediate build needs portable domain fixtures, deterministic policy behavior, and repeatable evals without assuming Maestro Case or Test Cloud APIs. Python standard library code keeps the local core easy to inspect and later map to UiPath artifacts.
 
 Status: Accepted for local/provisional core. Revisit after UiPath Labs validation.
+
+## D-013: Action Center Availability During Labs Spike
+
+Decision: Treat Action Center/Actions as unavailable for the current `keepingitlowkey` / `DefaultTenant` validation run, and do not claim G-003 pass through Action Center.
+
+Rationale: On 2026-06-24 20:30 IST, the Actions route redirected to `portal_/unregistered?serviceType=actions&organizationName=keepingitlowkey&tenantName=defaulttenant` and displayed `Actions is not enabled for this tenant` with session ID `32e450e2-89ca-4a80-a0c9-16df19a3d6b4`.
+
+Status: Accepted for the current spike. Revisit only if Actions is enabled or a different tenant is provided.
+
+## D-014: Maestro Case Spike Scope
+
+Decision: Continue with focused Maestro Case validation only; do not start broad product implementation until a live case instance proves or rejects G-001, G-002, and G-004, and G-003 has a documented Action Center enablement or Case App/custom packet path.
+
+Rationale: Automation Cloud, Maestro, Studio Web, and Maestro Case project creation are confirmed, but the hard gates require live state/audit/version/override evidence. Creating a validation-scoped `Maestro BPMN` solution and `Maestro Case` project is not enough to prove audit reconstruction or human evidence packet behavior.
+
+Status: Accepted.

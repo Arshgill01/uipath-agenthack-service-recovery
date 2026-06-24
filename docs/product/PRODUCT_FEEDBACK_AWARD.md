@@ -21,12 +21,46 @@ Bad feedback is:
 - complaints about user/account setup mixed with product bugs,
 - feedback written only at the end from memory.
 
+## How To Use This Log
+
+- Add one feedback entry during every UiPath-facing validation run.
+- Prefer one entry per product surface/workflow, not one giant daily entry.
+- Link each entry to the relevant wave/gate and validation result.
+- Capture evidence while the browser/session is still open.
+- Mark duplicate sightings as repeats under the original entry instead of creating vague duplicates.
+
+## Survey Answer Map
+
+Use accumulated entries to answer the final feedback survey.
+
+| Survey question | Evidence source in this file | How to answer |
+| --- | --- | --- |
+| Which UiPath products did you use? | `Product surface`, `Wave/gate` | Summarize surfaces touched: Automation Cloud, Maestro Case, Studio Web, Action Center/Actions, Test Manager, Integration Service, Orchestrator, CLI. |
+| What worked well? | `What worked` | Pull concrete successful workflows, not general praise. |
+| What challenges did you encounter? | `What failed or confused us`, `Expected`, `Observed` | Group by access, docs, UX, missing feature, product defect, integration, performance. |
+| How did it affect your build? | `Impact` | Tie to blocked gates, delayed implementation, workaround cost, demo risk, architecture change. |
+| What workaround did you use? | `Workaround` | List exact workaround and whether it is acceptable for demo only or durable. |
+| What one thing should UiPath improve? | `Suggested improvement` | Convert the highest-impact issue into a concrete product/doc improvement. |
+| What surprised you? | `What worked`, `What failed or confused us` | Pair positive surprises with adoption advice for first-time builders. |
+| What did Maestro simplify? | Gate entries for Maestro/Studio | Cite specific orchestration surfaces that avoided custom glue. |
+| What evidence supports this? | `Evidence` | Include screenshots, URLs, commands, validation result links, artifact paths. |
+
+## Feedback Index
+
+| ID | Date | Surface | Workflow | Wave/gate | Classification | Severity | Status | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| PF-001 | 2026-06-24 | Automation Cloud | Labs tenant access | Wave 01 | access / UX / docs | high | superseded | `docs/validation/VALIDATION_RESULTS.md` |
+| PF-002 | 2026-06-24 | Maestro | Home/recent projects | Wave 01 | product defect / UX | medium | open | `docs/validation/artifacts/2026-06-24/wave01-maestro-home.png` |
+| PF-003 | 2026-06-24 | Actions / Action Center | Pending task access | Wave 01 / G-003 | access / missing feature | high | open | `docs/validation/artifacts/2026-06-24/wave01-actions-not-enabled.png` |
+
 ## Entry Template
 
 ```md
-## YYYY-MM-DD - Product Surface / Workflow
+### PF-XXX - YYYY-MM-DD - Product Surface / Workflow
 
 Context:
+- ID:
+- Status: open / repeated / resolved / superseded
 - Goal:
 - Product surface:
 - Account/tenant:
@@ -61,14 +95,24 @@ Evidence:
 
 Classification:
 - access / docs / UX / missing feature / product defect / performance / integration / other
+
+Survey tags:
+- product-used
+- worked-well
+- pain-point
+- workaround
+- improvement
+- evidence
 ```
 
 ## Feedback Entries
 
-### 2026-06-24 - Automation Cloud Login / Labs Tenant Access
+### PF-001 - 2026-06-24 - Automation Cloud Login / Labs Tenant Access
 
 Context:
 
+- ID: PF-001.
+- Status: superseded by the later successful Safari login on 2026-06-24 20:30 IST.
 - Goal: complete Wave 01 platform access inventory.
 - Product surface: Automation Cloud login / portal routing.
 - Account/tenant: Google login attempted for the hackathon account.
@@ -114,3 +158,135 @@ Evidence:
 Classification:
 
 - access / UX / docs
+
+Survey tags:
+
+- product-used
+- pain-point
+- workaround
+- improvement
+- evidence
+
+### PF-002 - 2026-06-24 - Maestro Home / Recent Projects Fetch
+
+Context:
+
+- ID: PF-002.
+- Status: open.
+- Goal: complete Wave 01 platform access inventory and start Maestro hard-gate validation.
+- Product surface: UiPath Maestro home.
+- Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `Arshdeep Singh`.
+- Wave/gate: Wave 01, pre-G-001.
+
+What worked:
+
+- Maestro opened successfully from Automation Cloud.
+- The left navigation exposed Home, Process instances, Process incidents, Case app, Case instances, and Case incidents.
+- Studio Web could create a validation-scoped `Maestro BPMN` solution and add a `Maestro Case` project.
+
+What failed or confused us:
+
+- The Maestro home page displayed `There was an error fetching your recent projects` even though the account could create a new Maestro/Studio solution.
+- The message did not say whether this was a transient fetch failure, missing permission, no projects, or backend issue.
+
+Expected:
+
+- Recent projects should either load, show a clear empty state, or explain the permission/service issue.
+
+Observed:
+
+- Recent projects area showed an error while the rest of Maestro remained usable.
+
+Impact:
+
+- Build impact: medium; it did not block creation, but it created uncertainty during the first Maestro validation pass.
+- Demo/submission impact: low to medium; project discovery reliability matters for repeatable demo setup.
+- Severity: medium.
+
+Workaround:
+
+- Use `Start modeling` to create/open the validation solution directly and capture the solution URL.
+
+Suggested improvement:
+
+- Replace the generic recent-projects fetch error with a diagnostic empty/error state that identifies whether the cause is no projects, permission, tenant service registration, timeout, or backend failure, and include a retry action plus correlation/session ID.
+
+Evidence:
+
+- Screenshot/path/link: `docs/validation/artifacts/2026-06-24/wave01-maestro-home.png`.
+- Commands/logs: see `docs/validation/VALIDATION_RESULTS.md`, 2026-06-24 Wave 01 rerun.
+
+Classification:
+
+- product defect / UX
+
+Survey tags:
+
+- product-used
+- worked-well
+- pain-point
+- workaround
+- improvement
+- evidence
+
+### PF-003 - 2026-06-24 - Actions / Action Center Not Enabled
+
+Context:
+
+- ID: PF-003.
+- Status: open.
+- Goal: validate human evidence packet feasibility for G-003.
+- Product surface: Actions / Action Center.
+- Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `Arshdeep Singh`.
+- Wave/gate: Wave 01 / G-003.
+
+What worked:
+
+- Automation Cloud linked to the Actions route from the home page's pending actions surface.
+- The error page included a session ID.
+
+What failed or confused us:
+
+- Actions opened to an unregistered-service page: `Actions is not enabled for this tenant`.
+- The page said to contact an administrator, but the hackathon builder flow did not indicate where to enable it, whether the user had permission, or whether Labs tenants are expected to include Actions by default.
+
+Expected:
+
+- Since Maestro Case human review depends on people/tasks, the Labs tenant should either have Actions enabled or provide a clear self-service enablement path and track guidance.
+
+Observed:
+
+- URL redirected to `portal_/unregistered?serviceType=actions&organizationName=keepingitlowkey&tenantName=defaulttenant`.
+- Session ID: `32e450e2-89ca-4a80-a0c9-16df19a3d6b4`.
+
+Impact:
+
+- Build impact: high; G-003 cannot pass through Action Center in the current tenant state.
+- Demo/submission impact: high; human evidence packet may need a Case App/custom evidence-packet view unless Actions is enabled.
+- Severity: high.
+
+Workaround:
+
+- Use Maestro Case App/custom UI for evidence packet rendering if Actions cannot be enabled quickly.
+- Keep G-003 marked blocked/partial until structured human action return is validated.
+
+Suggested improvement:
+
+- For hackathon/Labs tenants, surface a product-readiness checklist for Maestro Case dependencies: Actions enabled, Test Manager enabled, Orchestrator tenant, Integration Service, Data Service, required roles, and direct admin enablement links. The unregistered-service page should include the exact permission or tenant setting needed.
+
+Evidence:
+
+- Screenshot/path/link: `docs/validation/artifacts/2026-06-24/wave01-actions-not-enabled.png`.
+- Commands/logs: see `docs/validation/VALIDATION_RESULTS.md`, 2026-06-24 Wave 01 rerun.
+
+Classification:
+
+- access / missing feature / UX
+
+Survey tags:
+
+- product-used
+- pain-point
+- workaround
+- improvement
+- evidence
