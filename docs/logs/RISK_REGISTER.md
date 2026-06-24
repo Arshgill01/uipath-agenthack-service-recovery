@@ -32,3 +32,9 @@
 - R-002 remains open: platform modeling is available, but live policy-version pinning and migration events are not validated.
 - R-003 likelihood increased: Actions / Action Center is not enabled for `DefaultTenant`, so the evidence packet likely needs Case App/custom UI unless tenant service enablement changes.
 - R-004 remains open: local override-event persistence is strong, but UiPath live persistence/visibility is not validated.
+
+### 2026-06-24 20:33 IST - Actions Enablement Path
+
+- R-003 root cause is likely tenant service enablement, not missing navigation. Official UiPath docs direct admins to enable Actions through `Admin > Tenants > Edit Services > Actions > Save`.
+- CLI auth works, but the CLI does not expose service enablement in the inspected commands.
+- Admin/Tenants UI did not render a usable tenants table in Safari automation, so resolution may require manual UI action by the user or a request to UiPath/hackathon administrators.

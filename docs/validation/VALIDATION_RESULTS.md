@@ -175,3 +175,44 @@ Follow-up:
 - Decide whether to request Actions enablement or proceed with Case App/custom evidence packet for the demo.
 - Run a minimal Maestro Case instance through at least two stages before marking G-001/G-002/G-004 pass.
 - Check Test Manager directly if G-003 unblocks or after the hard-gate decision is logged.
+
+## 2026-06-24 20:33 IST - Actions Blocker Investigation
+
+Environment:
+
+- UiPath Automation Cloud org `keepingitlowkey`, tenant `DefaultTenant`.
+- Safari session authenticated as `arshgill6120@gmail.com`.
+- UiPath CLI authenticated as `arshgill6120@gmail.com`.
+
+Steps:
+
+1. Searched official UiPath documentation for Action Center tenant enablement.
+2. Confirmed CLI auth with `uip user --output json`.
+3. Inspected CLI platform commands with `uip platform --help`, `uip platform tenants --help`, and `uip platform tenants licenses get --help`.
+4. Attempted to open Admin tenants page at `https://cloud.uipath.com/keepingitlowkey/portal_/admin/tenants`.
+
+Observed:
+
+- Official UiPath Action Center documentation states Actions is enabled at tenant level from Automation Cloud by navigating to `Admin > Tenants`, opening the tenant row menu, selecting `Edit Services`, selecting `Actions`, and clicking `Save`.
+- `uip user --output json` returned the authenticated user `arshgill6120@gmail.com`.
+- CLI exposes tenant license commands but did not expose a tenant service enablement command.
+- Admin/Tenants UI did not render a usable tenants table in the Safari automation session; it showed a mostly blank page and language/tenant selector overlays.
+
+Result:
+
+- Actions blocker root cause is narrowed to tenant service enablement.
+- Not fixed in this run because enabling a cloud tenant service is a configuration change requiring explicit approval at action time, and the Admin UI was not usable through automation.
+
+Decision impact:
+
+- If the user is an org/tenant admin, try enabling Actions from `Admin > Tenants > DefaultTenant > Edit Services > Actions > Save`.
+- If the user is not an admin or the UI remains blank, send a support/hackathon request with the org, tenant, service, and session ID.
+
+Product feedback:
+
+- PF-003 in `docs/product/PRODUCT_FEEDBACK_AWARD.md`.
+
+Follow-up:
+
+- Ask for approval before enabling Actions if the UI exposes the Save action.
+- Ask for approval before sending any support/hackathon email or form submission.

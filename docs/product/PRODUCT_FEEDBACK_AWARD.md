@@ -269,15 +269,18 @@ Workaround:
 
 - Use Maestro Case App/custom UI for evidence packet rendering if Actions cannot be enabled quickly.
 - Keep G-003 marked blocked/partial until structured human action return is validated.
+- Official docs indicate the intended enablement path is `Admin > Tenants > Edit Services > Actions > Save`, but Admin/Tenants did not render a usable tenants table in Safari automation during this run.
 
 Suggested improvement:
 
 - For hackathon/Labs tenants, surface a product-readiness checklist for Maestro Case dependencies: Actions enabled, Test Manager enabled, Orchestrator tenant, Integration Service, Data Service, required roles, and direct admin enablement links. The unregistered-service page should include the exact permission or tenant setting needed.
+- Add a direct `Request/enable Actions` path from the `Actions is not enabled for this tenant` page when the current user has admin rights, or show the exact admin role/contact needed when they do not.
 
 Evidence:
 
 - Screenshot/path/link: `docs/validation/artifacts/2026-06-24/wave01-actions-not-enabled.png`.
-- Commands/logs: see `docs/validation/VALIDATION_RESULTS.md`, 2026-06-24 Wave 01 rerun.
+- Commands/logs: see `docs/validation/VALIDATION_RESULTS.md`, 2026-06-24 Wave 01 rerun and 20:33 IST Actions blocker investigation.
+- Official docs: `https://docs.uipath.com/action-center/automation-cloud/latest/user-guide/about-actions`.
 
 Classification:
 

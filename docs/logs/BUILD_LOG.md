@@ -177,3 +177,46 @@ Next:
 
 - Decide whether to request Actions enablement or use Case App/custom evidence packet.
 - Run a minimal live Maestro Case instance through at least two stages before broad implementation.
+
+### 2026-06-24 20:33 IST - Agent / Actions Blocker Investigation
+
+What changed:
+
+- Investigated the `Actions is not enabled for this tenant` blocker.
+- Confirmed official UiPath docs say Actions is enabled from `Admin > Tenants > Edit Services > Actions > Save`.
+- Confirmed `uip` CLI authentication works for `arshgill6120@gmail.com`.
+- Confirmed CLI exposes tenant license management but not tenant service enablement.
+- Attempted Admin/Tenants UI inspection; Safari automation did not render a usable tenants table.
+- Updated validation results and PF-003 with the blocker root cause and next action.
+
+Commands run:
+
+- `uip user --output json`
+- `uip user --help`
+- `uip platform --help`
+- `uip platform tenants --help`
+- `uip platform tenants list --output json`
+- `uip platform tenants licenses --help`
+- `uip platform licenses --help`
+- `uip platform tenants licenses get --help`
+- `uip config --help`
+
+Validation:
+
+- PASS: CLI auth confirmed current user `arshgill6120@gmail.com`.
+- PARTIAL: blocker root cause narrowed to tenant service enablement.
+- BLOCKED: no service change made; Admin/Tenants UI was not usable through Safari automation and enabling services requires explicit approval.
+
+Product feedback:
+
+- PF-003
+
+Open risks:
+
+- Actions remains disabled for `DefaultTenant`.
+- Admin/Tenants page may have a rendering or automation-accessibility issue in Safari.
+
+Next:
+
+- If the user approves and the Admin UI becomes usable, enable Actions from `Admin > Tenants > DefaultTenant > Edit Services`.
+- Otherwise send a support/hackathon request asking UiPath to enable Actions for org `keepingitlowkey`, tenant `DefaultTenant`, citing session ID `32e450e2-89ca-4a80-a0c9-16df19a3d6b4`.
