@@ -252,3 +252,45 @@ Open risks:
 Next:
 
 - Create or trigger a minimal human review task and validate G-003 evidence-packet requirements.
+
+### 2026-06-24 21:40 IST - Agent / Zen Case Designer Checkpoint
+
+What changed:
+
+- Verified Action Center in the logged-in Zen/cmux browser session.
+- Opened Studio Web solution `Maestro BPMN` in Zen.
+- Added/opened a real `Maestro Case` project and `Case plan`.
+- Captured Case JSON/code-view metadata and observed Case task types.
+- Identified the current G-003 friction: `Human action` appears in the task picker, but did not activate through click/Return/accessibility in this session.
+
+Commands run:
+
+- `git status --short --branch`
+- `git log --oneline -3`
+- `git ls-remote --heads origin master`
+- `screencapture -x docs/validation/artifacts/2026-06-24/actions-enabled-inbox-zen.png`
+- `screencapture -x docs/validation/artifacts/2026-06-24/g001-maestro-case-json-code-view.png`
+
+Validation:
+
+- PASS: repository is clean and `origin/master` points to `f9388b6`.
+- PASS: Action Center opens in Zen as `Inbox - Action Center`.
+- PARTIAL: Maestro Case design surfaces are confirmed, but no live case instance has run.
+- PARTIAL: G-003 remains unproven because no real human action task/evidence packet was created.
+
+Product feedback:
+
+- PF-004
+
+Open risks:
+
+- Runtime audit reconstruction remains unproven.
+- Active-case policy version pinning remains unproven.
+- Action Center evidence-packet rendering remains unproven.
+- The Case task picker may require a manual gesture, different browser interaction, or undocumented setup.
+
+Next:
+
+- Add a minimal human action task to the Case plan.
+- Publish/debug the smallest case instance.
+- Inspect case history/state and Action Center task rendering before implementing broader flows.

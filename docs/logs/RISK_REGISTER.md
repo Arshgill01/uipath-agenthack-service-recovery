@@ -43,3 +43,10 @@
 
 - R-003 is partially mitigated: Actions was added to `DefaultTenant` after explicit user approval, and Action Center now opens as `Inbox - Action Center`.
 - R-003 remains open until a real human review task proves the required evidence packet fields and structured return behavior.
+
+### 2026-06-24 21:40 IST - Maestro Case Designer Checkpoint
+
+- R-001 remains open: Case plan design metadata is visible, but no runtime case instance has proven audit reconstruction.
+- R-002 remains open: Case JSON exposes design `version`/`publishVersion`, but active-case policy version pinning is still unvalidated.
+- R-003 remains open: Human action is available in the Case task menu, but no evidence packet task has been created or reviewed.
+- R-004 remains open: the Case model appears capable of representing agent/policy separation, but live persistence/visibility of linked raw recommendation and override decision is not proven.

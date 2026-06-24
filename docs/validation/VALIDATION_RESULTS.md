@@ -1,6 +1,6 @@
 # Validation Results
 
-UiPath Labs hard gate validation has not been run yet.
+UiPath Labs hard gate validation is in progress. Wave 01 access inventory is mostly complete; hard gates G-001 through G-004 remain PARTIAL until a real Maestro Case instance proves runtime audit, policy pinning, evidence packet, and override visibility behavior.
 
 Use [VALIDATION_GATES.md](VALIDATION_GATES.md) for pass/fail criteria.
 
@@ -264,3 +264,60 @@ Evidence:
 Follow-up:
 
 - Create or trigger a minimal human review task from Maestro/Studio and validate evidence table, agent output, policy decision, block reason, recommended options, approve/reject/request-evidence/comment, and structured return to case.
+
+## 2026-06-24 21:40 IST - Zen Session Maestro Case Designer Checkpoint
+
+Environment:
+
+- UiPath Automation Cloud org `keepingitlowkey`, tenant `DefaultTenant`.
+- Zen browser session authenticated as `Arshdeep Singh`.
+- Studio Web solution `Maestro BPMN`, solution ID `b6446ea0-7ebd-4712-ccbf-08ded1e3ee41`.
+- Maestro Case designer project URL observed with project ID `35207db4-6227-4833-aee1-5cb461f3eb69` and file ID `31c38730-c81e-40e2-be4d-c71a7e6031e5`.
+
+Steps:
+
+1. Opened Action Center pending tasks in Zen at `https://cloud.uipath.com/keepingitlowkey/DefaultTenant/actions_/tasks?status=Pending`.
+2. Confirmed Action Center loads as `Inbox - Action Center` with user `Arshdeep Singh`.
+3. Opened the existing Studio Web solution in Zen.
+4. Confirmed `Add to solution` exposes `Maestro Case`.
+5. Added a `Maestro Case` project to the solution and opened `Case plan`.
+6. Opened Case JSON/code view for the case plan.
+7. Opened the stage `Add task` menu and filtered for `Human action`.
+
+Observed:
+
+- Action Center now works in the logged-in Zen/cmux browser session and shows `No Pending tasks`.
+- Studio Web Case designer creates a real `Maestro Case` project with `Case plan`.
+- The default Case plan exposes `Stage 1`, stage entry/completion rules, `Add task`, `Add trigger`, `Add stage`, `Rules`, `Case manager AI Orchestrator`, and a Case app section.
+- Case properties expose `caseIdentifier` prefix `CASE`; generated IDs will use `CASE-12345`.
+- Case JSON/code view exposes design metadata including `id`, `version: 23.0.0`, `caseIdentifier`, `caseIdentifierType`, `caseAppEnabled: true`, `publishVersion`, and `caseUnifiedSchemaEnabled: true`.
+- The `Add task` menu lists task types relevant to the architecture: `Agent`, `External agent`, `External workflow`, `Agentic process`, `RPA workflow`, `Human action`, `Connector activity`, `Wait for connector`, `API workflow`, and `Wait for timer`.
+- Filtering the task picker to `Human action` works, but the filtered row did not activate through click, Return, or accessibility secondary action in this computer-use session.
+
+Result:
+
+- G-001: PARTIAL. Case plan design surfaces and Case app metadata are confirmed, but runtime case audit reconstruction is still not proven.
+- G-002: PARTIAL. Case design metadata/versioning exists, but active-case policy pinning and explicit migration events are not proven.
+- G-003: PARTIAL. Action Center is enabled and Human action is available as a case task type, but a real evidence packet task was not created or reviewed yet.
+- G-004: PARTIAL. Case stage/task model can represent the separation, but raw agent recommendation and linked policy decision visibility are still not proven in a live case.
+
+Decision impact:
+
+- Do not start broad implementation yet.
+- Continue with a focused task-creation path: try keyboard/mouse/manual UI selection, Case JSON edit if safe, or a UiPath CLI/API deployment route only after understanding the intended Studio task schema.
+- Keep Case App/custom evidence-packet fallback open until Action Center task rendering is actually validated.
+
+Product feedback:
+
+- PF-004 in `docs/product/PRODUCT_FEEDBACK_AWARD.md`.
+
+Evidence:
+
+- `docs/validation/artifacts/2026-06-24/actions-enabled-inbox-zen.png`
+- `docs/validation/artifacts/2026-06-24/g001-maestro-case-json-code-view.png`
+
+Follow-up:
+
+- Add a minimal human action task to `Stage 1`.
+- Publish/debug the smallest case instance.
+- Inspect whether one Case view or query reconstructs evidence state, policy versions, raw recommendation, policy decision, closure block, human action, and event timestamps.

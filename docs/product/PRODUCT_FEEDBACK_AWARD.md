@@ -52,6 +52,7 @@ Use accumulated entries to answer the final feedback survey.
 | PF-001 | 2026-06-24 | Automation Cloud | Labs tenant access | Wave 01 | access / UX / docs | high | superseded | `docs/validation/VALIDATION_RESULTS.md` |
 | PF-002 | 2026-06-24 | Maestro | Home/recent projects | Wave 01 | product defect / UX | medium | open | `docs/validation/artifacts/2026-06-24/wave01-maestro-home.png` |
 | PF-003 | 2026-06-24 | Actions / Action Center | Pending task access | Wave 01 / G-003 | access / missing feature | high | resolved | `docs/validation/artifacts/2026-06-24/wave01-actions-not-enabled.png` |
+| PF-004 | 2026-06-24 | Studio Web / Maestro Case | Add Human action task | G-003 | UX / accessibility | medium | open | `docs/validation/artifacts/2026-06-24/g001-maestro-case-json-code-view.png` |
 
 ## Entry Template
 
@@ -158,6 +159,74 @@ Evidence:
 Classification:
 
 - access / UX / docs
+
+Survey tags:
+
+- product-used
+- pain-point
+- workaround
+- improvement
+- evidence
+
+### PF-004 - 2026-06-24 - Studio Web / Maestro Case Task Picker
+
+Context:
+
+- ID: PF-004.
+- Status: open.
+- Goal: create the smallest real human review task for G-003 evidence-packet validation.
+- Product surface: Studio Web, Maestro Case designer.
+- Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `Arshdeep Singh`.
+- Wave/gate: G-003, with G-001/G-004 dependency.
+
+What worked:
+
+- `Add to solution` exposes `Maestro Case`.
+- The Case designer creates a real `Case plan` with stages, rules, Case app metadata, and code view.
+- The `Add task` menu lists architecture-relevant task types, including `Agent`, `Agentic process`, workflows, connector waits, and `Human action`.
+- Searching the task picker for `Human action` filters to the expected single option.
+
+What failed or confused us:
+
+- The filtered `Human action` option was exposed as selectable text, not a button/action, in the accessibility tree.
+- Clicks and Return did not activate the filtered row in the Zen/computer-use session.
+- The task picker gave no visible error or hint about whether the row was selected, disabled, required drag/drop, or waiting for a different interaction.
+
+Expected:
+
+- A filtered task-picker result should be activatable through click and keyboard, with clear focus/selection feedback.
+- If a task type requires drag/drop, permissions, configuration, or a different gesture, the UI should say so.
+
+Observed:
+
+- The menu remained open after selecting/filtering; no human action task was added to `Stage 1`.
+- Accessibility secondary action was unavailable for the row.
+
+Impact:
+
+- Build impact: medium; it delays G-003 because evidence-packet validation needs a real human action task.
+- Demo/submission impact: medium; task creation is part of the first-time Maestro Case builder path and should be smooth under hackathon time pressure.
+- Severity: medium.
+
+Workaround:
+
+- Continue by trying the same action manually in the browser, using a different selection gesture, or finding a supported Case JSON/schema route after inspecting docs/platform behavior.
+- Keep Case App/custom evidence-packet fallback open until Action Center task rendering is validated end to end.
+
+Suggested improvement:
+
+- Make task-picker rows first-class buttons/options with keyboard activation, visible focus state, and accessible action metadata.
+- Add microcopy or inline hints for any task types that require drag/drop, prior resource setup, catalog selection, or permissions before insertion.
+- For Maestro Case, add a guided `Add human review` template that scaffolds reviewer instructions, decision outputs, comments, and return mapping to the case.
+
+Evidence:
+
+- Screenshot/path/link: `docs/validation/artifacts/2026-06-24/g001-maestro-case-json-code-view.png`.
+- Commands/logs: see `docs/validation/VALIDATION_RESULTS.md`, 2026-06-24 21:40 IST Zen Session Maestro Case Designer Checkpoint.
+
+Classification:
+
+- UX / accessibility
 
 Survey tags:
 
