@@ -220,3 +220,35 @@ Next:
 
 - If the user approves and the Admin UI becomes usable, enable Actions from `Admin > Tenants > DefaultTenant > Edit Services`.
 - Otherwise send a support/hackathon request asking UiPath to enable Actions for org `keepingitlowkey`, tenant `DefaultTenant`, citing session ID `32e450e2-89ca-4a80-a0c9-16df19a3d6b4`.
+
+### 2026-06-24 21:08 IST - Agent / Actions Enabled
+
+What changed:
+
+- Used Admin `DefaultTenant > Services > Add services` after explicit user approval.
+- Selected only `Actions` and added it to the tenant.
+- Verified the direct Actions route now opens as `Inbox - Action Center`.
+- Captured before/after screenshots for the service list and Action Center inbox.
+
+Commands run:
+
+- `screencapture -x docs/validation/artifacts/2026-06-24/actions-admin-services-list.png`
+- `screencapture -x docs/validation/artifacts/2026-06-24/actions-enabled-inbox.png`
+
+Validation:
+
+- PASS: Actions service availability is unblocked for `keepingitlowkey / DefaultTenant`.
+- PARTIAL: G-003 still requires a real human review task with structured evidence packet and structured return.
+
+Product feedback:
+
+- PF-003
+
+Open risks:
+
+- Action Center rendering quality and structured return behavior remain unvalidated.
+- Live Maestro Case audit reconstruction is still unproven.
+
+Next:
+
+- Create or trigger a minimal human review task and validate G-003 evidence-packet requirements.

@@ -38,3 +38,8 @@
 - R-003 root cause is likely tenant service enablement, not missing navigation. Official UiPath docs direct admins to enable Actions through `Admin > Tenants > Edit Services > Actions > Save`.
 - CLI auth works, but the CLI does not expose service enablement in the inspected commands.
 - Admin/Tenants UI did not render a usable tenants table in Safari automation, so resolution may require manual UI action by the user or a request to UiPath/hackathon administrators.
+
+### 2026-06-24 21:08 IST - Actions Enabled
+
+- R-003 is partially mitigated: Actions was added to `DefaultTenant` after explicit user approval, and Action Center now opens as `Inbox - Action Center`.
+- R-003 remains open until a real human review task proves the required evidence packet fields and structured return behavior.

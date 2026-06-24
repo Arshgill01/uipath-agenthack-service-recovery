@@ -216,3 +216,51 @@ Follow-up:
 
 - Ask for approval before enabling Actions if the UI exposes the Save action.
 - Ask for approval before sending any support/hackathon email or form submission.
+
+## 2026-06-24 21:08 IST - Actions Enabled For G-003
+
+Environment:
+
+- UiPath Automation Cloud org `keepingitlowkey`, tenant `DefaultTenant`.
+- Tenant GUID observed in Admin URL: `ce9f6b89-4e70-47ee-a0b3-8bc4986b8772`.
+- Support ID observed in Admin UI: `7963-2959-3848-9528`.
+- Safari session authenticated as `arshgill6120@gmail.com`.
+
+Steps:
+
+1. Reopened Admin for `DefaultTenant`.
+2. Opened `Services`.
+3. Confirmed the enabled service list contained Orchestrator, Maestro, Integration Service, Data Fabric, and Test Manager, but not Actions.
+4. Opened `Add services`.
+5. Confirmed `Actions` was available as an additional service.
+6. With user approval, selected only `Actions` and clicked `Add`.
+7. Opened `https://cloud.uipath.com/keepingitlowkey/DefaultTenant/actions_/tasks?status=Pending`.
+
+Observed:
+
+- `Actions` was addable from the tenant services drawer.
+- After selecting only `Actions` and clicking `Add`, the previous unregistered-service blocker no longer appeared.
+- Direct Actions URL opened with browser title `UiPath Actions`, then `Inbox - Action Center`.
+
+Result:
+
+- Wave 01: PASS for Action Center service availability after tenant service enablement.
+- G-003: PARTIAL, no longer blocked by tenant service availability. Action Center opens, but structured evidence-packet rendering and structured return actions still need a real human review task.
+
+Decision impact:
+
+- Continue G-003 validation against Action Center before choosing Case App/custom evidence packet fallback.
+- Keep PF-003 as a resolved product-feedback entry because the original disabled-service page did not expose the admin enablement path directly.
+
+Product feedback:
+
+- PF-003 in `docs/product/PRODUCT_FEEDBACK_AWARD.md`.
+
+Evidence:
+
+- `docs/validation/artifacts/2026-06-24/actions-admin-services-list.png`
+- `docs/validation/artifacts/2026-06-24/actions-enabled-inbox.png`
+
+Follow-up:
+
+- Create or trigger a minimal human review task from Maestro/Studio and validate evidence table, agent output, policy decision, block reason, recommended options, approve/reject/request-evidence/comment, and structured return to case.

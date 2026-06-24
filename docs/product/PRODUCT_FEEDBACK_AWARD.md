@@ -51,7 +51,7 @@ Use accumulated entries to answer the final feedback survey.
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | PF-001 | 2026-06-24 | Automation Cloud | Labs tenant access | Wave 01 | access / UX / docs | high | superseded | `docs/validation/VALIDATION_RESULTS.md` |
 | PF-002 | 2026-06-24 | Maestro | Home/recent projects | Wave 01 | product defect / UX | medium | open | `docs/validation/artifacts/2026-06-24/wave01-maestro-home.png` |
-| PF-003 | 2026-06-24 | Actions / Action Center | Pending task access | Wave 01 / G-003 | access / missing feature | high | open | `docs/validation/artifacts/2026-06-24/wave01-actions-not-enabled.png` |
+| PF-003 | 2026-06-24 | Actions / Action Center | Pending task access | Wave 01 / G-003 | access / missing feature | high | resolved | `docs/validation/artifacts/2026-06-24/wave01-actions-not-enabled.png` |
 
 ## Entry Template
 
@@ -172,7 +172,7 @@ Survey tags:
 Context:
 
 - ID: PF-002.
-- Status: open.
+- Status: resolved after manual tenant service enablement.
 - Goal: complete Wave 01 platform access inventory and start Maestro hard-gate validation.
 - Product surface: UiPath Maestro home.
 - Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `Arshdeep Singh`.
@@ -258,6 +258,7 @@ Observed:
 
 - URL redirected to `portal_/unregistered?serviceType=actions&organizationName=keepingitlowkey&tenantName=defaulttenant`.
 - Session ID: `32e450e2-89ca-4a80-a0c9-16df19a3d6b4`.
+- Later same-run resolution: Admin `DefaultTenant > Services > Add services` exposed `Actions` as an addable service. After user-approved enablement, the direct Actions URL opened as `Inbox - Action Center`.
 
 Impact:
 
@@ -267,9 +268,9 @@ Impact:
 
 Workaround:
 
-- Use Maestro Case App/custom UI for evidence packet rendering if Actions cannot be enabled quickly.
-- Keep G-003 marked blocked/partial until structured human action return is validated.
-- Official docs indicate the intended enablement path is `Admin > Tenants > Edit Services > Actions > Save`, but Admin/Tenants did not render a usable tenants table in Safari automation during this run.
+- Enabled `Actions` from Admin `DefaultTenant > Services > Add services` after explicit user approval.
+- Keep G-003 partial until structured human action return is validated.
+- Official docs indicate the intended enablement path is `Admin > Tenants > Edit Services > Actions > Save`; in the current Automation Cloud UI, the observed path was `DefaultTenant > Services > Add services > Actions > Add`.
 
 Suggested improvement:
 
@@ -279,6 +280,8 @@ Suggested improvement:
 Evidence:
 
 - Screenshot/path/link: `docs/validation/artifacts/2026-06-24/wave01-actions-not-enabled.png`.
+- Screenshot/path/link: `docs/validation/artifacts/2026-06-24/actions-admin-services-list.png`.
+- Screenshot/path/link: `docs/validation/artifacts/2026-06-24/actions-enabled-inbox.png`.
 - Commands/logs: see `docs/validation/VALIDATION_RESULTS.md`, 2026-06-24 Wave 01 rerun and 20:33 IST Actions blocker investigation.
 - Official docs: `https://docs.uipath.com/action-center/automation-cloud/latest/user-guide/about-actions`.
 

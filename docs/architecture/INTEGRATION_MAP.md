@@ -35,6 +35,6 @@ Observed on 2026-06-24 20:30 IST rerun:
 - Studio Web can create a validation-scoped Maestro BPMN solution.
 - `Add to solution` includes `Maestro Case`, and a `Maestro Case` project can be added to the Studio solution.
 - Case App opens and shows active-case columns for Case ID, Case type, Last modified, Stage, Case SLA, SLA status, and Case state.
-- Actions / Action Center is not enabled for `DefaultTenant`; use Case App/custom evidence packet unless tenant enablement changes.
+- Actions / Action Center was initially disabled for `DefaultTenant`, then enabled from Admin `DefaultTenant > Services > Add services` after user approval. Action Center now opens as `Inbox - Action Center`.
 - Test Manager is visible from the launcher and home widgets, but no Test Manager projects are accessible yet.
 - Hard gate validation remains partial until a live case instance proves audit reconstruction, policy-version pinning, human evidence packet return, and raw recommendation visibility.
