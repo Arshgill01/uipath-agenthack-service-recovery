@@ -81,3 +81,49 @@ Open risks:
 Next:
 
 - Do not start UiPath implementation waves until Labs access is granted and hard gates are run or explicitly waived.
+
+### 2026-06-24 14:16 IST - Agent / Wave 01
+
+What changed:
+
+- Re-ran local repo validation before platform access work.
+- Installed and verified the UiPath CLI package.
+- Attempted UiPath Automation Cloud access through controlled Chromium and Safari without handling credentials.
+- Recorded Wave 01 as partial because login reached `portal_/missingaccount` rather than an accessible tenant.
+
+Commands run:
+
+- `git status --short --branch`
+- `git log --oneline -5`
+- `git remote -v`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- `command -v uip && uip --version`
+- `npm view @uipath/cli version bin --json`
+- `node --version && npm --version`
+- `npm install -g @uipath/cli@1.196.0`
+- `uip --version`
+- `agent-browser --session-name uipath-labs open https://cloud.uipath.com`
+- `agent-browser --session-name uipath-labs --headed open https://cloud.uipath.com`
+- `open -na Safari https://cloud.uipath.com`
+- `osascript -e 'tell application "Safari" to if (count of windows) > 0 then return URL of current tab of front window & "\n" & name of current tab of front window'`
+- `uip login`
+
+Validation:
+
+- PASS: `python -m unittest discover -s tests` ran 16 tests.
+- PASS: `python -m service_recovery_core.evals --output eval_results/local_baseline.json` passed 9/9 eval scenarios.
+- PASS: `uip --version` returned `1.196.0` after installing `@uipath/cli@1.196.0`.
+- PARTIAL: Wave 01 local/CLI inventory completed, but UiPath product-surface inventory could not be completed.
+- NOT RUN: G-001 through G-004 because Automation Cloud access landed at `portal_/missingaccount`.
+
+Open risks:
+
+- UiPath Labs account/tenant access is not usable yet for validation.
+- Maestro, Maestro Case, Studio Web, Action Center, Test Cloud/Test Manager, Integration Service, and Orchestrator access remain unconfirmed.
+
+Next:
+
+- Resolve UiPath Labs org/tenant assignment for the logged-in Google account.
+- Re-run Wave 01 inventory after Automation Cloud opens inside an accessible tenant.
+- Continue with G-001 only after Maestro Case access is confirmed.

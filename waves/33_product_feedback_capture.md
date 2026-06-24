@@ -10,7 +10,10 @@ Capture useful UiPath product feedback while building.
 - Separate user error from platform friction.
 - Capture suggested improvements.
 - Prepare feedback form notes.
+- Update `docs/product/PRODUCT_FEEDBACK_AWARD.md` during every UiPath-facing wave, not retroactively at the end.
+- Capture screenshots, URLs, exact workflow names, commands, and impact on the build whenever possible.
 
 ## Exit Criteria
 
 - Best Product Feedback path has evidence.
+- Feedback entries are specific enough to submit without reconstructing details from memory.

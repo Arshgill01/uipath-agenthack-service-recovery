@@ -9,6 +9,7 @@ Start here:
 3. [PLAN.md](PLAN.md)
 4. [waves/00_WAVES_INDEX.md](waves/00_WAVES_INDEX.md)
 5. [docs/validation/VALIDATION_GATES.md](docs/validation/VALIDATION_GATES.md)
+6. [docs/product/PRODUCT_FEEDBACK_AWARD.md](docs/product/PRODUCT_FEEDBACK_AWARD.md)
 
 Current project direction:
 

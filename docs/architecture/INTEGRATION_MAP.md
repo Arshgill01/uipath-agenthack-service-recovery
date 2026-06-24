@@ -11,9 +11,18 @@ This map is provisional until validation gates are run.
 | Case App / custom UI | Fallback or primary evidence packet/demo surface. | G-003, G-004, G-006 |
 | Data Fabric/Data Service | Store case/audit/policy/eval objects if native Case state is insufficient. | G-001, G-002 |
 | Test Cloud | Eval/regression validation for agent usefulness and policy changes. | G-007 |
-| UiPath CLI + skills | Coding-agent bonus proof and lifecycle automation. | G-008 |
+| UiPath CLI + skills | Coding-agent bonus proof and lifecycle automation. | G-008; CLI version `1.196.0` installed locally on 2026-06-24, login not completed |
 | Orchestrator | Assets, packages, jobs, logs, deployment, secrets if needed. | Wave 01 and stack selection |
 
 ## Rule
 
 Do not use a UiPath component for checkbox breadth. Use it when it has visible responsibility in the demo or build lifecycle.
+
+## Wave 01 Observed Access Status
+
+Observed on 2026-06-24:
+
+- Local `uip` CLI is installed and reports version `1.196.0`.
+- Automation Cloud browser access did not reach a tenant; Safari landed at `portal_/missingaccount`.
+- Product access for Maestro, Maestro Case, Studio Web, Action Center, Test Cloud/Test Manager, Integration Service, and Orchestrator is unconfirmed.
+- Hard gate validation must not start until Automation Cloud tenant access and Maestro Case availability are confirmed.

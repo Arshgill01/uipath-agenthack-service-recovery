@@ -18,3 +18,9 @@
 - R-005 mitigation is partially exercised by the local eval harness, but Test Cloud integration remains open.
 - R-004 mitigation is partially exercised locally by separate Agent Interpretation Event and Policy Decision Event persistence, but Maestro visibility remains unvalidated.
 - R-008 remains open; no UiPath Labs validation was attempted.
+
+### 2026-06-24 - Wave 01 Access Update
+
+- R-008 increased in likelihood for the current run: Safari authentication reached `https://cloud.uipath.com/portal_/missingaccount`, so the logged-in account did not land in an accessible Automation Cloud tenant during validation.
+- `uip` CLI availability is no longer a local blocker after installing `@uipath/cli@1.196.0`, but `uip login` still requires an interactive authentication path tied to a valid tenant.
+- R-001 through R-004 remain open and unvalidated because Maestro Case access was not confirmed.

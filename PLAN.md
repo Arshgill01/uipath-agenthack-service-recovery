@@ -28,6 +28,7 @@ Create a working UiPath AgentHack submission that proves governed agentic servic
 | Case orchestration | Enforce stages, routes, human review | [docs/architecture/CASE_WORKFLOW.md](docs/architecture/CASE_WORKFLOW.md) |
 | Evals/Test Cloud | Validate agent usefulness and policy regressions | [docs/validation/EVAL_PLAN.md](docs/validation/EVAL_PLAN.md) |
 | Demo/submission | Tell the story clearly | [docs/demo/DEMO_STORYBOARD.md](docs/demo/DEMO_STORYBOARD.md) |
+| Product feedback | Capture specific UiPath feedback for the feedback award | [docs/product/PRODUCT_FEEDBACK_AWARD.md](docs/product/PRODUCT_FEEDBACK_AWARD.md) |
 
 ## Execution Order
 
