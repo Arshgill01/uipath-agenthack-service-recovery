@@ -330,3 +330,152 @@ Next:
 
 - Use `Create new Action app` or the supported task configuration path to build a minimal evidence packet.
 - Publish/debug the smallest case instance and inspect Action Center plus case history.
+
+### 2026-06-25 02:46 IST - Agent / Hard Gate Runbook
+
+What changed:
+
+- Added a focused next-run validation runbook for G-001 through G-004.
+- Sequenced the next live actions from the observed state: org `keepingitlowkey`, tenant `DefaultTenant`, Action Center enabled, Case plan exists, and `Human action (placeholder)` inserted under `Stage 1`.
+- Kept scope to validation strategy/runbook only; no broad implementation or live UiPath changes were performed.
+
+Commands run:
+
+- `sed -n '1,240p' .agents/skills/uipath-service-recovery-architect/SKILL.md`
+- `sed -n '1,240p' .agents/skills/uipath-service-recovery-validator/SKILL.md`
+- `sed -n '1,260p' AGENTS.md`
+- `sed -n '1,240p' PROJECT_BRIEF.md`
+- `sed -n '1,260p' docs/validation/VALIDATION_GATES.md`
+- `sed -n '1,620p' docs/validation/VALIDATION_RESULTS.md`
+- `sed -n '1,620p' docs/logs/BUILD_LOG.md`
+- `sed -n '1,240p' docs/logs/RISK_REGISTER.md`
+- `sed -n '1,260p' PLAN.md`
+- `sed -n '1,260p' waves/39_final_validation.md`
+- `sed -n '1,240p' docs/architecture/ARCHITECTURE.md`
+- `sed -n '1,240p' docs/architecture/AGENT_CONTRACT.md`
+- `sed -n '1,260p' docs/architecture/POLICY_MODEL.md`
+- `sed -n '1,280p' docs/architecture/CASE_WORKFLOW.md`
+- `sed -n '1,240p' docs/decisions/DECISIONS.md`
+- `sed -n '1,220p' docs/validation/EVAL_PLAN.md`
+- `sed -n '1,220p' docs/demo/DEMO_STORYBOARD.md`
+- `rg -n "PASS:|PARTIAL:|FAIL:|Stop conditions|G-001|G-002|G-003|G-004|docs/validation/artifacts" docs/validation/HARD_GATE_NEXT_RUNBOOK.md`
+- `git status --short --branch`
+
+Validation:
+
+- PASS: runbook distinguishes PASS/PARTIAL/FAIL and stop conditions for G-001, G-002, G-003, and G-004.
+- PASS: runbook includes evidence capture paths and explicitly labels local/provisional results as non-pass evidence for live hard gates.
+- NOT RUN: no live UiPath validation, tests, or evals were run in this planning-only pass.
+
+Product feedback:
+
+- none
+
+Open risks:
+
+- G-001 through G-004 remain PARTIAL until the next live UiPath run produces runtime evidence.
+- Existing workspace had uncommitted doc/artifact changes before this run; this entry did not attempt to revert or normalize them.
+
+Next:
+
+- Follow `docs/validation/HARD_GATE_NEXT_RUNBOOK.md`, starting with G-003 Action app/evidence-packet configuration, then use the same live case instance for G-001, G-002, and G-004 where possible.
+
+### 2026-06-25 01:15 IST - Agent / Next Demo Architecture Plan
+
+What changed:
+
+- Added `docs/demo/NEXT_DEMO_PLAN.md` as a gated product/demo architecture plan.
+- Captured the highest-leverage submission shape after G-001 through G-004 resolve: one real Maestro Case recovery loop with separate linked Agent Interpretation and Policy Decision events.
+- Documented what should be built first, what should remain local/provisional, what to show live versus narrate honestly, and decision points for Action Center versus Case App/custom evidence packet.
+
+Commands run:
+
+- `sed -n ...` reads for required repo, architecture, demo, decision, validation, and skill docs.
+- `rg --files -g ...`
+- `git status --short`
+- `git diff -- ...`
+- `date '+%Y-%m-%d %H:%M %Z'`
+
+Validation:
+
+- PASS: planning output preserves the hard-gate stop rule and does not start broad implementation.
+- PASS: plan keeps raw `Agent Interpretation Event` and linked `Policy Decision Event` as separate first-class artifacts.
+- NOT RUN: no code tests; this was a documentation-only architecture/demo planning change.
+
+Open risks:
+
+- G-001 through G-004 remain PARTIAL until a live case proves runtime audit reconstruction, policy-version pinning, evidence-packet rendering/return, and raw recommendation visibility.
+
+### 2026-06-25 - Agent / Product Feedback Award System
+
+What changed:
+
+- Added a feedback evidence matrix to `docs/product/PRODUCT_FEEDBACK_AWARD.md` covering PF-001 through PF-004 with classification, severity, expected vs observed behavior, workaround, product improvement, and evidence paths.
+- Added future-observation placeholders for G-003 evidence-packet rendering and G-001/G-002/G-004 live case audit/override visibility so future agents do not invent unobserved claims.
+- Added evidence-backed draft scaffolding for survey questions 10, 11, 12, and 13, plus a scoring rubric for promoting observations into final survey claims.
+
+Commands run:
+
+- `sed -n '1,220p' .agents/skills/uipath-service-recovery-validator/SKILL.md`
+- `sed -n '1,260p' AGENTS.md`
+- `sed -n '1,260p' docs/product/PRODUCT_FEEDBACK_AWARD.md`
+- `sed -n '1,260p' docs/validation/VALIDATION_RESULTS.md`
+- `sed -n '1,260p' docs/logs/BUILD_LOG.md`
+- `sed -n '1,260p' docs/logs/RISK_REGISTER.md`
+- `sed -n '1,240p' docs/validation/VALIDATION_GATES.md`
+- `sed -n '1,220p' docs/validation/EVAL_PLAN.md`
+- `git status --short --branch`
+
+Validation:
+
+- PASS: documentation update is traceable to existing PF-001 through PF-004 entries, validation results, risk register items, and validation gate placeholders.
+- NOT RUN: no code tests were run because this was a documentation-only feedback-system change.
+
+Product feedback:
+
+- PF-001
+- PF-002
+- PF-003
+- PF-004
+
+Open risks:
+
+- Draft survey scaffolding is not final submission prose.
+- Future placeholders must not be converted into claims until the corresponding UiPath validation run is observed and logged.
+
+Next:
+
+- During the next UiPath run, update the matrix first, then the detailed PF entry, then the draft survey scaffold if the new evidence changes Q10-Q13.
+
+### 2026-06-25 01:35 IST - Agent / Bridge Readiness Mapping
+
+What changed:
+
+- Added `docs/architecture/IMPLEMENTATION_SLICES.md` to map local core objects/events to UiPath artifacts and define safe-now versus post-gate implementation slices.
+- Linked the readiness doc from `docs/architecture/INTEGRATION_MAP.md`.
+- Kept the work docs-only because G-001 through G-004 remain PARTIAL.
+
+Commands run:
+
+- `sed -n '1,220p' .agents/skills/uipath-service-recovery-architect/SKILL.md`
+- `rg --files -g 'AGENTS.md' -g 'README.md' -g 'PROJECT_BRIEF.md' -g 'PLAN.md' -g '*.md' docs service_recovery_core tests`
+- `sed -n ...` reads of `AGENTS.md`, `README.md`, `PROJECT_BRIEF.md`, `PLAN.md`, core architecture docs, validation results, decisions, build log, package files, and tests.
+- `git status --short --branch`
+
+Validation:
+
+- PASS: docs-only readiness change; no code tests required.
+- NOT RUN: `python -m unittest discover -s tests` and local evals because no code, fixtures, or executable behavior changed.
+
+Product feedback:
+
+- none
+
+Open risks:
+
+- G-001 through G-004 remain PARTIAL and still block broad UiPath implementation.
+- Action Center is enabled, but G-003 still needs a real evidence packet and structured return validation.
+
+Next:
+
+- Continue hard-gate validation with a minimal live case before implementing bridge adapters or deployment scripts.

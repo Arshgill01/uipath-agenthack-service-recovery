@@ -28,6 +28,52 @@ Bad feedback is:
 - Link each entry to the relevant wave/gate and validation result.
 - Capture evidence while the browser/session is still open.
 - Mark duplicate sightings as repeats under the original entry instead of creating vague duplicates.
+- Keep the `Feedback Evidence Matrix` current. It is the compaction-resistant source for survey answers 10-13.
+- Do not promote a draft survey claim unless it has a feedback ID, expected/observed detail, workaround or mitigation, and evidence path.
+
+## Feedback Evidence Matrix
+
+This matrix groups the current evidence into issue classes. Add new observations as rows, or append repeat sightings to the existing PF entry when the issue class is the same.
+
+| Issue class | Feedback IDs | Classification | Severity | Expected | Observed | Workaround / mitigation | Product improvement | Evidence |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Labs account and tenant routing clarity | PF-001 | access / UX / docs | high during setup | After Labs login, the builder lands in a usable Automation Cloud org/tenant or gets a clear next action. | Safari login reached `portal_/missingaccount`; no clear account-linking or invite/provisioning status was visible in that session. | User later accessed org `keepingitlowkey` / tenant `DefaultTenant` through a working browser session; Wave 01 was rerun. | Show invite/account/provisioning state on `missingaccount`, including wrong-account, pending-invite, missing-tenant, and switch-org guidance. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-24 Wave 01; PF-001. |
+| Maestro recent-projects diagnostic quality | PF-002 | product defect / UX | medium | Maestro home loads recent projects, shows a clear empty state, or identifies the permission/service/backend condition. | Maestro home showed `There was an error fetching your recent projects` while Studio Web and Maestro Case creation still worked. | Use `Start modeling` and capture the created solution URL directly. | Replace the generic error with diagnostic cause, retry action, and correlation/session ID. | `docs/validation/artifacts/2026-06-24/wave01-maestro-home.png`; `docs/validation/VALIDATION_RESULTS.md` 2026-06-24 20:30 IST; PF-002. |
+| Action Center dependency readiness | PF-003 | access / missing feature / UX | high | Maestro Case human-review dependencies are enabled or the disabled-service page gives the exact self-service/admin path. | Actions route opened an unregistered-service page for `DefaultTenant`; later Admin `DefaultTenant > Services > Add services > Actions > Add` resolved service availability. | Enabled only `Actions` after explicit user approval; G-003 stayed partial until evidence-packet rendering and structured return are validated. | Add a Labs/Maestro readiness checklist and direct enable/request path for Actions, Test Manager, Orchestrator, Integration Service, Data Service, and required roles. | `docs/validation/artifacts/2026-06-24/wave01-actions-not-enabled.png`; `docs/validation/artifacts/2026-06-24/actions-admin-services-list.png`; `docs/validation/artifacts/2026-06-24/actions-enabled-inbox.png`; PF-003. |
+| Maestro Case human-task creation and configuration clarity | PF-004 | UX / accessibility | medium | Filtered task-picker rows are keyboard/click activatable, inserted tasks become clearly configurable, and human-review evidence inputs/outputs are discoverable. | Filtered `Human action` row did not activate in the Zen/computer-use session; unfiltered path inserted `Human action (placeholder)`, but task-level evidence packet fields and return mapping were not visible. | Use `Add first task > Human action > Human action placeholder`; next validation must try `Create new Action app` or another supported task-configuration path. | Make task rows first-class accessible controls; after insertion, select the task and expose `Configure Action app`, `Map inputs`, `Map outputs`, and an evidence-packet starter template. | `docs/validation/artifacts/2026-06-24/g001-maestro-case-json-code-view.png`; `docs/validation/artifacts/2026-06-25/g003-human-action-placeholder-canvas.png`; PF-004. |
+| Future: evidence-packet rendering and structured return | placeholder | unknown until observed | TBD | Human review shows evidence table, raw agent output, policy decision, block reason, recommended options, decision/comment controls, and structured return to case. | Not observed yet. Do not claim. | Run G-003 with `Create new Action app` or equivalent and capture Action Center / Case App screenshots. | TBD after observation. Possible improvement should be based on actual rendering, not assumption. | `docs/validation/VALIDATION_GATES.md` G-003 pass condition; `docs/logs/RISK_REGISTER.md` R-003. |
+| Future: live case audit and override visibility | placeholder | unknown until observed | TBD | One case view or one query reconstructs evidence state, policy versions, raw recommendation, policy decision, closure block, human action, and timestamps. | Not observed yet. Do not claim. | Run minimal live Maestro Case instance for G-001/G-002/G-004. | TBD after observation. | `docs/validation/VALIDATION_GATES.md` G-001, G-002, G-004; `docs/logs/RISK_REGISTER.md` R-001/R-002/R-004. |
+
+## Best Insights So Far
+
+- The highest-impact feedback is not a single bug; it is dependency readiness for a first-time Maestro Case builder. PF-003 shows that Action Center was required for the intended human-review path but was not enabled by default, and the disabled-service page did not point to the observed admin resolution path.
+- The strongest product-design insight is that Maestro Case successfully exposes the right primitives for this architecture: Case app, case plan, stages, rules, task types, Human action, Agent, Agentic process, and Case JSON/code view. The remaining friction is discovery and configuration clarity, not lack of conceptual fit.
+- The fairest framing for PF-001 is access/account-state ambiguity, not a confirmed product defect. Later tenant access worked, so this should be submitted as onboarding diagnostics feedback.
+- PF-004 should be framed as two separate observations: the filtered picker activation/accessibility friction, and the post-insertion configuration ambiguity. The first has a workaround; the second is still open and needs more evidence.
+- Do not claim Action Center evidence-packet rendering is poor or sufficient yet. The only observed fact is that Action Center opens and the Case plan can hold a Human action placeholder.
+
+## Draft Survey Answer Scaffold
+
+Draft only. Evidence-backed but not final submission prose.
+
+| Survey question | Draft evidence-backed answer components | Evidence to cite before finalizing |
+| --- | --- | --- |
+| Q10 - What UiPath products did you use? | Automation Cloud, Maestro, Maestro Case / Case app, Studio Web, Actions / Action Center, Orchestrator service listing, Integration Service listing, Data Fabric listing, Test Manager listing, UiPath CLI. Note that deep validation has so far centered on Automation Cloud, Maestro, Studio Web, Maestro Case, and Actions. | Wave 01 validation results; product launcher screenshot; CLI help output in `docs/validation/VALIDATION_RESULTS.md`. |
+| Q11 - What worked well? | Automation Cloud eventually landed in org `keepingitlowkey` / tenant `DefaultTenant`; Maestro opened and exposed case/process surfaces; Studio Web created a real `Maestro Case` project; Case designer exposed stages, rules, Case app metadata, task types, and JSON/code view; Action Center opened after Actions was enabled; JSON editor guarded against saving malformed accidental input. | PF-002, PF-003, PF-004; `wave01-studio-maestro-bpmn-created.png`; `g001-maestro-case-project-created.png`; `g001-maestro-case-json-code-view.png`; `actions-enabled-inbox.png`; 2026-06-25 G-003 validation result. |
+| Q12 - What challenges did you encounter? | Group by issue class: account/tenant routing ambiguity, Maestro recent-projects generic fetch error, Action Center dependency not enabled with insufficient disabled-service guidance, Human action picker/configuration ambiguity. Keep user/access uncertainty separate from product defect claims. | Feedback Evidence Matrix rows PF-001 through PF-004. |
+| Q13 - What should UiPath improve? | Recommended top answer: add a Maestro Case readiness and human-review setup path that checks tenant services/roles, links directly to enable Actions when permitted, scaffolds a human evidence-packet task, and shows exact input/output mapping steps. Secondary improvements: better `missingaccount` diagnostics, recent-projects error diagnostics, accessible task-picker rows, post-insertion task configuration affordances. | PF-003 as highest-impact blocker; PF-004 as core G-003 workflow friction; PF-001/PF-002 as supporting onboarding diagnostics. |
+
+## Scoring Rubric For Future Feedback
+
+Use this rubric before promoting an observation into a survey claim.
+
+| Score | Standard |
+| --- | --- |
+| 5 | Reproduced or directly observed, exact workflow captured, expected vs observed written, severity tied to a gate/build impact, workaround documented, concrete product improvement proposed, evidence artifact linked. |
+| 4 | Directly observed with evidence and impact, but reproduction count or workaround quality is incomplete. |
+| 3 | Directly observed but missing expected/observed detail, severity rationale, or evidence artifact. Keep in log, do not make it a headline survey claim yet. |
+| 2 | Plausible but based on inference from adjacent behavior. Convert to a future validation placeholder instead of feedback. |
+| 1 | Frustration, preference, or memory-only note. Do not use for award submission. |
 
 ## Survey Answer Map
 

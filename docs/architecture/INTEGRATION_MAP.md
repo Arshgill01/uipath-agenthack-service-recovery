@@ -2,6 +2,8 @@
 
 This map is provisional until validation gates are run.
 
+Implementation readiness slices are tracked in [IMPLEMENTATION_SLICES.md](IMPLEMENTATION_SLICES.md). That file defines what is safe now versus blocked by G-001 through G-004.
+
 | Capability | Planned use | Validation dependency |
 | --- | --- | --- |
 | Maestro Case | Primary case lifecycle, stages, routing, incident/recovery, human accountability. | G-001, G-002, G-005, G-006 |
