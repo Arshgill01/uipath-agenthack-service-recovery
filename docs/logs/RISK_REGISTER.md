@@ -79,3 +79,10 @@
 - R-003 remains open with a concrete runtime blocker: the Action app task failed before review with `The Title field is required.`
 - New risk: Studio deployment validation can succeed while a required Action task field is missing, surfacing only as a runtime `AppTasks` incident.
 - Mitigation: add/map the required Action task title, republish/redeploy, rerun the case, and capture whether the Action Center task renders the evidence packet.
+
+### 2026-06-25 01:46 IST - Title Repair Blocked At Publish
+
+- R-003 is partially mitigated: the required `SimpleApprovalApp` task title was set in the Case designer and the visible task validation warning cleared.
+- R-003 remains open because the repaired case definition has not been published into a new package version or validated in a fresh runtime case.
+- New risk: Studio Web publish/versioning controls may be difficult to operate through browser automation and are not clearly represented as accessible actionable controls.
+- Mitigation: try the publish path again with precise UI interaction, then try UiPath CLI or another browser path if available; keep logs/screenshots so this remains a packaging blocker, not an invented Action Center failure.

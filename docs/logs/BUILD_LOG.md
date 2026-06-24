@@ -610,3 +610,42 @@ Pre-commit validation for this checkpoint:
 
 - PASS: `python -m unittest discover -s tests` ran 16 tests.
 - PASS: `python -m service_recovery_core.evals --output eval_results/local_baseline.json` passed 9/9 eval scenarios.
+
+### 2026-06-25 01:46 IST - Agent / Action Task Title Repair Blocked At Publish
+
+What changed:
+
+- Reopened the repaired Maestro Case plan in Safari.
+- Confirmed `SimpleApprovalApp` remains in `Stage 1` without the earlier visible task validation error.
+- Confirmed `Manage > Versions` still lists only published version `1.0.0`.
+- Captured a screenshot of the repaired case plan and publish-control state.
+- Logged the remaining blocker as publish/versioning rather than Action task title configuration.
+
+Commands run:
+
+- `open -a Safari && sleep 1 && screencapture -x docs/validation/artifacts/2026-06-25/current-safari-build-before-publish.png && file docs/validation/artifacts/2026-06-25/current-safari-build-before-publish.png`
+- `open -a Safari && sleep 0.5 && screencapture -x docs/validation/artifacts/2026-06-25/g003-title-repaired-publish-control-not-opened.png && git status --short`
+- `git status --short --branch`
+
+Validation:
+
+- PASS: design-time repair for the missing Action task title is visible in the Case plan.
+- PASS: `Manage > Versions` confirms no repaired package version has been published yet; only `1.0.0` is available.
+- BLOCKED/PARTIAL: fresh runtime validation could not proceed because the repaired definition was not published/deployed.
+- PASS: `python -m unittest discover -s tests` ran 16 tests.
+- PASS: `python -m service_recovery_core.evals --output eval_results/local_baseline.json` passed 9/9 eval scenarios.
+
+Product feedback:
+
+- PF-007 remains open until a fresh case reaches Action Center.
+- PF-008 added for Studio Web publish control and versioning friction.
+
+Open risks:
+
+- G-003 remains partial until the repaired package reaches a live Action Center task.
+- G-001, G-002, and G-004 remain partial because no new case instance was started after the repair.
+
+Next:
+
+- Publish a repaired version, preferably `1.0.1`, then deploy and start a fresh `Maestro Case` job.
+- If Studio Web publish remains inaccessible, try a UiPath CLI or alternate browser publish path before broad implementation.

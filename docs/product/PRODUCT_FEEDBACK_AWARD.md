@@ -44,6 +44,7 @@ This matrix groups the current evidence into issue classes. Add new observations
 | Studio Web local Assistant migration prompt during hackathon build | PF-005 | UX / integration / docs | medium | A time-boxed hackathon builder can continue or switch environments with clear impact on current project, debugging, and publication. | Studio Web interrupted Action app validation with a prompt saying RPA/app editing and debugging are moving to local UiPath Assistant and are required for all Community users starting July 22. | Selected `Do this later`, then `I'll switch later, just not today` and `Stay on current setup` to keep the current web validation moving. | Add a hackathon-safe readiness banner with exact local Assistant requirements, what still works in web Studio today, deadline impact, and a one-click environment check. | `docs/validation/artifacts/2026-06-25/g003-safari-simple-approval-upgrade-prompt.png`; PF-005. |
 | Action app schema-to-page generation for custom evidence fields | PF-006 | UX / product defect candidate / integration | high for G-003 | All valid string input properties generate readable, bound reviewer controls, or the generator gives precise repair actions before/after generation. | `EvidencePacketJson` and `RawAgentRecommendation` generated visible controls, but `PolicyDecisionJson` triggered an auto-generation warning and the page showed an ambiguous `Unnamed String 1` control. | Manual binding/regeneration still needs validation; keep a custom Case App/evidence-packet fallback if the missing policy decision cannot be repaired reliably. | Add schema preflight, per-property generation status, jump-to-failed-control, and an automatic repair/regenerate option that preserves existing controls. | `docs/validation/artifacts/2026-06-25/g003-generated-action-page-partial-evidence-packet.png`; PF-006. |
 | Action task deployment/runtime validation for required fields | PF-007 | UX / integration / product defect candidate | high for G-003 | Publish/deploy or task configuration validation catches missing required Action task fields before runtime, with a direct link to the field to repair. | Deployment succeeded and Orchestrator/Apps activated, but the live Maestro case faulted at `SimpleApprovalApp` with `Failure in the AppTasks request - (170000)` and `The Title field is required.` | Add/map the required Action task title, republish/redeploy, and retry/start a fresh case instance. | Add a preflight validator for Action task required fields such as Title, show missing mappings in Studio before deployment, and include field-specific repair links in Maestro incidents. | `docs/validation/artifacts/2026-06-25/g003-action-app-deployment-success.png`; `docs/validation/artifacts/2026-06-25/g003-maestro-action-task-title-required-incident.png`; PF-007. |
+| Studio Web publish/versioning after case repair | PF-008 | UX / accessibility / integration | high for G-003 iteration | After a designer repair, the builder can clearly publish a new package version and see whether deployment will use the repaired definition. | The required Action task title was repaired in the Case designer, but `Manage > Versions` still showed only `1.0.0`; the visual `Publish` control was exposed through accessibility only as text inside a broad toolbar/tab group and did not open reliably through available automation. | Keep the repair in the designer, retry publish with precise UI interaction or alternate publish path, and do not rerun the old `1.0.0` package as if it contains the fix. | Make Publish a first-class accessible button; show unsaved/unpublished changes and a direct `Publish new version` callout from Manage when the designer has changed since latest version. | `docs/validation/artifacts/2026-06-25/g003-title-repaired-publish-control-not-opened.png`; PF-008. |
 | Future: live case audit and override visibility | placeholder | unknown until observed | TBD | One case view or one query reconstructs evidence state, policy versions, raw recommendation, policy decision, closure block, human action, and timestamps. | Not observed yet. Do not claim. | Run minimal live Maestro Case instance for G-001/G-002/G-004. | TBD after observation. | `docs/validation/VALIDATION_GATES.md` G-001, G-002, G-004; `docs/logs/RISK_REGISTER.md` R-001/R-002/R-004. |
 
 ## Best Insights So Far
@@ -52,7 +53,7 @@ This matrix groups the current evidence into issue classes. Add new observations
 - The strongest product-design insight is that Maestro Case successfully exposes the right primitives for this architecture: Case app, case plan, stages, rules, task types, Human action, Agent, Agentic process, and Case JSON/code view. The remaining friction is discovery and configuration clarity, not lack of conceptual fit.
 - The fairest framing for PF-001 is access/account-state ambiguity, not a confirmed product defect. Later tenant access worked, so this should be submitted as onboarding diagnostics feedback.
 - PF-004 should be framed as three related observations: filtered picker activation/accessibility friction, post-insertion configuration ambiguity, and the separate Action app path that exposes schema/page primitives but not obvious case return mapping.
-- PF-006 and PF-007 are currently the strongest high-specificity feedback items for G-003: PF-006 covers design-time generation reliability; PF-007 covers deploy/runtime validation gap for a required Action task field.
+- PF-006, PF-007, and PF-008 are currently the strongest high-specificity feedback items for G-003: PF-006 covers design-time generation reliability; PF-007 covers deploy/runtime validation gap for a required Action task field; PF-008 covers repair-to-publish iteration friction.
 - Do not claim Action Center evidence-packet rendering is poor or sufficient yet. The observed facts are that Action Center opens, the Case plan can hold a Human action placeholder, and a generated Action page can show some but not all custom evidence packet fields.
 
 ## Draft Survey Answer Scaffold
@@ -105,6 +106,7 @@ Use accumulated entries to answer the final feedback survey.
 | PF-005 | 2026-06-25 | Studio Web | Local Assistant migration prompt | G-003 | UX / integration / docs | medium | open | `docs/validation/artifacts/2026-06-25/g003-safari-simple-approval-upgrade-prompt.png` |
 | PF-006 | 2026-06-25 | Studio Web / Action app | Generate page from Action schema | G-003 | UX / product defect candidate / integration | high | open | `docs/validation/artifacts/2026-06-25/g003-generated-action-page-partial-evidence-packet.png` |
 | PF-007 | 2026-06-25 | Maestro Case / Action tasks | Live Action task runtime validation | G-003 | UX / integration / product defect candidate | high | open | `docs/validation/artifacts/2026-06-25/g003-maestro-action-task-title-required-incident.png` |
+| PF-008 | 2026-06-25 | Studio Web / Publish | Publish repaired Case plan | G-003 | UX / accessibility / integration | high | open | `docs/validation/artifacts/2026-06-25/g003-title-repaired-publish-control-not-opened.png` |
 
 ## Entry Template
 
@@ -598,6 +600,77 @@ Evidence:
 Classification:
 
 - access / missing feature / UX
+
+Survey tags:
+
+- product-used
+- pain-point
+- workaround
+- improvement
+- evidence
+
+### PF-008 - 2026-06-25 - Studio Web / Publish Repaired Case Plan
+
+Context:
+
+- ID: PF-008.
+- Status: open.
+- Goal: publish the repaired Maestro Case definition after fixing the required Action task title for G-003.
+- Product surface: Studio Web publish/versioning workflow for Maestro Case solutions.
+- Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `Arshdeep Singh`.
+- Wave/gate: G-003, with G-001/G-002/G-004 dependent on a fresh live case rerun.
+
+What worked:
+
+- The Case designer exposed the required `Task title` field for `SimpleApprovalApp`.
+- After setting `Review service recovery evidence`, the visible task validation warning cleared in the Case plan.
+- `Manage > Versions` clearly showed the currently published package version and release notes.
+
+What failed or confused us:
+
+- After the design-time repair, `Manage > Versions` still showed only `1.0.0`, so the fixed case definition was not available for deployment.
+- The visual `Publish` control was not represented as a normal actionable button in the accessibility tree; it appeared as text inside a broader toolbar/tab group.
+- Repeated accessibility and coordinate-based attempts did not reliably open the publish flow in this session, making it difficult to move from a confirmed designer repair to a live rerun.
+
+Expected:
+
+- A builder who fixes a runtime-blocking Case task field should have a clear `Publish new version` path and a visible indication that the deployed version is stale.
+- Publish should be a first-class accessible button/menu with deterministic behavior in browser automation.
+
+Observed:
+
+- Current published version remained `1.0.0` with release notes `G-003 evidence packet validation`.
+- No `1.0.1` or later repaired package appeared in `Manage > Versions`.
+- The Case plan showed `SimpleApprovalApp` in `Stage 1` without the earlier visible validation warning, but runtime validation could not continue because the repaired definition was not published.
+
+Impact:
+
+- Build impact: high for G-003. The team had a concrete fix for the previous `The Title field is required` runtime failure, but could not yet prove it in a fresh live case.
+- Demo/submission impact: medium/high. It slows iteration on the central human evidence packet proof and increases the risk of accidentally rerunning stale package versions.
+- Severity: high during hackathon iteration.
+
+Workaround:
+
+- Do not rerun the old `1.0.0` deployment as if it contains the fix.
+- Retry the publish path with precise UI interaction or another browser/session.
+- If available, test whether UiPath CLI can publish/package the current project state.
+- Keep this as a packaging/publish blocker, not an Action Center rendering failure.
+
+Suggested improvement:
+
+- Make `Publish` a first-class accessible button with explicit menu items exposed to automation and keyboard users.
+- Show a persistent `Unpublished changes` indicator when the designer state differs from the latest package version.
+- On `Manage > Versions` and `New deployment`, add a callout such as `Latest package does not include current designer changes` with a direct `Publish new version` action.
+- After a runtime incident points to a required field, provide a repair-and-republish guided flow from the incident or task properties.
+
+Evidence:
+
+- Screenshot/path/link: `docs/validation/artifacts/2026-06-25/g003-title-repaired-publish-control-not-opened.png`.
+- Commands/logs: see `docs/validation/VALIDATION_RESULTS.md`, 2026-06-25 01:46 IST G-003 Action Task Title Repair / Publish Blocker.
+
+Classification:
+
+- UX / accessibility / integration
 
 Survey tags:
 

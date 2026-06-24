@@ -546,3 +546,50 @@ Evidence:
 - `docs/validation/artifacts/2026-06-25/g001-maestro-case-orchestrator-running-job.png`
 - `docs/validation/artifacts/2026-06-25/g001-maestro-live-case-execution-trail-faulted.png`
 - `docs/validation/artifacts/2026-06-25/g003-maestro-action-task-title-required-incident.png`
+
+## 2026-06-25 01:46 IST - G-003 Action Task Title Repair / Publish Blocker
+
+Environment:
+
+- UiPath Automation Cloud org `keepingitlowkey`, tenant `DefaultTenant`.
+- Safari browser session authenticated as `Arshdeep Singh`.
+- Existing published solution version remained `1.0.0`.
+
+Gate:
+
+- G-003: Human Evidence Packet.
+
+Steps:
+
+1. Reopened the `Maestro Case` case plan after the live runtime fault.
+2. Selected the `SimpleApprovalApp` human action task.
+3. Set the required task title to `Review service recovery evidence`.
+4. Confirmed the task no longer showed the visible validation warning in the Case plan canvas.
+5. Opened `Manage > Deployments` and `Manage > Versions`.
+6. Confirmed the published package list still contained only version `1.0.0` with release notes `G-003 evidence packet validation`.
+7. Attempted to open the Studio Web `Publish` control through accessibility clicks and direct screen coordinates.
+
+Observed:
+
+- The design-time title repair is real: `SimpleApprovalApp` remains in `Stage 1`, and the visible task validation warning is gone.
+- The repair has not been validated at runtime because no new package version was published after the title change.
+- `Manage > Versions` showed only published version `1.0.0`; no `1.0.1` or later repaired package was available.
+- The publish control is visually present in Studio Web, but it was exposed in the accessibility tree only as text inside a broad toolbar/tab group and did not open reliably through the available automation path in this session.
+
+Result:
+
+- G-003: PARTIAL. The concrete runtime blocker from the previous run has a design-time repair, but the repair is not proven until a new package version is published, deployed, and a fresh case instance reaches Action Center.
+- G-001/G-002/G-004: unchanged PARTIAL. No new live case instance was started after the repair.
+
+Decision impact:
+
+- Continue with the same minimal validation path, but the next live step is packaging/publishing the repaired case definition, not broad implementation.
+- If Studio Web publish remains unreliable, use an alternate publish path if available through UiPath CLI or another browser/session; otherwise document it as a product/build blocker and ask for interactive user help only for the click, not credentials.
+
+Product feedback:
+
+- PF-008 added for Studio Web publish/versioning control accessibility and packaging clarity.
+
+Evidence:
+
+- `docs/validation/artifacts/2026-06-25/g003-title-repaired-publish-control-not-opened.png`
