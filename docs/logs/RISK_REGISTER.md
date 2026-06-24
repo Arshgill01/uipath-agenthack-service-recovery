@@ -50,3 +50,10 @@
 - R-002 remains open: Case JSON exposes design `version`/`publishVersion`, but active-case policy version pinning is still unvalidated.
 - R-003 remains open: Human action is available in the Case task menu, but no evidence packet task has been created or reviewed.
 - R-004 remains open: the Case model appears capable of representing agent/policy separation, but live persistence/visibility of linked raw recommendation and override decision is not proven.
+
+### 2026-06-25 01:11 IST - Human Action Placeholder Inserted
+
+- R-003 likelihood decreases but remains open: Studio Web can insert `Human action (placeholder)` into `Stage 1`, proving the Case plan can hold a human-review task scaffold.
+- R-003 impact remains medium/high until a configured Action app or equivalent task shows the required evidence packet fields and returns structured reviewer outcomes to the case.
+- New product/build risk: selecting the inserted placeholder left the properties panel on stage properties, so task-level configuration may require a separate `Create new Action app` flow or another UI path.
+- R-001, R-002, and R-004 remain open because no live case instance has run.

@@ -294,3 +294,39 @@ Next:
 - Add a minimal human action task to the Case plan.
 - Publish/debug the smallest case instance.
 - Inspect case history/state and Action Center task rendering before implementing broader flows.
+
+### 2026-06-25 01:11 IST - Agent / G-003 Human Action Placeholder
+
+What changed:
+
+- Reopened the real Maestro Case plan in Zen.
+- Inserted `Human action (placeholder)` under `Stage 1` through `Add first task > Human action > Human action placeholder`.
+- Confirmed Case JSON/code view remains available and exposes case metadata, but did not save any JSON edits.
+- Captured a canvas screenshot showing the inserted placeholder task.
+
+Commands run:
+
+- `git status --short --branch`
+- `rg -n "2026-06-24|G-003|PF-004|Current status|hard gates|Action Center|Human action" ...`
+- `screencapture -x docs/validation/artifacts/2026-06-25/g003-human-action-placeholder-canvas.png`
+
+Validation:
+
+- PARTIAL: G-003 now has a real Human action placeholder inserted in Studio Web.
+- NOT PASS: evidence-packet fields, reviewer outcomes, and structured return to the case have not been validated.
+- SAFETY: an accidental malformed JSON editor text entry was discarded; `Save` was disabled and no malformed JSON was saved.
+
+Product feedback:
+
+- PF-004 updated.
+
+Open risks:
+
+- Action Center rendering quality and structured return behavior remain unvalidated.
+- Task-level Human action configuration did not surface clearly from selecting the placeholder in this observation.
+- Runtime case execution/publish/debug remains unvalidated.
+
+Next:
+
+- Use `Create new Action app` or the supported task configuration path to build a minimal evidence packet.
+- Publish/debug the smallest case instance and inspect Action Center plus case history.

@@ -52,7 +52,7 @@ Use accumulated entries to answer the final feedback survey.
 | PF-001 | 2026-06-24 | Automation Cloud | Labs tenant access | Wave 01 | access / UX / docs | high | superseded | `docs/validation/VALIDATION_RESULTS.md` |
 | PF-002 | 2026-06-24 | Maestro | Home/recent projects | Wave 01 | product defect / UX | medium | open | `docs/validation/artifacts/2026-06-24/wave01-maestro-home.png` |
 | PF-003 | 2026-06-24 | Actions / Action Center | Pending task access | Wave 01 / G-003 | access / missing feature | high | resolved | `docs/validation/artifacts/2026-06-24/wave01-actions-not-enabled.png` |
-| PF-004 | 2026-06-24 | Studio Web / Maestro Case | Add Human action task | G-003 | UX / accessibility | medium | open | `docs/validation/artifacts/2026-06-24/g001-maestro-case-json-code-view.png` |
+| PF-004 | 2026-06-24 | Studio Web / Maestro Case | Add Human action task | G-003 | UX / accessibility | medium | repeated / partial | `docs/validation/artifacts/2026-06-25/g003-human-action-placeholder-canvas.png` |
 
 ## Entry Template
 
@@ -173,7 +173,7 @@ Survey tags:
 Context:
 
 - ID: PF-004.
-- Status: open.
+- Status: repeated / partial. The original filtered-row activation issue was bypassed on 2026-06-25 by selecting `Human action` from the unfiltered task picker and then selecting `Human action placeholder`, but task configuration remains unclear.
 - Goal: create the smallest real human review task for G-003 evidence-packet validation.
 - Product surface: Studio Web, Maestro Case designer.
 - Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `Arshdeep Singh`.
@@ -185,12 +185,17 @@ What worked:
 - The Case designer creates a real `Case plan` with stages, rules, Case app metadata, and code view.
 - The `Add task` menu lists architecture-relevant task types, including `Agent`, `Agentic process`, workflows, connector waits, and `Human action`.
 - Searching the task picker for `Human action` filters to the expected single option.
+- Selecting `Human action` from the unfiltered task picker opened a second-level picker with `Human action placeholder` and `Create new Action app`.
+- Selecting `Human action placeholder` inserted a visible `Human action (placeholder)` task under `Stage 1` sequential tasks.
+- The JSON editor guarded against a malformed accidental edit by disabling `Save` and prompting to discard unsaved changes.
 
 What failed or confused us:
 
 - The filtered `Human action` option was exposed as selectable text, not a button/action, in the accessibility tree.
 - Clicks and Return did not activate the filtered row in the Zen/computer-use session.
 - The task picker gave no visible error or hint about whether the row was selected, disabled, required drag/drop, or waiting for a different interaction.
+- After placeholder insertion, selecting the placeholder did not obviously switch the properties panel to task-level configuration; the visible properties panel still showed stage properties.
+- It was not yet clear from the designer where to configure reviewer-facing evidence fields, decision outcomes, comments, and structured return mapping.
 
 Expected:
 
@@ -201,6 +206,8 @@ Observed:
 
 - The menu remained open after selecting/filtering; no human action task was added to `Stage 1`.
 - Accessibility secondary action was unavailable for the row.
+- In the follow-up run, the unfiltered-selection path inserted `Human action (placeholder)`.
+- The inserted placeholder is a useful scaffold but not a G-003 pass because it does not yet show the structured evidence packet or reviewer return contract.
 
 Impact:
 
@@ -212,17 +219,23 @@ Workaround:
 
 - Continue by trying the same action manually in the browser, using a different selection gesture, or finding a supported Case JSON/schema route after inspecting docs/platform behavior.
 - Keep Case App/custom evidence-packet fallback open until Action Center task rendering is validated end to end.
+- Prefer the unfiltered path: `Add first task > Human action > Human action placeholder`.
+- Next try `Create new Action app` because the placeholder alone does not expose the evidence-packet configuration needed for the demo.
 
 Suggested improvement:
 
 - Make task-picker rows first-class buttons/options with keyboard activation, visible focus state, and accessible action metadata.
 - Add microcopy or inline hints for any task types that require drag/drop, prior resource setup, catalog selection, or permissions before insertion.
 - For Maestro Case, add a guided `Add human review` template that scaffolds reviewer instructions, decision outputs, comments, and return mapping to the case.
+- After inserting a task, automatically select it and show task-level configuration, or display a clear next-step affordance such as `Configure Action app`, `Map inputs`, and `Map outputs`.
+- Add an evidence-packet starter template for case review tasks with a table section, raw agent output, policy decision, block reason, recommended actions, decision buttons, comment, and typed return schema.
 
 Evidence:
 
 - Screenshot/path/link: `docs/validation/artifacts/2026-06-24/g001-maestro-case-json-code-view.png`.
+- Screenshot/path/link: `docs/validation/artifacts/2026-06-25/g003-human-action-placeholder-canvas.png`.
 - Commands/logs: see `docs/validation/VALIDATION_RESULTS.md`, 2026-06-24 21:40 IST Zen Session Maestro Case Designer Checkpoint.
+- Commands/logs: see `docs/validation/VALIDATION_RESULTS.md`, 2026-06-25 01:11 IST G-003 Human Action Placeholder Inserted.
 
 Classification:
 

@@ -2,7 +2,7 @@
 
 Do not scaffold major application code until hard gates are answered or explicitly waived.
 
-Current status: not run. Any implementation work before these gates must be treated as local/provisional and must not assume Maestro Case native state, Action Center rendering, or policy pinning behavior.
+Current status: in progress / partial. Wave 01 access and Maestro Case design-surface validation have run against org `keepingitlowkey`, tenant `DefaultTenant`. G-001 through G-004 are still not pass-certified because runtime case audit reconstruction, policy version pinning, evidence-packet rendering/return, and raw recommendation visibility have not been proven in a live case.
 
 ## Hard Gates
 

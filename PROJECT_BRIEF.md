@@ -95,7 +95,7 @@ Secondary:
 
 ## Current Validation Status
 
-This repository currently contains scaffolding and planning documents. UiPath Labs hard gates have not been run yet.
+This repository contains a local/provisional recovery core plus UiPath Labs validation logs. Wave 01 access and Maestro Case design-surface validation have run against org `keepingitlowkey`, tenant `DefaultTenant`; hard gates G-001 through G-004 remain PARTIAL until a live case proves runtime audit reconstruction, policy version pinning, evidence-packet review/return, and raw recommendation visibility before policy override.
 
 Before major application scaffolding, complete or explicitly waive:
 

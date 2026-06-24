@@ -321,3 +321,54 @@ Follow-up:
 - Add a minimal human action task to `Stage 1`.
 - Publish/debug the smallest case instance.
 - Inspect whether one Case view or query reconstructs evidence state, policy versions, raw recommendation, policy decision, closure block, human action, and event timestamps.
+
+## 2026-06-25 01:11 IST - G-003 Human Action Placeholder Inserted
+
+Environment:
+
+- UiPath Automation Cloud org `keepingitlowkey`, tenant `DefaultTenant`.
+- Zen browser session authenticated as `Arshdeep Singh`.
+- Studio Web solution `Maestro BPMN`, solution ID `b6446ea0-7ebd-4712-ccbf-08ded1e3ee41`.
+- Maestro Case project URL observed with project ID `35207db4-6227-4833-aee1-5cb461f3eb69` and file ID `31c38730-c81e-40e2-be4d-c71a7e6031e5`.
+
+Gate:
+
+- G-003: Human Evidence Packet.
+- Assumption tested: Studio Web can insert a real `Human action` task into the Maestro Case plan, which is the first platform prerequisite for an Action Center evidence-packet review.
+
+Steps:
+
+1. Reopened the existing `Maestro Case` project in the logged-in Zen/cmux browser session.
+2. Closed the introductory Case Management modal.
+3. Opened `Stage 1 > Add first task`.
+4. Selected `Human action` from the task picker.
+5. Selected `Human action placeholder` from the second-level Human action picker.
+6. Opened Case JSON/code view to inspect the generated case-plan metadata, then canceled without saving after the editor showed an unsaved malformed test edit.
+7. Captured a clean canvas screenshot after returning to the Case designer.
+
+Observed:
+
+- `Human action` is not just listed in the first-level task picker; selecting it opens a second-level picker with `Human action placeholder` and `Create new Action app`.
+- Selecting `Human action placeholder` inserts a visible `Human action (placeholder)` task under `Stage 1` sequential tasks.
+- The right properties panel still showed stage properties after selecting the inserted task; task-level evidence packet fields, reviewer outcomes, and return mappings were not visible in this observation.
+- The Case JSON editor is available and showed case metadata including `id: case-rNCvlV3LxR`, `version: 23.0.0`, `caseIdentifier: CASE`, `caseIdentifierType: constant`, `caseAppEnabled: true`, `publishVersion: 2`, and `caseUnifiedSchemaEnabled: true`.
+- The JSON editor accepted accidental typed text into the modal but kept `Save` disabled and prompted to discard changes; the malformed editor-only change was discarded.
+
+Result:
+
+- G-003: PARTIAL. Studio Web can insert a real Human action placeholder task into a Maestro Case plan, but the pass condition is not met because reviewer-visible evidence table, agent output, policy decision, block reason, recommended options, approve/reject/request-evidence/comment outcome, and structured return to the case are still unproven.
+- G-001/G-002/G-004 remain PARTIAL. This observation improves the build path for human review but does not prove runtime audit reconstruction, active-case policy version pinning, or raw-recommendation-before-override visibility.
+
+Decision impact:
+
+- Continue G-003 through `Create new Action app` or task configuration before choosing a Case App/custom evidence-packet fallback.
+- Do not start broad implementation yet; the next validation action must create/configure a real evidence packet and run or publish the smallest case instance.
+- Treat `Human action placeholder` as a scaffold only, not a pass-worthy evidence packet.
+
+Product feedback:
+
+- PF-004 updated from open friction to partially resolved insertion path with remaining task-configuration ambiguity.
+
+Evidence:
+
+- `docs/validation/artifacts/2026-06-25/g003-human-action-placeholder-canvas.png`
