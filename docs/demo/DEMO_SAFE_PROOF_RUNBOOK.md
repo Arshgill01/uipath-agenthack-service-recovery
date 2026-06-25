@@ -112,24 +112,36 @@ The default proof artifacts are deterministic so tests and evals are repeatable.
 
 Auth is environment-based; do not store keys or project IDs in the repo.
 
+Default wrapper:
+
+```sh
+scripts/run_llm_demo.sh
+```
+
+If auth is unavailable, the wrapper writes `eval_results/llm_interpreter_E003.json` with `status: blocked` and exits `2`. Do not treat that as a live LLM validation.
+
+Validated live artifact:
+
+- `docs/demo/artifacts/llm_interpreter_E003_live.json`
+- Model used for the captured run: `gemini-2.5-flash` on Vertex AI.
+- Observed beat: Gemini emitted a valid Agent Interpretation Event with `recommended_next_stage: closure_candidate`; policy emitted `decision: override_recommendation`, `to_stage: verify_telemetry`, and reason `stale_authoritative_signal`.
+
 API-key path:
 
 ```sh
-GEMINI_API_KEY=... python -m service_recovery_core.llm_interpreter \
+GEMINI_API_KEY=... scripts/run_llm_demo.sh \
   --scenario-id E-003 \
-  --model gemini-3-flash \
-  --output eval_results/llm_interpreter_E003.json
+  --model gemini-3-flash
 ```
 
 Vertex AI path:
 
 ```sh
-python -m service_recovery_core.llm_interpreter \
+scripts/run_llm_demo.sh \
   --scenario-id E-003 \
   --model gemini-3-flash \
   --project YOUR_GOOGLE_CLOUD_PROJECT_ID \
-  --location us-central1 \
-  --output eval_results/llm_interpreter_E003.json
+  --location us-central1
 ```
 
 Expected proof beat:
@@ -138,6 +150,7 @@ Expected proof beat:
 - The event may include urgency, customer impact, evidence gaps, recommended actions, reviewer questions, and an operator note.
 - In the stale-telemetry scenario, the LLM can recommend `closure_candidate`; policy then overrides to `verify_telemetry` with `stale_authoritative_signal`.
 - If auth is missing, the command returns JSON with `status: blocked` and the required next step.
+- If the provider call works but the model output violates the local agent contract, the command returns JSON with `status: invalid_llm_output`; do not use that run as proof until it validates.
 
 Individual generation commands are available for inspection or partial refresh.
 

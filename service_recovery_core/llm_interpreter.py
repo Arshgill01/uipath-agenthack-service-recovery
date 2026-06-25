@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 from datetime import datetime, timezone
 from typing import Any, Protocol
 
@@ -24,6 +25,14 @@ class ContentClient(Protocol):
         ...
 
 
+class GoogleContentClient:
+    def __init__(self, client: Any):
+        self._client = client
+
+    def generate_content(self, *, model: str, contents: str, config: Any = None) -> Any:
+        return self._client.models.generate_content(model=model, contents=contents, config=config)
+
+
 def interpret_notes_with_llm(
     *,
     notes: list[dict[str, str]],
@@ -39,14 +48,18 @@ def interpret_notes_with_llm(
 
     active_client = client or _default_google_client(project=project, location=location)
     prompt = build_interpretation_prompt(notes=notes, business_context=business_context)
-    raw_text = _response_text(
-        active_client.generate_content(
-            model=model,
-            contents=prompt,
-            config=_generation_config(),
+    try:
+        raw_text = _response_text(
+            active_client.generate_content(
+                model=model,
+                contents=prompt,
+                config=_generation_config(),
+            )
         )
-    )
+    except Exception as exc:
+        raise LlmInterpreterError(f"LLM provider call failed: {exc}") from exc
     payload = _json_object(raw_text)
+    payload = _normalize_payload(payload)
     payload["event_id"] = event_id
     payload["input_refs"] = input_refs
     result = validate_agent_interpretation(payload)
@@ -60,8 +73,9 @@ def build_interpretation_prompt(*, notes: list[dict[str, str]], business_context
         [
             "You are the interpretation agent for a telecom service recovery case.",
             "Read unstructured technician notes, customer messages, and support notes.",
-            "Extract structured signals only. Do not make final closure or policy decisions.",
-            "The deterministic policy engine will separately check authoritative evidence freshness and contradictions.",
+            "Produce a structured triage recommendation package for the case owner.",
+            "You may recommend closure, retry, investigation, or human review, but you do not enforce final closure or routing.",
+            "The policy engine will separately check authoritative evidence freshness and contradictions.",
             "Return only one JSON object with these exact keys:",
             "- failure_category",
             "- category_confidence",
@@ -71,6 +85,12 @@ def build_interpretation_prompt(*, notes: list[dict[str, str]], business_context
             "- recommendation_confidence",
             "- closure_block_reason_code",
             "- audit_explanation",
+            "- urgency",
+            "- customer_impact_summary",
+            "- evidence_gaps",
+            "- recommended_actions",
+            "- reviewer_questions",
+            "- operator_note",
             "",
             "Allowed failure_category values:",
             "activation_failure, billing_hold, inventory_mismatch, dispatch_dependency, telemetry_gap, customer_premises_issue, unclassified",
@@ -86,7 +106,14 @@ def build_interpretation_prompt(*, notes: list[dict[str, str]], business_context
             "none, missing_authoritative_signal, stale_authoritative_signal, source_contradiction, low_category_confidence, low_recommendation_confidence, high_impact_exception, invalid_agent_output",
             "",
             "If business context and notes look resolved, you may recommend closure_candidate with closure_block_reason_code none.",
-            "Do not inspect or override authoritative telemetry freshness; policy owns that.",
+            "You should still provide useful triage value: urgency, customer impact, evidence gaps, recommended actions, reviewer questions, and an operator note.",
+            "Do not override authoritative telemetry freshness; policy owns enforcement against source-of-truth evidence.",
+            "Validator rules you must obey:",
+            "- Do not use failure_category unclassified unless category_confidence <= 0.40.",
+            "- If category_confidence >= 0.75, include at least one non-none rationale code.",
+            "- If category_confidence >= 0.90, include at least two rationale codes or one high-specificity code.",
+            "- If notes mention activation retry, green modem, signal, or service stability, prefer activation_failure or telemetry_gap over unclassified.",
+            "- For closure_candidate, closure_block_reason_code must be none and recommendation_confidence must be >= 0.75.",
             "Use ISO-8601 timestamps in extracted_claims. If a note lacks a timestamp, use the case timestamp.",
             "",
             f"Business context JSON:\n{json.dumps(business_context, indent=2, sort_keys=True)}",
@@ -177,10 +204,19 @@ def main() -> int:
             location=args.location,
         )
     except LlmInterpreterError as exc:
+        reason = str(exc)
+        status = "blocked"
+        next_step = "Set GEMINI_API_KEY/GOOGLE_API_KEY, or pass --project with Application Default Credentials."
+        if "failed validation" in reason:
+            status = "invalid_llm_output"
+            next_step = "Inspect validation errors, refine the prompt/schema, and rerun; do not claim live LLM validation."
+        elif "provider call failed" in reason:
+            status = "provider_call_failed"
+            next_step = "Verify model name, Vertex/API auth, project, region, and network access before rerunning."
         error = {
-            "status": "blocked",
-            "reason": str(exc),
-            "next_step": "Set GEMINI_API_KEY/GOOGLE_API_KEY, or pass --project with Application Default Credentials.",
+            "status": status,
+            "reason": reason,
+            "next_step": next_step,
         }
         rendered_error = json.dumps(error, indent=2, sort_keys=True)
         if args.output:
@@ -204,12 +240,12 @@ def _default_google_client(*, project: str | None = None, location: str | None =
 
     api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
     if api_key:
-        return genai.Client(api_key=api_key).models
+        return GoogleContentClient(genai.Client(api_key=api_key))
 
     resolved_project = project or os.environ.get("GOOGLE_CLOUD_PROJECT") or os.environ.get("GOOGLE_PROJECT_ID")
     resolved_location = location or os.environ.get("GOOGLE_CLOUD_LOCATION") or os.environ.get("GOOGLE_VERTEX_LOCATION") or DEFAULT_LOCATION
     if resolved_project:
-        return genai.Client(vertexai=True, project=resolved_project, location=resolved_location).models
+        return GoogleContentClient(genai.Client(vertexai=True, project=resolved_project, location=resolved_location))
 
     raise LlmInterpreterError(
         "Set GEMINI_API_KEY/GOOGLE_API_KEY or GOOGLE_CLOUD_PROJECT with Application Default Credentials."
@@ -224,7 +260,119 @@ def _generation_config() -> Any:
     return types.GenerateContentConfig(
         temperature=0.2,
         response_mime_type="application/json",
+        response_json_schema=_response_json_schema(),
     )
+
+
+def _response_json_schema() -> dict[str, Any]:
+    return {
+        "type": "object",
+        "additionalProperties": False,
+        "required": [
+            "failure_category",
+            "category_confidence",
+            "interpretation_rationale_codes",
+            "extracted_claims",
+            "recommended_next_stage",
+            "recommendation_confidence",
+            "closure_block_reason_code",
+            "audit_explanation",
+            "urgency",
+            "customer_impact_summary",
+            "evidence_gaps",
+            "recommended_actions",
+            "reviewer_questions",
+            "operator_note",
+        ],
+        "properties": {
+            "failure_category": {
+                "type": "string",
+                "enum": [
+                    "activation_failure",
+                    "billing_hold",
+                    "inventory_mismatch",
+                    "dispatch_dependency",
+                    "telemetry_gap",
+                    "customer_premises_issue",
+                    "unclassified",
+                ],
+            },
+            "category_confidence": {"type": "number", "minimum": 0, "maximum": 1},
+            "interpretation_rationale_codes": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                    "type": "string",
+                    "enum": [
+                        "mentions_access_blocker",
+                        "mentions_device_mismatch",
+                        "mentions_signal_absent",
+                        "mentions_billing_hold",
+                        "mentions_customer_pressure",
+                        "mentions_system_timeout",
+                        "none",
+                    ],
+                },
+            },
+            "extracted_claims": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "additionalProperties": False,
+                    "required": ["claim_type", "value", "source", "timestamp"],
+                    "properties": {
+                        "claim_type": {
+                            "type": "string",
+                            "enum": [
+                                "customer_reported_symptom",
+                                "technician_observation",
+                                "support_note_claim",
+                                "device_identifier",
+                                "appointment_update",
+                                "pressure_to_bypass",
+                            ],
+                        },
+                        "value": {"type": "string"},
+                        "source": {"type": "string", "enum": ["customer_message", "technician_note", "support_note"]},
+                        "timestamp": {"type": "string"},
+                    },
+                },
+            },
+            "recommended_next_stage": {
+                "type": "string",
+                "enum": [
+                    "verify_telemetry",
+                    "retry_activation",
+                    "dispatch_followup",
+                    "inventory_reconciliation",
+                    "billing_review",
+                    "human_exception_review",
+                    "closure_candidate",
+                ],
+            },
+            "recommendation_confidence": {"type": "number", "minimum": 0, "maximum": 1},
+            "closure_block_reason_code": {
+                "type": "string",
+                "enum": [
+                    "none",
+                    "missing_authoritative_signal",
+                    "stale_authoritative_signal",
+                    "source_contradiction",
+                    "low_category_confidence",
+                    "low_recommendation_confidence",
+                    "high_impact_exception",
+                    "invalid_agent_output",
+                ],
+            },
+            "audit_explanation": {"type": "string"},
+            "urgency": {"type": "string", "enum": ["low", "normal", "high", "critical"]},
+            "customer_impact_summary": {"type": "string"},
+            "evidence_gaps": {"type": "array", "items": {"type": "string"}},
+            "recommended_actions": {"type": "array", "items": {"type": "string"}},
+            "reviewer_questions": {"type": "array", "items": {"type": "string"}},
+            "operator_note": {"type": "string"},
+        },
+    }
 
 
 def _response_text(response: Any) -> str:
@@ -247,6 +395,38 @@ def _json_object(text: str) -> dict[str, Any]:
     if not isinstance(payload, dict):
         raise LlmInterpreterError("LLM response JSON must be an object")
     return payload
+
+
+def _normalize_payload(payload: dict[str, Any]) -> dict[str, Any]:
+    normalized = dict(payload)
+    for field in ("category_confidence", "recommendation_confidence"):
+        value = normalized.get(field)
+        if isinstance(value, str):
+            parsed = _parse_confidence(value)
+            if parsed is not None:
+                normalized[field] = parsed
+    claims = normalized.get("extracted_claims")
+    if isinstance(claims, list):
+        normalized["extracted_claims"] = [_normalize_claim(claim) for claim in claims]
+    return normalized
+
+
+def _parse_confidence(value: str) -> float | None:
+    match = re.search(r"[-+]?\d*\.?\d+", value)
+    if not match:
+        return None
+    parsed = float(match.group(0))
+    if "%" in value or parsed > 1:
+        parsed = parsed / 100
+    return parsed
+
+
+def _normalize_claim(claim: Any) -> Any:
+    if not isinstance(claim, dict):
+        return claim
+    normalized = dict(claim)
+    normalized.setdefault("source", "support_note")
+    return normalized
 
 
 def _evidence_value(evidence: list[dict[str, Any]], field: str) -> str:

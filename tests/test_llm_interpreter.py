@@ -73,6 +73,24 @@ class LlmInterpreterTests(unittest.TestCase):
                 client=FakeModels(payload),
             )
 
+    def test_normalizes_common_llm_schema_drift(self):
+        payload = _valid_llm_payload()
+        payload["category_confidence"] = "78%"
+        payload["recommendation_confidence"] = "0.83 confidence"
+        del payload["extracted_claims"][0]["source"]
+
+        event = interpret_notes_with_llm(
+            notes=[],
+            business_context={"case_id": "CASE-BG-STALE"},
+            event_id="AIE-DRIFT",
+            input_refs=[],
+            client=FakeModels(payload),
+        )
+
+        self.assertEqual(event["category_confidence"], 0.78)
+        self.assertEqual(event["recommendation_confidence"], 0.83)
+        self.assertEqual(event["extracted_claims"][0]["source"], "support_note")
+
     def test_rich_llm_package_reaches_audit_and_packet(self):
         fixture = scenario("E-003")
         agent_event = dict(_valid_llm_payload(), event_id="AIE-LLM-E003", input_refs=["llm_demo_E003"])

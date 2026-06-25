@@ -1626,3 +1626,51 @@ Open risks:
 Next:
 
 - Run `python -m service_recovery_core.llm_interpreter --scenario-id E-003 --model gemini-3-flash --project <project-id>` after Google auth is available, then commit the resulting non-secret output artifact if useful.
+
+### 2026-06-26 01:03 IST - Agent / Live Vertex LLM Proof Hardening
+
+What changed:
+
+- Added `scripts/run_llm_demo.sh` as the repeatable live LLM proof wrapper.
+- Fixed the Google GenAI client adapter so the parent client stays alive during `models.generate_content`.
+- Added Vertex response JSON schema guidance, confidence normalization, and common extracted-claim normalization before local contract validation.
+- Adjusted the LLM prompt from narrow extraction language to a richer case-owner triage recommendation package while preserving policy as the enforcement authority.
+- Preserved the successful non-secret live proof artifact at `docs/demo/artifacts/llm_interpreter_E003_live.json`.
+- Updated the demo runbook and readiness checklist from `LIVE AUTH BLOCKED` to a validated live Vertex run.
+
+Commands run:
+
+- `/Users/arshdeepsingh/google-cloud-sdk/bin/gcloud config get-value project`
+- `/Users/arshdeepsingh/google-cloud-sdk/bin/gcloud auth list --filter=status:ACTIVE --format='value(account)'`
+- `chmod +x scripts/run_llm_demo.sh && bash -n scripts/run_llm_demo.sh`
+- `scripts/run_llm_demo.sh --scenario-id E-003 --model gemini-2.5-flash --project <project> --location us-central1 --output eval_results/llm_interpreter_E003_live.json`
+- `python -m unittest tests.test_llm_interpreter tests.test_agent_validator tests.test_evidence_packet_view`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- `python -m service_recovery_core.demo_proof --output-dir docs/demo/artifacts --verify-only`
+- `bash -n scripts/run_llm_demo.sh`
+
+Validation:
+
+- PASS: Google Cloud CLI reported the expected active project and active account in this environment.
+- PASS: live Vertex call with `gemini-2.5-flash` produced a schema-valid Agent Interpretation Event.
+- PASS: the live LLM recommended `closure_candidate`; deterministic policy overrode it to `verify_telemetry` with `stale_authoritative_signal`.
+- PASS: targeted LLM/agent/evidence-packet tests passed 13 tests.
+- PASS: full unit suite passed 32 tests.
+- PASS: local eval suite passed 9/9 scenarios.
+- PASS: demo proof verifier passed E-002/E-004.
+- PASS: wrapper syntax validates with `bash -n`.
+- FIXED: earlier live attempts exposed provider-client lifetime failure, schema drift, and semantic validation drift; the current wrapper/prompt/schema path passed after those fixes.
+
+Product feedback:
+
+- No UiPath PF entry. This checkpoint validated Google/Vertex-backed agent behavior and local governance, not a new UiPath product surface.
+
+Open risks:
+
+- Live LLM output can vary by model/version; use the committed artifact for evidence and rerun before recording if prompt/model changes.
+- Policy must remain the final enforcement/audit authority even when the LLM provides richer triage recommendations.
+
+Next:
+
+- Commit and push the live LLM proof hardening checkpoint.
