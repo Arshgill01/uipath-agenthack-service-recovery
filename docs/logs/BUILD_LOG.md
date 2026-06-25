@@ -1303,3 +1303,40 @@ Open risks:
 Next:
 
 - Build or document the fresh live-run operator path: package/upload/update version, start 2A/2B case, poll task, complete task, upload/read back audit bundle, and verify AIE/PDE linkage.
+
+### 2026-06-26 00:31 IST - Agent / Demo Proof Helper
+
+What changed:
+
+- Added `service_recovery_core.demo_proof`, a narrow operator helper for the two core demo beats.
+- Added tests for generating and verifying E-002/E-004 proof artifacts.
+- Added `docs/demo/artifacts/demo_proof_manifest.json`.
+- Updated `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md` so `python -m service_recovery_core.demo_proof --output-dir docs/demo/artifacts` is the primary local proof refresh command.
+
+Commands run:
+
+- `python -m unittest tests.test_demo_proof`
+- `python -m service_recovery_core.demo_proof --output-dir docs/demo/artifacts`
+- `python -m service_recovery_core.demo_proof --output-dir docs/demo/artifacts --verify-only`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+
+Validation:
+
+- PASS: targeted demo proof tests ran 2 tests.
+- PASS: demo proof helper generated E-002/E-004 payload, audit bundle, HTML packet, and manifest artifacts.
+- PASS: demo proof helper verified raw `closure_candidate`, final policy route, block reason, and AIE/PDE linkage for both scenarios.
+- PASS: full unit test suite ran 27 tests.
+- PASS: local eval baseline passed 9/9 scenarios.
+
+Product feedback:
+
+- No new PF entry. This was local repeatability work, not a new UiPath platform interaction.
+
+Open risks:
+
+- The helper proves local artifact repeatability. Fresh live Case start/update/poll/complete remains the next live-ops gap.
+
+Next:
+
+- Add or execute the live UiPath operator path around this helper: package/update process, start E-002/E-004 cases, poll tasks, complete reviewer outputs, upload/read back audit bundle.

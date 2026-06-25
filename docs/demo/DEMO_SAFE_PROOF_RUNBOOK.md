@@ -68,7 +68,23 @@ Run from repo root.
 ```sh
 python -m unittest discover -s tests
 python -m service_recovery_core.evals --output eval_results/local_baseline.json
+python -m service_recovery_core.demo_proof --output-dir docs/demo/artifacts
+python -m service_recovery_core.demo_proof --output-dir docs/demo/artifacts --verify-only
 ```
+
+The demo proof helper generates and verifies:
+
+- `docs/demo/artifacts/action_payload_E002.json`
+- `docs/demo/artifacts/action_payload_E004.json`
+- `docs/demo/artifacts/service_recovery_audit_bundle_E002.json`
+- `docs/demo/artifacts/service_recovery_audit_bundle_E004.json`
+- `docs/demo/artifacts/evidence_packet_E002.html`
+- `docs/demo/artifacts/evidence_packet_E004.html`
+- `docs/demo/artifacts/demo_proof_manifest.json`
+
+It fails if the raw agent recommendation, policy decision, route, block reason, or AIE/PDE linkage drifts from the proof-beat contract.
+
+Individual generation commands are available for inspection or partial refresh.
 
 Generate UiPath Action Center payloads:
 

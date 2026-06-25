@@ -1,0 +1,27 @@
+{
+  "artifact_type": "service-recovery-demo-proof-manifest",
+  "scenarios": [
+    {
+      "audit_bundle_path": "docs/demo/artifacts/service_recovery_audit_bundle_E002.json",
+      "block_reason": "missing_authoritative_signal",
+      "case_id": "CASE-BG-MISSING",
+      "decision": "override_recommendation",
+      "evidence_packet_html_path": "docs/demo/artifacts/evidence_packet_E002.html",
+      "payload_path": "docs/demo/artifacts/action_payload_E002.json",
+      "recommended_next_stage": "closure_candidate",
+      "scenario_id": "E-002",
+      "to_stage": "verify_telemetry"
+    },
+    {
+      "audit_bundle_path": "docs/demo/artifacts/service_recovery_audit_bundle_E004.json",
+      "block_reason": "source_contradiction",
+      "case_id": "CASE-BG-CONTRA",
+      "decision": "require_human_review",
+      "evidence_packet_html_path": "docs/demo/artifacts/evidence_packet_E004.html",
+      "payload_path": "docs/demo/artifacts/action_payload_E004.json",
+      "recommended_next_stage": "closure_candidate",
+      "scenario_id": "E-004",
+      "to_stage": "human_review"
+    }
+  ]
+}
