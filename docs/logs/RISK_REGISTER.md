@@ -130,3 +130,10 @@
 - R-002 is reduced: the proposed Data Fabric record stores `interpretation_policy_version` and `decision_policy_version` as first-class fields tied to the full audit bundle.
 - New risk: Data Fabric entity creation is a tenant schema mutation. Mitigation: keep the schema proposal in repo, request explicit approval before `uip df entities create`, then immediately query/read back any inserted proof-beat record.
 - New feedback risk/opportunity: `uip df` works, but Data Fabric did not appear in `uip tools list` during discovery. Mitigation: log PF-018 and use direct `uip df` commands for the next validation step.
+
+### 2026-06-25 21:08 IST - Live Data Fabric Entity Created / Insert Blocked
+
+- R-001 is reduced for schema viability but remains open for durable storage: live entity `ServiceRecoveryAuditBundle` was created and read back by ID, but record insert failed before query-back.
+- R-002 is reduced for schema viability: first-class policy-version fields exist in the live entity, but no live audit record has persisted them.
+- New blocker: `uip df records insert` rejected valid field-name JSON, minimal JSON, wrapper JSON, field-ID keyed JSON, and array JSON with `case_id` reported missing even though the CLI debug log parsed `case_id`. CSV import also inserted `0` of `1` records. Mitigation: inspect official API/docs or import error file if accessible without secrets; if still blocked, use Case custom payload or file artifact for final audit storage.
+- New cleanup consideration: the tenant now contains validation entity `ServiceRecoveryAuditBundle` with zero records. Keep it for continued validation unless the user asks to remove it.

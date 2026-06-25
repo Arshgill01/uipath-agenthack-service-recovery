@@ -983,3 +983,89 @@ Next:
 
 - Ask for explicit approval to create the live Data Fabric entity `ServiceRecoveryAuditBundle` in org `keepingitlowkey`, tenant `DefaultTenant`.
 - If approved, create the entity, insert the E-004 record, query/read it back, update G-001/G-002 evidence, then commit/push the live validation checkpoint.
+
+## 2026-06-25 21:08 IST - Live Data Fabric Entity Created / Insert Blocked
+
+Environment:
+
+- UiPath CLI authenticated to org `keepingitlowkey`, tenant `DefaultTenant`.
+- User approved creating the live Data Fabric entity.
+- Tenant schema mutation performed: created `ServiceRecoveryAuditBundle`.
+
+Gate/wave:
+
+- G-001: Native Case State / Audit Reconstruction.
+- G-002: Policy Version Pinning.
+- G-008: CLI/coding-agent lifecycle support.
+
+Assumption tested:
+
+- Data Fabric can store a durable one-query audit bundle for the E-004 contradiction proof beat.
+
+Steps:
+
+1. Created the Data Fabric entity from `docs/architecture/data_fabric/service_recovery_audit_bundle_entity.json`.
+2. Read the schema back by entity ID.
+3. Generated the E-004 audit record from the local eval exporter.
+4. Attempted record insertion using:
+   - `--file eval_results/data_fabric_record_E004.json`,
+   - `--body` with the same full object,
+   - a minimal required-field object,
+   - a `{"Data": {...}}` wrapper,
+   - field UUID keys,
+   - an array containing the minimal object.
+6. Attempted `uip df records import` with a CSV generated from the same E-004 record.
+7. Listed records after the failed insert/import attempts.
+5. Listed records after the failed insert attempts.
+
+Observed:
+
+- Entity creation succeeded:
+  - entity name: `ServiceRecoveryAuditBundle`,
+  - entity ID: `328ef8b6-ab70-f111-ac9a-002248a16d28`.
+- `uip df entities get 328ef8b6-ab70-f111-ac9a-002248a16d28 --output json` returned the created schema, including required fields such as `case_id`, `interpretation_policy_version`, `decision_policy_version`, JSON payload fields, and system fields.
+- `uip df entities get ServiceRecoveryAuditBundle --output json` failed with `The value 'ServiceRecoveryAuditBundle' is not valid`; ID-based lookup works but name-based lookup does not.
+- Record insertion failed every tested payload shape with:
+  - `Required field "case_id" (3c8ef8b6-ab70-f111-ac9a-002248a16d28) is not provided and there is no default.`
+- The debug log showed the CLI parsed a `--body` containing `case_id`, but the service still reported the required field as missing.
+- CSV import returned `RecordsImported` with `TotalRecords: 1`, `InsertedRecords: 0`, and an `ErrorFileLink`, so the fallback import path also did not persist the audit record.
+- `uip df records list 328ef8b6-ab70-f111-ac9a-002248a16d28 --output json` returned success with `TotalCount: 0`.
+
+Result:
+
+- G-001: PARTIAL. Data Fabric schema creation/readback is validated, but record storage/query-back is blocked by CLI/API payload mapping. Native Case audit remains insufficient by itself; Data Fabric remains viable only after insert format is resolved or replaced by another storage path.
+- G-002: PARTIAL/PASS for schema capability. Data Fabric can define first-class fields for both policy versions, but no live record has persisted them yet.
+- G-004: unchanged from prior live task validation. The created schema can hold separate raw agent and policy decision JSON fields, but insert failed before persistence.
+- G-008: strengthened and product-feedback-worthy. The CLI can create/read entity schema, but record insertion did not accept documented field-name JSON payloads.
+
+Commands run:
+
+- `uip df entities create ServiceRecoveryAuditBundle --file docs/architecture/data_fabric/service_recovery_audit_bundle_entity.json --output json`
+- `uip df entities get ServiceRecoveryAuditBundle --output json`
+- `uip df entities list --output json`
+- `uip df entities get 328ef8b6-ab70-f111-ac9a-002248a16d28 --output json`
+- `python -m service_recovery_core.evals --data-fabric-record-scenario E-004 --output eval_results/data_fabric_record_E004.json`
+- `uip df records insert 328ef8b6-ab70-f111-ac9a-002248a16d28 --file eval_results/data_fabric_record_E004.json --output json`
+- `uip df records insert 328ef8b6-ab70-f111-ac9a-002248a16d28 --body <full-record-json> --output json`
+- `uip df records insert 328ef8b6-ab70-f111-ac9a-002248a16d28 --body <minimal-required-fields-json> --output json`
+- `uip df records insert 328ef8b6-ab70-f111-ac9a-002248a16d28 --body <wrapped-data-json> --output json`
+- `uip df records insert 328ef8b6-ab70-f111-ac9a-002248a16d28 --body <field-id-keyed-json> --output json`
+- `uip df records insert 328ef8b6-ab70-f111-ac9a-002248a16d28 --body <array-json> --output json`
+- `uip df records import 328ef8b6-ab70-f111-ac9a-002248a16d28 --file tmp/data_fabric_record_E004.csv --output json`
+- `uip df records list 328ef8b6-ab70-f111-ac9a-002248a16d28 --output json`
+
+Decision impact:
+
+- Keep `ServiceRecoveryAuditBundle` as the preferred Data Fabric schema only if record insertion can be resolved quickly.
+- Add a fallback branch: store the audit bundle as a UiPath-accessible artifact or Case custom payload while keeping the schema as proof of intended durable storage.
+- Treat Data Fabric record insert as blocked until a working payload shape or platform fix is found.
+
+Product feedback:
+
+- PF-018 strengthened by name-vs-ID lookup behavior.
+- PF-019 added for Data Fabric record insert rejecting documented field-name payloads even though the parsed body contains required fields.
+
+Next:
+
+- Try official docs/API or inspect the import error file if accessible without secrets.
+- If record insertion remains blocked, use a file artifact or Case custom payload for final G-001 audit storage and document Data Fabric as a platform limitation for this build.

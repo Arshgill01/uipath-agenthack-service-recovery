@@ -202,6 +202,13 @@ JSON payload fields:
 
 `python -m service_recovery_core.evals --data-fabric-record-scenario <ID>` emits the matching record body. Live entity creation and record insertion require explicit approval because they mutate the UiPath tenant schema/data.
 
+Live validation note from 2026-06-25:
+
+- Entity creation succeeded after user approval: `ServiceRecoveryAuditBundle`, ID `328ef8b6-ab70-f111-ac9a-002248a16d28`.
+- Schema readback by ID succeeded and returned the expected fields.
+- Name-based `entities get ServiceRecoveryAuditBundle` failed; use the entity ID for CLI operations.
+- Record insertion is not yet validated. `records insert` rejected file, inline object, minimal object, wrapper object, field-ID keyed object, and array payloads with required `case_id` reported missing. CSV import returned `InsertedRecords: 0` for one input row. Until insert/query-back succeeds, this entity is a schema-validated storage candidate, not a completed G-001 audit store.
+
 ## Package / Migration Event
 
 ```json

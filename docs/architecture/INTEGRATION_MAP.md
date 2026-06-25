@@ -65,7 +65,8 @@ Live validation moved the architecture from "maybe Data Fabric/Data Service" to 
 - Data Fabric is reachable through `uip df`; read-only entity listing returned an empty native entity list in org `keepingitlowkey`, tenant `DefaultTenant`.
 - `docs/architecture/data_fabric/service_recovery_audit_bundle_entity.json` is the proposed live entity schema for storing the bundle.
 - `python -m service_recovery_core.evals --data-fabric-record-scenario E-004` emits an insert-ready record body for the contradiction proof beat, including live Case/task/package references from package `1.0.5`.
-- Creating `ServiceRecoveryAuditBundle` remains an explicit approval step because it changes tenant schema.
+- After explicit user approval, live Data Fabric entity `ServiceRecoveryAuditBundle` was created with ID `328ef8b6-ab70-f111-ac9a-002248a16d28` and schema readback by ID succeeded.
+- Record insert is not yet validated: `uip df records insert` rejected field-name, wrapper, field-ID keyed, and array payloads with required `case_id` reported missing. Treat Data Fabric as schema-validated but storage-blocked until insert/query-back succeeds.
 
 Mapping to hard gates:
 

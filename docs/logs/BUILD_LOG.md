@@ -996,3 +996,47 @@ Open risks:
 
 - Data Fabric storage is prepared but not live-validated until `ServiceRecoveryAuditBundle` is created and queried back.
 - G-001 remains PARTIAL natively; the custom-audit path is becoming concrete but still requires live storage evidence.
+
+### 2026-06-25 21:08 IST - Agent / Live Data Fabric Entity Create
+
+What changed:
+
+- Created live Data Fabric entity `ServiceRecoveryAuditBundle` in org `keepingitlowkey`, tenant `DefaultTenant`, after user approval.
+- Verified schema readback by entity ID `328ef8b6-ab70-f111-ac9a-002248a16d28`.
+- Attempted E-004 audit record insertion through multiple documented/likely payload shapes.
+- Documented Data Fabric insert blocker and added PF-019.
+
+Commands run:
+
+- `uip df entities create ServiceRecoveryAuditBundle --file docs/architecture/data_fabric/service_recovery_audit_bundle_entity.json --output json`
+- `uip df entities get ServiceRecoveryAuditBundle --output json`
+- `uip df entities list --output json`
+- `uip df entities get 328ef8b6-ab70-f111-ac9a-002248a16d28 --output json`
+- `python -m service_recovery_core.evals --data-fabric-record-scenario E-004 --output eval_results/data_fabric_record_E004.json`
+- `uip df records insert 328ef8b6-ab70-f111-ac9a-002248a16d28 --file eval_results/data_fabric_record_E004.json --output json`
+- `uip df records insert 328ef8b6-ab70-f111-ac9a-002248a16d28 --body <full-record-json> --output json`
+- `uip df records insert 328ef8b6-ab70-f111-ac9a-002248a16d28 --body <minimal-required-fields-json> --output json`
+- `uip df records insert 328ef8b6-ab70-f111-ac9a-002248a16d28 --body <wrapped-data-json> --output json`
+- `uip df records insert 328ef8b6-ab70-f111-ac9a-002248a16d28 --body <field-id-keyed-json> --output json`
+- `uip df records insert 328ef8b6-ab70-f111-ac9a-002248a16d28 --body <array-json> --output json`
+- `uip df records import 328ef8b6-ab70-f111-ac9a-002248a16d28 --file tmp/data_fabric_record_E004.csv --output json`
+- `uip df records list 328ef8b6-ab70-f111-ac9a-002248a16d28 --output json`
+
+Validation:
+
+- PASS: entity creation returned `EntityCreated` with ID `328ef8b6-ab70-f111-ac9a-002248a16d28`.
+- PASS: schema readback by ID returned the intended first-class fields and JSON payload fields.
+- PARTIAL/FAIL: name-based schema get failed with `The value 'ServiceRecoveryAuditBundle' is not valid`; ID-based lookup works.
+- FAIL: record insertion failed for file, inline object, minimal object, wrapper object, field-ID keyed object, and array payloads with required `case_id` reported missing.
+- FAIL/PARTIAL: CSV import returned `RecordsImported` but inserted `0` of `1` records and returned an error file link.
+- PASS: final record list confirmed `TotalCount: 0`; no partial/unknown record was inserted.
+
+Product feedback:
+
+- PF-018 strengthened for Data Fabric CLI discovery/name lookup behavior.
+- PF-019 added for Data Fabric record insert rejecting parsed field-name payloads.
+
+Open risks:
+
+- Data Fabric storage cannot be claimed until record insertion/query-back succeeds.
+- Keep fallback audit storage paths open: Case custom payload, UiPath-accessible file/artifact, or custom evidence-packet artifact.

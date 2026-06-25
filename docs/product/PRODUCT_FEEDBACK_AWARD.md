@@ -57,6 +57,7 @@ This matrix groups the current evidence into issue classes. Add new observations
 | Action Center refresh after external task completion | PF-016 | UX / integration | medium | If a task is completed through API/CLI, an open Action Center task tab should either update automatically or clearly require refresh. | After `uip tasks complete` returned success and task API showed `Completed`, the open Safari tab still displayed the task under `Pending` until browser refresh. | Refresh the task tab; after refresh, Action Center correctly moved task `4295299` to `Completed` and showed `(reject)`. | Add real-time status sync or a stale-state banner when an open task has been completed outside the current browser session. | `docs/validation/artifacts/2026-06-25/g004-action-center-stale-pending-after-cli-complete-task-4295299.png`; `docs/validation/artifacts/2026-06-25/g004-action-center-completed-reject-task-4295299.png`; PF-016. |
 | Solution-feed package visibility and process binding | PF-017 | integration / UX / diagnostics | high for CLI/package recovery | A package uploaded successfully to a solution feed should be visible to the process-binding path, or the CLI should require/propagate the feed selector consistently. | Upload and feed-scoped `packages get` succeeded for `Solution.caseManagement.Maestro.Case:1.0.4`; default package lookup and `processes create --package-version 1.0.4` could not bind it. | Use `packages get --feed-id` to verify the package and `processes update-version` on an existing process to move to `1.0.4`. | Add feed-aware process creation or a clear diagnostic that says the package exists in feed X but the requested folder/process binding is resolving feed Y. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 19:05 IST; PF-017. |
 | Data Fabric CLI discovery mismatch | PF-018 | UX / integration / diagnostics | medium | CLI tool discovery should show the Data Fabric capability when `uip df` is installed and usable, or explain why it is a built-in command rather than a listed tool. | `uip df --help` and `uip df entities list --native-only --output json` worked, but `uip tools list --output json` did not expose a corresponding Data Fabric tool entry during discovery. | Use direct `uip df` commands and document the exact entity schema/record commands before mutating the tenant. | Make `uip tools list` include built-in product command surfaces or add a `uip tools explain df` style diagnostic so builders can discover available CLI capabilities consistently. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 21:01 IST; `docs/architecture/data_fabric/service_recovery_audit_bundle_entity.json`; PF-018. |
+| Data Fabric record insertion payload mapping | PF-019 | product defect candidate / integration / diagnostics | high for G-001 custom audit storage | After creating and reading a Data Fabric entity, `records insert` should accept JSON keyed by documented field names or return the exact expected payload shape. | Entity create/readback succeeded, but `records insert` rejected file, inline object, minimal object, wrapper object, field-ID keyed object, and array payloads with `case_id` reported missing even when debug parsing showed `case_id` in the body. CSV import returned success envelope but inserted `0` of `1` records. | Keep the entity for continued validation; inspect import error file/API docs if accessible; use Case custom payload/file artifact if insert remains blocked. | Add schema-aware insert/import validation that echoes recognized/unrecognized fields, fixes docs/help examples if the expected shape differs, and includes a correlation/session ID for support. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 21:08 IST; PF-019. |
 
 ## Best Insights So Far
 
@@ -70,6 +71,7 @@ This matrix groups the current evidence into issue classes. Add new observations
 - PF-015 is a headline product-design insight: Maestro Case can orchestrate the right participants, but regulated/domain workflows need a native audit/event inspector for linked agent interpretation, policy decision, human action, package version, and policy versions.
 - PF-017 is the strongest CLI/platform integration feedback: the package existed in the solution feed and could be read with `--feed-id`, but the process-create path could not bind it and did not expose the same feed selector.
 - PF-018 is a smaller but useful CLI-discovery feedback item: Data Fabric was available through `uip df`, but the general tool listing did not reveal it. This matters because first-time builders use discovery commands to decide which platform surfaces are actually accessible.
+- PF-019 is now a high-impact Data Fabric integration finding: entity create/readback worked, but record insert could not map documented JSON payloads to required fields. This directly affects regulated audit storage and is a strong product-feedback candidate if the CSV/API workaround also fails.
 - The CLI/package recovery path is valuable feedback because it shows a second integration surface: downloaded Studio Web assets, local pack/upload, package metadata, app bindings, and Orchestrator process versioning. Keep those entries separate from Action Center rendering claims.
 
 ## Draft Survey Answer Scaffold
@@ -80,8 +82,8 @@ Draft only. Evidence-backed but not final submission prose.
 | --- | --- | --- |
 | Q10 - What UiPath products did you use? | Automation Cloud, Maestro, Maestro Case / Case app, Studio Web, Actions / Action Center, Orchestrator service listing, Integration Service listing, Data Fabric listing, Test Manager listing, UiPath CLI. Note that deep validation has so far centered on Automation Cloud, Maestro, Studio Web, Maestro Case, and Actions. | Wave 01 validation results; product launcher screenshot; CLI help output in `docs/validation/VALIDATION_RESULTS.md`. |
 | Q11 - What worked well? | Automation Cloud eventually landed in org `keepingitlowkey` / tenant `DefaultTenant`; Maestro opened and exposed case/process surfaces; Studio Web created a real `Maestro Case` project; Case designer exposed stages, rules, Case app metadata, task types, and JSON/code view; Action Center opened after Actions was enabled; JSON editor guarded against saving malformed accidental input; Action app schema exposed typed inputs, outcomes, and generated a mostly usable evidence review page. | PF-002, PF-003, PF-004, PF-006; `wave01-studio-maestro-bpmn-created.png`; `g001-maestro-case-project-created.png`; `g001-maestro-case-json-code-view.png`; `actions-enabled-inbox.png`; 2026-06-25 G-003 validation results. |
-| Q12 - What challenges did you encounter? | Group by issue class: account/tenant routing ambiguity, Maestro recent-projects generic fetch error, Action Center dependency not enabled with insufficient disabled-service guidance, Human action picker/configuration ambiguity, Studio Web local Assistant migration uncertainty, schema-to-page generation failure for a proof-critical evidence field, deployment validation passing even though the live Action task was missing a required Title, CLI/package round-trip failure, generic upload diagnostics, app binding drift, process auto-update/readback ambiguity, runtime task label legibility, solution-feed package/process binding mismatch, Data Fabric CLI discovery mismatch, and generated image placeholder quality. Keep access confusion, product limitations, UX/docs friction, and product defect candidates separate. | Feedback Evidence Matrix rows PF-001 through PF-018. |
-| Q13 - What should UiPath improve? | Recommended top answer: add a Maestro Case readiness and human-review setup path that checks tenant services/roles, links directly to enable Actions when permitted, scaffolds a human evidence-packet task, shows exact input/output mapping steps, validates generated Action page controls per schema property, and runs a preflight for required Action task fields before deployment. Secondary improvements: native case audit/event inspector, feed-aware CLI process creation, consistent CLI discovery for built-in product command surfaces such as Data Fabric, better package/upload diagnostics, app binding validation, process version readback, `missingaccount` diagnostics, recent-projects error diagnostics, accessible task-picker rows, and Studio Web/local Assistant transition guidance. | PF-003 as highest-impact setup blocker; PF-006/PF-007/PF-013 as proof-critical G-003 build blockers; PF-015 as native audit insight; PF-017 as feed/process CLI integration issue; PF-018 as CLI discovery issue; PF-009 through PF-012 as CLI/package recovery blockers; PF-004 as core human-task workflow friction. |
+| Q12 - What challenges did you encounter? | Group by issue class: account/tenant routing ambiguity, Maestro recent-projects generic fetch error, Action Center dependency not enabled with insufficient disabled-service guidance, Human action picker/configuration ambiguity, Studio Web local Assistant migration uncertainty, schema-to-page generation failure for a proof-critical evidence field, deployment validation passing even though the live Action task was missing a required Title, CLI/package round-trip failure, generic upload diagnostics, app binding drift, process auto-update/readback ambiguity, runtime task label legibility, solution-feed package/process binding mismatch, Data Fabric CLI discovery mismatch, Data Fabric record insert payload mapping failure, and generated image placeholder quality. Keep access confusion, product limitations, UX/docs friction, and product defect candidates separate. | Feedback Evidence Matrix rows PF-001 through PF-019. |
+| Q13 - What should UiPath improve? | Recommended top answer: add a Maestro Case readiness and human-review setup path that checks tenant services/roles, links directly to enable Actions when permitted, scaffolds a human evidence-packet task, shows exact input/output mapping steps, validates generated Action page controls per schema property, and runs a preflight for required Action task fields before deployment. Secondary improvements: native case audit/event inspector, schema-aware Data Fabric insert diagnostics, feed-aware CLI process creation, consistent CLI discovery for built-in product command surfaces such as Data Fabric, better package/upload diagnostics, app binding validation, process version readback, `missingaccount` diagnostics, recent-projects error diagnostics, accessible task-picker rows, and Studio Web/local Assistant transition guidance. | PF-003 as highest-impact setup blocker; PF-006/PF-007/PF-013 as proof-critical G-003 build blockers; PF-015 as native audit insight; PF-019 as Data Fabric storage blocker; PF-017 as feed/process CLI integration issue; PF-018 as CLI discovery issue; PF-009 through PF-012 as CLI/package recovery blockers; PF-004 as core human-task workflow friction. |
 
 ## Scoring Rubric For Future Feedback
 
@@ -133,6 +135,7 @@ Use accumulated entries to answer the final feedback survey.
 | PF-016 | 2026-06-25 | Action Center / Tasks API | Open task tab after CLI completion | G-003 / G-008 | UX / integration | medium | observed | `docs/validation/artifacts/2026-06-25/g004-action-center-completed-reject-task-4295299.png` |
 | PF-017 | 2026-06-25 | Orchestrator / UiPath CLI / solution feed | Upload package, read package, create/update process | Wave 07 / G-002 / G-008 | integration / UX / diagnostics | high | observed workaround | `docs/validation/VALIDATION_RESULTS.md` |
 | PF-018 | 2026-06-25 | Data Fabric / UiPath CLI | CLI command discovery for Data Fabric | G-001 / G-002 / G-008 | UX / integration / diagnostics | medium | observed | `docs/validation/VALIDATION_RESULTS.md` |
+| PF-019 | 2026-06-25 | Data Fabric / UiPath CLI | Record insert payload mapping | G-001 / G-002 / G-008 | product defect candidate / integration / diagnostics | high | open blocker | `docs/validation/VALIDATION_RESULTS.md` |
 
 ## Entry Template
 
@@ -546,6 +549,84 @@ Survey tags:
 
 - product-used
 - pain-point
+- workaround
+- improvement
+- evidence
+
+### PF-019 - 2026-06-25 - Data Fabric / Record Insert Payload Mapping
+
+Context:
+
+- ID: PF-019.
+- Status: open blocker.
+- Goal: persist the E-004 `service-recovery-audit-v1` contradiction audit bundle in Data Fabric for G-001/G-002 reconstruction.
+- Product surface: UiPath CLI, Data Fabric entity and record APIs.
+- Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `Arshdeep Singh`.
+- Wave/gate: G-001, G-002, G-008.
+
+What worked:
+
+- `uip df entities create ServiceRecoveryAuditBundle --file docs/architecture/data_fabric/service_recovery_audit_bundle_entity.json --output json` succeeded.
+- Created entity ID: `328ef8b6-ab70-f111-ac9a-002248a16d28`.
+- `uip df entities get 328ef8b6-ab70-f111-ac9a-002248a16d28 --output json` read back the expected schema, including required `case_id`, policy-version fields, JSON payload fields, and system fields.
+- `uip df records list 328ef8b6-ab70-f111-ac9a-002248a16d28 --output json` succeeded and confirmed no partial records were inserted after failures.
+- `uip df records import` returned a structured result with an error file link instead of silently failing.
+
+What failed or confused us:
+
+- `uip df entities get ServiceRecoveryAuditBundle --output json` failed with `The value 'ServiceRecoveryAuditBundle' is not valid`, even though list/readback show that name.
+- Record insert failed when using the generated file object, inline full object, minimal required field object, `{"Data": {...}}` wrapper, field UUID keys, and array object.
+- Every insert attempt failed with `Required field "case_id" (...) is not provided and there is no default.`
+- A debug run showed the CLI parsed a `--body` containing `case_id`, so the failure appears to be in payload mapping or expected request shape rather than shell quoting.
+- CSV import inserted `0` of `1` records and returned an error file link, so the documented import fallback did not prove persistence either.
+
+Expected:
+
+- The insert command help says `--file` or `--body` accepts a JSON object or array of objects. A payload keyed by field names returned by schema readback should map to entity fields.
+- If the expected insert payload shape differs, CLI validation should reject the payload before calling the service and show the exact expected shape.
+
+Observed:
+
+- Schema creation/readback worked.
+- Insert payload parsing happened.
+- Required field validation still behaved as if no supplied fields were mapped.
+- CSV import returned an error file link with zero inserted records.
+- Record list remained empty after failures.
+
+Impact:
+
+- Build impact: high for G-001 custom audit storage. Data Fabric is the cleanest durable one-query audit store candidate, but record insert/query-back is the proof step.
+- Demo/submission impact: medium/high. The team can still use Case custom payload or file artifact, but Data Fabric would be stronger cross-platform integration if insert works.
+- Severity: high for CLI/API storage path, product defect candidate until a documented alternate payload shape is found.
+
+Workaround:
+
+- Keep the entity for continued validation.
+- Inspect the CSV import error file or official API/docs if accessible without exposing secrets.
+- If insert remains blocked, use a UiPath-accessible file artifact or Case custom payload for final demo audit reconstruction and submit PF-019 as Data Fabric feedback.
+
+Suggested improvement:
+
+- Add schema-aware insert diagnostics that echo recognized fields, unrecognized fields, missing required fields, and the expected payload shape.
+- Make `records insert` examples include a freshly-created custom entity with required fields.
+- If entity ID is required for `entities get`, update help/error text to say so or make name lookup work consistently.
+- Include a correlation/session ID for insert failures to make hackathon support escalation practical.
+
+Evidence:
+
+- Commands/logs: `docs/validation/VALIDATION_RESULTS.md`, 2026-06-25 21:08 IST Live Data Fabric Entity Created / Insert Blocked.
+- Entity ID: `328ef8b6-ab70-f111-ac9a-002248a16d28`.
+- Debug log was written locally to `tmp/data-fabric-insert-debug.log` but is intentionally not committed because CLI debug logs can contain request metadata.
+
+Classification:
+
+- product defect candidate / integration / diagnostics
+
+Survey tags:
+
+- product-used
+- pain-point
+- blocker
 - workaround
 - improvement
 - evidence
