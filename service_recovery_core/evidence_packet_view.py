@@ -32,6 +32,7 @@ def render_evidence_packet_html(audit_bundle: dict[str, Any]) -> str:
             '<div class="primary">',
             _platform_note(),
             _policy_boundary(agent, policy),
+            _llm_recommendation_package(agent),
             _evidence_table(packet["evidence_table"]),
             "</div>",
             '<aside class="side">',
@@ -163,6 +164,42 @@ def _policy_boundary(agent: dict[str, Any], policy: dict[str, Any]) -> str:
     </article>
   </div>
 </section>""".strip()
+
+
+def _llm_recommendation_package(agent: dict[str, Any]) -> str:
+    if not any(
+        agent.get(field)
+        for field in (
+            "urgency",
+            "customer_impact_summary",
+            "evidence_gaps",
+            "recommended_actions",
+            "reviewer_questions",
+            "operator_note",
+        )
+    ):
+        return ""
+    return f"""
+<section class="panel">
+  <h2>LLM triage package</h2>
+  <dl>
+    <div><dt>Urgency</dt><dd>{escape(str(agent.get("urgency") or "not_provided"))}</dd></div>
+    <div><dt>Customer impact</dt><dd>{escape(str(agent.get("customer_impact_summary") or "not_provided"))}</dd></div>
+    <div><dt>Operator note</dt><dd>{escape(str(agent.get("operator_note") or "not_provided"))}</dd></div>
+  </dl>
+  <div class="triage-grid">
+    {_list_block("Evidence gaps", agent.get("evidence_gaps", []))}
+    {_list_block("Recommended actions", agent.get("recommended_actions", []))}
+    {_list_block("Reviewer questions", agent.get("reviewer_questions", []))}
+  </div>
+</section>""".strip()
+
+
+def _list_block(title: str, values: list[Any]) -> str:
+    if not values:
+        return f"<article><h3>{escape(title)}</h3><p>None provided.</p></article>"
+    items = "\n".join(f"<li>{escape(str(value))}</li>" for value in values)
+    return f"<article><h3>{escape(title)}</h3><ul class=\"actions\">{items}</ul></article>"
 
 
 def _evidence_table(evidence: list[dict[str, Any]]) -> str:
@@ -456,6 +493,19 @@ p { color: var(--muted); }
   padding: 14px;
 }
 
+.triage-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.triage-grid article {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 14px;
+}
+
 dl {
   display: grid;
   gap: 8px;
@@ -550,7 +600,7 @@ code {
 }
 
 @media (max-width: 900px) {
-  .topbar, .layout, .boundary-grid, .summary, .proof-strip, .decision-compare, .route-banner {
+  .topbar, .layout, .boundary-grid, .summary, .proof-strip, .decision-compare, .route-banner, .triage-grid {
     display: block;
   }
 
@@ -563,7 +613,8 @@ code {
   }
 
   .panel + .panel,
-  .primary + .side {
+  .primary + .side,
+  .triage-grid article + article {
     margin-top: 16px;
   }
 }

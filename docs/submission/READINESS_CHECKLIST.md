@@ -9,6 +9,7 @@ Status: current evidence map for final submission and future agents. Do not mark
 | Local unit tests pass. | PASS | `python -m unittest discover -s tests` passed 27 tests on 2026-06-26. | Re-run before final submission if code changes. |
 | Local eval suite E-001 through E-009 passes. | PASS | `python -m service_recovery_core.evals --output eval_results/local_baseline.json` passed 9/9. | Re-run before final submission if fixtures/policy change. |
 | Repeatable E-002/E-004 proof artifacts exist. | PASS | `scripts/run_demo.sh --with-local-checks --no-uipath-next-steps`; `docs/demo/artifacts/demo_proof_manifest.json`. | Script is local/default-safe; it does not start live cases. |
+| Optional real LLM interpretation path exists. | IMPLEMENTED / LIVE AUTH BLOCKED | `service_recovery_core/llm_interpreter.py`; `tests/test_llm_interpreter.py`; `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md` | Live Gemini call requires `GEMINI_API_KEY`/`GOOGLE_API_KEY` or Google Cloud project + ADC in the shell. |
 | UiPath Labs access is confirmed. | PASS | Org `keepingitlowkey`, tenant `DefaultTenant`, user `arshgill6120@gmail.com` in validation logs. | Do not store credentials or tokens. |
 | Maestro Case access is confirmed. | PASS | Wave 01 and live Case validation entries in `docs/validation/VALIDATION_RESULTS.md`. | Native Case history is not full domain audit by itself. |
 
@@ -67,3 +68,4 @@ Status: current evidence map for final submission and future agents. Do not mark
 - Team name.
 - Story-sharing preference.
 - Any fresh live E-002/E-004 case/task IDs if rerun after this checklist.
+- Google Cloud project ID or Gemini API key environment setup if running the optional live LLM interpreter.

@@ -1583,3 +1583,46 @@ Open risks:
 Next:
 
 - Use the checklist before any final submission copy, live rerun, or handoff to another agent.
+
+### 2026-06-26 00:54 IST - Agent / Optional Gemini Interpreter Slice
+
+What changed:
+
+- Added `service_recovery_core/llm_interpreter.py` as an optional Gemini-backed interpreter for unstructured technician/customer/support notes.
+- Extended agent validation to allow a richer triage package: urgency, customer impact, evidence gaps, recommended actions, reviewer questions, and operator note.
+- Persisted the richer package into UiPath payload/audit events and rendered it in the custom evidence packet when present.
+- Added tests proving a closure-oriented LLM recommendation can be schema-valid and still be overridden by deterministic policy when authoritative telemetry is stale.
+- Documented the optional live Gemini command in `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`.
+- Updated `docs/architecture/AGENT_CONTRACT.md`, `docs/submission/SUBMISSION_BRIEF.md`, and `docs/submission/READINESS_CHECKLIST.md`.
+
+Commands run:
+
+- `python -m unittest tests.test_llm_interpreter tests.test_agent_validator tests.test_evidence_packet_view`
+- `python -m service_recovery_core.llm_interpreter --scenario-id E-003 --output eval_results/llm_interpreter_E003.json`
+- `command -v gcloud || echo gcloud-not-found`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- `python -m service_recovery_core.demo_proof --output-dir docs/demo/artifacts --verify-only`
+
+Validation:
+
+- PASS: targeted tests passed 11 tests.
+- PASS: full unit suite passed 31 tests.
+- PASS: local eval suite passed 9/9 scenarios.
+- PASS: demo proof verifier passed E-002/E-004.
+- PASS: `google.genai` SDK is importable in the local Python environment.
+- BLOCKED for live Gemini call: `gcloud` is not on PATH, and no `GEMINI_API_KEY`, `GOOGLE_API_KEY`, `GOOGLE_CLOUD_PROJECT`, or ADC-backed project is visible in this shell.
+- PASS: missing-auth LLM command now emits structured JSON with `status: blocked` and next-step guidance instead of a traceback.
+
+Product feedback:
+
+- No UiPath PF entry. This checkpoint is local agent capability work, not a UiPath platform interaction.
+
+Open risks:
+
+- Need user-provided Google Cloud project ID plus ADC/auth setup, or a Gemini API key in environment, before claiming a live LLM run.
+- Keep policy as enforcement/audit authority even when the LLM produces useful triage recommendations.
+
+Next:
+
+- Run `python -m service_recovery_core.llm_interpreter --scenario-id E-003 --model gemini-3-flash --project <project-id>` after Google auth is available, then commit the resulting non-secret output artifact if useful.

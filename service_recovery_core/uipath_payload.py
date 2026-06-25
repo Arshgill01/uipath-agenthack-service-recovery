@@ -41,6 +41,12 @@ def _agent_interpretation_event(case: dict[str, Any], agent_event: dict[str, Any
         "confidence": agent_event["recommendation_confidence"],
         "failure_category": agent_event["failure_category"],
         "rationale": agent_event["audit_explanation"],
+        "urgency": agent_event.get("urgency"),
+        "customer_impact_summary": agent_event.get("customer_impact_summary"),
+        "evidence_gaps": agent_event.get("evidence_gaps", []),
+        "recommended_actions": agent_event.get("recommended_actions", []),
+        "reviewer_questions": agent_event.get("reviewer_questions", []),
+        "operator_note": agent_event.get("operator_note"),
     }
 
 

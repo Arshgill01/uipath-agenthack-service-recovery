@@ -106,6 +106,39 @@ The demo proof helper generates and verifies:
 
 It fails if the raw agent recommendation, policy decision, route, block reason, or AIE/PDE linkage drifts from the proof-beat contract.
 
+## Optional Live LLM Interpretation
+
+The default proof artifacts are deterministic so tests and evals are repeatable. For the strongest demo beat, run the optional Gemini-backed interpreter to create the raw Agent Interpretation Event from unstructured notes, then let deterministic policy accept or override it.
+
+Auth is environment-based; do not store keys or project IDs in the repo.
+
+API-key path:
+
+```sh
+GEMINI_API_KEY=... python -m service_recovery_core.llm_interpreter \
+  --scenario-id E-003 \
+  --model gemini-3-flash \
+  --output eval_results/llm_interpreter_E003.json
+```
+
+Vertex AI path:
+
+```sh
+python -m service_recovery_core.llm_interpreter \
+  --scenario-id E-003 \
+  --model gemini-3-flash \
+  --project YOUR_GOOGLE_CLOUD_PROJECT_ID \
+  --location us-central1 \
+  --output eval_results/llm_interpreter_E003.json
+```
+
+Expected proof beat:
+
+- The LLM reads technician/customer/support text and emits a schema-validated Agent Interpretation Event.
+- The event may include urgency, customer impact, evidence gaps, recommended actions, reviewer questions, and an operator note.
+- In the stale-telemetry scenario, the LLM can recommend `closure_candidate`; policy then overrides to `verify_telemetry` with `stale_authoritative_signal`.
+- If auth is missing, the command returns JSON with `status: blocked` and the required next step.
+
 Individual generation commands are available for inspection or partial refresh.
 
 Generate UiPath Action Center payloads:

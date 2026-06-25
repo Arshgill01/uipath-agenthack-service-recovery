@@ -1,6 +1,6 @@
 # Agent Contract
 
-The agent converts ambiguous unstructured evidence into structured signals. It does not decide closure or mutate policy.
+The agent converts ambiguous unstructured evidence into structured signals and a useful triage recommendation package. It does not mutate policy, and its recommendation is not final until policy decides.
 
 ## Output Schema
 
@@ -22,7 +22,13 @@ The agent converts ambiguous unstructured evidence into structured signals. It d
   "recommended_next_stage": "verify_telemetry | retry_activation | dispatch_followup | inventory_reconciliation | billing_review | human_exception_review | closure_candidate",
   "recommendation_confidence": 0.0,
   "closure_block_reason_code": "none | missing_authoritative_signal | stale_authoritative_signal | source_contradiction | low_category_confidence | low_recommendation_confidence | high_impact_exception | invalid_agent_output",
-  "audit_explanation": "generated once and logged for this stage-transition event"
+  "audit_explanation": "generated once and logged for this stage-transition event",
+  "urgency": "low | normal | high | critical",
+  "customer_impact_summary": "business impact and customer-risk summary",
+  "evidence_gaps": ["specific evidence still needed"],
+  "recommended_actions": ["operator or reviewer actions the agent recommends"],
+  "reviewer_questions": ["questions for human exception review"],
+  "operator_note": "short operational note for the case owner"
 }
 ```
 
@@ -32,6 +38,8 @@ The agent converts ambiguous unstructured evidence into structured signals. It d
 - Policy must never parse `audit_explanation`.
 - `extracted_claims` never override structured authoritative evidence.
 - Claims can inform failure category, urgency, audit explanation, and recommended route.
+- The agent may recommend closure, retry, investigation, or human review; policy may accept, override, downgrade, or escalate that recommendation.
+- The triage package is useful to humans and operators, but does not override authoritative structured evidence.
 - `category_confidence` and `recommendation_confidence` are separate.
 - Low category confidence means the failure type is unclear.
 - Low recommendation confidence means the next action is unclear.
@@ -60,6 +68,7 @@ The agent is useful when it:
 
 - turns notes/messages into structured, valid, evidence-backed signals,
 - classifies failure mode better than generic retry,
+- identifies customer impact, urgency, evidence gaps, remediation actions, and reviewer questions,
 - prepares useful human handoff packets,
 - produces stable explanations tied to events,
 - improves route selection without weakening policy.

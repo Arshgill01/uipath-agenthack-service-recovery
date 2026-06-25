@@ -82,6 +82,8 @@ def validate_agent_interpretation(payload: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(payload["audit_explanation"], str) or not payload["audit_explanation"].strip():
         errors.append("audit_explanation must be a non-empty string")
 
+    _validate_optional_recommendation_package(payload, errors)
+
     category = payload["failure_category"]
     category_confidence = payload["category_confidence"]
     recommendation_confidence = payload["recommendation_confidence"]
@@ -119,6 +121,28 @@ def validate_agent_interpretation(payload: dict[str, Any]) -> dict[str, Any]:
             errors.append("closure_candidate recommendation requires recommendation_confidence >= 0.75")
 
     return {"valid": not errors, "errors": errors}
+
+
+def _validate_optional_recommendation_package(payload: dict[str, Any], errors: list[str]) -> None:
+    urgency = payload.get("urgency")
+    if urgency is not None:
+        _check_enum(urgency, {"low", "normal", "high", "critical"}, "urgency", errors)
+
+    for field in ("customer_impact_summary", "operator_note"):
+        value = payload.get(field)
+        if value is not None and (not isinstance(value, str) or not value.strip()):
+            errors.append(f"{field} must be a non-empty string when provided")
+
+    for field in ("evidence_gaps", "recommended_actions", "reviewer_questions"):
+        values = payload.get(field)
+        if values is None:
+            continue
+        if not isinstance(values, list):
+            errors.append(f"{field} must be a list when provided")
+            continue
+        for index, item in enumerate(values):
+            if not isinstance(item, str) or not item.strip():
+                errors.append(f"{field}[{index}] must be a non-empty string")
 
 
 def _validate_claim(claim: Any, index: int, errors: list[str]) -> None:
