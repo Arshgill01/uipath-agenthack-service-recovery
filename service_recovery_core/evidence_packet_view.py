@@ -27,6 +27,7 @@ def render_evidence_packet_html(audit_bundle: dict[str, Any]) -> str:
             '<main class="page">',
             _header(audit_bundle, state),
             _proof_strip(agent, policy, state, versions),
+            _decision_compare(agent, policy, state),
             '<section class="layout">',
             '<div class="primary">',
             _platform_note(),
@@ -47,8 +48,9 @@ def render_evidence_packet_html(audit_bundle: dict[str, Any]) -> str:
 
 
 def _header(audit_bundle: dict[str, Any], state: dict[str, Any]) -> str:
+    mode = _case_mode(state)
     return f"""
-<header class="topbar">
+<header class="topbar {escape(mode)}">
   <div>
     <h1>Review service recovery evidence</h1>
     <p>{escape(audit_bundle["case_id"])} / {escape(audit_bundle["service_id"])}</p>
@@ -88,6 +90,37 @@ def _proof_strip(
   <div>
     <span>Policy versions</span>
     <strong>{escape(versions["interpretation_policy_version"])} / {escape(versions["decision_policy_version"])}</strong>
+  </div>
+</section>""".strip()
+
+
+def _decision_compare(agent: dict[str, Any], policy: dict[str, Any], state: dict[str, Any]) -> str:
+    mode = _case_mode(state)
+    return f"""
+<section class="decision-compare {escape(mode)}" aria-label="Agent recommendation and final policy decision">
+  <article>
+    <span class="eyebrow">Raw Agent Interpretation Event</span>
+    <h2>{escape(agent["recommended_next_stage"])}</h2>
+    <dl>
+      <div><dt>AIE ID</dt><dd>{escape(agent["event_id"])}</dd></div>
+      <div><dt>Confidence</dt><dd>{escape(str(agent["confidence"]))}</dd></div>
+      <div><dt>Failure category</dt><dd>{escape(agent["failure_category"])}</dd></div>
+    </dl>
+  </article>
+  <div class="override-arrow" aria-hidden="true">-></div>
+  <article>
+    <span class="eyebrow">Linked Policy Decision Event</span>
+    <h2>{escape(policy["decision"])}</h2>
+    <dl>
+      <div><dt>PDE ID</dt><dd>{escape(policy["event_id"])}</dd></div>
+      <div><dt>Links to</dt><dd>{escape(policy["links_to"])}</dd></div>
+      <div><dt>Route</dt><dd>{escape(policy["to_stage"])}</dd></div>
+    </dl>
+  </article>
+  <div class="route-banner">
+    <span>{escape(_route_label(state))}</span>
+    <strong>{escape(policy["from_recommended_stage"])} -> {escape(policy["to_stage"])}</strong>
+    <em>{escape(policy["block_reason"])}</em>
   </div>
 </section>""".strip()
 
@@ -201,6 +234,18 @@ def _timeline(events: list[dict[str, Any]]) -> str:
 </section>""".strip()
 
 
+def _case_mode(state: dict[str, Any]) -> str:
+    if state["closure_block_reason"] == "source_contradiction":
+        return "escalated"
+    return "controlled"
+
+
+def _route_label(state: dict[str, Any]) -> str:
+    if state["closure_block_reason"] == "source_contradiction":
+        return "Escalated exception review"
+    return "Controlled verification retry"
+
+
 _CSS = """
 :root {
   color-scheme: light;
@@ -213,6 +258,8 @@ _CSS = """
   --warn: #b45309;
   --danger: #b42318;
   --blue: #1d4ed8;
+  --controlled: #0f766e;
+  --escalated: #b42318;
 }
 
 * { box-sizing: border-box; }
@@ -238,6 +285,16 @@ body {
   border-bottom: 1px solid var(--line);
   padding-bottom: 18px;
   margin-bottom: 18px;
+}
+
+.topbar.controlled {
+  border-top: 6px solid var(--controlled);
+  padding-top: 14px;
+}
+
+.topbar.escalated {
+  border-top: 6px solid var(--escalated);
+  padding-top: 14px;
 }
 
 .proof-strip {
@@ -266,6 +323,89 @@ body {
   display: block;
   font-size: 14px;
   overflow-wrap: break-word;
+}
+
+.decision-compare {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr);
+  gap: 12px;
+  align-items: stretch;
+  margin-bottom: 16px;
+}
+
+.decision-compare article,
+.route-banner {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.decision-compare.controlled article:first-child {
+  border-left: 4px solid var(--warn);
+}
+
+.decision-compare.controlled article:nth-of-type(2),
+.decision-compare.controlled .route-banner {
+  border-left: 4px solid var(--controlled);
+}
+
+.decision-compare.escalated article:first-child {
+  border-left: 4px solid var(--warn);
+}
+
+.decision-compare.escalated article:nth-of-type(2),
+.decision-compare.escalated .route-banner {
+  border-left: 4px solid var(--escalated);
+}
+
+.decision-compare h2 {
+  font-size: 24px;
+  line-height: 1.15;
+  margin-bottom: 14px;
+  overflow-wrap: break-word;
+}
+
+.eyebrow {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.override-arrow {
+  align-self: center;
+  color: var(--muted);
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.route-banner {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr) minmax(220px, auto);
+  gap: 14px;
+  align-items: center;
+}
+
+.route-banner span {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.route-banner strong,
+.route-banner em {
+  overflow-wrap: break-word;
+}
+
+.route-banner em {
+  color: var(--danger);
+  font-style: normal;
+  font-weight: 700;
 }
 
 h1, h2, h3, p { margin-top: 0; }
@@ -410,12 +550,16 @@ code {
 }
 
 @media (max-width: 900px) {
-  .topbar, .layout, .boundary-grid, .summary, .proof-strip {
+  .topbar, .layout, .boundary-grid, .summary, .proof-strip, .decision-compare, .route-banner {
     display: block;
   }
 
-  .summary, .side, .proof-strip div + div {
+  .summary, .side, .proof-strip div + div, .decision-compare article + article, .route-banner strong, .route-banner em {
     margin-top: 16px;
+  }
+
+  .override-arrow {
+    margin: 10px 0;
   }
 
   .panel + .panel,

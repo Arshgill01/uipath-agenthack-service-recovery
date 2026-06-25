@@ -159,3 +159,10 @@
 - New nuance: completed Action Center AppTasks `4300080` and `4300219` do not prove terminal Case job completion. Both corresponding Case jobs still read back as `State: Running`.
 - Mitigation: for the final demo, claim Action Center task lifecycle/reviewer return and audit-bundle reconstruction, but do not claim terminal Case job completion unless a fresh case run reaches a terminal job state.
 - New product feedback captured as PF-022: CaseManagement job/task lifecycle readback needs clearer Case-aware state explanation and more consistent process subcommand folder flag behavior.
+
+### 2026-06-26 00:41 IST - Demo Repeatability and Packet Surface
+
+- R-007 is further reduced: `scripts/run_demo.sh` now gives one safe command to regenerate and verify the E-002/E-004 proof payloads, audit bundles, evidence-packet HTML, and proof manifest.
+- R-003 is reduced for final presentation: the custom evidence packet now has a prominent raw AIE -> linked PDE comparison and visually distinguishes controlled verification from escalated exception review.
+- Remaining risk: the wrapper intentionally does not start fresh live cases or complete live tasks, because those mutate the tenant. Fresh live reruns still require an explicit operator action and log update.
+- Remaining risk: PF-013 still blocks use of generated Action Center UI as the judge-facing proof surface; custom HTML remains the validated workaround.

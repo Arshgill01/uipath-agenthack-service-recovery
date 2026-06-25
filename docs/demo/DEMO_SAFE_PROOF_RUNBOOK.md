@@ -65,6 +65,28 @@ Non-negotiable proof:
 
 Run from repo root.
 
+Default repeatable demo preparation:
+
+```sh
+scripts/run_demo.sh
+```
+
+This is the safest operator entry point. It regenerates and verifies the E-002/E-004 Action Center payloads, audit bundles, evidence-packet HTML, and proof manifest, then prints the live UiPath readback/upload commands to run manually. It does not start new live cases, complete live tasks, or mutate the tenant by default.
+
+Run the full local validation set before recording or submission:
+
+```sh
+scripts/run_demo.sh --with-local-checks
+```
+
+Suppress UiPath next-step commands when only refreshing local artifacts:
+
+```sh
+scripts/run_demo.sh --no-uipath-next-steps
+```
+
+The underlying commands are:
+
 ```sh
 python -m unittest discover -s tests
 python -m service_recovery_core.evals --output eval_results/local_baseline.json

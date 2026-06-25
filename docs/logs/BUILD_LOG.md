@@ -1425,3 +1425,50 @@ Open risks:
 Next:
 
 - Use `FEEDBACK_AWARD_APPENDIX.md` as the high-signal source when drafting the final survey answers or deck appendix.
+
+### 2026-06-26 00:41 IST - Agent / Demo Repeatability and Packet Polish
+
+What changed:
+
+- Added `scripts/run_demo.sh` as the default-safe demo preparation wrapper.
+- Updated `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md` to make the wrapper the front-door command for refreshing E-002/E-004 proof artifacts.
+- Strengthened `service_recovery_core/evidence_packet_view.py` with a prominent raw Agent Interpretation Event -> linked Policy Decision Event comparison panel.
+- Regenerated `docs/demo/artifacts/evidence_packet_E002.html` and `docs/demo/artifacts/evidence_packet_E004.html`.
+- Regenerated desktop evidence-packet screenshots for E-002 and E-004.
+- Updated `tests/test_evidence_packet_view.py` to lock the stronger proof-surface labels and route banners.
+
+Commands run:
+
+- `scripts/run_demo.sh --no-uipath-next-steps`
+- `python -m unittest tests.test_evidence_packet_view tests.test_demo_proof`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- `npx playwright screenshot --viewport-size=1440,1000 file://$PWD/docs/demo/artifacts/evidence_packet_E002.html docs/demo/artifacts/evidence_packet_E002_desktop.png`
+- `npx playwright screenshot --viewport-size=1440,1000 file://$PWD/docs/demo/artifacts/evidence_packet_E004.html docs/demo/artifacts/evidence_packet_E004_desktop.png`
+- `file docs/demo/artifacts/evidence_packet_E002_desktop.png docs/demo/artifacts/evidence_packet_E004_desktop.png`
+- `bash -n scripts/run_demo.sh`
+- `scripts/run_demo.sh --with-local-checks --no-uipath-next-steps`
+
+Validation:
+
+- PASS: `scripts/run_demo.sh --no-uipath-next-steps` regenerated and verified E-002/E-004 proof artifacts.
+- PASS: targeted evidence-packet/demo-proof tests passed.
+- PASS: full unit suite passed 27 tests.
+- PASS: local eval suite passed 9/9 scenarios.
+- PASS: desktop packet screenshots were generated as 1440x1000 PNGs.
+- PASS: shell syntax validation passed for `scripts/run_demo.sh`.
+- PASS: full wrapper mode ran local checks and verified E-002/E-004 proof artifacts.
+
+Product feedback:
+
+- No new PF entry. This checkpoint implements the documented PF-013 workaround by making the custom packet the clearer judge-facing proof surface.
+
+Open risks:
+
+- `scripts/run_demo.sh` intentionally does not start fresh live cases or complete live tasks. Fresh live E-002/E-004 reruns still require an operator decision because they mutate the tenant.
+- Generated Action Center UI remains a poor final proof surface until PF-013 is repaired or revalidated.
+
+Next:
+
+- Use `scripts/run_demo.sh --with-local-checks` before recording/submission.
+- If a fresh live run is needed, execute the printed UiPath readback/upload commands deliberately from the runbook and log new case/task IDs.
