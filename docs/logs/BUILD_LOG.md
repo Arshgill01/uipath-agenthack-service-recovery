@@ -851,3 +851,36 @@ Next:
 
 - Repair the generated Action Center `PolicyDecisionJson` binding or use a custom evidence-packet view.
 - Add/strengthen product feedback entries PF-013 and PF-015 before the final survey draft.
+
+### 2026-06-25 19:21 IST - Agent / Feedback Survey Prep Checkpoint
+
+What changed:
+
+- Inspected the open Safari page after interruption.
+- Confirmed Safari was on completed UiPath Action Center task `#4295299` titled `Feedback Submission`, not the external AgentHack product-feedback survey.
+- Preserved the observation as additional support for PF-013: the completed reviewer task still shows empty generated evidence controls and `PolicyDecisionJson` as `Unnamed String 1` even though the task API persisted the policy decision correctly.
+- Expanded `docs/product/FEEDBACK_SURVEY_DRAFT.md` with evidence-backed draft answers for the exact survey questions captured from the prompt.
+
+Commands/tools run:
+
+- Computer Use `get_app_state` for Safari.
+- `uip login status --output json`
+- `sed -n '1,260p' docs/product/FEEDBACK_SURVEY_DRAFT.md`
+- `sed -n '1,260p' docs/product/PRODUCT_FEEDBACK_AWARD.md`
+
+Validation:
+
+- PASS: UiPath CLI status still reports logged-in org `keepingitlowkey`, tenant `DefaultTenant`.
+- PASS: current Safari page is a completed Action Center task, so no final feedback survey submission has been made in this checkpoint.
+- PASS: `python -m unittest discover -s tests` ran 19 tests.
+- PASS: `python -m service_recovery_core.evals --output eval_results/local_baseline.json` passed 9/9 scenarios.
+
+Product feedback:
+
+- PF-013 remains the strongest evidence-backed UI/generation feedback item.
+- Survey draft now ranks the top feedback claims so final answers can be iterated rather than one-shotted.
+
+Open risks:
+
+- Final feedback survey still requires user-owned choices for team name, satisfaction ratings, and sharing permission.
+- Do not submit any external feedback form without explicit user confirmation at action time.
