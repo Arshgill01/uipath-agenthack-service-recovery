@@ -117,3 +117,9 @@
 - R-002 is reduced: the audit bundle pins `interpretation_policy_version` and `decision_policy_version` at top level and inside linked event payloads.
 - R-003 is partially reduced for custom UI fallback: `reviewer_packet` gives a structured evidence table, raw agent recommendation, policy decision, block reason, recommended options, and rendering status independent of the generated Action Center label issue.
 - New remaining risk: the bundle still needs a live UiPath storage/surface path. Candidate paths are Case custom data, Data Fabric/Data Service, a UiPath-accessible artifact, or a custom Case App/evidence-packet view.
+
+### 2026-06-25 19:35 IST - Static Evidence Packet Renderer
+
+- R-003 is reduced for demo fallback: static HTML artifacts now render the E-002 and E-004 reviewer packets with visible raw agent recommendation, final policy decision, evidence table, block reason, recommended options, and audit order.
+- R-003 remains open for live UiPath: the renderer is local/static until embedded in Case App/custom UI or replaced by a repaired Action Center generated page.
+- R-007 decreases slightly: the E-004 desktop artifact shows the second proof beat on one screen, reducing demo narration risk.

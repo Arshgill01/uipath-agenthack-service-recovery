@@ -7,6 +7,7 @@ from typing import Any
 
 from service_recovery_core.agent_validator import validate_agent_interpretation
 from service_recovery_core.audit_bundle import build_case_audit_bundle
+from service_recovery_core.evidence_packet_view import render_evidence_packet_html
 from service_recovery_core.fixtures import load_scenarios
 from service_recovery_core.policy import decide_policy
 from service_recovery_core.state_machine import apply_policy_decision
@@ -85,6 +86,11 @@ def main() -> int:
         default=None,
         help="Optional scenario ID to export as the custom one-query case audit bundle.",
     )
+    parser.add_argument(
+        "--evidence-packet-html-scenario",
+        default=None,
+        help="Optional scenario ID to export as a static reviewer evidence-packet HTML file.",
+    )
     args = parser.parse_args()
     if args.uipath_payload_scenario:
         payload = build_uipath_payload(args.uipath_payload_scenario)
@@ -103,6 +109,14 @@ def main() -> int:
             output_path.parent.mkdir(parents=True, exist_ok=True)
             output_path.write_text(rendered_bundle + "\n", encoding="utf-8")
         print(rendered_bundle)
+        return 0
+    if args.evidence_packet_html_scenario:
+        html = build_evidence_packet_html(args.evidence_packet_html_scenario)
+        if args.output:
+            output_path = Path(args.output)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_text(html, encoding="utf-8")
+        print(html)
         return 0
 
     results = run_eval_suite()
@@ -123,6 +137,10 @@ def build_uipath_payload(scenario_id: str) -> dict[str, str]:
 def build_audit_bundle(scenario_id: str) -> dict[str, Any]:
     scenario, transition = _scenario_transition(scenario_id)
     return build_case_audit_bundle(scenario["case"], scenario["evidence"], transition)
+
+
+def build_evidence_packet_html(scenario_id: str) -> str:
+    return render_evidence_packet_html(build_audit_bundle(scenario_id))
 
 
 def _scenario_transition(scenario_id: str) -> tuple[dict[str, Any], dict[str, Any]]:

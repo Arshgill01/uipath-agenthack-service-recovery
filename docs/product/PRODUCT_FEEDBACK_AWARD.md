@@ -392,6 +392,7 @@ Evidence:
 
 - Screenshot/path/link: `docs/validation/artifacts/2026-06-25/g004-action-center-policy-field-mislabeled-task-4295299.png`.
 - Screenshot/path/link: `docs/validation/artifacts/2026-06-25/g004-action-center-raw-recommendation-visible-task-4295299.png`.
+- Comparison artifact: `docs/demo/artifacts/evidence_packet_E004_desktop.png` shows the same proof beat rendered with the policy decision field legible.
 - Commands/logs: `docs/validation/VALIDATION_RESULTS.md`, 2026-06-25 18:47, 19:05, and 19:13 IST entries.
 - Live task IDs: `4295299`, `4300080`, `4300219`.
 

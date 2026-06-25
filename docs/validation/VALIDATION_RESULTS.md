@@ -846,3 +846,65 @@ Decision impact:
 Product feedback:
 
 - Strengthens PF-015. The platform can orchestrate the workflow, but builders need a native domain audit/event inspector for linked agent, policy, evidence, and human events.
+
+## 2026-06-25 19:35 IST - Static Evidence Packet Renderer
+
+Environment:
+
+- Local Python and Playwright.
+- No new UiPath cloud mutation in this checkpoint.
+
+Steps:
+
+1. Added `service_recovery_core.evidence_packet_view.render_evidence_packet_html`.
+2. Added `python -m service_recovery_core.evals --evidence-packet-html-scenario <ID>`.
+3. Generated static reviewer packet HTML artifacts for E-002 and E-004.
+4. Captured Playwright screenshots for E-004 at desktop and mobile viewport sizes.
+5. Ran targeted tests, full unit tests, local eval baseline, and Playwright visibility checks.
+
+Observed:
+
+- `docs/demo/artifacts/evidence_packet_E002.html` renders the missing authoritative telemetry proof beat.
+- `docs/demo/artifacts/evidence_packet_E004.html` renders the contradiction proof beat.
+- E-004 desktop screenshot shows:
+  - case/service identity,
+  - business state `green`,
+  - evidence state `contradicting`,
+  - block reason `source_contradiction`,
+  - raw agent recommendation `closure_candidate`,
+  - final policy decision `require_human_review` to `human_review`,
+  - evidence table with fresh authoritative `network_telemetry` value `not_live`,
+  - reviewer options including `open_investigation`,
+  - audit event order from EvidenceStateEvent through HumanReviewEvent.
+- Playwright visibility checks passed for desktop and mobile.
+
+Result:
+
+- G-003: strengthened with a custom evidence-packet fallback. Action Center remains the validated task lifecycle, but this renderer gives a legible reviewer packet if generated Action Center UI continues to hide `PolicyDecisionJson`.
+- G-004: strengthened for demo visibility. The raw agent recommendation and policy decision are visibly separate on one screen.
+- G-006: PARTIAL/PASS for custom demo surface. The renderer shows severity-adjacent evidence state, route, block reason, history order, and evidence table, but it is not yet embedded in UiPath Case App.
+- This does not claim native Action Center rendering is repaired.
+
+Evidence:
+
+- `docs/demo/artifacts/evidence_packet_E002.html`
+- `docs/demo/artifacts/evidence_packet_E004.html`
+- `docs/demo/artifacts/evidence_packet_E004_desktop.png`
+- `docs/demo/artifacts/evidence_packet_E004_mobile.png`
+
+Commands run:
+
+- `python -m service_recovery_core.evals --evidence-packet-html-scenario E-002 --output docs/demo/artifacts/evidence_packet_E002.html`
+- `python -m service_recovery_core.evals --evidence-packet-html-scenario E-004 --output docs/demo/artifacts/evidence_packet_E004.html`
+- Playwright Chromium screenshot/visibility script for desktop and mobile.
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+
+Decision impact:
+
+- Keep this renderer as the demo fallback if Action Center binding repair is not reliable.
+- Next live UiPath work should either embed/surface this packet in Case App/custom UI or repair the generated Action Center binding.
+
+Product feedback:
+
+- Strengthens PF-013: we now have a concrete comparison artifact showing the fields that the generated Action Center UI should have rendered legibly.

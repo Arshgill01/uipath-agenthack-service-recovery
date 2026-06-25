@@ -920,3 +920,40 @@ Open risks:
 
 - Need a live UiPath storage/surface path for `service-recovery-audit-v1`: Case custom data, Data Fabric/Data Service, file artifact, or custom app view.
 - Generated Action Center page still needs `PolicyDecisionJson` binding repair or replacement with a custom evidence-packet surface.
+
+### 2026-06-25 19:35 IST - Agent / Static Evidence Packet Renderer
+
+What changed:
+
+- Added `service_recovery_core.evidence_packet_view.render_evidence_packet_html`.
+- Added `python -m service_recovery_core.evals --evidence-packet-html-scenario <ID>`.
+- Added renderer tests for E-002 and E-004.
+- Generated demo artifacts:
+  - `docs/demo/artifacts/evidence_packet_E002.html`
+  - `docs/demo/artifacts/evidence_packet_E004.html`
+  - `docs/demo/artifacts/evidence_packet_E004_desktop.png`
+  - `docs/demo/artifacts/evidence_packet_E004_mobile.png`
+
+Commands run:
+
+- `python -m service_recovery_core.evals --evidence-packet-html-scenario E-002 --output docs/demo/artifacts/evidence_packet_E002.html`
+- `python -m service_recovery_core.evals --evidence-packet-html-scenario E-004 --output docs/demo/artifacts/evidence_packet_E004.html`
+- Playwright Chromium screenshot/visibility script for desktop and mobile.
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+
+Validation:
+
+- PASS: full unit suite ran 23 tests.
+- PASS: eval suite passed 9/9 scenarios.
+- PASS: Playwright found the proof-critical E-004 text visible on desktop and mobile: `Review service recovery evidence`, `Raw agent interpretation`, `Final policy decision`, `source_contradiction`, and `open_investigation`.
+- PASS: screenshot inspection shows the E-004 packet presents the agent/policy boundary, evidence table, reviewer options, and audit order on one desktop viewport.
+
+Product feedback:
+
+- PF-013 is strengthened by a concrete comparison artifact for the generated Action Center binding issue.
+
+Open risks:
+
+- The renderer is a local/static custom surface; it still needs embedding or recreation in a live UiPath Case App/custom view if used for the final demo.
+- Native Action Center generated page still renders `PolicyDecisionJson` incorrectly until repaired.

@@ -98,6 +98,13 @@ The packet should fit one reviewer screen and include:
 
 If Action Center renders this generically or hides the agent/policy boundary, use a Case App/custom packet for the demo while still recording the Action Center limitation as product feedback.
 
+Current custom packet fallback:
+
+- `python -m service_recovery_core.evals --evidence-packet-html-scenario E-002 --output docs/demo/artifacts/evidence_packet_E002.html`
+- `python -m service_recovery_core.evals --evidence-packet-html-scenario E-004 --output docs/demo/artifacts/evidence_packet_E004.html`
+
+These static artifacts are not a substitute for live UiPath human-task validation. They are the demo-ready custom evidence-packet surface to use if generated Action Center UI remains mislabeled. They show the raw agent recommendation and final policy decision side by side, plus evidence table, block reason, recommended reviewer actions, and audit order.
+
 ## Demo Proof Sequence
 
 1. Start with the canonical green business fixture: CRM/order active, billing clear, support note resolved.
