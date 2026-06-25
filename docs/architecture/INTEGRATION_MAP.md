@@ -62,6 +62,10 @@ Live validation moved the architecture from "maybe Data Fabric/Data Service" to 
 - `python -m service_recovery_core.evals --audit-bundle-scenario E-002` emits the missing-telemetry proof beat.
 - `python -m service_recovery_core.evals --audit-bundle-scenario E-004` emits the contradiction/human-review proof beat.
 - The bundle can be stored as Case custom data, Data Fabric/Data Service record, or a UiPath-accessible file/artifact depending on the final implementation path.
+- Data Fabric is reachable through `uip df`; read-only entity listing returned an empty native entity list in org `keepingitlowkey`, tenant `DefaultTenant`.
+- `docs/architecture/data_fabric/service_recovery_audit_bundle_entity.json` is the proposed live entity schema for storing the bundle.
+- `python -m service_recovery_core.evals --data-fabric-record-scenario E-004` emits an insert-ready record body for the contradiction proof beat, including live Case/task/package references from package `1.0.5`.
+- Creating `ServiceRecoveryAuditBundle` remains an explicit approval step because it changes tenant schema.
 
 Mapping to hard gates:
 

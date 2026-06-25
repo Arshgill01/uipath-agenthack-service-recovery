@@ -173,6 +173,35 @@ Bundle shape:
 
 This is the fallback answer for G-001: if a single native Case query/view cannot reconstruct the domain proof beat, store this bundle as custom audit state/events in the Case payload, Data Fabric/Data Service, or another UiPath-accessible artifact. It preserves the exact fields the hard gate requires: evidence state, active policy versions, raw agent recommendation, policy decision, closure block reason, human action, and event order.
 
+## Proposed Data Fabric Entity
+
+`docs/architecture/data_fabric/service_recovery_audit_bundle_entity.json` defines the proposed `ServiceRecoveryAuditBundle` entity for storing `service-recovery-audit-v1` in UiPath Data Fabric.
+
+First-class query fields:
+
+- `case_id`
+- `service_id`
+- `scenario_id`
+- `audit_contract_version`
+- `business_state`
+- `derived_evidence_state`
+- `closure_block_reason`
+- `interpretation_policy_version`
+- `decision_policy_version`
+- `source_case_instance_key`
+- `source_task_id`
+- `package_version`
+- `created_at`
+
+JSON payload fields:
+
+- `raw_agent_event_json`
+- `policy_decision_event_json`
+- `reviewer_packet_json`
+- `audit_bundle_json`
+
+`python -m service_recovery_core.evals --data-fabric-record-scenario <ID>` emits the matching record body. Live entity creation and record insertion require explicit approval because they mutate the UiPath tenant schema/data.
+
 ## Package / Migration Event
 
 ```json

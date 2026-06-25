@@ -1,0 +1,107 @@
+{
+  "displayName": "Service Recovery Audit Bundle",
+  "description": "Stores one governed service-recovery audit bundle for UiPath Maestro Case validation and demo reconstruction.",
+  "fields": [
+    {
+      "fieldName": "case_id",
+      "type": "STRING",
+      "isRequired": true,
+      "lengthLimit": 100
+    },
+    {
+      "fieldName": "service_id",
+      "type": "STRING",
+      "isRequired": true,
+      "lengthLimit": 100
+    },
+    {
+      "fieldName": "scenario_id",
+      "type": "STRING",
+      "isRequired": true,
+      "lengthLimit": 20
+    },
+    {
+      "fieldName": "audit_contract_version",
+      "type": "STRING",
+      "isRequired": true,
+      "lengthLimit": 100
+    },
+    {
+      "fieldName": "business_state",
+      "type": "STRING",
+      "isRequired": true,
+      "lengthLimit": 50
+    },
+    {
+      "fieldName": "derived_evidence_state",
+      "type": "STRING",
+      "isRequired": true,
+      "lengthLimit": 100
+    },
+    {
+      "fieldName": "closure_block_reason",
+      "type": "STRING",
+      "isRequired": true,
+      "lengthLimit": 100
+    },
+    {
+      "fieldName": "interpretation_policy_version",
+      "type": "STRING",
+      "isRequired": true,
+      "lengthLimit": 100
+    },
+    {
+      "fieldName": "decision_policy_version",
+      "type": "STRING",
+      "isRequired": true,
+      "lengthLimit": 100
+    },
+    {
+      "fieldName": "source_case_instance_key",
+      "type": "STRING",
+      "isRequired": false,
+      "lengthLimit": 100
+    },
+    {
+      "fieldName": "source_task_id",
+      "type": "STRING",
+      "isRequired": false,
+      "lengthLimit": 50
+    },
+    {
+      "fieldName": "package_version",
+      "type": "STRING",
+      "isRequired": false,
+      "lengthLimit": 50
+    },
+    {
+      "fieldName": "raw_agent_event_json",
+      "type": "MULTILINE_TEXT",
+      "isRequired": true,
+      "lengthLimit": 10000
+    },
+    {
+      "fieldName": "policy_decision_event_json",
+      "type": "MULTILINE_TEXT",
+      "isRequired": true,
+      "lengthLimit": 10000
+    },
+    {
+      "fieldName": "reviewer_packet_json",
+      "type": "MULTILINE_TEXT",
+      "isRequired": true,
+      "lengthLimit": 10000
+    },
+    {
+      "fieldName": "audit_bundle_json",
+      "type": "MULTILINE_TEXT",
+      "isRequired": true,
+      "lengthLimit": 10000
+    },
+    {
+      "fieldName": "created_at",
+      "type": "DATETIME_WITH_TZ",
+      "isRequired": true
+    }
+  ]
+}

@@ -908,3 +908,78 @@ Decision impact:
 Product feedback:
 
 - Strengthens PF-013: we now have a concrete comparison artifact showing the fields that the generated Action Center UI should have rendered legibly.
+
+## 2026-06-25 21:01 IST - Data Fabric Audit Storage Preparation
+
+Environment:
+
+- UiPath CLI authenticated to org `keepingitlowkey`, tenant `DefaultTenant`.
+- Data Fabric CLI surface inspected read-only.
+- No live Data Fabric schema or record mutation was performed in this checkpoint.
+
+Gate/wave:
+
+- G-001: Native Case State / Audit Reconstruction.
+- G-002: Policy Version Pinning.
+- G-008: CLI/coding-agent lifecycle support.
+
+Assumption tested:
+
+- If native Maestro Case history remains insufficient for one-query domain audit reconstruction, Data Fabric can serve as the durable UiPath-accessible storage path for `service-recovery-audit-v1` bundles.
+
+Steps:
+
+1. Confirmed `uip df` command availability.
+2. Ran a read-only entity listing for native Data Fabric entities.
+3. Added a proposed `ServiceRecoveryAuditBundle` entity schema.
+4. Added a local exporter for Data Fabric record bodies from the same audit bundle used by the evidence packet renderer.
+5. Generated an E-004 contradiction record body with the live Case/task/package references from package `1.0.5`.
+
+Observed:
+
+- `uip df entities list --native-only --output json` returned success with an empty entity list: `{"Result":"Success","Code":"EntityList","Data":[]}`.
+- `uip df` is available even though `uip tools list --output json` did not list a `data-fabric-tool` entry in the inspected output.
+- The proposed schema is stored at `docs/architecture/data_fabric/service_recovery_audit_bundle_entity.json`.
+- `python -m service_recovery_core.evals --data-fabric-record-scenario E-004` emits fields for:
+  - case/service/scenario identity,
+  - evidence state and block reason,
+  - interpretation and decision policy versions,
+  - live source Case instance key `60e52ca5-6891-45b4-9e98-e1b08a984f06`,
+  - live source task ID `4300219`,
+  - package version `1.0.5`,
+  - raw agent event JSON,
+  - policy decision event JSON,
+  - reviewer packet JSON,
+  - full audit bundle JSON.
+
+Result:
+
+- G-001: PARTIAL but materially advanced. A concrete Data Fabric storage path now exists as a proposed tenant schema plus insert-ready record body; live entity creation/query-back still requires explicit approval because it changes tenant schema.
+- G-002: strengthened. The proposed record stores `interpretation_policy_version` and `decision_policy_version` as first-class fields and inside linked event JSON.
+- G-004: unchanged PASS/PARTIAL from prior live task payload evidence; this checkpoint prepares durable storage for the same linked raw/final event pair.
+- G-008: strengthened. The CLI can inspect Data Fabric and the repo can generate record bodies for a UiPath storage command, but no live insert has been run yet.
+
+Commands run:
+
+- `uip df --help`
+- `uip tools list --output json`
+- `uip df entities list --native-only --output json`
+- `uip df entities create --help`
+- `uip df records insert --help`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- `python -m service_recovery_core.evals --data-fabric-record-scenario E-004 --output eval_results/data_fabric_record_E004.json`
+
+Decision impact:
+
+- Use Data Fabric as the preferred durable custom-audit storage candidate if the user approves live schema creation.
+- Do not mark native G-001 as PASS: the platform still needs explicit domain audit state outside the native case runtime trail.
+
+Product feedback:
+
+- PF-018 added for Data Fabric CLI discovery mismatch: `uip df` is usable, but `uip tools list` did not expose the corresponding tool entry during discovery.
+
+Next:
+
+- Ask for explicit approval to create the live Data Fabric entity `ServiceRecoveryAuditBundle` in org `keepingitlowkey`, tenant `DefaultTenant`.
+- If approved, create the entity, insert the E-004 record, query/read it back, update G-001/G-002 evidence, then commit/push the live validation checkpoint.

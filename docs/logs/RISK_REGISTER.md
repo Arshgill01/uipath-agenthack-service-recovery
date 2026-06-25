@@ -123,3 +123,10 @@
 - R-003 is reduced for demo fallback: static HTML artifacts now render the E-002 and E-004 reviewer packets with visible raw agent recommendation, final policy decision, evidence table, block reason, recommended options, and audit order.
 - R-003 remains open for live UiPath: the renderer is local/static until embedded in Case App/custom UI or replaced by a repaired Action Center generated page.
 - R-007 decreases slightly: the E-004 desktop artifact shows the second proof beat on one screen, reducing demo narration risk.
+
+### 2026-06-25 21:01 IST - Data Fabric Audit Storage Preparation
+
+- R-001 is reduced but still open: Data Fabric is reachable through `uip df`, and the repo now has a proposed `ServiceRecoveryAuditBundle` schema plus an insert-ready E-004 record body. Native Case audit remains PARTIAL, and live Data Fabric create/insert/readback is still unproven.
+- R-002 is reduced: the proposed Data Fabric record stores `interpretation_policy_version` and `decision_policy_version` as first-class fields tied to the full audit bundle.
+- New risk: Data Fabric entity creation is a tenant schema mutation. Mitigation: keep the schema proposal in repo, request explicit approval before `uip df entities create`, then immediately query/read back any inserted proof-beat record.
+- New feedback risk/opportunity: `uip df` works, but Data Fabric did not appear in `uip tools list` during discovery. Mitigation: log PF-018 and use direct `uip df` commands for the next validation step.

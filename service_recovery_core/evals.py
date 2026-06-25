@@ -7,6 +7,7 @@ from typing import Any
 
 from service_recovery_core.agent_validator import validate_agent_interpretation
 from service_recovery_core.audit_bundle import build_case_audit_bundle
+from service_recovery_core.data_fabric_record import build_data_fabric_record
 from service_recovery_core.evidence_packet_view import render_evidence_packet_html
 from service_recovery_core.fixtures import load_scenarios
 from service_recovery_core.policy import decide_policy
@@ -91,6 +92,11 @@ def main() -> int:
         default=None,
         help="Optional scenario ID to export as a static reviewer evidence-packet HTML file.",
     )
+    parser.add_argument(
+        "--data-fabric-record-scenario",
+        default=None,
+        help="Optional scenario ID to export as a Data Fabric audit record body.",
+    )
     args = parser.parse_args()
     if args.uipath_payload_scenario:
         payload = build_uipath_payload(args.uipath_payload_scenario)
@@ -118,6 +124,15 @@ def main() -> int:
             output_path.write_text(html, encoding="utf-8")
         print(html)
         return 0
+    if args.data_fabric_record_scenario:
+        record = build_audit_record(args.data_fabric_record_scenario)
+        rendered_record = json.dumps(record, indent=2, sort_keys=True)
+        if args.output:
+            output_path = Path(args.output)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_text(rendered_record + "\n", encoding="utf-8")
+        print(rendered_record)
+        return 0
 
     results = run_eval_suite()
     rendered = json.dumps(results, indent=2, sort_keys=True)
@@ -141,6 +156,22 @@ def build_audit_bundle(scenario_id: str) -> dict[str, Any]:
 
 def build_evidence_packet_html(scenario_id: str) -> str:
     return render_evidence_packet_html(build_audit_bundle(scenario_id))
+
+
+def build_audit_record(scenario_id: str) -> dict[str, Any]:
+    live_refs = {
+        "E-002": {
+            "source_case_instance_key": "3af41e1d-8b04-4eba-aa5e-a95c5c673730",
+            "source_task_id": "4300080",
+            "package_version": "1.0.4",
+        },
+        "E-004": {
+            "source_case_instance_key": "60e52ca5-6891-45b4-9e98-e1b08a984f06",
+            "source_task_id": "4300219",
+            "package_version": "1.0.5",
+        },
+    }
+    return build_data_fabric_record(build_audit_bundle(scenario_id), scenario_id=scenario_id, **live_refs.get(scenario_id, {}))
 
 
 def _scenario_transition(scenario_id: str) -> tuple[dict[str, Any], dict[str, Any]]:

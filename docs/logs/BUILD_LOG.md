@@ -957,3 +957,42 @@ Open risks:
 
 - The renderer is a local/static custom surface; it still needs embedding or recreation in a live UiPath Case App/custom view if used for the final demo.
 - Native Action Center generated page still renders `PolicyDecisionJson` incorrectly until repaired.
+
+### 2026-06-25 21:01 IST - Agent / Data Fabric Audit Storage Preparation
+
+What changed:
+
+- Added `service_recovery_core.data_fabric_record.build_data_fabric_record`.
+- Added `python -m service_recovery_core.evals --data-fabric-record-scenario <ID>`.
+- Added tests for the E-004 Data Fabric record body and its live Case/task/package references.
+- Added the proposed Data Fabric entity schema at `docs/architecture/data_fabric/service_recovery_audit_bundle_entity.json`.
+- Updated validation and integration docs with the read-only Data Fabric finding and the explicit approval gate before live schema creation.
+
+Commands run:
+
+- `uip df --help`
+- `uip tools list --output json`
+- `uip df entities list --native-only --output json`
+- `uip df entities create --help`
+- `uip df records insert --help`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- `python -m service_recovery_core.evals --data-fabric-record-scenario E-004 --output eval_results/data_fabric_record_E004.json`
+
+Validation:
+
+- PASS: full unit suite ran 24 tests.
+- PASS: eval suite passed 9/9 scenarios.
+- PASS: Data Fabric CLI is reachable.
+- PASS: read-only entity listing returned `Result: Success` with an empty native entity list.
+- PASS: E-004 record exporter preserves source Case instance key `60e52ca5-6891-45b4-9e98-e1b08a984f06`, task ID `4300219`, package version `1.0.5`, raw agent event, linked policy decision event, reviewer packet, and full audit bundle.
+- PARTIAL: live Data Fabric entity creation/insert/readback was not run because schema creation changes tenant state and needs explicit approval.
+
+Product feedback:
+
+- PF-018 added for Data Fabric CLI discovery mismatch: `uip df` works while `uip tools list` did not expose a corresponding Data Fabric tool entry.
+
+Open risks:
+
+- Data Fabric storage is prepared but not live-validated until `ServiceRecoveryAuditBundle` is created and queried back.
+- G-001 remains PARTIAL natively; the custom-audit path is becoming concrete but still requires live storage evidence.
