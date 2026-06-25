@@ -2,6 +2,8 @@
 
 Status: current evidence map for final submission and future agents. Do not mark an item stronger than the evidence listed here.
 
+Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_COMPLETION_AUDIT.md).
+
 ## Core Validation
 
 | Requirement | Status | Evidence | Remaining caution |

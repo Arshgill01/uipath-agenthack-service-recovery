@@ -1746,3 +1746,48 @@ Open risks:
 Next:
 
 - Continue with product proof polish or fresh UiPath validation only when it produces new evidence.
+
+### 2026-06-26 01:11 IST - Agent / Objective Evidence Audit
+
+What changed:
+
+- Added `docs/validation/OBJECTIVE_COMPLETION_AUDIT.md` as a prompt-to-artifact checklist for the active UiPath validation objective.
+- Linked the objective audit from `docs/submission/READINESS_CHECKLIST.md`.
+- Mapped hard gates, soft gates, local validation, UiPath access, product feedback, architecture updates, live LLM proof, commits, and remaining caveats to concrete repo evidence.
+
+Commands run:
+
+- `git status --short --branch && git log --oneline -5`
+- `find docs -maxdepth 3 -type f | sort | sed -n '1,220p'`
+- `sed -n '1,220p' docs/submission/READINESS_CHECKLIST.md`
+- `sed -n '1,220p' docs/validation/VALIDATION_GATES.md`
+- `sed -n '1,220p' AGENTS.md`
+- `sed -n '1,240p' docs/validation/EVAL_PLAN.md`
+- `sed -n '1,240p' docs/demo/DEMO_STORYBOARD.md`
+- `sed -n '1,240p' waves/39_final_validation.md`
+- `test -f docs/validation/OBJECTIVE_COMPLETION_AUDIT.md && test -f docs/validation/VALIDATION_RESULTS.md && test -f docs/validation/VALIDATION_GATES.md && test -f docs/product/PRODUCT_FEEDBACK_AWARD.md && test -f docs/product/FEEDBACK_AWARD_APPENDIX.md && test -f docs/product/FEEDBACK_SURVEY_COPY_READY.md && test -f docs/demo/artifacts/llm_interpreter_E003_live.json && test -f scripts/run_demo.sh && test -f scripts/run_llm_demo.sh && echo audit-references-present`
+- `rg -n "OBJECTIVE_COMPLETION_AUDIT|Native Case history alone|Data Fabric record persistence|Generated Action Center UI|LLM final" docs/submission/READINESS_CHECKLIST.md docs/validation/OBJECTIVE_COMPLETION_AUDIT.md`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- `python -m service_recovery_core.demo_proof --output-dir docs/demo/artifacts --verify-only`
+
+Validation:
+
+- PASS: audit reference paths exist.
+- PASS: overclaim guardrails remain present in the readiness checklist and objective audit.
+- PASS: full unit suite passed 32 tests.
+- PASS: local eval suite passed 9/9 scenarios.
+- PASS: demo proof verifier passed E-002/E-004.
+
+Product feedback:
+
+- No new PF entry. This checkpoint is an evidence audit; no new UiPath interaction occurred.
+
+Open risks:
+
+- Objective evidence is strong, but the user explicitly asked not to mark the active goal complete yet.
+- Remaining caveats are still active do-not-claim boundaries: native Case-only audit, generated Action Center UI, Data Fabric record persistence, automated Test Cloud execution, terminal Case job completion, real telecom integrations, and LLM final authority.
+
+Next:
+
+- Validate, commit, and push the audit checkpoint.
