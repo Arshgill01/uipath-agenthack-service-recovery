@@ -1,10 +1,10 @@
 # Validation Results
 
-UiPath Labs hard gate validation is in progress. Wave 01 access inventory is mostly complete; hard gates G-001 through G-004 remain PARTIAL until a real Maestro Case instance proves runtime audit, policy pinning, evidence packet, and override visibility behavior.
+UiPath Labs hard gate validation has answered G-001 through G-004 with implementation implications. The current architecture uses native Maestro Case and Action Center for lifecycle and human return, a custom evidence-packet/audit surface for demo legibility, and an Orchestrator bucket-backed `service-recovery-audit-v1` bundle for durable one-object audit reconstruction.
 
 Use [VALIDATION_GATES.md](VALIDATION_GATES.md) for pass/fail criteria.
 
-Until hard gates G-001 through G-004 are answered, the data model and UiPath integration map remain provisional.
+The data model and integration map are now grounded in observed platform facts. Remaining partials are explicit: native Case does not provide the full domain audit alone, generated Action Center UI is not demo-legible, Data Fabric record insert is blocked, and Test Manager automation is not claimed.
 
 ## 2026-06-18 - Local Provisional Core Baseline
 

@@ -1,19 +1,19 @@
 # UiPath Integration Map
 
-This map remains provisional until hard validation gates are pass-certified. Latest live facts move some items from access risk to implementation constraints; they do not by themselves certify G-001 through G-004.
+This map is now grounded in live UiPath validation. The hard gates are answered with explicit implementation implications: native Case state is not sufficient alone for the domain audit, Action Center is not the final evidence UI, and the validated demo-safe path combines Action Center lifecycle, custom evidence packet, and Orchestrator bucket audit bundle.
 
-Implementation readiness slices are tracked in [IMPLEMENTATION_SLICES.md](IMPLEMENTATION_SLICES.md). That file defines what is safe now versus blocked by G-001 through G-004.
+Implementation readiness slices are tracked in [IMPLEMENTATION_SLICES.md](IMPLEMENTATION_SLICES.md). Future implementation should follow the validated demo-safe path unless new platform evidence supersedes it.
 
 | Capability | Planned use | Validation dependency |
 | --- | --- | --- |
 | Maestro Case | Primary case lifecycle, stages, routing, incident/recovery, human accountability. | G-001, G-002, G-005, G-006 |
 | Agent Builder / Coded Agent | Interpret unstructured notes/messages into structured schema. | Stack choice and UiPath access |
 | API Workflows | Query simulated CRM/billing/telemetry/inventory/dispatch APIs. | G-005 and Wave 28 |
-| Action Center | Human review/approval. AppTask can create, assign, complete, and return structured task output into case variables. | G-003; final evidence-packet rendering remains pending |
-| Case App / custom UI | Fallback or primary evidence packet/demo surface if Action Center rendering is not demo-legible. | G-003, G-004, G-006 |
-| Data Fabric/Data Service | Store `service-recovery-audit-v1` case audit bundles or equivalent custom audit events if native Case state is insufficient. | G-001, G-002 |
+| Action Center | Human review lifecycle: create, assign, complete, reviewer action/comment, structured task output into case variables. Not the final judge-readable evidence UI. | G-003 PASS/PARTIAL |
+| Case App / custom UI | Primary final evidence packet/demo surface because generated Action Center UI is not demo-legible. | G-003, G-004, G-006 |
+| Data Fabric/Data Service | Candidate future storage for audit bundles. Schema create/readback validated, record insert blocked. | G-001, G-002; PF-019 |
 | Orchestrator storage buckets | Validated fallback for storing one-object `service-recovery-audit-v1` audit artifacts when native Case audit is insufficient and Data Fabric record insert is blocked. | G-001, G-002, G-004, G-008 |
-| Test Cloud | Eval/regression validation for agent usefulness and policy changes. | G-007 |
+| Test Cloud / Test Manager | Eval/regression representation. Live project `SREV`, test set `SREV:9`, and manual execution logs represent E-001 through E-009; automated execution not claimed. | G-007 PASS/PARTIAL |
 | UiPath CLI + skills | Coding-agent bonus proof and lifecycle automation, including explicit process creation with pinned package versions. | G-008; CLI version `1.196.0` installed locally and logged into org `keepingitlowkey`, tenant `DefaultTenant` |
 | Orchestrator | Assets, packages, jobs, logs, deployment, secrets if needed. | Wave 01 and stack selection |
 
@@ -28,7 +28,7 @@ Observed on 2026-06-24:
 - Local `uip` CLI is installed and reports version `1.196.0`.
 - Automation Cloud browser access did not reach a tenant; Safari landed at `portal_/missingaccount`.
 - Product access for Maestro, Maestro Case, Studio Web, Action Center, Test Cloud/Test Manager, Integration Service, and Orchestrator is unconfirmed.
-- Hard gate validation must not start until Automation Cloud tenant access and Maestro Case availability are confirmed.
+- Initial access blocker is historical. Current Automation Cloud tenant access and Maestro Case availability are confirmed.
 
 Observed on 2026-06-24 20:30 IST rerun:
 
@@ -39,8 +39,8 @@ Observed on 2026-06-24 20:30 IST rerun:
 - `Add to solution` includes `Maestro Case`, and a `Maestro Case` project can be added to the Studio solution.
 - Case App opens and shows active-case columns for Case ID, Case type, Last modified, Stage, Case SLA, SLA status, and Case state.
 - Actions / Action Center was initially disabled for `DefaultTenant`, then enabled from Admin `DefaultTenant > Services > Add services` after user approval. Action Center now opens as `Inbox - Action Center`.
-- Test Manager is visible from the launcher and home widgets, but no Test Manager projects are accessible yet.
-- Hard gate validation remains partial until a live case instance proves audit reconstruction, policy-version pinning, human evidence packet return, and raw recommendation visibility.
+- Test Manager is validated through project `SREV`, test set `SREV:9`, and manual execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad`.
+- Hard gates are answered with documented partials and implementation choices. Proceed with the demo-safe proof path instead of reopening broad validation.
 
 Observed live validation facts to carry into implementation:
 
@@ -54,6 +54,7 @@ Observed live validation facts to carry into implementation:
 - Raw agent recommendation and final policy decision can be represented as separate structured HITL payload fields.
 - Package `1.0.3` live validation reached Action Center task `4295299`. The task API persisted both `RawAgentRecommendation` and `PolicyDecisionJson`; Action Center rendered the raw recommendation and evidence packet, but rendered the policy field as `Unnamed String 1`.
 - Treat G-004 persistence as validated for the proof beat, with a reviewer-legibility caveat that needs a label/binding repair before the final demo.
+- Later E-004 completed-task recheck showed the generated Action Center UI still leaves proof-critical values blank/generic. D-009 is activated: use Action Center for lifecycle and custom packet/audit UI for legibility.
 
 ## Custom Audit Bundle Mapping
 

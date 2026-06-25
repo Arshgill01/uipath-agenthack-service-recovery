@@ -111,7 +111,7 @@ Decision: Treat Action Center/Actions as unavailable for the current `keepingitl
 
 Rationale: On 2026-06-24 20:30 IST, the Actions route redirected to `portal_/unregistered?serviceType=actions&organizationName=keepingitlowkey&tenantName=defaulttenant` and displayed `Actions is not enabled for this tenant` with session ID `32e450e2-89ca-4a80-a0c9-16df19a3d6b4`.
 
-Status: Accepted for the current spike. Revisit only if Actions is enabled or a different tenant is provided.
+Status: Superseded. Actions was later enabled for `DefaultTenant`, and live Action Center task lifecycle/structured return is validated. The remaining G-003 caveat is generated UI legibility, covered by D-009.
 
 ## D-014: Maestro Case Spike Scope
 
@@ -119,7 +119,7 @@ Decision: Continue with focused Maestro Case validation only; do not start broad
 
 Rationale: Automation Cloud, Maestro, Studio Web, and Maestro Case project creation are confirmed, but the hard gates require live state/audit/version/override evidence. Creating a validation-scoped `Maestro BPMN` solution and `Maestro Case` project is not enough to prove audit reconstruction or human evidence packet behavior.
 
-Status: Accepted.
+Status: Superseded by live validation. G-001 through G-004 are answered with PASS/PARTIAL implications; proceed with the demo-safe proof path rather than broad implementation against unvalidated assumptions.
 
 ## D-015: Explicit Case Package Pinning And Custom Audit Payloads
 
@@ -128,3 +128,16 @@ Decision: Use explicit Case package version pinning plus custom structured audit
 Rationale: Live validation shows the Case process package is visible on case instances through `PackageKey`, and direct process creation can pin package versions. It also showed that the original solution-created process stayed on package `1.0.0` with `AutoUpdate` false despite an update command reporting success, so implicit update/migration is not reliable enough for the audit story. Separately, Action Center AppTask can return structured output into case variables, and raw agent recommendation plus final policy decision can be represented as separate structured HITL payload fields. Custom payloads preserve the required architecture boundary even if native Case history is incomplete.
 
 Status: Accepted as the current implementation plan. Package `1.0.3` live validation proved task payload persistence and structured human return, including the raw agent recommendation and linked policy override decision. Reviewer page legibility still needs repair because the generated Action Center page rendered `PolicyDecisionJson` as `Unnamed String 1`.
+
+## D-016: Demo-Safe Proof Path
+
+Decision: Build the final proof path from the validated components:
+
+- Action Center owns human task lifecycle and structured reviewer return.
+- Custom evidence packet owns judge-readable proof of evidence state, raw agent recommendation, policy decision, block reason, recommended options, and route.
+- Orchestrator bucket audit bundle owns durable UiPath-hosted domain audit evidence.
+- Generated Action Center UI is not used as the final evidence-packet surface unless repaired and revalidated.
+
+Rationale: Live validation answered the hard gates with partial native support. Native Case and Action Center provide the orchestration and human-review mechanics, but generated Action Center rendering hid or mislabeled proof-critical fields. The custom evidence packet and bucket-backed audit artifact preserve the architecture boundary without weakening the platform story or pretending the generated UI is demo-ready.
+
+Status: Accepted as the implementation plan for the next build wave.

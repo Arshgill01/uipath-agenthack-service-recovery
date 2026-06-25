@@ -21,13 +21,25 @@ Architecture thesis:
 
 ## Current Status
 
-- Local provisional core exists and is committed.
+- Local service-recovery core exists and is committed.
 - Local tests/evals should pass:
   - `python -m unittest discover -s tests`
   - `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
-- UiPath CLI was installed locally in a prior run as `uip` version `1.196.0`.
-- A prior Wave 01 attempt was blocked at `portal_/missingaccount`; if the user now has working Labs access, rerun Wave 01 before continuing.
-- Hard UiPath gates G-001 through G-004 are still the next critical checkpoint unless newer validation results prove otherwise.
+- UiPath CLI is installed locally as `uip` version `1.196.0`.
+- UiPath Labs access is working for org `keepingitlowkey`, tenant `DefaultTenant`, user `arshgill6120@gmail.com`.
+- Live validation has answered the hard gates with implementation implications:
+  - G-001: native Case runtime audit is PARTIAL; custom `service-recovery-audit-v1` bundle stored in Orchestrator bucket is the validated one-object audit fallback.
+  - G-002: PASS for explicit package/process/artifact policy-version pinning; native active-case migration must be represented as an explicit custom audit event.
+  - G-003: PASS for Action Center lifecycle and structured reviewer return; PARTIAL for generated Action Center UI legibility. Use custom evidence-packet/audit surface for the final demo.
+  - G-004: PASS for persisted raw Agent Interpretation Event and linked Policy Decision Event; PARTIAL only for generated Action Center display.
+- Soft gates now have evidence:
+  - G-005: live E-002/E-004 runs prove distinct missing/stale versus contradiction routes.
+  - G-007: Test Manager project `SREV`, test set `SREV:9`, and manual execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad` represent E-001 through E-009; all manual logs passed, but the aggregate execution remained `Running`.
+- Demo-safe proof path:
+  - Action Center = lifecycle, assignment, reviewer action/comment, structured return.
+  - Custom evidence packet = judge-readable proof surface.
+  - Orchestrator bucket audit bundle = durable UiPath-hosted audit proof.
+  - Do not rely on the generated Action Center page as the final evidence-packet UI unless repaired and revalidated.
 
 If this status conflicts with newer entries in `docs/validation/VALIDATION_RESULTS.md`, `docs/logs/BUILD_LOG.md`, or `docs/decisions/DECISIONS.md`, trust the newer dated evidence and update this section in the same commit.
 
@@ -72,15 +84,14 @@ Update these as applicable:
 
 ## Immediate Priority
 
-If UiPath Labs access is now working, run:
+The hard gates are answered enough to proceed with the validated demo-safe proof path. Next work should make the live run repeatable and productize the two proof beats:
 
-1. Wave 01: platform access and inventory.
-2. G-001: Native Case State / Audit Reconstruction.
-3. G-002: Policy Version Pinning.
-4. G-003: Human Evidence Packet.
-5. G-004: Agent Recommendation Visible Before Override.
+1. Write/run scripts or runbooks for generating E-002/E-004 payloads, starting/polling cases and tasks, completing review, uploading/downloading audit bundles, and verifying AIE/PDE linkage.
+2. Keep the canonical green business fixture stable, changing only authoritative telemetry/inventory state between 2A and 2B.
+3. Polish the custom evidence packet for judge readability.
+4. Continue product-feedback logging during every UiPath interaction.
 
-Do not start broad UiPath implementation until G-001 through G-004 are PASS/PARTIAL with documented implications or explicitly waived in `docs/decisions/DECISIONS.md`.
+Do not restart broad platform validation unless new platform behavior contradicts the current evidence or a remaining partial item becomes demo-critical.
 
 ## Product Feedback Award Discipline
 

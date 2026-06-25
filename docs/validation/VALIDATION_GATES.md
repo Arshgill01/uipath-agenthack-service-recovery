@@ -2,7 +2,14 @@
 
 Do not scaffold major application code until hard gates are answered or explicitly waived.
 
-Current status: in progress / partial. Wave 01 access and Maestro Case design-surface validation have run against org `keepingitlowkey`, tenant `DefaultTenant`. G-001 through G-004 are still not pass-certified because runtime case audit reconstruction, policy version pinning, evidence-packet rendering/return, and raw recommendation visibility have not been proven in a live case.
+Current status: hard gates are answered with implementation implications, not all-native PASS.
+
+- G-001: PARTIAL natively, PASS for custom UiPath-hosted audit fallback. Native Case runtime reconstructs operational flow but not the full domain audit in one native view/query. The validated fallback is a `service-recovery-audit-v1` bundle stored in Orchestrator bucket `service-recovery-audit-validation`.
+- G-002: PASS for explicit package/process/artifact policy-version pinning. Active-case policy migration remains custom and must be represented as an explicit audited event.
+- G-003: PASS for Action Center lifecycle and structured reviewer return, PARTIAL for generated Action Center evidence-packet legibility. Use the custom evidence-packet/audit surface for final demo readability.
+- G-004: PASS for persisted raw agent recommendation and linked final policy decision in task/API/audit data, PARTIAL only for generated Action Center display.
+
+Decision: proceed with the demo-safe proof path. Action Center owns human task lifecycle; the custom evidence packet owns judge-readable proof; Orchestrator bucket owns durable audit evidence. Do not depend on generated Action Center UI for final video unless repaired and revalidated.
 
 ## Hard Gates
 
@@ -24,6 +31,8 @@ Pass condition:
 
 Strict rule: manual log archaeology across many sources is not a pass. If one-view or one-query reconstruction is not possible, use Data Fabric/Data Service or explicit custom audit events.
 
+Validated result: PARTIAL natively, PASS with custom audit artifact fallback. Native Case and task APIs reconstruct package, runtime order, task state, timestamps, reviewer return, and payload links. The one-object `service-recovery-audit-v1` bundle reconstructs the full domain audit and was uploaded/listed/downloaded from a live Orchestrator bucket.
+
 ### G-002: Policy Version Pinning
 
 Question: Can each case persist interpretation and decision policy versions?
@@ -36,6 +45,8 @@ Pass condition:
 - migration can be represented as explicit audited event.
 
 Native support is optional. Metadata + audit event is acceptable.
+
+Validated result: PASS for explicit metadata/artifact pinning. Process/package pinning with `AutoUpdate: false` was observed, task/audit payloads persist `interpretation_policy_version` and `decision_policy_version`, and migrations must be explicit audit events.
 
 ### G-003: Human Evidence Packet
 
@@ -52,6 +63,8 @@ Pass condition:
 
 If Action Center works but renders this generically, prefer custom evidence-packet UI for demo legibility.
 
+Validated result: PASS for lifecycle/return, PARTIAL for generated UI. Action Center can create, assign, complete, and return structured reviewer action/comment. Generated Action Center page rendering is not demo-safe, so the custom evidence-packet/audit surface is the final reviewer-visible proof surface.
+
 ### G-004: Agent Recommendation Visible Before Override
 
 Question: Can the demo show raw recommendation separately from final policy decision?
@@ -64,6 +77,8 @@ Pass condition:
 - visible before/after override is available in UI, event view, or controlled screen.
 
 This is central to the demo. Do not fake it if it can be logged.
+
+Validated result: PASS for persistence/API/audit visibility. Live E-002 and E-004 payloads and bucket audit artifact preserve separate raw Agent Interpretation Events and linked Policy Decision Events. Generated Action Center display remains partial.
 
 ## Soft Gates
 

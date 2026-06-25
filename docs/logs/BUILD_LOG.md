@@ -1221,3 +1221,36 @@ Product feedback:
 Open risks:
 
 - G-007 remains PARTIAL for automation. The mapping and manual passed logs are live in Test Manager, but final claims must distinguish manual Test Manager execution from automated Test Cloud execution.
+
+### 2026-06-26 00:00 IST - Agent / Hard-Gate Architecture Freeze
+
+What changed:
+
+- Updated `AGENTS.md` current status so future agents start from observed UiPath facts.
+- Updated `docs/validation/VALIDATION_GATES.md` to mark G-001 through G-004 as answered with exact PASS/PARTIAL implications.
+- Updated `docs/architecture/INTEGRATION_MAP.md` to use the validated demo-safe proof path:
+  - Action Center for lifecycle and structured reviewer return.
+  - Custom evidence packet for judge-readable proof.
+  - Orchestrator bucket audit bundle for durable UiPath-hosted audit evidence.
+- Updated `docs/decisions/DECISIONS.md` to supersede older access/spike-scope decisions and add D-016.
+- Updated the `docs/validation/VALIDATION_RESULTS.md` summary to remove obsolete provisional hard-gate wording.
+
+Commands run:
+
+- `git status --short --branch`
+- `sed -n '1,220p' AGENTS.md`
+- `rg -n "G-001|G-002|G-003|G-004|hard gate|Hard" docs/validation/VALIDATION_RESULTS.md docs/validation/VALIDATION_GATES.md docs/decisions/DECISIONS.md docs/architecture/INTEGRATION_MAP.md`
+- `sed -n '1,140p' docs/validation/VALIDATION_GATES.md`
+- `sed -n '1,140p' docs/architecture/INTEGRATION_MAP.md`
+- `tail -n 120 docs/decisions/DECISIONS.md`
+
+Validation:
+
+- PASS: control docs now agree that hard gates are answered enough to proceed with the demo-safe proof path.
+- PASS/PARTIAL retained: native Case audit and generated Action Center UI remain partials, not hidden as full native passes.
+
+Open risks:
+
+- Live-run repeatability is not yet scripted/runbooked end to end.
+- Generated Action Center evidence UI remains unsuitable for final video unless repaired and revalidated.
+- Data Fabric record insert remains blocked; Orchestrator bucket is the validated audit fallback.
