@@ -884,3 +884,39 @@ Open risks:
 
 - Final feedback survey still requires user-owned choices for team name, satisfaction ratings, and sharing permission.
 - Do not submit any external feedback form without explicit user confirmation at action time.
+
+### 2026-06-25 19:25 IST - Agent / Custom Audit Bundle Slice
+
+What changed:
+
+- Added `service_recovery_core.audit_bundle.build_case_audit_bundle`.
+- Added `python -m service_recovery_core.evals --audit-bundle-scenario <ID>`.
+- Added tests for E-002 and E-004 audit bundles.
+- Updated Action Center content generation so contradiction uses a distinct human-exception message instead of the missing-telemetry verification copy.
+- Updated architecture docs with the `service-recovery-audit-v1` bundle contract and UiPath mapping.
+
+Commands run:
+
+- `python -m unittest tests.test_audit_bundle tests.test_uipath_payload`
+- `python -m service_recovery_core.evals --audit-bundle-scenario E-002 --output eval_results/audit_bundle_E002.json`
+- `python -m service_recovery_core.evals --audit-bundle-scenario E-004 --output eval_results/audit_bundle_E004.json`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+
+Validation:
+
+- PASS: targeted audit/payload suite ran 5 tests.
+- PASS: full unit suite ran 21 tests.
+- PASS: eval suite passed 9/9 scenarios.
+- PASS: E-002 audit bundle reconstructs green business state, missing authoritative telemetry, raw `closure_candidate`, policy override to `verify_telemetry`, policy versions, and event order in one object.
+- PASS: E-004 audit bundle reconstructs green business state, fresh authoritative contradiction, raw `closure_candidate`, policy route to `human_review`, policy versions, and reviewer `open_investigation` option in one object.
+- PARTIAL: this is a local/custom-audit implementation artifact, not a new live UiPath run.
+
+Product feedback:
+
+- PF-015 is strengthened: this work exists because native Case/task APIs required explicit domain payloads for audit-grade reconstruction.
+
+Open risks:
+
+- Need a live UiPath storage/surface path for `service-recovery-audit-v1`: Case custom data, Data Fabric/Data Service, file artifact, or custom app view.
+- Generated Action Center page still needs `PolicyDecisionJson` binding repair or replacement with a custom evidence-packet surface.

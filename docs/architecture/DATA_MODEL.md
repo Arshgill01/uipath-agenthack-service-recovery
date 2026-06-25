@@ -115,6 +115,64 @@ Package metadata is operational audit metadata, not business evidence. It pins w
 
 The raw agent recommendation and final policy decision are separate fields because the demo and audit trail must show the policy boundary. Package `1.0.3` proved persistence for both fields in Action Center task `4295299`, but the generated Action Center page rendered `PolicyDecisionJson` as `Unnamed String 1`; use `persisted_but_mislabeled` until the reviewer page is repaired.
 
+## Case Audit Bundle
+
+Native Maestro Case state is useful for package/job/stage/task order, but live validation showed that the domain audit must be carried explicitly. The implementation now has a reproducible `service-recovery-audit-v1` bundle generated from the same scenario, policy, and transition outputs that feed UiPath Action Center.
+
+Generate examples with:
+
+```bash
+python -m service_recovery_core.evals --audit-bundle-scenario E-002 --output eval_results/audit_bundle_E002.json
+python -m service_recovery_core.evals --audit-bundle-scenario E-004 --output eval_results/audit_bundle_E004.json
+```
+
+Bundle shape:
+
+```json
+{
+  "case_id": "CASE-BG-MISSING",
+  "service_id": "SVC-BG-1",
+  "audit_contract_version": "service-recovery-audit-v1",
+  "case_instance": {
+    "case_stage": "intake",
+    "severity": "normal",
+    "sla_deadline": "timestamp",
+    "case_process_package_key": "optional UiPath PackageKey",
+    "case_process_package_version": "optional UiPath package version",
+    "case_process_auto_update": false
+  },
+  "policy_versions": {
+    "interpretation_policy_version": "ip-v1",
+    "decision_policy_version": "dp-v1"
+  },
+  "evidence_state": {
+    "business_state": "green",
+    "derived_evidence_state": "missing_pending",
+    "closure_block_reason": "missing_authoritative_signal"
+  },
+  "agent_interpretation_event": {},
+  "policy_decision_event": {},
+  "human_review_event": {},
+  "reviewer_packet": {
+    "content": "reviewer summary",
+    "evidence_table": [],
+    "raw_agent_recommendation": {},
+    "policy_decision": {},
+    "block_reason": "missing_authoritative_signal",
+    "recommended_options": [],
+    "rendering_status": "structured_packet_ready"
+  },
+  "events": [
+    {"event_type": "EvidenceStateEvent", "sort_order": 10},
+    {"event_type": "AgentInterpretationEvent", "sort_order": 20},
+    {"event_type": "PolicyDecisionEvent", "sort_order": 30},
+    {"event_type": "HumanReviewEvent", "sort_order": 40}
+  ]
+}
+```
+
+This is the fallback answer for G-001: if a single native Case query/view cannot reconstruct the domain proof beat, store this bundle as custom audit state/events in the Case payload, Data Fabric/Data Service, or another UiPath-accessible artifact. It preserves the exact fields the hard gate requires: evidence state, active policy versions, raw agent recommendation, policy decision, closure block reason, human action, and event order.
+
 ## Package / Migration Event
 
 ```json

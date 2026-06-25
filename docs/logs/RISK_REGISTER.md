@@ -110,3 +110,10 @@
 - R-005 likelihood decreases substantially: distinct route behavior is now observed live. Missing authoritative telemetry E-002 routes to `verify_telemetry`; fresh authoritative contradiction E-004 routes to `human_review` with `source_contradiction`.
 - R-003 remains open for UI legibility. The task API contains correct `PolicyDecisionJson`, but generated Action Center app binding still likely lacks `ActionProperties.PolicyDecisionJson` and renders `Unnamed String 1`.
 - R-001 remains open for native one-query domain audit. Two proof beats are now carried as explicit task payloads, but a durable custom audit event/state model is still needed for final demo-quality reconstruction.
+
+### 2026-06-25 19:25 IST - Custom Audit Bundle Slice
+
+- R-001 is mitigated by an implementation fallback, not by native platform behavior: `service-recovery-audit-v1` reconstructs evidence state, policy versions, raw agent recommendation, policy decision, closure block reason, human review state, and event order in one JSON object.
+- R-002 is reduced: the audit bundle pins `interpretation_policy_version` and `decision_policy_version` at top level and inside linked event payloads.
+- R-003 is partially reduced for custom UI fallback: `reviewer_packet` gives a structured evidence table, raw agent recommendation, policy decision, block reason, recommended options, and rendering status independent of the generated Action Center label issue.
+- New remaining risk: the bundle still needs a live UiPath storage/surface path. Candidate paths are Case custom data, Data Fabric/Data Service, a UiPath-accessible artifact, or a custom Case App/evidence-packet view.

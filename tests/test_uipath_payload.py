@@ -57,6 +57,7 @@ class UiPathPayloadTests(unittest.TestCase):
         self.assertEqual(policy_decision["to_stage"], "human_review")
         self.assertEqual(policy_decision["block_reason"], "source_contradiction")
         self.assertIn("open_investigation", policy_decision["allowed_actions"])
+        self.assertIn("fresh authoritative telemetry contradicts", payload["Content"])
 
     def test_eval_helper_exports_named_scenario_payload(self):
         payload = build_uipath_payload("E-002")

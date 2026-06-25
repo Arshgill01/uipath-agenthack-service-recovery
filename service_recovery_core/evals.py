@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from service_recovery_core.agent_validator import validate_agent_interpretation
+from service_recovery_core.audit_bundle import build_case_audit_bundle
 from service_recovery_core.fixtures import load_scenarios
 from service_recovery_core.policy import decide_policy
 from service_recovery_core.state_machine import apply_policy_decision
@@ -79,6 +80,11 @@ def main() -> int:
         default=None,
         help="Optional scenario ID to export as generated Action Center input payload.",
     )
+    parser.add_argument(
+        "--audit-bundle-scenario",
+        default=None,
+        help="Optional scenario ID to export as the custom one-query case audit bundle.",
+    )
     args = parser.parse_args()
     if args.uipath_payload_scenario:
         payload = build_uipath_payload(args.uipath_payload_scenario)
@@ -88,6 +94,15 @@ def main() -> int:
             output_path.parent.mkdir(parents=True, exist_ok=True)
             output_path.write_text(rendered_payload + "\n", encoding="utf-8")
         print(rendered_payload)
+        return 0
+    if args.audit_bundle_scenario:
+        bundle = build_audit_bundle(args.audit_bundle_scenario)
+        rendered_bundle = json.dumps(bundle, indent=2, sort_keys=True)
+        if args.output:
+            output_path = Path(args.output)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_text(rendered_bundle + "\n", encoding="utf-8")
+        print(rendered_bundle)
         return 0
 
     results = run_eval_suite()
@@ -101,6 +116,16 @@ def main() -> int:
 
 
 def build_uipath_payload(scenario_id: str) -> dict[str, str]:
+    scenario, transition = _scenario_transition(scenario_id)
+    return build_action_center_payload(scenario["case"], scenario["evidence"], transition)
+
+
+def build_audit_bundle(scenario_id: str) -> dict[str, Any]:
+    scenario, transition = _scenario_transition(scenario_id)
+    return build_case_audit_bundle(scenario["case"], scenario["evidence"], transition)
+
+
+def _scenario_transition(scenario_id: str) -> tuple[dict[str, Any], dict[str, Any]]:
     scenarios = load_scenarios()
     if scenario_id not in scenarios:
         raise KeyError(f"unknown scenario_id: {scenario_id}")
@@ -116,7 +141,7 @@ def build_uipath_payload(scenario_id: str) -> dict[str, str]:
         policy_decision,
         event_id=f"PDE-{scenario_id}",
     )
-    return build_action_center_payload(scenario["case"], scenario["evidence"], transition)
+    return scenario, transition
 
 
 def _override_persistence_assertions(transition: dict[str, Any]) -> list[bool]:

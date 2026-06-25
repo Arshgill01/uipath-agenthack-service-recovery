@@ -53,7 +53,7 @@ This matrix groups the current evidence into issue classes. Add new observations
 | Orchestrator process auto-update readback | PF-012 | product limitation candidate / UX / integration | medium/high for rerun safety | A successful process auto-update command should update the process or report that update is unsupported/no-op with the current package. | Command returned success, but readback stayed `false` / `1.0.0`. | Treat success responses as provisional; always read back process version and auto-update state before rerunning a case. | Make no-op success impossible, or return an operation result that includes before/after auto-update state and package version. | Needs exact command output/readback artifact; PF-012. |
 | Action Center generated app task rendering and return | PF-013 | UX / product defect candidate / integration | high for G-003 legibility | Action Center should render generated app fields with the schema display names and return reviewer action/comment as structured case data. | Action Center mechanics proved claim/approve/reject/structured return, but `PolicyDecisionJson` rendered as `Unnamed String 1` while the task API showed the correct persisted value. | Use Action Center mechanics for proof of task lifecycle; repair the generated page label/binding or use a custom packet view for demo legibility. | Preserve schema display names in generated runtime tasks and expose a field-binding inspector for Action Center tasks. | `docs/validation/artifacts/2026-06-25/g003-action-center-task-renders-unassigned-fields-null.png`; `docs/validation/artifacts/2026-06-25/g004-action-center-policy-field-mislabeled-task-4295299.png`; PF-013. |
 | Generated app image component placeholder | PF-014 | UX / generated app quality | low/medium | Generated apps should avoid unconfigured media placeholders or show a clear design-time configuration message. | Generated app image component showed `Unable to render image` when no/invalid image was configured. | Remove or configure the image component before demo; do not treat it as a blocking G-003 issue unless it obscures evidence fields. | Omit image controls from generated forms unless an image source exists, or render a design-time-only placeholder with a direct configure/remove action. | `docs/validation/artifacts/2026-06-25/g004-action-center-raw-recommendation-visible-task-4295299.png`; PF-014. |
-| Live Case audit and override visibility | PF-015 | integration / UX / missing feature | high for G-001/G-004 audit | One case view or one query reconstructs evidence state, policy versions, raw recommendation, policy decision, closure block, human action, and timestamps. | CLI/task APIs can reconstruct most of the evidence chain, but native Case history still needs explicit custom payloads for a clean one-query domain audit; Action Center UI hid the policy value behind a generated label issue. | Use explicit audit payloads and package/policy version fields; keep generated Action Center UI as reviewer task mechanics, not the sole audit surface. | Add a native Case audit/event inspector for custom domain events with linked agent interpretation, policy decision, human action, and package/policy versions in one timeline/query. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 18:47 IST; PF-015. |
+| Live Case audit and override visibility | PF-015 | integration / UX / missing feature | high for G-001/G-004 audit | One case view or one query reconstructs evidence state, policy versions, raw recommendation, policy decision, closure block, human action, and timestamps. | CLI/task APIs can reconstruct most of the evidence chain, but native Case history still needs explicit custom payloads for a clean one-query domain audit; Action Center UI hid the policy value behind a generated label issue. | Use the `service-recovery-audit-v1` bundle, explicit package/policy version fields, and generated reviewer packets; keep generated Action Center UI as task mechanics, not the sole audit surface. | Add a native Case audit/event inspector for custom domain events with linked agent interpretation, policy decision, human action, and package/policy versions in one timeline/query. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 18:47/19:25 IST; `service_recovery_core/audit_bundle.py`; PF-015. |
 | Action Center refresh after external task completion | PF-016 | UX / integration | medium | If a task is completed through API/CLI, an open Action Center task tab should either update automatically or clearly require refresh. | After `uip tasks complete` returned success and task API showed `Completed`, the open Safari tab still displayed the task under `Pending` until browser refresh. | Refresh the task tab; after refresh, Action Center correctly moved task `4295299` to `Completed` and showed `(reject)`. | Add real-time status sync or a stale-state banner when an open task has been completed outside the current browser session. | `docs/validation/artifacts/2026-06-25/g004-action-center-stale-pending-after-cli-complete-task-4295299.png`; `docs/validation/artifacts/2026-06-25/g004-action-center-completed-reject-task-4295299.png`; PF-016. |
 | Solution-feed package visibility and process binding | PF-017 | integration / UX / diagnostics | high for CLI/package recovery | A package uploaded successfully to a solution feed should be visible to the process-binding path, or the CLI should require/propagate the feed selector consistently. | Upload and feed-scoped `packages get` succeeded for `Solution.caseManagement.Maestro.Case:1.0.4`; default package lookup and `processes create --package-version 1.0.4` could not bind it. | Use `packages get --feed-id` to verify the package and `processes update-version` on an existing process to move to `1.0.4`. | Add feed-aware process creation or a clear diagnostic that says the package exists in feed X but the requested folder/process binding is resolving feed Y. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 19:05 IST; PF-017. |
 
@@ -242,6 +242,86 @@ Evidence:
 Classification:
 
 - access / UX / docs
+
+Survey tags:
+
+- product-used
+- pain-point
+- workaround
+- improvement
+- evidence
+
+### PF-015 - 2026-06-25 - Maestro Case / Domain Audit And Override Timeline
+
+Context:
+
+- ID: PF-015.
+- Status: observed / implementation fallback created.
+- Goal: validate whether one case view or one query can reconstruct the governed service-recovery proof beat.
+- Product surface: Maestro Case, Case instance APIs, Action Center task APIs, UiPath CLI.
+- Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `Arshdeep Singh`.
+- Wave/gate: G-001, G-002, G-004, G-005.
+
+What worked:
+
+- Live Case and task APIs exposed package version, runtime order, stage/task state, task source linkage, timestamps, reviewer action, and structured HITL return.
+- Action Center task payloads preserved raw `AgentInterpretationEvent` and linked `PolicyDecisionEvent` separately.
+- Process readback and version history made package pinning visible across `1.0.3`, `1.0.4`, and `1.0.5`.
+- The local implementation now generates a `service-recovery-audit-v1` bundle containing evidence state, policy versions, raw agent recommendation, policy decision, closure block reason, human review state, and event order in one JSON object.
+
+What failed or confused us:
+
+- Native Case history alone did not provide a clean domain audit timeline for the proof beat.
+- To reconstruct the governed decision, we still had to carry explicit payloads and combine Case instance, task, process, and package/version reads.
+- The generated Action Center UI rendered a proof-critical policy field as `Unnamed String 1`, so the reviewer-facing surface was weaker than the persisted audit data.
+
+Expected:
+
+- A governed agentic Case should expose one audit view or one query that shows the linked sequence: evidence state, active policy versions, raw agent recommendation, policy decision, closure block reason, human action, and event timestamps.
+
+Observed:
+
+- The platform can orchestrate and persist the pieces, but the domain audit must currently be modeled explicitly.
+- The project now uses `service-recovery-audit-v1` as the custom audit contract and can generate it with `python -m service_recovery_core.evals --audit-bundle-scenario E-002` or `E-004`.
+
+Impact:
+
+- Build impact: high. This determines whether G-001 is native PASS or custom-audit PARTIAL/PASS.
+- Demo/submission impact: high. The main demo needs to show that policy overrode a raw agent recommendation, not merely that the final route changed.
+- Severity: high for regulated or audit-heavy Maestro Case adoption.
+
+Workaround:
+
+- Use explicit domain audit bundles/events and store them in the chosen UiPath-accessible path: Case custom data, Data Fabric/Data Service, file artifact, or custom evidence-packet view.
+- Keep native Case runtime/history for operational traceability, but do not rely on it as the sole governed-domain audit record.
+
+Suggested improvement:
+
+- Add a native Maestro Case audit/event inspector for custom domain events.
+- Let builders declare linked event types, such as Agent Interpretation Event, Policy Decision Event, Evidence State Event, and Human Review Event.
+- Show event links, policy/package versions, source payload refs, stage transitions, and human actions in one timeline/query.
+- Provide a standard evidence-packet audit template for agent + policy + human workflows.
+
+Evidence:
+
+- Commands/logs: `docs/validation/VALIDATION_RESULTS.md`, 2026-06-25 18:47, 19:05, 19:13, and 19:25 IST entries.
+- Code artifact: `service_recovery_core/audit_bundle.py`.
+- Tests: `tests/test_audit_bundle.py`.
+- Live E-002 task/case: task `4300080`, case `3af41e1d-8b04-4eba-aa5e-a95c5c673730`.
+- Live E-004 task/case: task `4300219`, case `60e52ca5-6891-45b4-9e98-e1b08a984f06`.
+
+Classification:
+
+- integration / UX / missing feature
+
+Confidence:
+
+- high. The observation is based on live Case/task/process reads plus a tested implementation fallback.
+
+Follow-up validation needed:
+
+- Store or surface the `service-recovery-audit-v1` bundle in a live UiPath path.
+- Repair or replace the generated Action Center reviewer view so the same audit fields are legible in the demo.
 
 Survey tags:
 

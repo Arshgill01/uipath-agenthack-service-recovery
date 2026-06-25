@@ -86,6 +86,12 @@ def _recommended_options(policy_event: dict[str, Any]) -> list[str]:
 
 
 def _content_summary(evidence_packet: dict[str, Any], policy_event: dict[str, Any]) -> str:
+    if policy_event["block_reason"] == "source_contradiction":
+        return (
+            "Service recovery exception review required: CRM/order/billing/support notes are green, "
+            "but fresh authoritative telemetry contradicts the business state. "
+            "Do not close; open human exception review."
+        )
     if evidence_packet["business_state"] == "green" and policy_event["block_reason"] != "none":
         return (
             "Service recovery verification required: CRM/order/billing/support notes are green, "

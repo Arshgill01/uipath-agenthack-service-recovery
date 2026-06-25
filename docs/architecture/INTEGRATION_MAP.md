@@ -11,7 +11,7 @@ Implementation readiness slices are tracked in [IMPLEMENTATION_SLICES.md](IMPLEM
 | API Workflows | Query simulated CRM/billing/telemetry/inventory/dispatch APIs. | G-005 and Wave 28 |
 | Action Center | Human review/approval. AppTask can create, assign, complete, and return structured task output into case variables. | G-003; final evidence-packet rendering remains pending |
 | Case App / custom UI | Fallback or primary evidence packet/demo surface if Action Center rendering is not demo-legible. | G-003, G-004, G-006 |
-| Data Fabric/Data Service | Store case/audit/policy/eval objects or custom audit payloads if native Case state is insufficient. | G-001, G-002 |
+| Data Fabric/Data Service | Store `service-recovery-audit-v1` case audit bundles or equivalent custom audit events if native Case state is insufficient. | G-001, G-002 |
 | Test Cloud | Eval/regression validation for agent usefulness and policy changes. | G-007 |
 | UiPath CLI + skills | Coding-agent bonus proof and lifecycle automation, including explicit process creation with pinned package versions. | G-008; CLI version `1.196.0` installed locally and logged into org `keepingitlowkey`, tenant `DefaultTenant` |
 | Orchestrator | Assets, packages, jobs, logs, deployment, secrets if needed. | Wave 01 and stack selection |
@@ -53,3 +53,19 @@ Observed live validation facts to carry into implementation:
 - Raw agent recommendation and final policy decision can be represented as separate structured HITL payload fields.
 - Package `1.0.3` live validation reached Action Center task `4295299`. The task API persisted both `RawAgentRecommendation` and `PolicyDecisionJson`; Action Center rendered the raw recommendation and evidence packet, but rendered the policy field as `Unnamed String 1`.
 - Treat G-004 persistence as validated for the proof beat, with a reviewer-legibility caveat that needs a label/binding repair before the final demo.
+
+## Custom Audit Bundle Mapping
+
+Live validation moved the architecture from "maybe Data Fabric/Data Service" to a concrete custom-audit contract:
+
+- `service_recovery_core.audit_bundle.build_case_audit_bundle(...)` emits a one-object domain audit bundle.
+- `python -m service_recovery_core.evals --audit-bundle-scenario E-002` emits the missing-telemetry proof beat.
+- `python -m service_recovery_core.evals --audit-bundle-scenario E-004` emits the contradiction/human-review proof beat.
+- The bundle can be stored as Case custom data, Data Fabric/Data Service record, or a UiPath-accessible file/artifact depending on the final implementation path.
+
+Mapping to hard gates:
+
+- G-001: one bundle reconstructs evidence state, policy versions, raw agent recommendation, policy decision, closure block reason, human action placeholder/result, and event order.
+- G-002: policy versions are explicit top-level fields and remain tied to the generated policy event.
+- G-003: `reviewer_packet` contains the evidence table, raw agent recommendation, policy decision, block reason, recommended options, and rendering status for a custom evidence packet view.
+- G-004: `agent_interpretation_event` and `policy_decision_event` are separate linked objects; the policy event points back through `links_to`.

@@ -785,3 +785,64 @@ Decision impact:
 - Continue with Maestro Case as primary track.
 - Next validation should repair generated Action Center binding for `PolicyDecisionJson` or create a custom evidence-packet view before demo polish.
 - The contradiction route is ready to become the second main demo beat after UI legibility is repaired.
+
+## 2026-06-25 19:25 IST - Custom Audit Bundle Implementation Checkpoint
+
+Environment:
+
+- Local Python environment.
+- No new UiPath cloud mutation in this checkpoint.
+- Grounded in prior live UiPath findings from package `1.0.4` / task `4300080` and package `1.0.5` / task `4300219`.
+
+Steps:
+
+1. Added `service_recovery_core.audit_bundle.build_case_audit_bundle`.
+2. Added `python -m service_recovery_core.evals --audit-bundle-scenario <ID>` to export a one-object domain audit bundle.
+3. Generated local audit bundles for E-002 missing authoritative telemetry and E-004 source contradiction.
+4. Ran targeted audit/payload tests, full unit tests, and the local eval baseline.
+5. Updated architecture docs to map the bundle to G-001/G-002/G-003/G-004.
+
+Observed:
+
+- E-002 bundle contains:
+  - `audit_contract_version: service-recovery-audit-v1`.
+  - `evidence_state.business_state: green`.
+  - `evidence_state.derived_evidence_state: missing_pending`.
+  - `evidence_state.closure_block_reason: missing_authoritative_signal`.
+  - `policy_versions.interpretation_policy_version: ip-v1`.
+  - `policy_versions.decision_policy_version: dp-v1`.
+  - raw `AgentInterpretationEvent` with `recommended_next_stage: closure_candidate`.
+  - linked `PolicyDecisionEvent` with `decision: override_recommendation`, `from_recommended_stage: closure_candidate`, `to_stage: verify_telemetry`, and `links_to: AIE-E002`.
+  - ordered events: EvidenceStateEvent, AgentInterpretationEvent, PolicyDecisionEvent, HumanReviewEvent.
+- E-004 bundle contains:
+  - `evidence_state.business_state: green`.
+  - `evidence_state.derived_evidence_state: contradicting`.
+  - `evidence_state.closure_block_reason: source_contradiction`.
+  - linked policy decision `require_human_review` to `human_review`.
+  - reviewer options including `open_investigation`.
+- Contradiction reviewer content now explicitly says fresh authoritative telemetry contradicts the business state.
+
+Result:
+
+- G-001: still PARTIAL natively, but the custom audit fallback is now concrete and test-covered. A single `service-recovery-audit-v1` bundle reconstructs the domain fields that native Case history did not expose in one view/query.
+- G-002: strengthened locally. The bundle pins interpretation and decision policy versions at top level and inside linked events.
+- G-003: strengthened locally. The bundle has a structured `reviewer_packet` with evidence table, raw agent recommendation, policy decision, block reason, recommended options, and rendering status.
+- G-004: strengthened locally. The bundle preserves raw agent recommendation and final policy decision as separate linked events.
+- This checkpoint does not claim new live UiPath validation. It converts prior live platform facts into a grounded implementation artifact.
+
+Commands run:
+
+- `python -m unittest tests.test_audit_bundle tests.test_uipath_payload`
+- `python -m service_recovery_core.evals --audit-bundle-scenario E-002 --output eval_results/audit_bundle_E002.json`
+- `python -m service_recovery_core.evals --audit-bundle-scenario E-004 --output eval_results/audit_bundle_E004.json`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+
+Decision impact:
+
+- Use `service-recovery-audit-v1` as the implementation contract for custom Case/Data Fabric/Data Service audit storage unless a later native Maestro Case audit view proves the same domain reconstruction.
+- Next live UiPath slice should store or surface this bundle through the chosen UiPath path, then repair or replace the generated Action Center reviewer UI.
+
+Product feedback:
+
+- Strengthens PF-015. The platform can orchestrate the workflow, but builders need a native domain audit/event inspector for linked agent, policy, evidence, and human events.
