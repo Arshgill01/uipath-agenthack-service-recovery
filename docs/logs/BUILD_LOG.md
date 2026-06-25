@@ -1143,3 +1143,31 @@ Open risks:
 
 - The custom surface is a static artifact, not yet embedded inside a UiPath Case App.
 - Data Fabric record insert remains blocked; bucket-backed audit artifact is the validated UiPath-hosted storage fallback.
+
+### 2026-06-25 23:53 IST - Agent / Feedback Survey Synthesis
+
+What changed:
+
+- Strengthened `docs/product/FEEDBACK_SURVEY_DRAFT.md` with final-submission ingredients.
+- Separated positive platform findings from critical product feedback.
+- Added a compact evidence-backed table for the strongest feedback claims and explicit `Do Not Claim Yet` guardrails.
+
+Commands run:
+
+- `git status --short --branch`
+- `sed -n '1,260p' docs/product/FEEDBACK_SURVEY_DRAFT.md`
+- `sed -n '1,180p' docs/product/PRODUCT_FEEDBACK_AWARD.md`
+
+Validation:
+
+- PASS: survey draft remains evidence-linked to PF entries.
+- PASS: unsupported claims are explicitly excluded for Test Cloud, Data Fabric record storage, native G-001, generated Action Center UI, and generic governance-platform positioning.
+
+Product feedback:
+
+- No new PF entry. This is synthesis of existing PF-001 through PF-019 evidence.
+
+Open risks:
+
+- Final survey answers still need user-confirmed team name and sharing preference.
+- Test Cloud should not be selected unless a real Test Manager/Test Cloud validation happens.

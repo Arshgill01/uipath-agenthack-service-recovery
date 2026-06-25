@@ -199,3 +199,34 @@ Use these as the backbone for the final answer. Do not submit unsupported claims
 | 3 | Native domain audit/event inspector would make Maestro stronger for governed agentic workflows. | Directly tied to the central architecture and hard gate G-001. | PF-015. |
 | 4 | Feed-aware CLI/process diagnostics should be consistent across upload/get/create/update. | Reproducible CLI/package workflow with clear workaround. | PF-017. |
 | 5 | Runtime task state should sync or warn when completed outside the browser session. | Smaller but precise UI/runtime consistency issue. | PF-016. |
+
+## Final Submission Ingredients
+
+Use this section as the concise answer source when filling the form. Keep the final tone fair: the strongest submission is not "everything was broken"; it is "the platform primitives worked, and here are the exact preflight/diagnostic improvements that would make adoption much faster."
+
+### Best Positive Findings To Include
+
+| Finding | Why it matters | Evidence |
+| --- | --- | --- |
+| Maestro Case matches the orchestration shape. | It gave a real place to coordinate case state, stages, human tasks, package/process state, and incidents for a governed service-recovery workflow. | PF-015; `docs/validation/VALIDATION_RESULTS.md`. |
+| Action Center mechanics worked after enablement. | Assignment, completion, reviewer comment, and structured return could be validated; the issue is legibility/binding, not total task failure. | PF-013, PF-016. |
+| Orchestrator CLI lifecycle was strong once the right path was found. | Package/process readback and bucket create/upload/list/download gave real build-lifecycle evidence and a durable audit-artifact fallback. | PF-017; `docs/validation/artifacts/2026-06-25/orchestrator_bucket_audit_artifact_E004_manifest.json`. |
+| Task APIs preserved the governance boundary. | Raw agent recommendation and final policy decision were both available in persisted payloads, which supports the architecture thesis. | PF-013, PF-015. |
+
+### Best Critical Feedback To Include
+
+| Claim | Expected | Observed | Workaround | Product improvement |
+| --- | --- | --- | --- | --- |
+| Maestro Case human-review readiness needs a preflight. | A Case with human review should verify tenant services, required fields, schema bindings, and return mapping before runtime. | Actions was initially disabled; required Action task Title failed only at runtime; generated page binding hid proof-critical fields. | Manually enabled Actions, repaired package/version path, used task APIs and custom evidence surface for legibility. | Add a readiness/preflight wizard for Maestro Case human-review dependencies. |
+| Generated Action app field binding needs inspection and repair. | Every schema field should render with a readable label/value or produce a precise repair action. | `PolicyDecisionJson` persisted in APIs but rendered as `Unnamed String 1`; E-004 completed task repeated blank/unreadable proof fields. | Keep Action Center for lifecycle; use custom evidence/audit surface for final demo. | Add schema-to-control binding inspector, failed-property report, and evidence-packet template. |
+| Native case audit needs domain-event reconstruction. | One view/query should reconstruct evidence state, policy versions, raw recommendation, policy decision, block reason, human action, and timestamps. | Native runtime history plus task APIs reconstruct operational flow, but domain audit requires explicit custom payloads/artifacts. | Use `service-recovery-audit-v1` bundle and Orchestrator bucket artifact fallback. | Add native Case audit/event inspector for linked agent/policy/human/domain events. |
+| CLI/package diagnostics need feed awareness. | Upload/get/create/update process commands should resolve the same package feed or explain mismatch. | Feed-scoped package lookup worked, while default lookup/process create could not bind the same version. | Verified with `--feed-id`; used process version update and readback. | Add feed selector/diagnostics to process creation and package binding paths. |
+| Data Fabric record insert needs schema-aware diagnostics. | A record body keyed by schema field names should insert or explain exact expected shape. | Entity create/readback succeeded, but multiple insert/import shapes failed with required `case_id` reported missing. | Use Orchestrator bucket artifact while Data Fabric insert remains blocked. | Echo recognized/unrecognized fields and provide insert examples for custom required fields. |
+
+### Do Not Claim Yet
+
+- Do not claim a Test Cloud implementation unless a Test Manager/Test Cloud project/run is actually validated.
+- Do not claim Data Fabric audit storage is complete; only entity schema create/readback is validated, while record insert is blocked.
+- Do not claim native Maestro Case history alone passes G-001; current result is native PARTIAL plus custom audit artifact PASS.
+- Do not claim the generated Action Center page is demo-ready; task mechanics are validated, but field legibility is not.
+- Do not describe the project as a generic agent governance platform. Keep it as telecom/broadband service recovery with an architecture that generalizes.
