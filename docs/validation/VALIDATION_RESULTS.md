@@ -593,3 +593,85 @@ Product feedback:
 Evidence:
 
 - `docs/validation/artifacts/2026-06-25/g003-title-repaired-publish-control-not-opened.png`
+
+## 2026-06-25 18:47 IST - G-003/G-004 Live Package 1.0.3 Validation
+
+Environment:
+
+- UiPath Automation Cloud org `keepingitlowkey`, tenant `DefaultTenant`.
+- UiPath CLI `uip` authenticated for `arshgill6120@gmail.com`.
+- Orchestrator folder key `9d7ae568-d60e-4395-94d7-db115bfb25de`, folder ID `7978263`.
+- Case package feed ID `831bf59a-a3f1-4aa8-8890-f01b857c18f3`.
+- Case package under test: `Solution.caseManagement.Maestro.Case:1.0.3`.
+- Direct process created for validation: `9a7eb300-7b16-4856-b14f-d6f2da3dbe61`.
+- Live case instance/job key: `dde02258-c535-4c52-a8a8-a34d470e0ce6`.
+- Live case external ID: `CASE-693765876`.
+- Action Center task ID: `4295299`, task key `d88c4d59-0aa1-464c-8abf-e15dc1304633`.
+
+Gates:
+
+- G-001: Native Case State / Audit Reconstruction.
+- G-002: Policy Version Pinning.
+- G-003: Human Evidence Packet.
+- G-004: Agent Recommendation Visible Before Override.
+
+Steps:
+
+1. Downloaded/exported the Studio Web solution with `uip solution download` and inspected the generated case package source.
+2. Built validation package `1.0.1`; uploaded successfully, then observed runtime failure `No app: SimpleApprovalApp found in folder: .app`.
+3. Built validation package `1.0.2` with explicit app folder binding to `arshgill6120@gmail.com's workspace/Solution`.
+4. Created a direct process for `1.0.2`, started a case, observed Action Center task creation, assigned it, approved it, and verified structured task return to the case.
+5. Built validation package `1.0.3` with explicit app folder binding and populated evidence packet fields:
+   - `EvidencePacketJson` with green business state and missing authoritative network telemetry.
+   - `RawAgentRecommendation` with `event_type: AgentInterpretationEvent`, `interpretation_policy_version: interp-2026-06-25.1`, and `recommended_next_stage: closure_candidate`.
+   - `PolicyDecisionJson` with `event_type: PolicyDecisionEvent`, link to `aie-g004-missing-telemetry`, `decision_policy_version: decision-2026-06-25.1`, `decision: override_recommendation`, `from_recommended_stage: closure_candidate`, `to_stage: verify_telemetry`, and `block_reason: missing_authoritative_signal`.
+6. Uploaded `Solution.caseManagement.Maestro.Case:1.0.3`.
+7. Created direct process `Maestro Case G004 1.0.3 Evidence Validation` pinned to package `1.0.3` with `--no-auto-update`.
+8. Started one case instance and polled `uip maestro case instance get`, `uip maestro case instance element-executions`, and `uip tasks list`.
+9. Opened Action Center task `4295299` in Safari and captured reviewer-visible evidence.
+10. Assigned the task to self, completed it with `uip tasks complete ... --action reject`, and verified task/case completion through CLI.
+
+Observed:
+
+- `uip or processes create` returned `ProcessVersion: 1.0.3` for process `9a7eb300-7b16-4856-b14f-d6f2da3dbe61`.
+- `uip maestro case instance get dde02258...` returned `PackageKey: Solution.caseManagement.Maestro.Case:1.0.3`, `PackageVersion: 1.0.3`, `LatestRunStatus: Completed`, and no incidents.
+- `uip tasks get 4295299` before completion returned task `Data` containing:
+  - `EvidencePacketJson` with `closure_block_reason: missing_authoritative_signal`.
+  - `RawAgentRecommendation` with `recommended_next_stage: closure_candidate`.
+  - `PolicyDecisionJson` with `decision: override_recommendation`, `from_recommended_stage: closure_candidate`, `to_stage: verify_telemetry`, `block_reason: missing_authoritative_signal`, and `decision_policy_version: decision-2026-06-25.1`.
+- Action Center rendered the evidence packet and raw recommendation in the reviewer task.
+- Action Center did not render the policy decision with its schema label; it showed `Unnamed String 1` / `Unnamed string 1` instead of the `PolicyDecisionJson` value.
+- Completing task `4295299` with `--action reject` returned `TaskCompleted`.
+- `uip tasks get 4295299` after completion returned `Status: Completed`, `Action: reject`, `ActionLabel: reject`, `CompletedByUser: Arshdeep Singh`, and the reviewer comment.
+- `uip maestro case instance variables dde02258...` returned the structured `HitlTask`, `Action: reject`, reviewer comment, assigned/completed user metadata, task source metadata, timestamps, and `TaskCompletedOutputsVariable.SimpleApprovalApp`.
+- Safari initially still showed the task in `Pending` after CLI completion; after a browser refresh, Action Center moved task `4295299` to `Completed`, showed `(reject)` in the task header, disabled approve/reject, and displayed the reviewer comment.
+- The case completed at `2026-06-25T13:17:32.2491173Z`.
+
+Result:
+
+- G-001: PARTIAL. A single case query reconstructs package version, ordered runtime elements, stage/task state, task source linkage, human action, timestamps, and structured task return. It still does not natively reconstruct all domain audit fields in one Case view/query unless the proof-critical evidence payloads are carried as explicit custom task/audit data; implement custom audit events for evidence state, raw agent event, policy decision, block reason, and policy versions.
+- G-002: PARTIAL/PASS for explicit metadata pinning. Case package version pinning is observed through direct process creation and `PackageKey`; interpretation and decision policy versions persist inside the explicit task payload. Native active-case policy migration semantics are not proven, so active cases must remain explicitly pinned and migrations must be custom audited.
+- G-003: PASS for Action Center mechanics and structured return; PARTIAL for final reviewer legibility. The reviewer can see content, evidence packet, raw agent output, comment, approve/reject controls, and the case receives structured return. The policy decision field is persisted but mislabeled/not legible in the generated page, so the final demo should repair the Action page label/binding or use a custom evidence-packet view.
+- G-004: PASS for persistence and API-level visibility of raw recommendation before override; PARTIAL for reviewer UI display of the policy decision. The same live task persisted a raw `AgentInterpretationEvent` recommending `closure_candidate` and a linked `PolicyDecisionEvent` overriding to `verify_telemetry` for `missing_authoritative_signal`. The Action Center page showed the raw recommendation but not the policy decision value under a usable label.
+
+Decision impact:
+
+- Maestro Case remains viable as the primary track.
+- Proceed with a UiPath-grounded implementation slice only if it preserves explicit audit payloads and does not rely on generated Action Center labels for the final proof beat.
+- Use direct process/package version pinning for validation and demo repeatability.
+- Repair or replace the generated evidence-packet page before final demo polish.
+
+Product feedback:
+
+- PF-009 through PF-014 are strengthened with live package/runtime evidence.
+- Add a new Action Center/CLI completion note under PF-013 or a follow-up entry for API persistence versus UI label mismatch.
+
+Evidence:
+
+- `docs/validation/artifacts/2026-06-25/g003-case-102-running-hitl-inprogress.png`
+- `docs/validation/artifacts/2026-06-25/g003-case-102-action-history-empty-hitl-inprogress.png`
+- `docs/validation/artifacts/2026-06-25/g003-action-center-task-renders-unassigned-fields-null.png`
+- `docs/validation/artifacts/2026-06-25/g004-action-center-raw-recommendation-visible-task-4295299.png`
+- `docs/validation/artifacts/2026-06-25/g004-action-center-policy-field-mislabeled-task-4295299.png`
+- `docs/validation/artifacts/2026-06-25/g004-action-center-stale-pending-after-cli-complete-task-4295299.png`
+- `docs/validation/artifacts/2026-06-25/g004-action-center-completed-reject-task-4295299.png`

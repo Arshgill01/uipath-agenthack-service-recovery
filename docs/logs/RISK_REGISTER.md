@@ -86,3 +86,12 @@
 - R-003 remains open because the repaired case definition has not been published into a new package version or validated in a fresh runtime case.
 - New risk: Studio Web publish/versioning controls may be difficult to operate through browser automation and are not clearly represented as accessible actionable controls.
 - Mitigation: try the publish path again with precise UI interaction, then try UiPath CLI or another browser path if available; keep logs/screenshots so this remains a packaging blocker, not an invented Action Center failure.
+
+### 2026-06-25 18:47 IST - Live 1.0.3 Validation
+
+- R-001 likelihood decreases: `uip maestro case instance get`, `element-executions`, `variables`, and task APIs reconstruct package version, runtime order, stage/task state, timestamps, human action, reviewer metadata, and structured HITL return for case `dde02258-c535-4c52-a8a8-a34d470e0ce6`.
+- R-001 remains open because the native case state does not by itself provide a clean domain audit unless raw agent, policy, evidence, block reason, and policy versions are carried as explicit custom payloads.
+- R-002 likelihood decreases: package version pinning is observed with direct process `--package-version 1.0.3 --no-auto-update`, and policy versions persisted inside explicit task payloads. Native policy migration is still unproven, so custom migration events remain required.
+- R-003 likelihood decreases: Action Center can create, assign, complete, and return structured AppTask output to the case. R-003 remains open for demo legibility because `PolicyDecisionJson` rendered as `Unnamed String 1`.
+- R-004 likelihood decreases substantially: task `4295299` persisted raw `AgentInterpretationEvent` with `recommended_next_stage: closure_candidate` and linked `PolicyDecisionEvent` with `decision: override_recommendation`, `to_stage: verify_telemetry`, and `block_reason: missing_authoritative_signal`. Keep R-004 open only for final reviewer UI polish and explicit audit-event implementation.
+- R-008 is mitigated for current development: CLI login, Maestro Case, Actions, Orchestrator packages/jobs, and Action Center task APIs are usable in `keepingitlowkey / DefaultTenant`.

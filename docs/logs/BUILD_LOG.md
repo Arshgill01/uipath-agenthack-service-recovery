@@ -649,3 +649,61 @@ Next:
 
 - Publish a repaired version, preferably `1.0.1`, then deploy and start a fresh `Maestro Case` job.
 - If Studio Web publish remains inaccessible, try a UiPath CLI or alternate browser publish path before broad implementation.
+
+### 2026-06-25 18:47 IST - Agent / Live 1.0.3 Hard-Gate Validation
+
+What changed:
+
+- Used UiPath CLI package recovery to move past the Studio Web publish blocker without broad implementation.
+- Uploaded validation Case packages `1.0.1`, `1.0.2`, and `1.0.3`.
+- Proved `1.0.2` reaches Action Center and returns structured human task output.
+- Proved `1.0.3` persists the G-004 proof payload: raw `AgentInterpretationEvent` recommending `closure_candidate` and linked `PolicyDecisionEvent` overriding to `verify_telemetry` for `missing_authoritative_signal`.
+- Completed Action Center task `4295299` as `reject` and verified case completion plus structured `HitlTask` return.
+- Updated architecture docs, decision log, validation results, and product feedback plan from observed platform facts.
+
+Commands run:
+
+- `uip solution download b6446ea0-7ebd-4712-ccbf-08ded1e3ee41 --destination tmp/uipath-downloads --name maestro-case-current --extract --output json`
+- `uip or packages download 'Solution.caseManagement.Maestro.Case:1.0.0' --feed-id 831bf59a-a3f1-4aa8-8890-f01b857c18f3 --destination tmp/uipath-case-packages/old/Solution.caseManagement.Maestro.Case.1.0.0.nupkg --output json`
+- `uip or processes create --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --name "Maestro Case G004 1.0.3 Evidence Validation" --package-key Solution.caseManagement.Maestro.Case --package-version 1.0.3 --description "Validation binding for raw agent recommendation and policy override evidence packet" --no-auto-update --output json`
+- `uip or jobs start 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --jobs-count 1 --output json`
+- `uip maestro case instance get dde02258-c535-4c52-a8a8-a34d470e0ce6 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip maestro case instance element-executions dde02258-c535-4c52-a8a8-a34d470e0ce6 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip tasks list --folder-id 7978263 --as-admin --output json`
+- `uip tasks get 4295299 --folder-id 7978263 --output json`
+- `uip tasks complete 4295299 --type AppTask --folder-id 7978263 --action reject --data '{"Comment":"G-004 validation: raw agent recommended closure_candidate, policy overrode to verify_telemetry due missing_authoritative_signal; reviewer rejects closure and requests telemetry evidence."}' --output json`
+- `uip maestro case instance variables dde02258-c535-4c52-a8a8-a34d470e0ce6 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `screencapture -x docs/validation/artifacts/2026-06-25/g004-action-center-raw-recommendation-visible-task-4295299.png`
+- `screencapture -x docs/validation/artifacts/2026-06-25/g004-action-center-policy-field-mislabeled-task-4295299.png`
+- `screencapture -x docs/validation/artifacts/2026-06-25/g004-action-center-stale-pending-after-cli-complete-task-4295299.png`
+- `screencapture -x docs/validation/artifacts/2026-06-25/g004-action-center-completed-reject-task-4295299.png`
+
+Validation:
+
+- PASS: `Solution.caseManagement.Maestro.Case:1.0.3` process creation pinned `ProcessVersion: 1.0.3`.
+- PASS: case instance `dde02258-c535-4c52-a8a8-a34d470e0ce6` completed with `PackageKey: Solution.caseManagement.Maestro.Case:1.0.3`.
+- PASS: Action Center task `4295299` persisted raw agent recommendation, policy decision, evidence packet, and reviewer return.
+- PASS: reviewer action `reject` and comment returned into case variables as structured `HitlTask` / `TaskCompletedOutputsVariable.SimpleApprovalApp`.
+- PASS: browser refresh confirmed task `4295299` in Action Center `Completed` state with `(reject)` and disabled outcome controls.
+- PARTIAL: generated Action Center page rendered `PolicyDecisionJson` as `Unnamed String 1`, so the final demo needs a label/binding repair or custom evidence-packet view.
+- NOT RUN YET for this checkpoint: local unit/eval suite; run before commit.
+
+Product feedback:
+
+- PF-009
+- PF-010
+- PF-011
+- PF-012
+- PF-013
+- PF-014
+
+Open risks:
+
+- Native Case history is good for runtime order and task metadata but still needs explicit custom audit payloads for a one-query domain audit.
+- Generated Action Center page legibility is not strong enough for the final proof beat until `PolicyDecisionJson` rendering is repaired.
+- Direct package/process recovery is effective but should be turned into a repeatable runbook before final demo.
+
+Next:
+
+- Commit the hard-gate validation checkpoint after local tests/evals pass.
+- Start Wave 07: implement only the canonical missing/stale telemetry override slice with explicit audit payloads and a repaired evidence-packet view.

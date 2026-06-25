@@ -120,3 +120,11 @@ Decision: Continue with focused Maestro Case validation only; do not start broad
 Rationale: Automation Cloud, Maestro, Studio Web, and Maestro Case project creation are confirmed, but the hard gates require live state/audit/version/override evidence. Creating a validation-scoped `Maestro BPMN` solution and `Maestro Case` project is not enough to prove audit reconstruction or human evidence packet behavior.
 
 Status: Accepted.
+
+## D-015: Explicit Case Package Pinning And Custom Audit Payloads
+
+Decision: Use explicit Case package version pinning plus custom structured audit/event payloads as the current implementation plan. Create direct processes with a chosen `--package-version` and `--no-auto-update`; treat active cases as pinned to their starting package, interpretation policy, and decision policy unless an explicit migration event is recorded.
+
+Rationale: Live validation shows the Case process package is visible on case instances through `PackageKey`, and direct process creation can pin package versions. It also showed that the original solution-created process stayed on package `1.0.0` with `AutoUpdate` false despite an update command reporting success, so implicit update/migration is not reliable enough for the audit story. Separately, Action Center AppTask can return structured output into case variables, and raw agent recommendation plus final policy decision can be represented as separate structured HITL payload fields. Custom payloads preserve the required architecture boundary even if native Case history is incomplete.
+
+Status: Accepted as the current implementation plan. Package `1.0.3` live validation proved task payload persistence and structured human return, including the raw agent recommendation and linked policy override decision. Reviewer page legibility still needs repair because the generated Action Center page rendered `PolicyDecisionJson` as `Unnamed String 1`.
