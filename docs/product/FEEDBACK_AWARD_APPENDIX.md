@@ -2,6 +2,8 @@
 
 Status: curated evidence appendix for the UiPath AgentHack feedback survey. This is not final form prose; it is the high-signal source for writing the final answers.
 
+Copy-ready answer bank: [FEEDBACK_SURVEY_COPY_READY.md](FEEDBACK_SURVEY_COPY_READY.md).
+
 ## Submission Thesis
 
 UiPath Maestro Case had the right core primitives for a governed telecom service-recovery workflow: case state, stages, human tasks, Action Center lifecycle, Orchestrator process/package/job readback, Test Manager representation, and CLI automation. The strongest product feedback is that first-time builders need a guided readiness and verification path for Maestro Case human-review workflows so they can trust tenant services, generated Action app bindings, required task fields, package/feed bindings, and audit reconstruction before spending hours in live runtime recovery.
@@ -139,5 +141,8 @@ Without Maestro, we would have had to stitch together case state, task lifecycle
 | `docs/validation/VALIDATION_RESULTS.md` | Chronological validation results and command evidence. |
 | `docs/validation/VALIDATION_GATES.md` | Hard gate PASS/PARTIAL implications. |
 | `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md` | Repeatable proof path and live readback commands. |
+| `scripts/run_demo.sh` | Safe local command to regenerate and verify E-002/E-004 proof artifacts before submission work. |
 | `docs/demo/artifacts/demo_proof_manifest.json` | Local 2A/2B proof artifact manifest. |
+| `docs/demo/artifacts/evidence_packet_E002_desktop.png` | Judge-facing 2A packet screenshot with controlled verification route. |
+| `docs/demo/artifacts/evidence_packet_E004_desktop.png` | Judge-facing 2B packet screenshot with escalated human-review route. |
 | `docs/validation/TEST_MANAGER_MAPPING.md` | Test Manager eval mapping and manual execution evidence. |

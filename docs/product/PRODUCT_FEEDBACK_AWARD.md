@@ -4,6 +4,8 @@ The team wants to seriously compete for the Best Product Feedback award. This fi
 
 Curated survey/deck appendix: [FEEDBACK_AWARD_APPENDIX.md](FEEDBACK_AWARD_APPENDIX.md).
 
+Copy-ready survey answer bank: [FEEDBACK_SURVEY_COPY_READY.md](FEEDBACK_SURVEY_COPY_READY.md).
+
 ## Feedback Principles
 
 Good feedback is:

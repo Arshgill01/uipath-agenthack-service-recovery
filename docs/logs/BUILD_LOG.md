@@ -1472,3 +1472,39 @@ Next:
 
 - Use `scripts/run_demo.sh --with-local-checks` before recording/submission.
 - If a fresh live run is needed, execute the printed UiPath readback/upload commands deliberately from the runbook and log new case/task IDs.
+
+### 2026-06-26 00:44 IST - Agent / Feedback Survey Answer Bank
+
+What changed:
+
+- Added `docs/product/FEEDBACK_SURVEY_COPY_READY.md` as an evidence-backed answer bank for the UiPath product feedback form.
+- Linked the answer bank from `docs/product/PRODUCT_FEEDBACK_AWARD.md`, `docs/product/FEEDBACK_SURVEY_DRAFT.md`, and `docs/product/FEEDBACK_AWARD_APPENDIX.md`.
+- Updated the feedback appendix evidence index to include `scripts/run_demo.sh` and the refreshed E-002/E-004 desktop packet screenshots.
+
+Commands run:
+
+- `git status --short --branch`
+- `sed -n '1,260p' docs/product/FEEDBACK_AWARD_APPENDIX.md`
+- `sed -n '1,260p' docs/product/FEEDBACK_SURVEY_DRAFT.md`
+- `sed -n '1,220p' docs/product/PRODUCT_FEEDBACK_AWARD.md`
+- `rg -n "automated Test Cloud execution|Data Fabric audit record persistence|generated Action Center UI is final-demo ready|native Case history alone passes|terminal Case job completion|generic agent governance platform|generic governance platform" docs/product/FEEDBACK_SURVEY_COPY_READY.md docs/product/FEEDBACK_AWARD_APPENDIX.md docs/product/FEEDBACK_SURVEY_DRAFT.md docs/product/PRODUCT_FEEDBACK_AWARD.md`
+- `test -f scripts/run_demo.sh && test -f docs/demo/artifacts/evidence_packet_E002_desktop.png && test -f docs/demo/artifacts/evidence_packet_E004_desktop.png && test -f docs/product/FEEDBACK_SURVEY_COPY_READY.md && echo referenced-files-present`
+
+Validation:
+
+- PASS: copy-ready answers remain scoped to validated product surfaces and preserve open user-confirmed fields for team name and story-sharing preference.
+- PASS: answer bank includes explicit do-not-claim guardrails for automated Test Cloud execution, Data Fabric audit persistence, generated Action Center UI readiness, native-only G-001, terminal Case job completion, and generic governance-platform positioning.
+- PASS: referenced demo wrapper, packet screenshots, and answer-bank files exist.
+
+Product feedback:
+
+- No new PF entry. This checkpoint curates existing PF-001 through PF-022 into final-form answer material.
+
+Open risks:
+
+- Final survey still needs user-confirmed team name and story-sharing preference.
+- If fresh live E-002/E-004 runs are created, update the answer bank with new case/task IDs before submission.
+
+Next:
+
+- Use `docs/product/FEEDBACK_SURVEY_COPY_READY.md` as the primary source when filling the feedback form.

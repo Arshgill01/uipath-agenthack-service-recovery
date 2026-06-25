@@ -4,6 +4,8 @@ This file preserves the exact evidence fields requested for product-feedback pre
 
 Curated appendix: [FEEDBACK_AWARD_APPENDIX.md](FEEDBACK_AWARD_APPENDIX.md).
 
+Copy-ready answer bank: [FEEDBACK_SURVEY_COPY_READY.md](FEEDBACK_SURVEY_COPY_READY.md).
+
 ## Exact Evidence Fields
 
 - product surface
