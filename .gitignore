@@ -8,5 +8,7 @@ build/
 dist/
 *.egg-info/
 .env
+tmp/
+docs/validation/artifacts/**/current-safari-*.png
 eval_results/*.json
 !eval_results/.gitkeep

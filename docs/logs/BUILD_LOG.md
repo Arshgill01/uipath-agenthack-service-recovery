@@ -1713,3 +1713,36 @@ Open risks:
 Next:
 
 - Continue with repeatable live-run helpers or evidence-packet polish without reopening answered hard gates.
+
+### 2026-06-26 01:09 IST - Agent / Scratch Artifact Ignore Hygiene
+
+What changed:
+
+- Added `.gitignore` rules for local `tmp/` diagnostics and generic `current-safari-*.png` scratch screenshots.
+- Verified the already tracked referenced screenshot `docs/validation/artifacts/2026-06-25/current-safari-build-before-publish.png` remains tracked.
+
+Commands run:
+
+- `find docs/validation/artifacts/2026-06-25 -maxdepth 1 -type f -name 'current-safari-*.png' -print`
+- `rg -n "current-safari" docs AGENTS.md README.md PROJECT_BRIEF.md PLAN.md waves || true`
+- `find tmp -maxdepth 2 -type f | sed -n '1,120p'`
+- `git status --short --branch`
+- `git ls-files docs/validation/artifacts/2026-06-25/current-safari-build-before-publish.png`
+- `git check-ignore -v docs/validation/artifacts/2026-06-25/current-safari-after-publish-click.png tmp/task-4300219-wave07-e004.json || true`
+
+Validation:
+
+- PASS: ignore rules hide only scratch artifacts and do not untrack the referenced committed screenshot.
+- NOT RUN: unit/eval checks are not relevant for `.gitignore`-only hygiene.
+
+Product feedback:
+
+- No new PF entry. No new UiPath surface was exercised.
+
+Open risks:
+
+- Keep named validation screenshots outside the `current-safari-*` scratch naming pattern when they should be committed as durable evidence.
+
+Next:
+
+- Continue with product proof polish or fresh UiPath validation only when it produces new evidence.
