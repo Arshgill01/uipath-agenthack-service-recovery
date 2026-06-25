@@ -1108,3 +1108,38 @@ Open risks:
 
 - Final demo should not rely on the generated Action Center page as the evidence packet surface.
 - Build the custom evidence/audit surface next, using Action Center only for human-task lifecycle and return mechanics.
+
+### 2026-06-25 21:31 IST - Agent / Custom Evidence Audit Surface
+
+What changed:
+
+- Upgraded the static custom evidence-packet renderer into a clearer demo audit surface.
+- Added a first-screen proof strip for raw agent recommendation, policy decision, final route, closure guard, and policy versions.
+- Added a UiPath platform-role note explaining that Maestro Case and Action Center own lifecycle/return while the custom surface provides legible audit evidence.
+- Made evidence authority/freshness more scannable and added an explicit closure guardrail.
+- Regenerated E-002 and E-004 demo HTML artifacts and captured an E-004 screenshot.
+
+Commands run:
+
+- `python -m service_recovery_core.evals --evidence-packet-html-scenario E-002 --output docs/demo/artifacts/evidence_packet_E002.html`
+- `python -m service_recovery_core.evals --evidence-packet-html-scenario E-004 --output docs/demo/artifacts/evidence_packet_E004.html`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- `npx playwright screenshot --viewport-size=1440,1000 file://$PWD/docs/demo/artifacts/evidence_packet_E004.html docs/demo/artifacts/evidence_packet_E004_custom_surface.png`
+- `node - <<'NODE' ... custom-surface text checks ... NODE`
+
+Validation:
+
+- PASS: unit suite ran 25 tests.
+- PASS: eval suite passed 9/9 scenarios.
+- PASS: Playwright screenshot captured `docs/demo/artifacts/evidence_packet_E004_custom_surface.png`.
+- PASS: Playwright text check found `Raw agent recommendation`, `Final route`, `ip-v1 / dp-v1`, `UiPath platform role`, `source_contradiction`, and `open_investigation`.
+
+Product feedback:
+
+- No new PF entry. This implements the PF-013/D-009 workaround: keep Action Center for lifecycle and use a custom packet/audit surface for legibility.
+
+Open risks:
+
+- The custom surface is a static artifact, not yet embedded inside a UiPath Case App.
+- Data Fabric record insert remains blocked; bucket-backed audit artifact is the validated UiPath-hosted storage fallback.

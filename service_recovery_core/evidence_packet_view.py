@@ -9,6 +9,7 @@ def render_evidence_packet_html(audit_bundle: dict[str, Any]) -> str:
     agent = audit_bundle["agent_interpretation_event"]
     policy = audit_bundle["policy_decision_event"]
     state = audit_bundle["evidence_state"]
+    versions = audit_bundle["policy_versions"]
 
     return "\n".join(
         [
@@ -25,8 +26,10 @@ def render_evidence_packet_html(audit_bundle: dict[str, Any]) -> str:
             "<body>",
             '<main class="page">',
             _header(audit_bundle, state),
+            _proof_strip(agent, policy, state, versions),
             '<section class="layout">',
             '<div class="primary">',
+            _platform_note(),
             _policy_boundary(agent, policy),
             _evidence_table(packet["evidence_table"]),
             "</div>",
@@ -54,8 +57,47 @@ def _header(audit_bundle: dict[str, Any], state: dict[str, Any]) -> str:
     <div><dt>Business state</dt><dd>{escape(state["business_state"])}</dd></div>
     <div><dt>Evidence state</dt><dd>{escape(state["derived_evidence_state"])}</dd></div>
     <div><dt>Block reason</dt><dd>{escape(state["closure_block_reason"])}</dd></div>
-  </dl>
+    </dl>
 </header>""".strip()
+
+
+def _proof_strip(
+    agent: dict[str, Any],
+    policy: dict[str, Any],
+    state: dict[str, Any],
+    versions: dict[str, Any],
+) -> str:
+    return f"""
+<section class="proof-strip" aria-label="Demo proof summary">
+  <div>
+    <span>Raw agent recommendation</span>
+    <strong>{escape(agent["recommended_next_stage"])}</strong>
+  </div>
+  <div>
+    <span>Policy decision</span>
+    <strong>{escape(policy["decision"])}</strong>
+  </div>
+  <div>
+    <span>Final route</span>
+    <strong>{escape(policy["to_stage"])}</strong>
+  </div>
+  <div>
+    <span>Closure guard</span>
+    <strong>{escape(state["closure_block_reason"])}</strong>
+  </div>
+  <div>
+    <span>Policy versions</span>
+    <strong>{escape(versions["interpretation_policy_version"])} / {escape(versions["decision_policy_version"])}</strong>
+  </div>
+</section>""".strip()
+
+
+def _platform_note() -> str:
+    return """
+<section class="panel platform-note">
+  <h2>UiPath platform role</h2>
+  <p>Maestro Case and Action Center own lifecycle, assignment, completion, and reviewer return. This custom packet is the legible audit/evidence surface because the generated Action Center page hid or mislabeled proof-critical fields during validation.</p>
+</section>""".strip()
 
 
 def _policy_boundary(agent: dict[str, Any], policy: dict[str, Any]) -> str:
@@ -80,6 +122,7 @@ def _policy_boundary(agent: dict[str, Any], policy: dict[str, Any]) -> str:
         <div><dt>Event</dt><dd>{escape(policy["event_id"])}</dd></div>
         <div><dt>Links to</dt><dd>{escape(policy["links_to"])}</dd></div>
         <div><dt>Decision</dt><dd>{escape(policy["decision"])}</dd></div>
+        <div><dt>Block reason</dt><dd>{escape(policy["block_reason"])}</dd></div>
         <div><dt>From</dt><dd>{escape(policy["from_recommended_stage"])}</dd></div>
         <div><dt>To</dt><dd>{escape(policy["to_stage"])}</dd></div>
         <div><dt>Policy version</dt><dd>{escape(policy["decision_policy_version"])}</dd></div>
@@ -96,8 +139,8 @@ def _evidence_table(evidence: list[dict[str, Any]]) -> str:
           <td>{escape(signal["field"])}</td>
           <td>{escape(signal["source"])}</td>
           <td>{escape(str(signal["value"]))}</td>
-          <td>{escape(signal["freshness_status"])}</td>
-          <td>{escape("yes" if signal["authoritative"] else "no")}</td>
+          <td><span class="status">{escape(signal["freshness_status"])}</span></td>
+          <td><span class="authority">{escape("authoritative" if signal["authoritative"] else "supporting")}</span></td>
           <td>{escape(str(signal["ttl_seconds"]))}</td>
         </tr>""".rstrip()
         for signal in evidence
@@ -135,6 +178,7 @@ def _reviewer_actions(packet: dict[str, Any]) -> str:
   </dl>
   <h3>Recommended options</h3>
   <ul class="actions">{options}</ul>
+  <p class="guardrail">Closure is not available until fresh authoritative service evidence confirms recovery.</p>
 </section>""".strip()
 
 
@@ -168,6 +212,7 @@ _CSS = """
   --strong: #0f766e;
   --warn: #b45309;
   --danger: #b42318;
+  --blue: #1d4ed8;
 }
 
 * { box-sizing: border-box; }
@@ -193,6 +238,34 @@ body {
   border-bottom: 1px solid var(--line);
   padding-bottom: 18px;
   margin-bottom: 18px;
+}
+
+.proof-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.proof-strip div {
+  background: var(--ink);
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 12px;
+  min-height: 76px;
+}
+
+.proof-strip span {
+  display: block;
+  color: #cfd6cc;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.proof-strip strong {
+  display: block;
+  font-size: 14px;
+  overflow-wrap: break-word;
 }
 
 h1, h2, h3, p { margin-top: 0; }
@@ -225,6 +298,10 @@ p { color: var(--muted); }
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 18px;
+}
+
+.platform-note {
+  border-left: 4px solid var(--blue);
 }
 
 .boundary-grid {
@@ -282,6 +359,29 @@ th {
   padding-left: 18px;
 }
 
+.guardrail {
+  margin: 14px 0 0;
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.status,
+.authority {
+  display: inline-block;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+.status {
+  color: var(--strong);
+}
+
+.authority {
+  color: var(--blue);
+}
+
 .timeline {
   display: grid;
   gap: 10px;
@@ -310,11 +410,11 @@ code {
 }
 
 @media (max-width: 900px) {
-  .topbar, .layout, .boundary-grid, .summary {
+  .topbar, .layout, .boundary-grid, .summary, .proof-strip {
     display: block;
   }
 
-  .summary, .side {
+  .summary, .side, .proof-strip div + div {
     margin-top: 16px;
   }
 

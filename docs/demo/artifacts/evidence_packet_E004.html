@@ -15,6 +15,7 @@
   --strong: #0f766e;
   --warn: #b45309;
   --danger: #b42318;
+  --blue: #1d4ed8;
 }
 
 * { box-sizing: border-box; }
@@ -40,6 +41,34 @@ body {
   border-bottom: 1px solid var(--line);
   padding-bottom: 18px;
   margin-bottom: 18px;
+}
+
+.proof-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.proof-strip div {
+  background: var(--ink);
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 12px;
+  min-height: 76px;
+}
+
+.proof-strip span {
+  display: block;
+  color: #cfd6cc;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.proof-strip strong {
+  display: block;
+  font-size: 14px;
+  overflow-wrap: break-word;
 }
 
 h1, h2, h3, p { margin-top: 0; }
@@ -72,6 +101,10 @@ p { color: var(--muted); }
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 18px;
+}
+
+.platform-note {
+  border-left: 4px solid var(--blue);
 }
 
 .boundary-grid {
@@ -129,6 +162,29 @@ th {
   padding-left: 18px;
 }
 
+.guardrail {
+  margin: 14px 0 0;
+  color: var(--danger);
+  font-weight: 700;
+}
+
+.status,
+.authority {
+  display: inline-block;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+.status {
+  color: var(--strong);
+}
+
+.authority {
+  color: var(--blue);
+}
+
 .timeline {
   display: grid;
   gap: 10px;
@@ -157,11 +213,11 @@ code {
 }
 
 @media (max-width: 900px) {
-  .topbar, .layout, .boundary-grid, .summary {
+  .topbar, .layout, .boundary-grid, .summary, .proof-strip {
     display: block;
   }
 
-  .summary, .side {
+  .summary, .side, .proof-strip div + div {
     margin-top: 16px;
   }
 
@@ -183,10 +239,36 @@ code {
     <div><dt>Business state</dt><dd>green</dd></div>
     <div><dt>Evidence state</dt><dd>contradicting</dd></div>
     <div><dt>Block reason</dt><dd>source_contradiction</dd></div>
-  </dl>
+    </dl>
 </header>
+<section class="proof-strip" aria-label="Demo proof summary">
+  <div>
+    <span>Raw agent recommendation</span>
+    <strong>closure_candidate</strong>
+  </div>
+  <div>
+    <span>Policy decision</span>
+    <strong>require_human_review</strong>
+  </div>
+  <div>
+    <span>Final route</span>
+    <strong>human_review</strong>
+  </div>
+  <div>
+    <span>Closure guard</span>
+    <strong>source_contradiction</strong>
+  </div>
+  <div>
+    <span>Policy versions</span>
+    <strong>ip-v1 / dp-v1</strong>
+  </div>
+</section>
 <section class="layout">
 <div class="primary">
+<section class="panel platform-note">
+  <h2>UiPath platform role</h2>
+  <p>Maestro Case and Action Center own lifecycle, assignment, completion, and reviewer return. This custom packet is the legible audit/evidence surface because the generated Action Center page hid or mislabeled proof-critical fields during validation.</p>
+</section>
 <section class="panel boundary">
   <h2>Agent and policy boundary</h2>
   <div class="boundary-grid">
@@ -207,6 +289,7 @@ code {
         <div><dt>Event</dt><dd>PDE-E-004</dd></div>
         <div><dt>Links to</dt><dd>AIE-E004</dd></div>
         <div><dt>Decision</dt><dd>require_human_review</dd></div>
+        <div><dt>Block reason</dt><dd>source_contradiction</dd></div>
         <div><dt>From</dt><dd>closure_candidate</dd></div>
         <div><dt>To</dt><dd>human_review</dd></div>
         <div><dt>Policy version</dt><dd>dp-v1</dd></div>
@@ -233,8 +316,8 @@ code {
           <td>crm_order_status</td>
           <td>crm</td>
           <td>active</td>
-          <td>fresh</td>
-          <td>yes</td>
+          <td><span class="status">fresh</span></td>
+          <td><span class="authority">authoritative</span></td>
           <td>86400</td>
         </tr>
 
@@ -242,8 +325,8 @@ code {
           <td>billing_status</td>
           <td>billing</td>
           <td>clear</td>
-          <td>fresh</td>
-          <td>yes</td>
+          <td><span class="status">fresh</span></td>
+          <td><span class="authority">authoritative</span></td>
           <td>86400</td>
         </tr>
 
@@ -251,8 +334,8 @@ code {
           <td>inventory_assignment</td>
           <td>inventory</td>
           <td>assigned_match</td>
-          <td>fresh</td>
-          <td>yes</td>
+          <td><span class="status">fresh</span></td>
+          <td><span class="authority">authoritative</span></td>
           <td>86400</td>
         </tr>
 
@@ -260,8 +343,8 @@ code {
           <td>service_live_status</td>
           <td>network_telemetry</td>
           <td>not_live</td>
-          <td>fresh</td>
-          <td>yes</td>
+          <td><span class="status">fresh</span></td>
+          <td><span class="authority">authoritative</span></td>
           <td>300</td>
         </tr>
 
@@ -269,8 +352,8 @@ code {
           <td>dispatch_status</td>
           <td>dispatch</td>
           <td>complete</td>
-          <td>fresh</td>
-          <td>yes</td>
+          <td><span class="status">fresh</span></td>
+          <td><span class="authority">authoritative</span></td>
           <td>86400</td>
         </tr>
     </tbody>
@@ -289,6 +372,7 @@ code {
   <ul class="actions"><li>human_review</li>
 <li>request_evidence</li>
 <li>open_investigation</li></ul>
+  <p class="guardrail">Closure is not available until fresh authoritative service evidence confirms recovery.</p>
 </section>
 <section class="panel">
   <h2>Audit order</h2>
