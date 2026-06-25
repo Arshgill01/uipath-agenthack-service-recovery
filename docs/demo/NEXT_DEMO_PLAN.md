@@ -132,9 +132,9 @@ This is a real UiPath-hosted artifact path, not demo-only local data. It should 
 
 Action Center versus Case App/custom packet:
 
-- Use Action Center as the review surface only if G-003 proves the required evidence table, agent output, policy decision, block reason, recommended actions, and structured return are readable.
-- Use Case App/custom packet if Action Center technically works but hides the packet structure or weakens the demo.
-- If both work, prefer the surface that best shows the reviewer decision and linked event boundary in one screen.
+- Use Action Center for human-task lifecycle and structured reviewer return.
+- Use Case App/custom packet/audit-bundle view as the final demo evidence surface because G-003 recheck of completed E-004 task `4300219` showed the generated Action Center form still hides or mislabels proof-critical values.
+- Only switch back to Action Center as the primary review surface if the generated page binding is repaired and revalidated with visible evidence table, raw agent output, policy decision, block reason, recommended actions, and structured return.
 
 Native Case state versus explicit audit store:
 

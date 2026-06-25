@@ -75,11 +75,11 @@ Status: Accepted, implementation method pending validation.
 
 ## D-009: Action Center Fallback
 
-Decision: If Action Center cannot render the evidence packet clearly, use a Case App/custom evidence-packet view even if Action Center technically works.
+Decision: Use Action Center for human-task lifecycle and structured reviewer return, but use a Case App/custom evidence-packet or audit-bundle view for the final demo surface unless the generated Action Center page is repaired.
 
 Rationale: Demo legibility matters. The human reviewer must see evidence, agent output, policy decision, block reason, and allowed actions.
 
-Status: Accepted, pending validation.
+Status: Accepted and activated. Live tasks `4295299` and `4300219` proved Action Center task mechanics and reviewer comments, but the generated page rendered the policy field as `Unnamed String 1` and left proof-critical evidence/raw/policy values blank or unreadable in the completed-task UI. Use the custom packet/audit surface for legibility while keeping Action Center as the human-in-the-loop mechanism.
 
 ## D-010: Product Narrative Boundary
 

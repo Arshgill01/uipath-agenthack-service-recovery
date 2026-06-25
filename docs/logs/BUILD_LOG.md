@@ -1080,3 +1080,31 @@ Open risks:
 
 - Data Fabric record storage remains blocked.
 - The final demo still needs a polished way to surface the bucket-backed audit bundle or equivalent custom audit view inside the presentation flow.
+
+### 2026-06-25 21:28 IST - Agent / Action Center E-004 UI Recheck
+
+What changed:
+
+- Used Computer Use against Safari to inspect the completed E-004 Action Center task `4300219`.
+- Confirmed the completed task and reviewer comment are visible after reload.
+- Confirmed the generated Action Center UI still does not render the proof-critical evidence/raw/policy values legibly.
+- Captured a screenshot and updated PF-013 plus D-009.
+
+Commands run:
+
+- `screencapture -x docs/validation/artifacts/2026-06-25/g003-action-center-e004-completed-generated-ui-empty-fields.png`
+
+Validation:
+
+- PASS: Safari/Action Center session recovered after reload.
+- PASS: completed task `4300219` is visible and tied to case instance `60e52ca5-6891-45b4-9e98-e1b08a984f06`.
+- PARTIAL: generated UI shows reviewer comment, but leaves `Content`, `Evidence Packet Json`, and `Raw Agent Recommendation` values unreadable/blank and renders policy as `Unnamed String 1`.
+
+Product feedback:
+
+- PF-013 strengthened as a repeated generated Action Center field rendering/binding issue.
+
+Open risks:
+
+- Final demo should not rely on the generated Action Center page as the evidence packet surface.
+- Build the custom evidence/audit surface next, using Action Center only for human-task lifecycle and return mechanics.

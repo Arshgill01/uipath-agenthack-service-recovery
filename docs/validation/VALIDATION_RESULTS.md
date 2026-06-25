@@ -1161,3 +1161,55 @@ Product feedback:
 
 - No new negative PF entry for buckets. Bucket create/upload/list/download worked cleanly through CLI and should be cited as a positive "what worked well" item.
 - PF-019 remains the active blocker for Data Fabric record insertion.
+
+## 2026-06-25 21:28 IST - Action Center E-004 Completed Task UI Recheck
+
+Environment:
+
+- Safari authenticated to UiPath Action Center.
+- Org `keepingitlowkey`, tenant `DefaultTenant`.
+- Completed task URL: `https://cloud.uipath.com/keepingitlowkey/DefaultTenant/actions_/tasks/4300219`.
+
+Gate/wave:
+
+- G-003: Human Evidence Packet.
+- G-004: Agent Recommendation Visible Before Override.
+
+Assumption tested:
+
+- A completed E-004 Action Center task can serve as the final reviewer-visible evidence packet for the contradiction route.
+
+Steps:
+
+1. Used Computer Use to inspect the current Safari Action Center tab.
+2. Reloaded the page after a session-timeout overlay.
+3. Selected completed task `4300219`, linked to case instance `60e52ca5-6891-45b4-9e98-e1b08a984f06`.
+4. Inspected the generated completed-task form.
+5. Captured a screenshot.
+
+Observed:
+
+- Action Center recovered after reload and listed completed tasks `4295185`, `4295299`, `4300080`, and `4300219`.
+- Task `4300219` opened as `Review service recovery evidence #4300219 (reject)`.
+- The completed-task UI showed the reviewer comment:
+  - `Wave 07 E-004 validation: generated local eval payload preserved closure_candidate raw recommendation, detected fresh authoritative network telemetry contradiction, and routed to human_review for source_contradiction; reviewer rejects closure and opens investigation.`
+- The generated UI still showed `Unable to render image`.
+- `Content`, `Evidence Packet Json`, and `Raw Agent Recommendation` labels were visible, but their values were not visible in the completed-task form.
+- The policy field still rendered as `Unnamed String 1` / `Unnamed string 1`.
+
+Result:
+
+- G-003: PARTIAL. Action Center is validated for task lifecycle, completion state, reviewer comment visibility, and structured return through APIs/case variables. The generated reviewer UI is not sufficient for final demo evidence-packet legibility.
+- G-004: PASS through persisted task/API/audit artifact data, but PARTIAL through generated Action Center UI because the raw/policy proof fields are not readable in the completed-task form.
+
+Decision impact:
+
+- Activate D-009 fallback: use Action Center for human-task mechanics and structured reviewer return, but use the custom evidence-packet/audit-bundle surface for final demo legibility.
+
+Evidence:
+
+- `docs/validation/artifacts/2026-06-25/g003-action-center-e004-completed-generated-ui-empty-fields.png`
+
+Product feedback:
+
+- PF-013 strengthened as a repeated generated Action Center field rendering/binding issue.
