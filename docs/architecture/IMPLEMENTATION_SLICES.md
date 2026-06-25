@@ -2,7 +2,14 @@
 
 This document maps the local service-recovery core to UiPath artifacts and defines the smallest post-gate implementation slices. It is a readiness plan, not permission to start broad implementation.
 
-Current gate status: G-001 through G-004 are PARTIAL. Action Center is enabled and a `Human action (placeholder)` can be inserted, but no live case has proven runtime audit reconstruction, active-case policy pinning, evidence-packet rendering/return, or raw recommendation visibility before policy override.
+Current gate status: G-001 through G-004 are answered with implementation implications, not all-native PASS:
+
+- G-001 is PARTIAL natively and PASS with the custom UiPath-hosted `service-recovery-audit-v1` audit bundle stored in an Orchestrator bucket.
+- G-002 is PASS for explicit package/process/artifact policy-version pinning; active-case migration remains a custom audited event.
+- G-003 is PASS for Action Center lifecycle and structured reviewer return, PARTIAL for generated Action Center evidence-packet legibility.
+- G-004 is PASS for persisted raw Agent Interpretation Event and linked Policy Decision Event in payload/API/audit data, PARTIAL for generated Action Center display.
+
+Implementation should follow the validated demo-safe path: Action Center for human-task mechanics, custom evidence packet for judge-readable proof, and Orchestrator bucket audit bundle for durable UiPath-hosted reconstruction.
 
 ## Core-to-UiPath Mapping
 
@@ -14,11 +21,11 @@ Current gate status: G-001 through G-004 are PARTIAL. Action Center is enabled a
 | `policy_decision` / Policy Decision Event | Separate linked policy event, stage route, closure block reason, and case field update. | G-001, G-002, G-004, G-005 | Must link to `agent_event_id`; must not overwrite the raw recommendation. |
 | `apply_policy_decision` transition | Maestro Case stage transition and task routing. | G-001, G-005 | Local policy stages map through `POLICY_STAGE_TO_CASE_STAGE`; UiPath mapper should not invent new routing semantics. |
 | Human Review Event | Action Center human action result or Case App/custom evidence-packet result. | G-003 | Required outcomes: approve remediation, reject, request evidence, close after confirmation, and comment. |
-| Eval result | Test Manager/Test Cloud artifact if feasible; otherwise a UiPath-compatible eval export attached to policy-improvement evidence. | G-007 | Local evals remain authoritative until native Test Manager mapping is validated. |
+| Eval result | Test Manager/Test Cloud artifact if feasible; otherwise a UiPath-compatible eval export attached to policy-improvement evidence. | G-007 | Live Test Manager project `SREV`, test set `SREV:9`, and manual execution logs represent E-001 through E-009. Do not claim automated Test Cloud execution. |
 
 ## Safe Now
 
-The following are safe before G-001 through G-004 pass because they do not assume unproven UiPath behavior:
+The following are safe because they preserve the validated gate implications and do not depend on unproven native Case audit or generated Action Center UI behavior:
 
 | Slice | Files owned | Validation |
 | --- | --- | --- |
@@ -26,25 +33,27 @@ The following are safe before G-001 through G-004 pass because they do not assum
 | Contract-only fixtures for export examples, if needed later. | `fixtures/` or docs examples only. | `python -m unittest discover -s tests`; `python -m service_recovery_core.evals --output eval_results/local_baseline.json` if fixture JSON changes. |
 | Narrow tests that assert existing boundaries before bridge code exists. | `tests/test_policy_state_eval.py`, `tests/test_schemas.py`. | `python -m unittest discover -s tests`; eval command if expected eval behavior changes. |
 
-Do not add UiPath runtime adapters, package/deploy scripts, or Case JSON mutation code until the relevant gate has an observed pass/partial-with-implication result.
+Do not add broad UiPath runtime adapters, package/deploy scripts, or Case JSON mutation code unless the slice directly supports the demo-safe proof path and keeps the validated partials explicit.
 
 ## Post-Gate Slices
 
 | Slice | Build only after | Files likely owned | Minimum tests and checks |
 | --- | --- | --- | --- |
-| Event export schema | G-001 and G-004 establish whether native Case history is sufficient or custom audit storage is required. | `service_recovery_core/exports.py`, `tests/test_exports.py`, `docs/architecture/DATA_MODEL.md`. | `python -m unittest discover -s tests`; `python -m service_recovery_core.evals --output eval_results/local_baseline.json`; targeted fixture asserting raw agent event and policy decision export as separate linked records. |
-| Evidence packet renderer data contract | G-003 proves Action Center packet rendering/return or selects Case App/custom packet fallback. | `service_recovery_core/evidence_packet.py`, `tests/test_evidence_packet.py`, `docs/architecture/DATA_MODEL.md`. | Unit tests for required packet sections and allowed human outcomes; eval command if packet uses eval fixtures; manual G-003 rerun against the selected UiPath surface. |
-| UiPath case payload mapper | G-001, G-002, G-004 prove where case fields, versions, and events persist. | `service_recovery_core/uipath_mapper.py` or a similarly narrow bridge module, `tests/test_uipath_mapper.py`, `docs/architecture/INTEGRATION_MAP.md`. | Unit tests for stage mapping, version fields, linked event IDs, and closure-block reason; local eval command; live minimal case rerun for G-001/G-002/G-004. |
-| Maestro routing slice | G-005 proves structured policy output can drive distinct routes. | UiPath solution assets once export/import path is known; bridge mapper tests. | Scenario checks for E-002 missing evidence to verification/retry and E-004 contradiction to human review; live case run showing both routes. |
-| Eval-to-Test-Manager mapping | G-007 proves feasible Test Manager/Test Cloud representation. | `service_recovery_core/evals.py` only if export shape is needed, `tests/test_eval_export.py`, `docs/validation/EVAL_PLAN.md`. | Local eval command; Test Manager/Test Cloud run or documented fallback artifact import/check. |
-| CLI packaging/deploy helper | G-008 and a known UiPath solution/package path. | `scripts/` helper, README or runbook updates. | `uip --version`; dry-run/help command for the helper; no deploy claim unless a real package/deploy command succeeds. |
+| Event export schema | Now safe if it emits the validated audit bundle/payload shape. | `service_recovery_core/exports.py`, `tests/test_exports.py`, `docs/architecture/DATA_MODEL.md`. | `python -m unittest discover -s tests`; `python -m service_recovery_core.evals --output eval_results/local_baseline.json`; targeted fixture asserting raw agent event and policy decision export as separate linked records. |
+| Evidence packet renderer data contract | Already selected: custom evidence packet is the demo-readable surface; Action Center remains lifecycle/return. | `service_recovery_core/evidence_packet_view.py`, `tests/test_evidence_packet_view.py`, `docs/architecture/DATA_MODEL.md`. | Unit tests for required packet sections and allowed human outcomes; proof verifier for E-002/E-004. |
+| UiPath case payload mapper | Now safe for the validated payload/API/audit path, not for claiming native Case audit alone. | `service_recovery_core/uipath_payload.py`, mapper tests if expanded, `docs/architecture/INTEGRATION_MAP.md`. | Unit tests for stage mapping, version fields, linked event IDs, and closure-block reason; local eval command; live rerun only if package/process/task IDs change. |
+| Maestro routing slice | G-005 is live-validated for E-002 and E-004. | UiPath solution assets once export/import path is known; bridge mapper tests. | Scenario checks for E-002 missing/stale evidence to verification/retry and E-004 contradiction to human review; live rerun only if route implementation changes. |
+| Eval-to-Test-Manager mapping | G-007 is validated as manual Test Manager representation. | `docs/validation/TEST_MANAGER_MAPPING.md`, `service_recovery_core/evals.py` only if export shape is needed. | Local eval command; do not claim automated Test Cloud execution unless a real automated run is added later. |
+| CLI packaging/deploy helper | G-008 has CLI lifecycle evidence; helper scripts should focus on repeatable proof/readback rather than broad deployment. | `scripts/`, README or runbook updates. | `uip --version`; dry-run/help command for helper; no deploy claim unless a real package/deploy command succeeds and is logged. |
 
-## Blocked By Gate
+## Remaining Partials / Do Not Overclaim
 
-- G-001 blocks final audit storage choice. If one case view or one query cannot reconstruct the timeline, use explicit custom audit events in Data Fabric/Data Service or equivalent.
-- G-002 blocks policy-version persistence implementation. Metadata fields are acceptable, but silent version changes are not.
-- G-003 blocks the human evidence packet surface. Action Center is available, but rendering quality and structured return are still unproven.
-- G-004 blocks any implementation that claims visible policy override. Raw `agent_event` and final `policy_event` must remain separate linked records.
+- Do not claim native Case history alone satisfies G-001; use the explicit audit bundle.
+- Do not claim Data Fabric record persistence; entity creation/readback worked, but record insert/query-back is still blocked.
+- Do not claim generated Action Center UI is final-demo ready; use the custom evidence packet for legibility.
+- Do not claim automated Test Cloud execution; Test Manager mapping is manual.
+- Do not claim terminal Case job completion for E-002/E-004 while job readback remains `Running`.
+- Do not claim broad real telecom integrations.
 
 ## Guardrails
 

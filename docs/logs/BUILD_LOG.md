@@ -1674,3 +1674,42 @@ Open risks:
 Next:
 
 - Commit and push the live LLM proof hardening checkpoint.
+
+### 2026-06-26 01:16 IST - Agent / Implementation Status Alignment
+
+What changed:
+
+- Updated `docs/architecture/IMPLEMENTATION_SLICES.md` so future agents do not treat G-001 through G-004 as unanswered blockers.
+- Aligned post-gate implementation slices with the validated demo-safe path: Action Center lifecycle, custom evidence packet, and Orchestrator bucket audit bundle.
+- Updated `docs/submission/SUBMISSION_BRIEF.md` with the current 32-test count and live Vertex LLM proof artifact.
+
+Commands run:
+
+- `git status --short --branch`
+- `sed -n '1,260p' docs/validation/VALIDATION_RESULTS.md`
+- `sed -n '1,220p' docs/validation/VALIDATION_GATES.md`
+- `sed -n '1,220p' docs/submission/READINESS_CHECKLIST.md`
+- `sed -n '1,260p' docs/architecture/INTEGRATION_MAP.md`
+- `sed -n '1,260p' docs/architecture/DATA_MODEL.md`
+- `sed -n '1,220p' docs/product/PRODUCT_FEEDBACK_AWARD.md`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- `python -m service_recovery_core.demo_proof --output-dir docs/demo/artifacts --verify-only`
+
+Validation:
+
+- PASS: full unit suite passed 32 tests.
+- PASS: local eval suite passed 9/9 scenarios.
+- PASS: demo proof verifier passed E-002/E-004.
+
+Product feedback:
+
+- No new PF entry. This checkpoint updates repo alignment only; no new UiPath product surface was exercised.
+
+Open risks:
+
+- Do not overclaim generated Action Center UI, Data Fabric record persistence, automated Test Cloud execution, or terminal Case job completion.
+
+Next:
+
+- Continue with repeatable live-run helpers or evidence-packet polish without reopening answered hard gates.
