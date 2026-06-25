@@ -258,6 +258,79 @@ Survey tags:
 - improvement
 - evidence
 
+### PF-020 - 2026-06-25 - Test Manager Eval Suite Mapping
+
+Context:
+
+- ID: PF-020.
+- Status: open.
+- Goal: validate G-007 by representing the local service-recovery eval scenarios in UiPath Test Manager.
+- Product surface: UiPath Test Manager / Test Cloud CLI.
+- Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `Arshdeep Singh`.
+- Wave/gate: G-007.
+
+What worked:
+
+- `uip tm` was available after CLI login and exposed project, test case, and test set commands.
+- Project creation worked from CLI.
+- Test case creation worked from CLI.
+- Test set creation and membership assignment worked from CLI.
+- Readback commands confirmed the project, nine test cases, and the test set membership.
+
+What failed or confused us:
+
+- The tenant initially had no accessible Test Manager projects, so a builder has to know to create one before any eval crossover is possible.
+- Mapping a local eval suite required hand-creating project/cases/set objects from CLI commands. There was no obvious one-step import from a JSON/JUnit-style eval output into Test Manager cases and a baseline test set.
+- The created cases are manual by default. That is acceptable for honest G-007 representation, but the jump from local eval harness to automated Test Cloud execution remains a separate integration step.
+
+Expected:
+
+- For hackathon agent/eval workflows, Test Manager should make it easy to import a small eval result file and produce traceable test cases/test sets without bespoke scripting.
+
+Observed:
+
+- Initial `uip tm project list --output json` returned `Data: []`.
+- Project `SREV` was created with ID `1281f516-2c82-0000-9e76-0b49cf9a9990`.
+- Test set `SREV:9` was created with ID `6881c763-b871-0200-165b-0b49cf9ac490`.
+- Test-set readback returned all nine scenarios E-001 through E-009.
+- Each test case read back with `IsAutomated: false`.
+
+Impact:
+
+- Build impact: medium. The platform can represent eval coverage, but converting a local agent eval harness into Test Manager artifacts takes manual mapping work.
+- Demo/submission impact: medium. We can honestly show Test Manager coverage now, but cannot claim automated Test Cloud execution until a real run/link exists.
+- Severity: medium.
+
+Workaround:
+
+- Created a validation-scoped Test Manager project `SREV`.
+- Created one manual test case per local eval scenario.
+- Grouped all nine test cases into test set `SREV:9`.
+- Added `docs/validation/TEST_MANAGER_MAPPING.md` to keep the Test Manager keys tied to local eval IDs and expected policy outcomes.
+
+Suggested improvement:
+
+- Add an eval-import workflow for Test Manager: upload JSON/JUnit/custom eval output, preview scenarios, map fields to test-case name/description/labels, create a test set, and optionally attach artifacts.
+- Add first-run guidance when a tenant has no Test Manager projects: `Create project`, `Import tests`, and `Connect automation` actions from the empty state.
+- Add an agent-eval template for AI workflows with fields for scenario ID, input fixture, expected policy decision, actual decision, policy version, evidence links, and pass/fail.
+
+Evidence:
+
+- Repository mapping: `docs/validation/TEST_MANAGER_MAPPING.md`.
+- Commands/logs: see `docs/validation/VALIDATION_RESULTS.md`, 2026-06-25 23:58 IST Test Manager Eval Crossover.
+
+Classification:
+
+- UX / integration
+
+Survey tags:
+
+- product-used
+- pain-point
+- workaround
+- improvement
+- evidence
+
 ### PF-015 - 2026-06-25 - Maestro Case / Domain Audit And Override Timeline
 
 Context:

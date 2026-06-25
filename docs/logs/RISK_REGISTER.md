@@ -144,3 +144,9 @@
 - R-002 is reduced for explicit version pinning: the bucket-backed artifact persists `interpretation_policy_version` and `decision_policy_version` with the linked events. Native active-case migration still needs a custom audited migration event.
 - R-004 is reduced for final audit visibility: the bucket-backed artifact preserves separate `AIE-E004` and `PDE-E-004` objects with `links_to`, `from_recommended_stage`, `to_stage`, and `block_reason`.
 - Data Fabric record insert remains open under PF-019, but it is no longer the only viable G-001 fallback. Use Orchestrator bucket artifacts unless Data Fabric insert/query-back is resolved quickly.
+
+### 2026-06-25 23:58 IST - Test Manager Eval Mapping
+
+- R-005 is reduced: the tenant now contains live Test Manager project `SREV` with nine manual test cases and test set `SREV:9` representing E-001 through E-009.
+- R-005 remains open for automated crossover. The local eval harness is not yet linked to a Test Manager automated execution or Orchestrator test automation.
+- Mitigation update: describe the current state as live Test Manager representation, not automated Test Cloud execution, until an execution record or automation link is validated.

@@ -212,6 +212,7 @@ Use this section as the concise answer source when filling the form. Keep the fi
 | Action Center mechanics worked after enablement. | Assignment, completion, reviewer comment, and structured return could be validated; the issue is legibility/binding, not total task failure. | PF-013, PF-016. |
 | Orchestrator CLI lifecycle was strong once the right path was found. | Package/process readback and bucket create/upload/list/download gave real build-lifecycle evidence and a durable audit-artifact fallback. | PF-017; `docs/validation/artifacts/2026-06-25/orchestrator_bucket_audit_artifact_E004_manifest.json`. |
 | Task APIs preserved the governance boundary. | Raw agent recommendation and final policy decision were both available in persisted payloads, which supports the architecture thesis. | PF-013, PF-015. |
+| Test Manager could represent the eval suite. | A live project, nine manual test cases, and a test set now map E-001 through E-009 without pretending automation exists. | PF-020; `docs/validation/TEST_MANAGER_MAPPING.md`. |
 
 ### Best Critical Feedback To Include
 
@@ -222,10 +223,11 @@ Use this section as the concise answer source when filling the form. Keep the fi
 | Native case audit needs domain-event reconstruction. | One view/query should reconstruct evidence state, policy versions, raw recommendation, policy decision, block reason, human action, and timestamps. | Native runtime history plus task APIs reconstruct operational flow, but domain audit requires explicit custom payloads/artifacts. | Use `service-recovery-audit-v1` bundle and Orchestrator bucket artifact fallback. | Add native Case audit/event inspector for linked agent/policy/human/domain events. |
 | CLI/package diagnostics need feed awareness. | Upload/get/create/update process commands should resolve the same package feed or explain mismatch. | Feed-scoped package lookup worked, while default lookup/process create could not bind the same version. | Verified with `--feed-id`; used process version update and readback. | Add feed selector/diagnostics to process creation and package binding paths. |
 | Data Fabric record insert needs schema-aware diagnostics. | A record body keyed by schema field names should insert or explain exact expected shape. | Entity create/readback succeeded, but multiple insert/import shapes failed with required `case_id` reported missing. | Use Orchestrator bucket artifact while Data Fabric insert remains blocked. | Echo recognized/unrecognized fields and provide insert examples for custom required fields. |
+| Test Manager should support eval-suite import. | A local agent eval result file should become traceable test cases/test sets with field mapping and artifacts. | Live Test Manager project/case/set creation worked, but E-001 through E-009 required manual CLI object creation. | Created project `SREV`, nine manual cases, and test set `SREV:9`; kept a repo mapping file. | Add JSON/JUnit/eval import with preview, scenario-ID mapping, labels, expected/actual policy fields, and artifact attachment. |
 
 ### Do Not Claim Yet
 
-- Do not claim a Test Cloud implementation unless a Test Manager/Test Cloud project/run is actually validated.
+- Do not claim automated Test Cloud execution. A live Test Manager project/test set now exists, but cases are manual and no automated run/link has been validated.
 - Do not claim Data Fabric audit storage is complete; only entity schema create/readback is validated, while record insert is blocked.
 - Do not claim native Maestro Case history alone passes G-001; current result is native PARTIAL plus custom audit artifact PASS.
 - Do not claim the generated Action Center page is demo-ready; task mechanics are validated, but field legibility is not.

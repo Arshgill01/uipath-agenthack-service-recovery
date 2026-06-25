@@ -1213,3 +1213,81 @@ Evidence:
 Product feedback:
 
 - PF-013 strengthened as a repeated generated Action Center field rendering/binding issue.
+
+## 2026-06-25 23:58 IST - Test Manager Eval Crossover
+
+Environment:
+
+- UiPath org `keepingitlowkey`, tenant `DefaultTenant`.
+- UiPath CLI `uip` authenticated as `arshgill6120@gmail.com`.
+- Test Manager project created for validation: `Service Recovery Eval Validation`.
+- Project key: `SREV`.
+- Project ID: `1281f516-2c82-0000-9e76-0b49cf9a9990`.
+
+Gate/wave:
+
+- G-007: Test Cloud / Eval Crossover.
+
+Assumption tested:
+
+- The local E-001 through E-009 eval scenarios can be represented honestly in UiPath Test Manager without claiming unsupported automation.
+
+Steps:
+
+1. Ran `uip login status --output json`.
+2. Probed Test Manager CLI surface with `uip tm testcases --help --output json`.
+3. Listed existing Test Manager projects with `uip tm project list --output json`.
+4. Created project `SREV`.
+5. Re-ran the local eval baseline with `python -m service_recovery_core.evals --output eval_results/local_baseline.json`.
+6. Created nine Test Manager test cases for E-001 through E-009.
+7. Created test set `SREV:9`.
+8. Added all nine test cases to `SREV:9`.
+9. Read back the project, test cases, test set, and test-set membership.
+10. Used Computer Use to inspect the current Safari UiPath tab; it remained on Action Center task `4300219` and confirmed existing G-003 generated UI legibility limitations.
+
+Observed:
+
+- `uip login status` returned `Status: Logged in`, org `keepingitlowkey`, tenant `DefaultTenant`.
+- `uip tm testcases --help --output json` returned `Result: Success`, confirming the post-rename `testcases` command surface.
+- Initial `uip tm project list --output json` returned an empty `Data` list.
+- Project creation succeeded:
+  - `ProjectKey: SREV`,
+  - `Id: 1281f516-2c82-0000-9e76-0b49cf9a9990`,
+  - `Name: Service Recovery Eval Validation`.
+- Local eval baseline passed 9/9.
+- Test set creation succeeded:
+  - `TestSetKey: SREV:9`,
+  - `Id: 6881c763-b871-0200-165b-0b49cf9ac490`.
+- Test-set membership readback returned all nine scenarios:
+  - E-001: `SREV:3`,
+  - E-002: `SREV:1`,
+  - E-003: `SREV:2`,
+  - E-004: `SREV:4`,
+  - E-005: `SREV:5`,
+  - E-006: `SREV:6`,
+  - E-007: `SREV:7`,
+  - E-008: `SREV:8`,
+  - E-009: `SREV:10`.
+- Created test cases are manual Test Manager cases. `IsAutomated` read back as `false` for each case.
+
+Result:
+
+- G-007: PASS for live UiPath Test Manager representation of E-001 through E-009.
+- G-007: PARTIAL for automated Test Cloud crossover. The eval suite is represented in Test Manager as manual cases and grouped in a test set, but no automated Test Manager execution or Orchestrator test automation link has been created.
+
+Evidence:
+
+- `docs/validation/TEST_MANAGER_MAPPING.md`.
+- Test Manager project `SREV`.
+- Test set `SREV:9`.
+- Local eval output `eval_results/local_baseline.json`.
+
+Decision impact:
+
+- It is now fair to select/report Test Cloud/Test Manager participation only as a live Test Manager mapping unless an automated execution is added later.
+- Keep the final survey guardrail: do not claim automated Test Cloud validation yet.
+- Next G-007 step, if time allows, is either a manual execution record in Test Manager or a real automation link from Test Manager to an Orchestrator test package.
+
+Product feedback:
+
+- PF-020 added for Test Manager eval onboarding: CLI project/case/test-set lifecycle worked, but importing an eval suite from JSON/JUnit-style output still requires custom scripting/manual object creation.

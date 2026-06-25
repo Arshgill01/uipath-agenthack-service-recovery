@@ -1171,3 +1171,44 @@ Open risks:
 
 - Final survey answers still need user-confirmed team name and sharing preference.
 - Test Cloud should not be selected unless a real Test Manager/Test Cloud validation happens.
+
+### 2026-06-25 23:58 IST - Agent / Test Manager Eval Mapping
+
+What changed:
+
+- Created live UiPath Test Manager project `SREV` named `Service Recovery Eval Validation`.
+- Created nine Test Manager test cases mapping local eval scenarios E-001 through E-009.
+- Created test set `SREV:9` and attached all nine cases.
+- Added `docs/validation/TEST_MANAGER_MAPPING.md` as the repository evidence map for G-007.
+
+Commands run:
+
+- `uip login status --output json`
+- `uip tm testcases --help --output json`
+- `uip tm project list --output json`
+- `uip tm project create --name "Service Recovery Eval Validation" --project-key SREV --description "AgentHack service-recovery eval mapping for E-001 through E-009; validation-scoped project created by Codex on 2026-06-25." --output json`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- `uip tm testcases create --project-key SREV ... --output json`
+- `uip tm testsets create --project-key SREV --name "Service Recovery E-001 through E-009 Baseline" --description "Manual Test Manager representation of local eval suite. Automation linkage is not yet claimed; source of truth remains python -m service_recovery_core.evals." --output json`
+- `uip tm testcases add --test-set-key SREV:9 --test-case-keys SREV:1,SREV:2,SREV:3,SREV:4,SREV:5,SREV:6,SREV:7,SREV:8,SREV:10 --output json`
+- `uip tm project list --filter SREV --output json`
+- `uip tm testcases list --project-key SREV --output json`
+- `uip tm testsets list --project-key SREV --include-last-execution --output json`
+- `uip tm testsets list-testcases --project-key SREV --test-set-key SREV:9 --output json`
+
+Validation:
+
+- PASS: CLI authenticated to org `keepingitlowkey`, tenant `DefaultTenant`.
+- PASS: Test Manager CLI command surface returned `Result: Success`.
+- PASS: project `SREV` was created and read back as active.
+- PASS: nine manual test cases were created and read back.
+- PASS: test set `SREV:9` was created and read back with all nine expected test cases.
+- PARTIAL: no automated Test Manager execution or Orchestrator test automation linkage has been created yet.
+
+Product feedback:
+
+- PF-020 added for eval-suite import/onboarding improvement.
+
+Open risks:
+
+- G-007 remains PARTIAL for automation. The mapping is live in Test Manager, but final claims must distinguish manual Test Manager representation from automated Test Cloud execution.
