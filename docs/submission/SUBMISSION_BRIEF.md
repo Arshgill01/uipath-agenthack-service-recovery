@@ -2,6 +2,8 @@
 
 Status: concise, evidence-backed source for Devpost-style project copy. This is not a demo video script.
 
+Readiness checklist: [READINESS_CHECKLIST.md](READINESS_CHECKLIST.md).
+
 ## One-Line Pitch
 
 UiPath Maestro Case for telecom service recovery: agents interpret messy evidence, deterministic policy decides whether closure is safe, and human reviewers handle high-impact exceptions with an auditable evidence packet.

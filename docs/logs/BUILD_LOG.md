@@ -1545,3 +1545,41 @@ Open risks:
 Next:
 
 - Use `docs/submission/SUBMISSION_BRIEF.md` as the short project-copy source and `docs/product/FEEDBACK_SURVEY_COPY_READY.md` as the feedback-form source.
+
+### 2026-06-26 00:48 IST - Agent / Submission Readiness Checklist
+
+What changed:
+
+- Added `docs/submission/READINESS_CHECKLIST.md` as the current requirement-to-evidence map for submission readiness.
+- Linked the checklist from `docs/submission/SUBMISSION_BRIEF.md`.
+- Captured PASS/PARTIAL status for hard gates, soft gates, product-feedback readiness, submission artifacts, and do-not-claim boundaries.
+
+Commands run:
+
+- `git status --short --branch`
+- `sed -n '1,220p' docs/validation/VALIDATION_GATES.md`
+- `sed -n '1,260p' docs/validation/VALIDATION_RESULTS.md`
+- `sed -n '1,220p' docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`
+- `scripts/run_demo.sh --no-uipath-next-steps`
+- `rg -n "hard gates have not been run|automated Test Cloud execution|Data Fabric audit record persistence|generated Action Center UI is final-demo ready|Native Case history alone passes|terminal Case job completion|generic agent governance platform|generic governance platform" docs/submission/READINESS_CHECKLIST.md docs/submission/SUBMISSION_BRIEF.md README.md docs/product/FEEDBACK_SURVEY_COPY_READY.md`
+- `test -f docs/submission/READINESS_CHECKLIST.md && test -f docs/submission/SUBMISSION_BRIEF.md && test -x scripts/run_demo.sh && echo readiness-references-present`
+
+Validation:
+
+- PASS: checklist maps validated requirements to concrete repo evidence and keeps remaining partials explicit.
+- PASS: `scripts/run_demo.sh --no-uipath-next-steps` verified E-002/E-004 proof artifacts.
+- PASS: overclaim search only returned intentional guardrail/do-not-claim lines.
+- PASS: readiness checklist, submission brief, and executable demo wrapper references exist.
+
+Product feedback:
+
+- No new PF entry. This checkpoint prevents product-feedback and submission claims from drifting beyond PF-001 through PF-022 and the validated gate evidence.
+
+Open risks:
+
+- Team name and story-sharing preference remain final manual inputs.
+- Fresh live reruns need new case/task IDs logged before being cited.
+
+Next:
+
+- Use the checklist before any final submission copy, live rerun, or handoff to another agent.
