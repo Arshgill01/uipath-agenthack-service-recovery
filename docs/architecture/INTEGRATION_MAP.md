@@ -12,6 +12,7 @@ Implementation readiness slices are tracked in [IMPLEMENTATION_SLICES.md](IMPLEM
 | Action Center | Human review/approval. AppTask can create, assign, complete, and return structured task output into case variables. | G-003; final evidence-packet rendering remains pending |
 | Case App / custom UI | Fallback or primary evidence packet/demo surface if Action Center rendering is not demo-legible. | G-003, G-004, G-006 |
 | Data Fabric/Data Service | Store `service-recovery-audit-v1` case audit bundles or equivalent custom audit events if native Case state is insufficient. | G-001, G-002 |
+| Orchestrator storage buckets | Validated fallback for storing one-object `service-recovery-audit-v1` audit artifacts when native Case audit is insufficient and Data Fabric record insert is blocked. | G-001, G-002, G-004, G-008 |
 | Test Cloud | Eval/regression validation for agent usefulness and policy changes. | G-007 |
 | UiPath CLI + skills | Coding-agent bonus proof and lifecycle automation, including explicit process creation with pinned package versions. | G-008; CLI version `1.196.0` installed locally and logged into org `keepingitlowkey`, tenant `DefaultTenant` |
 | Orchestrator | Assets, packages, jobs, logs, deployment, secrets if needed. | Wave 01 and stack selection |
@@ -67,6 +68,9 @@ Live validation moved the architecture from "maybe Data Fabric/Data Service" to 
 - `python -m service_recovery_core.evals --data-fabric-record-scenario E-004` emits an insert-ready record body for the contradiction proof beat, including live Case/task/package references from package `1.0.5`.
 - After explicit user approval, live Data Fabric entity `ServiceRecoveryAuditBundle` was created with ID `328ef8b6-ab70-f111-ac9a-002248a16d28` and schema readback by ID succeeded.
 - Record insert is not yet validated: `uip df records insert` rejected field-name, wrapper, field-ID keyed, and array payloads with required `case_id` reported missing. Treat Data Fabric as schema-validated but storage-blocked until insert/query-back succeeds.
+- Orchestrator bucket fallback is live-validated. Bucket `service-recovery-audit-validation` with key `dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb` stores `audit/service_recovery_audit_bundle_E004.json`.
+- The bucket artifact was uploaded, listed, downloaded to `eval_results/downloaded_audit_bundle_E004.json`, and byte-compared against `docs/validation/artifacts/2026-06-25/service_recovery_audit_bundle_E004.json`.
+- The artifact manifest is `docs/validation/artifacts/2026-06-25/orchestrator_bucket_audit_artifact_E004_manifest.json`.
 
 Mapping to hard gates:
 

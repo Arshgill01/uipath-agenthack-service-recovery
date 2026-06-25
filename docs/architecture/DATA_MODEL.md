@@ -209,6 +209,23 @@ Live validation note from 2026-06-25:
 - Name-based `entities get ServiceRecoveryAuditBundle` failed; use the entity ID for CLI operations.
 - Record insertion is not yet validated. `records insert` rejected file, inline object, minimal object, wrapper object, field-ID keyed object, and array payloads with required `case_id` reported missing. CSV import returned `InsertedRecords: 0` for one input row. Until insert/query-back succeeds, this entity is a schema-validated storage candidate, not a completed G-001 audit store.
 
+## Orchestrator Bucket Audit Artifact
+
+Because native Case history does not currently reconstruct the domain proof beat by itself and Data Fabric record insertion is blocked, Orchestrator storage buckets are the validated fallback for the audit object.
+
+Live validation note from 2026-06-25:
+
+- Bucket `service-recovery-audit-validation` was created in org `keepingitlowkey`, tenant `DefaultTenant`.
+- Bucket key: `dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb`.
+- Uploaded path: `audit/service_recovery_audit_bundle_E004.json`.
+- Source artifact: `docs/validation/artifacts/2026-06-25/service_recovery_audit_bundle_E004.json`.
+- Manifest: `docs/validation/artifacts/2026-06-25/orchestrator_bucket_audit_artifact_E004_manifest.json`.
+- Downloaded copy: `eval_results/downloaded_audit_bundle_E004.json`.
+- SHA-256: `3d02852775cb8e6a3c3c451553a22c5c5afe38848853f48e9f4f5a506b83a05e`.
+- Upload, list, download, and byte-compare all succeeded.
+
+Use this bucket-backed artifact as the current durable UiPath-accessible audit store unless Data Fabric insert/query-back is resolved. It is not native Case history; it is explicit custom audit state stored on a UiPath platform surface.
+
 ## Package / Migration Event
 
 ```json

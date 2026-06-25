@@ -105,6 +105,17 @@ Current custom packet fallback:
 
 These static artifacts are not a substitute for live UiPath human-task validation. They are the demo-ready custom evidence-packet surface to use if generated Action Center UI remains mislabeled. They show the raw agent recommendation and final policy decision side by side, plus evidence table, block reason, recommended reviewer actions, and audit order.
 
+Current audit storage fallback:
+
+- Use Maestro Case and Action Center for the live lifecycle/human-task proof.
+- Use Orchestrator bucket `service-recovery-audit-validation` for the durable one-object domain audit artifact if Data Fabric remains blocked.
+- Live bucket key: `dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb`.
+- Live path: `audit/service_recovery_audit_bundle_E004.json`.
+- Repo evidence: `docs/validation/artifacts/2026-06-25/orchestrator_bucket_audit_artifact_E004_manifest.json`.
+- The bucket-backed E-004 artifact preserves raw `AIE-E004` recommending `closure_candidate`, linked `PDE-E-004` requiring `human_review`, policy versions `ip-v1` / `dp-v1`, and `source_contradiction`.
+
+This is a real UiPath-hosted artifact path, not demo-only local data. It should be presented honestly as explicit custom audit state because native Case history did not provide the full domain audit by itself and Data Fabric record insertion is currently blocked.
+
 ## Demo Proof Sequence
 
 1. Start with the canonical green business fixture: CRM/order active, billing clear, support note resolved.
@@ -129,6 +140,7 @@ Native Case state versus explicit audit store:
 
 - Use native Case state/history only if G-001 proves one-view or one-query reconstruction of evidence state, policy versions, raw recommendation, policy decision, closure block, human action, and timestamps.
 - Add Data Fabric/Data Service or explicit custom audit events if reconstruction requires manual log archaeology.
+- Current validated fallback is an Orchestrator bucket artifact containing the `service-recovery-audit-v1` bundle. Prefer this over waiting on Data Fabric unless Data Fabric insert/query-back is fixed quickly.
 
 Native version fields versus explicit metadata:
 
@@ -151,7 +163,7 @@ Before broad implementation, validate:
 - Whether policy output can drive distinct 2A and 2B Case routes for G-005.
 - Whether Case App/Case instances can make severity, SLA, stage, and block reason legible for G-006.
 - Whether Test Manager/Test Cloud can host or reference the local eval scenarios for G-007.
-- Whether UiPath CLI/skills can provide a visible coding-agent lifecycle proof for G-008.
+- Whether UiPath CLI/skills can provide a visible coding-agent lifecycle proof for G-008. Orchestrator bucket create/upload/list/download is already a validated CLI lifecycle proof; Test Cloud and skill-specific proof remain optional follow-ups.
 
 ## Stop Rule
 

@@ -1069,3 +1069,95 @@ Next:
 
 - Try official docs/API or inspect the import error file if accessible without secrets.
 - If record insertion remains blocked, use a file artifact or Case custom payload for final G-001 audit storage and document Data Fabric as a platform limitation for this build.
+
+## 2026-06-25 21:17 IST - Orchestrator Bucket Audit Artifact Fallback
+
+Environment:
+
+- UiPath Automation Cloud org `keepingitlowkey`, tenant `DefaultTenant`.
+- Folder key `9d7ae568-d60e-4395-94d7-db115bfb25de`.
+- UiPath CLI `uip` authenticated as `arshgill6120@gmail.com`.
+
+Gate/wave:
+
+- G-001: Native Case State / Audit Reconstruction.
+- G-002: Policy Version Pinning.
+- G-004: Agent Recommendation Visible Before Override.
+- G-008: CLI/coding-agent lifecycle support.
+
+Assumption tested:
+
+- If native Case history is insufficient and Data Fabric record insert is blocked, a UiPath-accessible Orchestrator storage bucket can hold one `service-recovery-audit-v1` object that reconstructs the domain proof beat without manual log archaeology.
+
+Steps:
+
+1. Listed existing Orchestrator storage buckets for the validation folder.
+2. Generated the E-004 contradiction audit bundle artifact.
+3. Created storage bucket `service-recovery-audit-validation`.
+4. Uploaded `service_recovery_audit_bundle_E004.json` to bucket path `audit/service_recovery_audit_bundle_E004.json`.
+5. Listed bucket files and confirmed the uploaded JSON file metadata.
+6. Downloaded the same bucket file to `eval_results/downloaded_audit_bundle_E004.json`.
+7. Byte-compared the downloaded file against the committed source artifact.
+8. Extracted proof-critical fields from the JSON artifact.
+
+Observed:
+
+- Bucket creation succeeded:
+  - name: `service-recovery-audit-validation`,
+  - bucket key: `dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb`,
+  - bucket ID: `177034`.
+- Bucket upload succeeded for:
+  - path: `audit/service_recovery_audit_bundle_E004.json`,
+  - content type: `application/json`,
+  - size: `6412` bytes.
+- Bucket list returned the uploaded file at `/audit/service_recovery_audit_bundle_E004.json`.
+- Bucket download succeeded and `cmp` returned `bucket-download-matches`.
+- The artifact SHA-256 is `3d02852775cb8e6a3c3c451553a22c5c5afe38848853f48e9f4f5a506b83a05e`.
+- The JSON artifact reconstructs:
+  - `audit_contract_version: service-recovery-audit-v1`,
+  - raw agent event `AIE-E004` with `recommended_next_stage: closure_candidate`,
+  - policy decision event `PDE-E-004` linked to `AIE-E004`,
+  - `decision: require_human_review`,
+  - `from_recommended_stage: closure_candidate`,
+  - `to_stage: human_review`,
+  - `block_reason: source_contradiction`,
+  - `interpretation_policy_version: ip-v1`,
+  - `decision_policy_version: dp-v1`,
+  - event order: evidence state, agent interpretation, policy decision, human review.
+
+Result:
+
+- G-001: PARTIAL natively, PASS for custom UiPath-accessible audit artifact fallback. Native Case state still does not by itself provide a clean one-query domain audit, and Data Fabric record storage remains blocked. Orchestrator bucket storage does prove a live UiPath-hosted, downloadable one-object audit artifact for the contradiction proof beat.
+- G-002: PASS for explicit artifact-level policy version pinning. The artifact stores both policy versions with the linked events. Native active-case migration semantics remain custom and must be represented by an explicit audited migration event.
+- G-004: PASS for artifact persistence of raw recommendation before policy override. The uploaded object preserves separate linked `AgentInterpretationEvent` and `PolicyDecisionEvent` data rather than only final routed state.
+- G-008: PASS/PARTIAL. CLI lifecycle now includes bucket create, upload, list, download, and verification. It is a real build-lifecycle operation, not a mock.
+
+Commands run:
+
+- `uip or buckets list --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `python -m service_recovery_core.evals --audit-bundle-scenario E-004 --output docs/validation/artifacts/2026-06-25/service_recovery_audit_bundle_E004.json`
+- `uip or buckets create service-recovery-audit-validation --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --description "Validation audit bundle artifacts for UiPath AgentHack service recovery" --output json`
+- `uip or bucket-files upload dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb audit/service_recovery_audit_bundle_E004.json --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --file docs/validation/artifacts/2026-06-25/service_recovery_audit_bundle_E004.json --content-type application/json --output json`
+- `uip or bucket-files list dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip or bucket-files download dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb audit/service_recovery_audit_bundle_E004.json --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --destination eval_results/downloaded_audit_bundle_E004.json --output json`
+- `cmp -s docs/validation/artifacts/2026-06-25/service_recovery_audit_bundle_E004.json eval_results/downloaded_audit_bundle_E004.json && echo bucket-download-matches`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+
+Evidence:
+
+- `docs/validation/artifacts/2026-06-25/service_recovery_audit_bundle_E004.json`
+- `docs/validation/artifacts/2026-06-25/orchestrator_bucket_audit_artifact_E004_manifest.json`
+- live bucket key `dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb`
+- live bucket path `audit/service_recovery_audit_bundle_E004.json`
+
+Decision impact:
+
+- Use Orchestrator bucket audit artifacts as the current validated fallback for the final audit view if Data Fabric record insertion remains blocked.
+- Keep native Case history for runtime lifecycle evidence: package, job, stage/task order, task status, timestamps, and reviewer return.
+- Keep the custom audit bundle as the domain audit object that proves evidence state, policy versions, raw agent recommendation, final policy decision, closure block reason, human action, and ordered event chain.
+
+Product feedback:
+
+- No new negative PF entry for buckets. Bucket create/upload/list/download worked cleanly through CLI and should be cited as a positive "what worked well" item.
+- PF-019 remains the active blocker for Data Fabric record insertion.

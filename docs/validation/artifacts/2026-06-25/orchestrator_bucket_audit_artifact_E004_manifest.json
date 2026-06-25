@@ -1,0 +1,38 @@
+{
+  "validated_at": "2026-06-25 21:17 IST",
+  "org": "keepingitlowkey",
+  "tenant": "DefaultTenant",
+  "folder_key": "9d7ae568-d60e-4395-94d7-db115bfb25de",
+  "bucket_name": "service-recovery-audit-validation",
+  "bucket_key": "dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb",
+  "bucket_id": 177034,
+  "bucket_path": "audit/service_recovery_audit_bundle_E004.json",
+  "source_local_file": "docs/validation/artifacts/2026-06-25/service_recovery_audit_bundle_E004.json",
+  "downloaded_file": "eval_results/downloaded_audit_bundle_E004.json",
+  "content_type": "application/json",
+  "size_bytes": 6412,
+  "sha256": "3d02852775cb8e6a3c3c451553a22c5c5afe38848853f48e9f4f5a506b83a05e",
+  "source_case_instance_key": "60e52ca5-6891-45b4-9e98-e1b08a984f06",
+  "source_task_id": 4300219,
+  "source_package_version": "1.0.5",
+  "audit_contract_version": "service-recovery-audit-v1",
+  "proof_fields": {
+    "case_id": "CASE-BG-CONTRA",
+    "raw_agent_event_id": "AIE-E004",
+    "raw_agent_recommended_next_stage": "closure_candidate",
+    "policy_decision_event_id": "PDE-E-004",
+    "policy_decision_links_to": "AIE-E004",
+    "policy_decision": "require_human_review",
+    "from_recommended_stage": "closure_candidate",
+    "to_stage": "human_review",
+    "block_reason": "source_contradiction",
+    "interpretation_policy_version": "ip-v1",
+    "decision_policy_version": "dp-v1"
+  },
+  "readback_validation": {
+    "upload_result": "success",
+    "list_result": "success",
+    "download_result": "success",
+    "byte_compare_result": "match"
+  }
+}

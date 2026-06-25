@@ -137,3 +137,10 @@
 - R-002 is reduced for schema viability: first-class policy-version fields exist in the live entity, but no live audit record has persisted them.
 - New blocker: `uip df records insert` rejected valid field-name JSON, minimal JSON, wrapper JSON, field-ID keyed JSON, and array JSON with `case_id` reported missing even though the CLI debug log parsed `case_id`. CSV import also inserted `0` of `1` records. Mitigation: inspect official API/docs or import error file if accessible without secrets; if still blocked, use Case custom payload or file artifact for final audit storage.
 - New cleanup consideration: the tenant now contains validation entity `ServiceRecoveryAuditBundle` with zero records. Keep it for continued validation unless the user asks to remove it.
+
+### 2026-06-25 21:17 IST - Orchestrator Bucket Audit Artifact Fallback
+
+- R-001 is materially reduced: native Case history remains partial for domain audit, but a live Orchestrator bucket now stores and returns the E-004 `service-recovery-audit-v1` bundle as one JSON object. This gives the build a validated UiPath-accessible fallback for reconstructing evidence state, policy versions, raw agent recommendation, policy decision, block reason, human review state, and event order.
+- R-002 is reduced for explicit version pinning: the bucket-backed artifact persists `interpretation_policy_version` and `decision_policy_version` with the linked events. Native active-case migration still needs a custom audited migration event.
+- R-004 is reduced for final audit visibility: the bucket-backed artifact preserves separate `AIE-E004` and `PDE-E-004` objects with `links_to`, `from_recommended_stage`, `to_stage`, and `block_reason`.
+- Data Fabric record insert remains open under PF-019, but it is no longer the only viable G-001 fallback. Use Orchestrator bucket artifacts unless Data Fabric insert/query-back is resolved quickly.

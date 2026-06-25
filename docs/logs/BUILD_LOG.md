@@ -1040,3 +1040,43 @@ Open risks:
 
 - Data Fabric storage cannot be claimed until record insertion/query-back succeeds.
 - Keep fallback audit storage paths open: Case custom payload, UiPath-accessible file/artifact, or custom evidence-packet artifact.
+
+### 2026-06-25 21:17 IST - Agent / Orchestrator Audit Artifact Fallback
+
+What changed:
+
+- Created live Orchestrator storage bucket `service-recovery-audit-validation`.
+- Uploaded, listed, downloaded, and byte-compared the E-004 `service-recovery-audit-v1` audit bundle.
+- Added a manifest tying the bucket artifact to the live E-004 case/task/package references.
+- Added a regression test that checks the committed E-004 artifact preserves the proof-critical raw agent and policy decision fields.
+- Updated validation, architecture, demo, risk, and product-feedback docs with the bucket fallback result.
+
+Commands run:
+
+- `uip or buckets list --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `python -m service_recovery_core.evals --audit-bundle-scenario E-004 --output docs/validation/artifacts/2026-06-25/service_recovery_audit_bundle_E004.json`
+- `uip or buckets create service-recovery-audit-validation --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --description "Validation audit bundle artifacts for UiPath AgentHack service recovery" --output json`
+- `uip or bucket-files upload dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb audit/service_recovery_audit_bundle_E004.json --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --file docs/validation/artifacts/2026-06-25/service_recovery_audit_bundle_E004.json --content-type application/json --output json`
+- `uip or bucket-files list dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip or bucket-files download dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb audit/service_recovery_audit_bundle_E004.json --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --destination eval_results/downloaded_audit_bundle_E004.json --output json`
+- `cmp -s docs/validation/artifacts/2026-06-25/service_recovery_audit_bundle_E004.json eval_results/downloaded_audit_bundle_E004.json && echo bucket-download-matches`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+
+Validation:
+
+- PASS: Orchestrator bucket create returned bucket key `dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb`.
+- PASS: upload/list/download returned the expected `application/json` file at `audit/service_recovery_audit_bundle_E004.json`.
+- PASS: downloaded artifact byte-compared equal to the committed source artifact.
+- PASS: committed artifact preserves `AIE-E004` recommending `closure_candidate` and linked `PDE-E-004` requiring `human_review` for `source_contradiction`.
+- PARTIAL: native Case audit remains partial; the bucket is a custom UiPath-accessible audit artifact fallback, not native Case history.
+
+Product feedback:
+
+- PF-019 remains open for Data Fabric record insert.
+- No new negative PF entry for Orchestrator buckets; bucket file operations worked cleanly and are now a positive survey point.
+
+Open risks:
+
+- Data Fabric record storage remains blocked.
+- The final demo still needs a polished way to surface the bucket-backed audit bundle or equivalent custom audit view inside the presentation flow.
