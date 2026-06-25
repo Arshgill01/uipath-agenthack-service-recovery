@@ -103,3 +103,10 @@
 - R-003 remains open for reviewer UI quality but the task lifecycle is stronger: unassigned task `4300080` required assignment before completion, then returned `Action: reject` and the reviewer comment.
 - R-004 is functionally mitigated for API/persistence proof: generated local eval output reached a live task with raw `AIE-E002` `closure_candidate` and linked `PDE-E-002` `override_recommendation` to `verify_telemetry`. Keep open only for final demo UI legibility and custom audit timeline.
 - New integration risk: feed-scoped package upload/read succeeded for `1.0.4`, while default package lookup and process creation could not bind the same version. Mitigation: use feed-scoped verification plus `processes update-version` for current validation; log PF-017 and avoid claiming that direct create is reliable for solution-feed Case packages.
+
+### 2026-06-25 19:13 IST - Live 1.0.5 Contradiction Route Validation
+
+- R-004 is further mitigated: live task `4300219` persisted raw `AIE-E004` recommending `closure_candidate` and linked policy `PDE-E-004` requiring `human_review` for `source_contradiction`.
+- R-005 likelihood decreases substantially: distinct route behavior is now observed live. Missing authoritative telemetry E-002 routes to `verify_telemetry`; fresh authoritative contradiction E-004 routes to `human_review` with `source_contradiction`.
+- R-003 remains open for UI legibility. The task API contains correct `PolicyDecisionJson`, but generated Action Center app binding still likely lacks `ActionProperties.PolicyDecisionJson` and renders `Unnamed String 1`.
+- R-001 remains open for native one-query domain audit. Two proof beats are now carried as explicit task payloads, but a durable custom audit event/state model is still needed for final demo-quality reconstruction.

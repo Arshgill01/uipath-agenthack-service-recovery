@@ -109,15 +109,42 @@ Validated:
 Still next:
 
 - Repair Action Center `PolicyDecisionJson` rendering before demo polish.
-- Build and validate the contradiction route from the same canonical green business fixture.
+- Add explicit custom audit event/state storage for one-query domain reconstruction.
+
+## 2026-06-25 Live Contradiction Checkpoint
+
+Completed:
+
+- Repacked the Case package as `Solution.caseManagement.Maestro.Case:1.0.5` using generated E-004 contradiction payload.
+- Updated validation process `9a7eb300-7b16-4856-b14f-d6f2da3dbe61` to `1.0.5` with `AutoUpdate: false`.
+- Started live case `60e52ca5-6891-45b4-9e98-e1b08a984f06`.
+- Verified task `4300219` before human action contained:
+  - raw `AIE-E004` recommendation to `closure_candidate`,
+  - linked `PDE-E-004` requiring `human_review`,
+  - `source_contradiction`,
+  - `derived_evidence_state: contradicting`,
+  - fresh authoritative `network_telemetry.service_live_status = not_live`,
+  - `interpretation_policy_version: ip-v1`,
+  - `decision_policy_version: dp-v1`.
+- Assigned and rejected the task; the case completed.
+
+Validated:
+
+- The same canonical green business fixture now has both UiPath-visible proof beats:
+  - E-002 missing authoritative telemetry -> `verify_telemetry`.
+  - E-004 fresh authoritative contradiction -> `human_review`.
+- Distinct route behavior is proven at API/persistence level.
+
+Still next:
+
+- Repair Action Center `PolicyDecisionJson` rendering before demo polish.
 - Add explicit custom audit event/state storage for one-query domain reconstruction.
 
 ## Follow-On Order
 
-1. Contradiction route from the same canonical business fixture.
-2. Evidence packet content and structured reviewer outcome.
-3. Audit event linkage / one-query reconstruction.
-4. Demo runbook.
-5. Test Cloud mapping if available.
+1. Evidence packet UI legibility and structured reviewer outcome polish.
+2. Audit event linkage / one-query reconstruction.
+3. Demo runbook.
+4. Test Cloud mapping if available.
 
 Stop at the first failed validation and log the implication before continuing.

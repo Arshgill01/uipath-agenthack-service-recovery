@@ -65,6 +65,9 @@ This matrix groups the current evidence into issue classes. Add new observations
 - PF-004 should be framed as three related observations: filtered picker activation/accessibility friction, post-insertion configuration ambiguity, and the separate Action app path that exposes schema/page primitives but not obvious case return mapping.
 - PF-006, PF-007, and PF-008 are currently the strongest high-specificity feedback items for G-003: PF-006 covers design-time generation reliability; PF-007 covers deploy/runtime validation gap for a required Action task field; PF-008 covers repair-to-publish iteration friction.
 - Action Center moved from tenant-service blocker to usable task lifecycle: claim, approve, and structured return have now been observed through the live validation artifacts. The remaining product-feedback issue is legibility and binding quality, especially `PolicyDecisionJson` rendering as `Unnamed String 1`.
+- PF-013 is a headline feedback candidate: the platform persisted the proof-critical policy payload correctly through task APIs, but the generated reviewer UI lost the field binding/label. This is fair feedback because it separates a strong backend/runtime result from a UX/generation issue.
+- PF-015 is a headline product-design insight: Maestro Case can orchestrate the right participants, but regulated/domain workflows need a native audit/event inspector for linked agent interpretation, policy decision, human action, package version, and policy versions.
+- PF-017 is the strongest CLI/platform integration feedback: the package existed in the solution feed and could be read with `--feed-id`, but the process-create path could not bind it and did not expose the same feed selector.
 - The CLI/package recovery path is valuable feedback because it shows a second integration surface: downloaded Studio Web assets, local pack/upload, package metadata, app bindings, and Orchestrator process versioning. Keep those entries separate from Action Center rendering claims.
 
 ## Draft Survey Answer Scaffold
@@ -75,8 +78,8 @@ Draft only. Evidence-backed but not final submission prose.
 | --- | --- | --- |
 | Q10 - What UiPath products did you use? | Automation Cloud, Maestro, Maestro Case / Case app, Studio Web, Actions / Action Center, Orchestrator service listing, Integration Service listing, Data Fabric listing, Test Manager listing, UiPath CLI. Note that deep validation has so far centered on Automation Cloud, Maestro, Studio Web, Maestro Case, and Actions. | Wave 01 validation results; product launcher screenshot; CLI help output in `docs/validation/VALIDATION_RESULTS.md`. |
 | Q11 - What worked well? | Automation Cloud eventually landed in org `keepingitlowkey` / tenant `DefaultTenant`; Maestro opened and exposed case/process surfaces; Studio Web created a real `Maestro Case` project; Case designer exposed stages, rules, Case app metadata, task types, and JSON/code view; Action Center opened after Actions was enabled; JSON editor guarded against saving malformed accidental input; Action app schema exposed typed inputs, outcomes, and generated a mostly usable evidence review page. | PF-002, PF-003, PF-004, PF-006; `wave01-studio-maestro-bpmn-created.png`; `g001-maestro-case-project-created.png`; `g001-maestro-case-json-code-view.png`; `actions-enabled-inbox.png`; 2026-06-25 G-003 validation results. |
-| Q12 - What challenges did you encounter? | Group by issue class: account/tenant routing ambiguity, Maestro recent-projects generic fetch error, Action Center dependency not enabled with insufficient disabled-service guidance, Human action picker/configuration ambiguity, Studio Web local Assistant migration uncertainty, schema-to-page generation failure for a proof-critical evidence field, deployment validation passing even though the live Action task was missing a required Title, CLI/package round-trip failure, generic upload diagnostics, app binding drift, process auto-update readback mismatch, runtime task label legibility, and generated image placeholder quality. Keep access confusion, product limitations, UX/docs friction, and product defect candidates separate. | Feedback Evidence Matrix rows PF-001 through PF-014. |
-| Q13 - What should UiPath improve? | Recommended top answer: add a Maestro Case readiness and human-review setup path that checks tenant services/roles, links directly to enable Actions when permitted, scaffolds a human evidence-packet task, shows exact input/output mapping steps, validates generated Action page controls per schema property, and runs a preflight for required Action task fields before deployment. Secondary improvements: better package/upload diagnostics, app binding validation, process version readback, `missingaccount` diagnostics, recent-projects error diagnostics, accessible task-picker rows, and Studio Web/local Assistant transition guidance. | PF-003 as highest-impact setup blocker; PF-006/PF-007/PF-013 as proof-critical G-003 build blockers; PF-009 through PF-012 as CLI/package recovery blockers; PF-004 as core human-task workflow friction; PF-001/PF-002/PF-005/PF-014 as supporting UX diagnostics. |
+| Q12 - What challenges did you encounter? | Group by issue class: account/tenant routing ambiguity, Maestro recent-projects generic fetch error, Action Center dependency not enabled with insufficient disabled-service guidance, Human action picker/configuration ambiguity, Studio Web local Assistant migration uncertainty, schema-to-page generation failure for a proof-critical evidence field, deployment validation passing even though the live Action task was missing a required Title, CLI/package round-trip failure, generic upload diagnostics, app binding drift, process auto-update/readback ambiguity, runtime task label legibility, solution-feed package/process binding mismatch, and generated image placeholder quality. Keep access confusion, product limitations, UX/docs friction, and product defect candidates separate. | Feedback Evidence Matrix rows PF-001 through PF-017. |
+| Q13 - What should UiPath improve? | Recommended top answer: add a Maestro Case readiness and human-review setup path that checks tenant services/roles, links directly to enable Actions when permitted, scaffolds a human evidence-packet task, shows exact input/output mapping steps, validates generated Action page controls per schema property, and runs a preflight for required Action task fields before deployment. Secondary improvements: native case audit/event inspector, feed-aware CLI process creation, better package/upload diagnostics, app binding validation, process version readback, `missingaccount` diagnostics, recent-projects error diagnostics, accessible task-picker rows, and Studio Web/local Assistant transition guidance. | PF-003 as highest-impact setup blocker; PF-006/PF-007/PF-013 as proof-critical G-003 build blockers; PF-015 as native audit insight; PF-017 as feed/process CLI integration issue; PF-009 through PF-012 as CLI/package recovery blockers; PF-004 as core human-task workflow friction. |
 
 ## Scoring Rubric For Future Feedback
 
@@ -239,6 +242,82 @@ Evidence:
 Classification:
 
 - access / UX / docs
+
+Survey tags:
+
+- product-used
+- pain-point
+- workaround
+- improvement
+- evidence
+
+### PF-013 - 2026-06-25 - Action Center / Generated App Task Field Rendering
+
+Context:
+
+- ID: PF-013.
+- Status: observed with caveat.
+- Goal: validate whether a human reviewer can clearly see the structured evidence packet, raw agent recommendation, policy decision, block reason, recommended options, and return an approve/reject/comment result.
+- Product surface: Action Center, generated Action app runtime, Maestro Case human task.
+- Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `Arshdeep Singh`.
+- Wave/gate: G-003, G-004, Wave 07.
+
+What worked:
+
+- Action Center created real AppTasks from live Maestro Case runs.
+- Task APIs persisted structured `Content`, `EvidencePacketJson`, `RawAgentRecommendation`, `PolicyDecisionJson`, and `Comment` fields.
+- The raw agent event and final policy decision remained separate in task data.
+- Reviewer actions returned structurally to the case: assigned user, completed user, action, comment, timestamps, and task source metadata.
+- Unassigned tasks could be assigned to the logged-in user and then completed through the CLI.
+
+What failed or confused us:
+
+- The generated reviewer page did not render the proof-critical policy decision under its schema name.
+- Action Center showed `Unnamed String 1` / `Unnamed string 1` instead of a readable `PolicyDecisionJson` field.
+- The task API showed the correct `PolicyDecisionJson` value, so the failure appears to be generated page binding/label legibility rather than task-data loss.
+- A read-only inspection of downloaded generated app assets found bindings for `ActionProperties.Content`, `ActionProperties.EvidencePacketJson`, `ActionProperties.RawAgentRecommendation`, and `ActionProperties.Comment`, but not for `ActionProperties.PolicyDecisionJson`; the page had two `Unnamed String 1` label controls instead.
+
+Expected:
+
+- Every valid schema property should either generate a visible, correctly labeled reviewer field or fail generation with a precise repair action.
+- For a governance/audit workflow, policy decision fields should be as visible as raw agent recommendations; otherwise the demo can accidentally show only the agent output and hide the governing override.
+
+Observed:
+
+- Task `4295299` persisted `PolicyDecisionJson` with `decision: override_recommendation`, `to_stage: verify_telemetry`, and `block_reason: missing_authoritative_signal`, but the Action Center page mislabeled/hid the value.
+- Task `4300080` persisted generated E-002 `PolicyDecisionJson` from the local eval exporter.
+- Task `4300219` persisted generated E-004 `PolicyDecisionJson` with `decision: require_human_review`, `to_stage: human_review`, and `block_reason: source_contradiction`.
+- Reviewer lifecycle worked after assignment, but final demo legibility remains partial until the generated field binding is repaired.
+
+Impact:
+
+- Build impact: high for G-003/G-004 demo quality. The platform preserved the core evidence, but the reviewer UI did not make a proof-critical field legible.
+- Demo/submission impact: high. The central story depends on showing raw agent recommendation separately from final policy decision.
+- Severity: high for generated human-review app adoption in governed workflows.
+
+Workaround:
+
+- Use task API/Case variables as the authoritative evidence during validation.
+- For demo polish, repair the generated page by changing the `Unnamed String 1` label to `Policy Decision` and binding the value to `ActionProperties.PolicyDecisionJson.toString`, or replace the generated view with a custom evidence-packet view.
+- Keep Action Center for task lifecycle and structured return, but do not rely on the current generated page as the sole audit surface.
+
+Suggested improvement:
+
+- Add a generated-app field binding inspector showing each schema property, generated control, label, binding expression, and validation status.
+- If a schema property cannot be rendered, fail generation or show a repair card instead of silently producing `Unnamed String 1`.
+- Add a human-review evidence-packet template for Maestro Case that treats policy decisions, raw agent output, evidence state, and block reason as first-class fields.
+- In Action Center runtime, expose a debug/read-only task data panel so reviewers/builders can compare rendered fields with persisted task data during development.
+
+Evidence:
+
+- Screenshot/path/link: `docs/validation/artifacts/2026-06-25/g004-action-center-policy-field-mislabeled-task-4295299.png`.
+- Screenshot/path/link: `docs/validation/artifacts/2026-06-25/g004-action-center-raw-recommendation-visible-task-4295299.png`.
+- Commands/logs: `docs/validation/VALIDATION_RESULTS.md`, 2026-06-25 18:47, 19:05, and 19:13 IST entries.
+- Live task IDs: `4295299`, `4300080`, `4300219`.
+
+Classification:
+
+- UX / product defect candidate / integration
 
 Survey tags:
 

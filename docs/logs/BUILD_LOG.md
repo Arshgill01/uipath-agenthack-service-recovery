@@ -801,3 +801,53 @@ Next:
 
 - Repair the Action Center policy-decision label or build a custom evidence-packet view.
 - Add the contradiction route as the next UiPath-grounded slice.
+
+### 2026-06-25 19:13 IST - Agent / Wave 07 Live E-004 Contradiction Run
+
+What changed:
+
+- Built temporary package `Solution.caseManagement.Maestro.Case.1.0.5.nupkg` from `1.0.4`.
+- Injected the generated E-004 contradiction payload from `service_recovery_core.evals --uipath-payload-scenario E-004`.
+- Uploaded package `Solution.caseManagement.Maestro.Case:1.0.5`.
+- Updated validation process `9a7eb300-7b16-4856-b14f-d6f2da3dbe61` to `1.0.5`.
+- Started and completed live case `60e52ca5-6891-45b4-9e98-e1b08a984f06`, task `4300219`.
+
+Commands run:
+
+- `python -m service_recovery_core.evals --uipath-payload-scenario E-004 --output eval_results/uipath_action_payload_E004.json`
+- `uip or packages upload tmp/uipath-case-packages/Solution.caseManagement.Maestro.Case.1.0.5.nupkg --feed-id 831bf59a-a3f1-4aa8-8890-f01b857c18f3 --output json`
+- `uip or packages get Solution.caseManagement.Maestro.Case:1.0.5 --feed-id 831bf59a-a3f1-4aa8-8890-f01b857c18f3 --all-fields --output json`
+- `uip or processes update-version 9A7EB300-7B16-4856-B14F-D6F2DA3DBE61 --package-version 1.0.5 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip or processes version-history 9A7EB300-7B16-4856-B14F-D6F2DA3DBE61 --output json`
+- `uip or jobs start 9A7EB300-7B16-4856-B14F-D6F2DA3DBE61 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --jobs-count 1 --reference wave07-e004-contradiction-1-0-5 --output json`
+- `uip tasks get 4300219 --folder-id 7978263 --output json`
+- `uip tasks assign 4300219 --user arshgill6120@gmail.com --output json`
+- `uip tasks complete 4300219 --type AppTask --folder-id 7978263 --action reject --data '{"Comment":"Wave 07 E-004 validation: generated local eval payload preserved closure_candidate raw recommendation, detected fresh authoritative network telemetry contradiction, and routed to human_review for source_contradiction; reviewer rejects closure and opens investigation."}' --output json`
+- `uip maestro case instance get 60e52ca5-6891-45b4-9e98-e1b08a984f06 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+
+Validation:
+
+- PASS: live case `60e52ca5-6891-45b4-9e98-e1b08a984f06` ran on `PackageKey: Solution.caseManagement.Maestro.Case:1.0.5`.
+- PASS: task `4300219` persisted generated E-004 raw agent recommendation `AIE-E004` with `recommended_next_stage: closure_candidate` and `interpretation_policy_version: ip-v1`.
+- PASS: task `4300219` persisted linked policy decision `PDE-E-004` with `decision: require_human_review`, `to_stage: human_review`, `block_reason: source_contradiction`, and `decision_policy_version: dp-v1`.
+- PASS: evidence packet persisted `business_state: green`, `derived_evidence_state: contradicting`, and fresh authoritative `network_telemetry.service_live_status = not_live`.
+- PASS: process version history explicitly records `1.0.3`, `1.0.4`, and `1.0.5`, while process readback kept `AutoUpdate: false`.
+- PASS: assigned task `4300219`, completed it with `reject`, and the case completed at `2026-06-25T13:43:29.3270546Z`.
+- PARTIAL: reviewer UI legibility still needs `PolicyDecisionJson` binding repair; API/task data is correct.
+- PASS: `python -m unittest discover -s tests` ran 19 tests.
+- PASS: `python -m service_recovery_core.evals --output eval_results/local_baseline.json` passed 9/9 scenarios.
+
+Product feedback:
+
+- PF-013 should be promoted to a full detailed entry.
+- PF-015 should be strengthened as the native domain-audit insight.
+
+Open risks:
+
+- Generated Action Center page still lacks the correct `ActionProperties.PolicyDecisionJson` binding.
+- Native Case audit still needs explicit custom audit state/events for one-query domain reconstruction.
+
+Next:
+
+- Repair the generated Action Center `PolicyDecisionJson` binding or use a custom evidence-packet view.
+- Add/strengthen product feedback entries PF-013 and PF-015 before the final survey draft.

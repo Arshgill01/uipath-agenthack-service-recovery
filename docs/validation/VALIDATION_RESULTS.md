@@ -732,3 +732,56 @@ Product feedback:
 
 - PF-013 updated by the unassigned task lifecycle observation.
 - PF-017 added for feed-scoped package visibility and process-binding mismatch.
+
+## 2026-06-25 19:13 IST - Wave 07 Live Contradiction Route Run
+
+Environment:
+
+- UiPath Automation Cloud org `keepingitlowkey`, tenant `DefaultTenant`.
+- UiPath CLI authenticated for `arshgill6120@gmail.com`.
+- Orchestrator folder key `9d7ae568-d60e-4395-94d7-db115bfb25de`, folder ID `7978263`.
+- Case package feed ID `831bf59a-a3f1-4aa8-8890-f01b857c18f3`.
+- Generated local payload source: `python -m service_recovery_core.evals --uipath-payload-scenario E-004 --output eval_results/uipath_action_payload_E004.json`.
+- Uploaded package: `Solution.caseManagement.Maestro.Case:1.0.5`.
+- Updated validation process: `9a7eb300-7b16-4856-b14f-d6f2da3dbe61`.
+- Live case instance/job key: `60e52ca5-6891-45b4-9e98-e1b08a984f06`.
+- Live case external ID: `CASE-693865376`.
+- Action Center task ID: `4300219`, task key from task list for job `60e52ca5-6891-45b4-9e98-e1b08a984f06`.
+
+Steps:
+
+1. Exported the local E-004 contradiction scenario into the UiPath Action Center payload shape.
+2. Repacked the known-good `1.0.4` Case package as `1.0.5`, changing only package version/release notes and the Case task payload values.
+3. Uploaded `1.0.5` to solution feed `831bf59a-a3f1-4aa8-8890-f01b857c18f3`.
+4. Verified feed-scoped package read for `Solution.caseManagement.Maestro.Case:1.0.5`.
+5. Updated existing validation process to `1.0.5` and verified `AutoUpdate: false`.
+6. Verified process version history now contains explicit `1.0.3`, `1.0.4`, and `1.0.5` entries.
+7. Started fresh case job `60e52ca5-6891-45b4-9e98-e1b08a984f06`.
+8. Read task `4300219` before human action and asserted the contradiction payload fields.
+9. Assigned task `4300219` to `arshgill6120@gmail.com`, completed it with `--action reject`, and verified task/case completion.
+
+Observed:
+
+- `uip maestro case instance get 60e52ca5...` returned `PackageKey: Solution.caseManagement.Maestro.Case:1.0.5`, `PackageVersion: 1.0.5`, and later `LatestRunStatus: Completed`.
+- `uip tasks get 4300219` before completion returned:
+  - `RawAgentRecommendation` with `event_id: AIE-E004`, `interpretation_policy_version: ip-v1`, and `recommended_next_stage: closure_candidate`.
+  - `PolicyDecisionJson` with `event_id: PDE-E-004`, `links_to: AIE-E004`, `decision_policy_version: dp-v1`, `decision: require_human_review`, `from_recommended_stage: closure_candidate`, `to_stage: human_review`, and `block_reason: source_contradiction`.
+  - `EvidencePacketJson` with `business_state: green`, `derived_evidence_state: contradicting`, `closure_block_reason: source_contradiction`, and fresh authoritative `network_telemetry.service_live_status = not_live`.
+- Task `4300219` was initially `Unassigned`; assignment to the logged-in user succeeded.
+- Task `4300219` completed with `Action: reject` at `2026-06-25T13:43:16.503Z`.
+- Case `60e52ca5...` completed at `2026-06-25T13:43:29.3270546Z`.
+
+Result:
+
+- G-005 soft gate: PASS at API/persistence level for distinct 2A and 2B routes.
+  - E-002 missing authoritative telemetry routes to `verify_telemetry` with `decision: override_recommendation` and `block_reason: missing_authoritative_signal`.
+  - E-004 fresh authoritative contradiction routes to `human_review` with `decision: require_human_review` and `block_reason: source_contradiction`.
+- Second proof beat: PASS at API/persistence level. The same canonical green business fixture persisted fresh authoritative network telemetry contradiction and escalated to human review.
+- G-003 remains PARTIAL for reviewer UI legibility until `PolicyDecisionJson` binding is repaired; API data is correct.
+- G-001 remains PARTIAL for native one-query domain audit; explicit payloads now carry both missing/stale and contradiction proof beats, but native Case still lacks a domain-specific audit timeline.
+
+Decision impact:
+
+- Continue with Maestro Case as primary track.
+- Next validation should repair generated Action Center binding for `PolicyDecisionJson` or create a custom evidence-packet view before demo polish.
+- The contradiction route is ready to become the second main demo beat after UI legibility is repaired.
