@@ -707,3 +707,47 @@ Next:
 
 - Commit the hard-gate validation checkpoint after local tests/evals pass.
 - Start Wave 07: implement only the canonical missing/stale telemetry override slice with explicit audit payloads and a repaired evidence-packet view.
+
+### 2026-06-25 18:55 IST - Agent / Wave 07 UiPath Payload Exporter
+
+What changed:
+
+- Added `service_recovery_core.uipath_payload.build_action_center_payload`.
+- Reused existing local scenario, policy, and transition outputs to produce generated Action Center input fields:
+  - `Content`
+  - `EvidencePacketJson`
+  - `RawAgentRecommendation`
+  - `PolicyDecisionJson`
+  - `Comment`
+- Added `python -m service_recovery_core.evals --uipath-payload-scenario <ID>` so a validated local scenario can be exported into the UiPath task payload shape without ad hoc scripts.
+- Added tests proving E-002 preserves the raw `closure_candidate` agent recommendation separately from the policy override to `verify_telemetry`, and E-004 routes contradiction to human review.
+
+Commands run:
+
+- `python -m unittest tests.test_uipath_payload`
+- `python -m compileall service_recovery_core tests`
+- `python -m service_recovery_core.evals --uipath-payload-scenario E-002 --output eval_results/uipath_action_payload_E002.json`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+
+Validation:
+
+- PASS: targeted payload tests ran 3 tests.
+- PASS: full unit suite ran 19 tests.
+- PASS: eval suite passed 9/9 scenarios.
+- PASS: generated E-002 payload includes `RawAgentRecommendation.recommended_next_stage = closure_candidate`, `PolicyDecisionJson.decision = override_recommendation`, `to_stage = verify_telemetry`, and `block_reason = missing_authoritative_signal`.
+- NOTE: `eval_results/*.json` is ignored by `.gitignore`; generated payload files are reproducible artifacts, not committed outputs.
+
+Product feedback:
+
+- none new; this implementation uses the validated workaround path from PF-013/PF-015.
+
+Open risks:
+
+- The exporter produces payload fields, but the generated Action Center page still needs a label/binding repair for `PolicyDecisionJson`.
+- The payload is not yet automatically injected into a new UiPath package; manual package/update path remains the bridge until the next slice.
+
+Next:
+
+- Use the exporter output as the source for the next `1.0.4` or repaired-package run.
+- Repair the reviewer UI label/binding or move the evidence packet into a custom view before final demo.

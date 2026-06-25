@@ -64,6 +64,28 @@ Then run one fresh UiPath-visible case and capture:
 - Policy versions are pinned in visible state or explicit audit events.
 - No contradiction route, evidence-packet polish, dashboard, Test Cloud mapping, or broad UI work is included in this slice.
 
+## 2026-06-25 Implementation Checkpoint
+
+Completed:
+
+- Added a local UiPath Action Center payload exporter for the canonical missing-telemetry scenario.
+- Export command:
+
+```sh
+python -m service_recovery_core.evals --uipath-payload-scenario E-002 --output eval_results/uipath_action_payload_E002.json
+```
+
+Validated:
+
+- `RawAgentRecommendation` preserves `recommended_next_stage: closure_candidate`.
+- `PolicyDecisionJson` preserves `decision: override_recommendation`, `to_stage: verify_telemetry`, and `block_reason: missing_authoritative_signal`.
+- Full unit suite and eval baseline pass.
+
+Still next:
+
+- Use the exported payload in a fresh UiPath package/run.
+- Repair Action Center `PolicyDecisionJson` rendering before demo polish.
+
 ## Follow-On Order
 
 1. Contradiction route from the same canonical business fixture.

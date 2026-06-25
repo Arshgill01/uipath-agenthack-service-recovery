@@ -3,9 +3,11 @@
 from service_recovery_core.agent_validator import validate_agent_interpretation
 from service_recovery_core.policy import decide_policy
 from service_recovery_core.state_machine import apply_policy_decision
+from service_recovery_core.uipath_payload import build_action_center_payload
 
 __all__ = [
     "apply_policy_decision",
+    "build_action_center_payload",
     "decide_policy",
     "validate_agent_interpretation",
 ]

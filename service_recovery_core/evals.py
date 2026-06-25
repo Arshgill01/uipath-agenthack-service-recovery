@@ -9,6 +9,7 @@ from service_recovery_core.agent_validator import validate_agent_interpretation
 from service_recovery_core.fixtures import load_scenarios
 from service_recovery_core.policy import decide_policy
 from service_recovery_core.state_machine import apply_policy_decision
+from service_recovery_core.uipath_payload import build_action_center_payload
 
 
 def run_eval_suite() -> dict[str, Any]:
@@ -73,7 +74,22 @@ def run_eval_suite() -> dict[str, Any]:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", default=None, help="Optional JSON output path.")
+    parser.add_argument(
+        "--uipath-payload-scenario",
+        default=None,
+        help="Optional scenario ID to export as generated Action Center input payload.",
+    )
     args = parser.parse_args()
+    if args.uipath_payload_scenario:
+        payload = build_uipath_payload(args.uipath_payload_scenario)
+        rendered_payload = json.dumps(payload, indent=2, sort_keys=True)
+        if args.output:
+            output_path = Path(args.output)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_text(rendered_payload + "\n", encoding="utf-8")
+        print(rendered_payload)
+        return 0
+
     results = run_eval_suite()
     rendered = json.dumps(results, indent=2, sort_keys=True)
     if args.output:
@@ -82,6 +98,25 @@ def main() -> int:
         output_path.write_text(rendered + "\n", encoding="utf-8")
     print(rendered)
     return 0 if results["summary"]["failed"] == 0 else 1
+
+
+def build_uipath_payload(scenario_id: str) -> dict[str, str]:
+    scenarios = load_scenarios()
+    if scenario_id not in scenarios:
+        raise KeyError(f"unknown scenario_id: {scenario_id}")
+    scenario = scenarios[scenario_id]
+    policy_decision = decide_policy(
+        scenario["case"],
+        scenario["evidence"],
+        scenario["agent_interpretation"],
+    )
+    transition = apply_policy_decision(
+        scenario["case"],
+        scenario["agent_interpretation"],
+        policy_decision,
+        event_id=f"PDE-{scenario_id}",
+    )
+    return build_action_center_payload(scenario["case"], scenario["evidence"], transition)
 
 
 def _override_persistence_assertions(transition: dict[str, Any]) -> list[bool]:
