@@ -1254,3 +1254,52 @@ Open risks:
 - Live-run repeatability is not yet scripted/runbooked end to end.
 - Generated Action Center evidence UI remains unsuitable for final video unless repaired and revalidated.
 - Data Fabric record insert remains blocked; Orchestrator bucket is the validated audit fallback.
+
+### 2026-06-26 00:24 IST - Agent / Demo-Safe Proof Runbook
+
+What changed:
+
+- Added `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md` as the operator path after hard-gate freeze.
+- Documented the demo-safe split:
+  - Action Center proves lifecycle and structured reviewer return.
+  - Custom evidence packet proves judge-readable evidence, raw recommendation, policy decision, and route.
+  - Orchestrator bucket bundle proves durable UiPath-hosted audit reconstruction.
+- Generated local E-002 and E-004 Action Center payloads plus audit bundles under `docs/demo/artifacts/`.
+- Updated `docs/demo/NEXT_DEMO_PLAN.md` and `waves/30_demo_scenario_runbook.md` to point to the runbook and stop treating hard gates as unresolved.
+
+Commands run:
+
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- `python -m service_recovery_core.evals --uipath-payload-scenario E-002 --output docs/demo/artifacts/action_payload_E002.json`
+- `python -m service_recovery_core.evals --uipath-payload-scenario E-004 --output docs/demo/artifacts/action_payload_E004.json`
+- `python -m service_recovery_core.evals --audit-bundle-scenario E-002 --output docs/demo/artifacts/service_recovery_audit_bundle_E002.json`
+- `python -m service_recovery_core.evals --audit-bundle-scenario E-004 --output docs/demo/artifacts/service_recovery_audit_bundle_E004.json`
+- `python -m service_recovery_core.evals --evidence-packet-html-scenario E-002 --output docs/demo/artifacts/evidence_packet_E002.html`
+- `python -m service_recovery_core.evals --evidence-packet-html-scenario E-004 --output docs/demo/artifacts/evidence_packet_E004.html`
+- `jq -r '[.case_id,.agent_interpretation_event.recommended_next_stage,.policy_decision_event.decision,.policy_decision_event.from_recommended_stage,.policy_decision_event.to_stage,.policy_decision_event.block_reason,.policy_decision_event.links_to] | @tsv' docs/demo/artifacts/service_recovery_audit_bundle_E002.json docs/demo/artifacts/service_recovery_audit_bundle_E004.json`
+- `jq -r '[(.RawAgentRecommendation|fromjson).recommended_next_stage,(.PolicyDecisionJson|fromjson).decision,(.PolicyDecisionJson|fromjson).from_recommended_stage,(.PolicyDecisionJson|fromjson).to_stage,(.PolicyDecisionJson|fromjson).block_reason,(.PolicyDecisionJson|fromjson).links_to] | @tsv' docs/demo/artifacts/action_payload_E002.json docs/demo/artifacts/action_payload_E004.json`
+- `rg -n "closure_candidate|override_recommendation|require_human_review|verify_telemetry|human_review|missing_authoritative_signal|source_contradiction" docs/demo/artifacts/evidence_packet_E002.html docs/demo/artifacts/evidence_packet_E004.html`
+
+Validation:
+
+- PASS: unit tests ran 25 tests.
+- PASS: local eval baseline passed 9/9 scenarios.
+- PASS: E-002 audit bundle preserves `closure_candidate`, `override_recommendation`, `verify_telemetry`, `missing_authoritative_signal`, and link `AIE-E002`.
+- PASS: E-004 audit bundle preserves `closure_candidate`, `require_human_review`, `human_review`, `source_contradiction`, and link `AIE-E004`.
+- PASS: Action Center payload JSON preserves the same proof-critical fields; nested Action Center fields require `fromjson` for CLI verification.
+- PASS: custom evidence packet HTML contains the same proof-critical values for both beats.
+- PARTIAL: this runbook makes local proof artifacts repeatable and references validated live IDs; it does not yet start a fresh live Case instance end to end.
+
+Product feedback:
+
+- No new PF entry. This checkpoint uses the validated PF-013/PF-014 workaround rather than recording a new UiPath interaction.
+
+Open risks:
+
+- Fresh live case start/package/update remains operator-heavy until scripted or reduced to exact CLI/UI steps.
+- Generated Action Center UI remains unsuitable as final judge-facing packet unless repaired and revalidated.
+
+Next:
+
+- Build or document the fresh live-run operator path: package/upload/update version, start 2A/2B case, poll task, complete task, upload/read back audit bundle, and verify AIE/PDE linkage.

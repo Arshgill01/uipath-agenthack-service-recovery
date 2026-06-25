@@ -1,6 +1,6 @@
 # Next Demo Architecture Plan
 
-Status: planning artifact for the next implementation wave after G-001 through G-004 are PASS/PARTIAL with documented implications. Do not treat this as approval to start broad implementation before the hard gates are resolved or explicitly waived.
+Status: implementation planning artifact. G-001 through G-004 are now answered with PASS/PARTIAL implications, and the validated proof path is captured in [DEMO_SAFE_PROOF_RUNBOOK.md](DEMO_SAFE_PROOF_RUNBOOK.md).
 
 ## Product Shape
 
@@ -154,16 +154,20 @@ Raw recommendation visibility:
 
 ## Platform Facts Still Needed
 
-Before broad implementation, validate:
+Hard-gate facts are now validated enough to build:
 
-- Whether a live Maestro Case instance can be published/debugged and reconstructed for G-001.
-- Whether policy versions can be pinned on active cases for G-002.
-- Whether `Human action placeholder` or `Create new Action app` can render and return the full evidence packet for G-003.
-- Whether raw agent recommendation and policy override can be shown separately in the same run for G-004.
-- Whether policy output can drive distinct 2A and 2B Case routes for G-005.
-- Whether Case App/Case instances can make severity, SLA, stage, and block reason legible for G-006.
-- Whether Test Manager/Test Cloud can host or reference the local eval scenarios for G-007.
-- Whether UiPath CLI/skills can provide a visible coding-agent lifecycle proof for G-008. Orchestrator bucket create/upload/list/download is already a validated CLI lifecycle proof; Test Cloud and skill-specific proof remain optional follow-ups.
+- G-001: native Case audit is partial; use the bucket-backed `service-recovery-audit-v1` bundle for one-object domain audit proof.
+- G-002: explicit package/process/artifact policy-version pinning is validated; represent migrations as explicit audited events.
+- G-003: Action Center lifecycle and structured return are validated; generated Action Center UI is not demo-legible, so use the custom evidence packet for judge-facing review.
+- G-004: raw agent recommendation and linked policy decision persist separately in task/API/audit data.
+- G-005: E-002 and E-004 live runs prove distinct missing/stale versus contradiction routes.
+- G-007: Test Manager project `SREV`, test set `SREV:9`, and manual passed logs represent E-001 through E-009; automated Test Cloud execution is not claimed.
+
+Remaining optional platform improvements:
+
+- Repair generated Action Center field binding only if it can be done quickly and revalidated.
+- Resolve Data Fabric record insert only if it is faster than using the validated Orchestrator bucket fallback.
+- Add a real automated Test Manager/Test Cloud execution only after the demo-safe proof path is repeatable.
 
 ## Stop Rule
 

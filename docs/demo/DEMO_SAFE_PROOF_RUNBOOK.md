@@ -1,0 +1,266 @@
+# Demo-Safe Proof Runbook
+
+This runbook turns the validated UiPath platform facts into repeatable demo operations.
+
+It is intentionally conservative:
+
+- Action Center proves human-task lifecycle and structured reviewer return.
+- Custom evidence-packet HTML proves judge-readable evidence, agent recommendation, policy decision, and route.
+- Orchestrator bucket audit bundle proves durable UiPath-hosted one-object audit reconstruction.
+- Generated Action Center UI is not used as the final evidence-packet surface unless repaired and revalidated.
+
+## Current Live References
+
+UiPath context:
+
+- Org: `keepingitlowkey`
+- Tenant: `DefaultTenant`
+- User: `arshgill6120@gmail.com`
+- Orchestrator folder key: `9d7ae568-d60e-4395-94d7-db115bfb25de`
+- Process key: `9a7eb300-7b16-4856-b14f-d6f2da3dbe61`
+- Audit bucket key: `dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb`
+- Audit bucket path: `audit/service_recovery_audit_bundle_E004.json`
+
+Validated live proof beats:
+
+| Beat | Scenario | Case/job key | Action task | Package version | Route |
+| --- | --- | --- | --- | --- | --- |
+| 2A | E-002 missing authoritative telemetry | `3af41e1d-8b04-4eba-aa5e-a95c5c673730` | `4300080` | `1.0.4` | `verify_telemetry` |
+| 2B | E-004 fresh authoritative contradiction | `60e52ca5-6891-45b4-9e98-e1b08a984f06` | `4300219` | `1.0.5` | `human_review` |
+
+Test Manager:
+
+- Project key: `SREV`
+- Test set key: `SREV:9`
+- Manual execution: `d50a7be6-35ed-1100-95aa-0b49cf9b8cad`
+- Readback nuance: all 9 manual test case logs passed, but the aggregate execution still reported top-level `Status: Running`.
+
+## Proof Beat Contract
+
+Use the same canonical green business fixture for 2A and 2B:
+
+- CRM/order: green / active
+- Billing: green / clear
+- Support note: green / resolved
+- Agent recommendation: `closure_candidate`
+
+Change only authoritative evidence:
+
+- 2A: authoritative telemetry is missing or stale.
+- 2B: authoritative telemetry or inventory is fresh but contradicts the green business state.
+
+Expected policy outcomes:
+
+- 2A: policy overrides closure to `verify_telemetry` or retry with SLA, reason `missing_authoritative_signal` or `stale_authoritative_signal`.
+- 2B: policy escalates to `human_review` or exception investigation, reason `source_contradiction`, elevated severity.
+
+Non-negotiable proof:
+
+- Raw Agent Interpretation Event stays separate from Policy Decision Event.
+- Policy event links back to the raw agent event.
+- Policy decision, not the agent, controls routing.
+- Closure is blocked unless fresh authoritative telemetry satisfies policy.
+
+## Local Artifact Generation
+
+Run from repo root.
+
+```sh
+python -m unittest discover -s tests
+python -m service_recovery_core.evals --output eval_results/local_baseline.json
+```
+
+Generate UiPath Action Center payloads:
+
+```sh
+python -m service_recovery_core.evals \
+  --uipath-payload-scenario E-002 \
+  --output docs/demo/artifacts/action_payload_E002.json
+
+python -m service_recovery_core.evals \
+  --uipath-payload-scenario E-004 \
+  --output docs/demo/artifacts/action_payload_E004.json
+```
+
+Generate durable audit bundles:
+
+```sh
+python -m service_recovery_core.evals \
+  --audit-bundle-scenario E-002 \
+  --output docs/demo/artifacts/service_recovery_audit_bundle_E002.json
+
+python -m service_recovery_core.evals \
+  --audit-bundle-scenario E-004 \
+  --output docs/demo/artifacts/service_recovery_audit_bundle_E004.json
+```
+
+Generate judge-readable evidence packets:
+
+```sh
+python -m service_recovery_core.evals \
+  --evidence-packet-html-scenario E-002 \
+  --output docs/demo/artifacts/evidence_packet_E002.html
+
+python -m service_recovery_core.evals \
+  --evidence-packet-html-scenario E-004 \
+  --output docs/demo/artifacts/evidence_packet_E004.html
+```
+
+Verify the proof-critical fields:
+
+```sh
+jq -r '[.case_id,.agent_interpretation_event.recommended_next_stage,.policy_decision_event.decision,.policy_decision_event.from_recommended_stage,.policy_decision_event.to_stage,.policy_decision_event.block_reason,.policy_decision_event.links_to] | @tsv' \
+  docs/demo/artifacts/service_recovery_audit_bundle_E002.json \
+  docs/demo/artifacts/service_recovery_audit_bundle_E004.json
+
+jq -r '[(.RawAgentRecommendation|fromjson).recommended_next_stage,(.PolicyDecisionJson|fromjson).decision,(.PolicyDecisionJson|fromjson).from_recommended_stage,(.PolicyDecisionJson|fromjson).to_stage,(.PolicyDecisionJson|fromjson).block_reason,(.PolicyDecisionJson|fromjson).links_to] | @tsv' \
+  docs/demo/artifacts/action_payload_E002.json \
+  docs/demo/artifacts/action_payload_E004.json
+
+rg -n "closure_candidate|override_recommendation|require_human_review|verify_telemetry|human_review|missing_authoritative_signal|source_contradiction" \
+  docs/demo/artifacts/evidence_packet_E002.html \
+  docs/demo/artifacts/evidence_packet_E004.html
+```
+
+Optional screenshot capture:
+
+```sh
+npx playwright screenshot \
+  --viewport-size=1440,1000 \
+  file://$PWD/docs/demo/artifacts/evidence_packet_E002.html \
+  docs/demo/artifacts/evidence_packet_E002_desktop.png
+
+npx playwright screenshot \
+  --viewport-size=1440,1000 \
+  file://$PWD/docs/demo/artifacts/evidence_packet_E004.html \
+  docs/demo/artifacts/evidence_packet_E004_desktop.png
+```
+
+## UiPath CLI Readback Checks
+
+Confirm login:
+
+```sh
+uip login status --output json
+```
+
+Read the pinned process:
+
+```sh
+uip or processes get 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 \
+  --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de \
+  --output json
+```
+
+Read Action Center task state when validating a run:
+
+```sh
+uip tasks get 4300080 --output json
+uip tasks get 4300219 --output json
+```
+
+Expected proof fields in task or payload readback:
+
+- `RawAgentRecommendation` contains `recommended_next_stage: closure_candidate`.
+- `PolicyDecisionJson` contains a linked policy event.
+- E-002 policy event routes to `verify_telemetry`.
+- E-004 policy event routes to `human_review`.
+- Policy reason is `missing_authoritative_signal`, `stale_authoritative_signal`, or `source_contradiction`.
+
+## Orchestrator Bucket Audit Proof
+
+Upload or refresh the E-004 audit bundle:
+
+```sh
+uip or bucket-files upload \
+  dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb \
+  audit/service_recovery_audit_bundle_E004.json \
+  --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de \
+  --file docs/demo/artifacts/service_recovery_audit_bundle_E004.json \
+  --content-type application/json \
+  --output json
+```
+
+List bucket files:
+
+```sh
+uip or bucket-files list \
+  dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb \
+  --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de \
+  --output json
+```
+
+Download and verify:
+
+```sh
+uip or bucket-files download \
+  dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb \
+  audit/service_recovery_audit_bundle_E004.json \
+  --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de \
+  --destination eval_results/downloaded_audit_bundle_E004.json \
+  --output json
+
+cmp -s \
+  docs/demo/artifacts/service_recovery_audit_bundle_E004.json \
+  eval_results/downloaded_audit_bundle_E004.json \
+  && echo bucket-download-matches
+```
+
+Expected audit fields:
+
+- `audit_contract_version: service-recovery-audit-v1`
+- `agent_interpretation_event.recommended_next_stage: closure_candidate`
+- `policy_decision_event.links_to` points to the agent event.
+- `policy_decision_event.from_recommended_stage: closure_candidate`
+- `policy_decision_event.to_stage: human_review` for E-004.
+- `evidence_state.closure_block_reason: source_contradiction` for E-004.
+- `policy_versions.interpretation_policy_version: ip-v1`
+- `policy_versions.decision_policy_version: dp-v1`
+
+## Demo Operator Flow
+
+1. Show the canonical green business fixture.
+2. Show 2A local and/or live evidence:
+   - business state green,
+   - telemetry missing/stale,
+   - raw agent recommends `closure_candidate`,
+   - policy overrides to `verify_telemetry`,
+   - case routes to verification/retry instead of closure.
+3. Reset narrative to the same green fixture.
+4. Show 2B:
+   - only authoritative telemetry/inventory changes,
+   - fresh authoritative contradiction appears,
+   - raw agent still recommends `closure_candidate`,
+   - policy routes to `human_review`,
+   - custom evidence packet shows elevated exception packet.
+5. Show Action Center task lifecycle/reviewer return as platform proof.
+6. Show Orchestrator bucket artifact readback as durable audit proof.
+7. Show Test Manager `SREV` as eval coverage proof, with the manual aggregate-status caveat.
+
+## Do Not Claim
+
+- Do not claim generated Action Center UI is final-demo ready.
+- Do not claim native Case history alone passes G-001.
+- Do not claim Data Fabric record storage is complete.
+- Do not claim automated Test Cloud execution.
+- Do not claim real telecom integrations.
+- Do not pitch the product as a generic agent governance platform.
+
+## Reset / Rebuild Checklist
+
+Before a demo dry run:
+
+```sh
+git status --short --branch
+python -m unittest discover -s tests
+python -m service_recovery_core.evals --output eval_results/local_baseline.json
+python -m service_recovery_core.evals --evidence-packet-html-scenario E-002 --output docs/demo/artifacts/evidence_packet_E002.html
+python -m service_recovery_core.evals --evidence-packet-html-scenario E-004 --output docs/demo/artifacts/evidence_packet_E004.html
+python -m service_recovery_core.evals --audit-bundle-scenario E-004 --output docs/demo/artifacts/service_recovery_audit_bundle_E004.json
+```
+
+After a demo dry run:
+
+- Record commands and observed UiPath IDs in `docs/logs/BUILD_LOG.md`.
+- Add product feedback only for new, concrete UiPath observations.
+- If live artifacts changed, commit the runbook/log update and push.
