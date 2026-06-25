@@ -58,6 +58,9 @@ This matrix groups the current evidence into issue classes. Add new observations
 | Solution-feed package visibility and process binding | PF-017 | integration / UX / diagnostics | high for CLI/package recovery | A package uploaded successfully to a solution feed should be visible to the process-binding path, or the CLI should require/propagate the feed selector consistently. | Upload and feed-scoped `packages get` succeeded for `Solution.caseManagement.Maestro.Case:1.0.4`; default package lookup and `processes create --package-version 1.0.4` could not bind it. | Use `packages get --feed-id` to verify the package and `processes update-version` on an existing process to move to `1.0.4`. | Add feed-aware process creation or a clear diagnostic that says the package exists in feed X but the requested folder/process binding is resolving feed Y. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 19:05 IST; PF-017. |
 | Data Fabric CLI discovery mismatch | PF-018 | UX / integration / diagnostics | medium | CLI tool discovery should show the Data Fabric capability when `uip df` is installed and usable, or explain why it is a built-in command rather than a listed tool. | `uip df --help` and `uip df entities list --native-only --output json` worked, but `uip tools list --output json` did not expose a corresponding Data Fabric tool entry during discovery. | Use direct `uip df` commands and document the exact entity schema/record commands before mutating the tenant. | Make `uip tools list` include built-in product command surfaces or add a `uip tools explain df` style diagnostic so builders can discover available CLI capabilities consistently. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 21:01 IST; `docs/architecture/data_fabric/service_recovery_audit_bundle_entity.json`; PF-018. |
 | Data Fabric record insertion payload mapping | PF-019 | product defect candidate / integration / diagnostics | high for G-001 custom audit storage | After creating and reading a Data Fabric entity, `records insert` should accept JSON keyed by documented field names or return the exact expected payload shape. | Entity create/readback succeeded, but `records insert` rejected file, inline object, minimal object, wrapper object, field-ID keyed object, and array payloads with `case_id` reported missing even when debug parsing showed `case_id` in the body. CSV import returned success envelope but inserted `0` of `1` records. | Keep the entity for continued validation; inspect import error file/API docs if accessible; use Case custom payload/file artifact if insert remains blocked. | Add schema-aware insert/import validation that echoes recognized/unrecognized fields, fixes docs/help examples if the expected shape differs, and includes a correlation/session ID for support. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 21:08 IST; PF-019. |
+| Test Manager eval-suite onboarding | PF-020 | UX / integration | medium | A local eval output can be imported or mapped into Test Manager without bespoke object creation. | CLI project/case/test-set lifecycle worked, but E-001 through E-009 had to be manually represented as Test Manager objects. | Created project `SREV`, nine manual cases, test set `SREV:9`, and mapping doc. | Add eval/JUnit/JSON import flow with scenario preview and field mapping for AI evals. | `docs/validation/TEST_MANAGER_MAPPING.md`; PF-020. |
+| Test Manager manual execution aggregate status | PF-021 | UX / product defect candidate | medium | Manual execution aggregate becomes terminal or explains the required close action when all child logs pass. | All nine test case logs passed, but aggregate execution stayed `Running` and `uip tm wait --timeout 30` timed out. | Cite child log pass evidence and aggregate counts; do not claim terminal aggregate status. | Add explicit finish/close manual execution action or surface the remaining blocker in execution readback. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 23:58 IST; PF-021. |
+| Case job/task lifecycle CLI clarity | PF-022 | UX / integration / diagnostics | medium | Process, job, and task CLI readbacks should make a fresh Case run's package, human-task completion, and terminal case state easy to reconstruct with consistent flags. | `processes get` rejected `--folder-key` while `version-history` accepted it; completed E-002/E-004 AppTasks returned reviewer actions/comments, but their Case jobs still read as `Running` with only Pending/Running history. | Use corrected `processes get <key>` command, read `version-history`, rely on task readback plus audit bundle for reviewer proof, and do not claim terminal job completion. | Harmonize folder option support or document per-subcommand differences; show whether a Case job is waiting for human task, post-task continuation, or terminal completion. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-26 00:36 IST; `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`; PF-022. |
 
 ## Best Insights So Far
 
@@ -72,6 +75,7 @@ This matrix groups the current evidence into issue classes. Add new observations
 - PF-017 is the strongest CLI/platform integration feedback: the package existed in the solution feed and could be read with `--feed-id`, but the process-create path could not bind it and did not expose the same feed selector.
 - PF-018 is a smaller but useful CLI-discovery feedback item: Data Fabric was available through `uip df`, but the general tool listing did not reveal it. This matters because first-time builders use discovery commands to decide which platform surfaces are actually accessible.
 - PF-019 is now a high-impact Data Fabric integration finding: entity create/readback worked, but record insert could not map documented JSON payloads to required fields. This directly affects regulated audit storage and is a strong product-feedback candidate if the CSV/API workaround also fails.
+- PF-022 is a practical live-run feedback item: the CLI exposes the needed process/job/task primitives, but a first-time builder needs clearer lifecycle state and per-command flag consistency to know whether a Case job is waiting, completed, or still running after a human task is completed.
 - The Orchestrator bucket lifecycle is a useful positive counterpoint: create/upload/list/download worked cleanly for a JSON audit artifact and gave the build a real UiPath-hosted fallback when Data Fabric records were blocked. This should be cited under "what worked well" rather than turned into a complaint.
 - The CLI/package recovery path is valuable feedback because it shows a second integration surface: downloaded Studio Web assets, local pack/upload, package metadata, app bindings, and Orchestrator process versioning. Keep those entries separate from Action Center rendering claims.
 
@@ -83,8 +87,8 @@ Draft only. Evidence-backed but not final submission prose.
 | --- | --- | --- |
 | Q10 - What UiPath products did you use? | Automation Cloud, Maestro, Maestro Case / Case app, Studio Web, Actions / Action Center, Orchestrator service listing, Integration Service listing, Data Fabric listing, Test Manager listing, UiPath CLI. Note that deep validation has so far centered on Automation Cloud, Maestro, Studio Web, Maestro Case, and Actions. | Wave 01 validation results; product launcher screenshot; CLI help output in `docs/validation/VALIDATION_RESULTS.md`. |
 | Q11 - What worked well? | Automation Cloud eventually landed in org `keepingitlowkey` / tenant `DefaultTenant`; Maestro opened and exposed case/process surfaces; Studio Web created a real `Maestro Case` project; Case designer exposed stages, rules, Case app metadata, task types, and JSON/code view; Action Center opened after Actions was enabled; JSON editor guarded against saving malformed accidental input; Action app schema exposed typed inputs, outcomes, and generated a mostly usable evidence review page; Orchestrator bucket operations worked cleanly for a JSON audit artifact through CLI create/upload/list/download/readback verification. | PF-002, PF-003, PF-004, PF-006; `wave01-studio-maestro-bpmn-created.png`; `g001-maestro-case-project-created.png`; `g001-maestro-case-json-code-view.png`; `actions-enabled-inbox.png`; 2026-06-25 G-003 validation results; `docs/validation/artifacts/2026-06-25/orchestrator_bucket_audit_artifact_E004_manifest.json`. |
-| Q12 - What challenges did you encounter? | Group by issue class: account/tenant routing ambiguity, Maestro recent-projects generic fetch error, Action Center dependency not enabled with insufficient disabled-service guidance, Human action picker/configuration ambiguity, Studio Web local Assistant migration uncertainty, schema-to-page generation failure for a proof-critical evidence field, deployment validation passing even though the live Action task was missing a required Title, CLI/package round-trip failure, generic upload diagnostics, app binding drift, process auto-update/readback ambiguity, runtime task label legibility, solution-feed package/process binding mismatch, Data Fabric CLI discovery mismatch, Data Fabric record insert payload mapping failure, and generated image placeholder quality. Keep access confusion, product limitations, UX/docs friction, and product defect candidates separate. | Feedback Evidence Matrix rows PF-001 through PF-019. |
-| Q13 - What should UiPath improve? | Recommended top answer: add a Maestro Case readiness and human-review setup path that checks tenant services/roles, links directly to enable Actions when permitted, scaffolds a human evidence-packet task, shows exact input/output mapping steps, validates generated Action page controls per schema property, and runs a preflight for required Action task fields before deployment. Secondary improvements: native case audit/event inspector, schema-aware Data Fabric insert diagnostics, feed-aware CLI process creation, consistent CLI discovery for built-in product command surfaces such as Data Fabric, better package/upload diagnostics, app binding validation, process version readback, `missingaccount` diagnostics, recent-projects error diagnostics, accessible task-picker rows, and Studio Web/local Assistant transition guidance. | PF-003 as highest-impact setup blocker; PF-006/PF-007/PF-013 as proof-critical G-003 build blockers; PF-015 as native audit insight; PF-019 as Data Fabric storage blocker; PF-017 as feed/process CLI integration issue; PF-018 as CLI discovery issue; PF-009 through PF-012 as CLI/package recovery blockers; PF-004 as core human-task workflow friction. |
+| Q12 - What challenges did you encounter? | Group by issue class: account/tenant routing ambiguity, Maestro recent-projects generic fetch error, Action Center dependency not enabled with insufficient disabled-service guidance, Human action picker/configuration ambiguity, Studio Web local Assistant migration uncertainty, schema-to-page generation failure for a proof-critical evidence field, deployment validation passing even though the live Action task was missing a required Title, CLI/package round trip failure, generic upload diagnostics, app binding drift, process auto-update/readback ambiguity, runtime task label legibility, solution-feed package/process binding mismatch, Data Fabric CLI discovery mismatch, Data Fabric record insert payload mapping failure, Test Manager manual aggregate status ambiguity, Case job/task lifecycle state ambiguity, and generated image placeholder quality. Keep access confusion, product limitations, UX/docs friction, and product defect candidates separate. | Feedback Evidence Matrix rows PF-001 through PF-022. |
+| Q13 - What should UiPath improve? | Recommended top answer: add a Maestro Case readiness and human-review setup path that checks tenant services/roles, links directly to enable Actions when permitted, scaffolds a human evidence-packet task, shows exact input/output mapping steps, validates generated Action page controls per schema property, and runs a preflight for required Action task fields before deployment. Secondary improvements: native case audit/event inspector, schema-aware Data Fabric insert diagnostics, feed-aware CLI process creation, consistent CLI discovery for built-in product command surfaces such as Data Fabric, clearer Case job/task lifecycle readback, better package/upload diagnostics, app binding validation, process version readback, `missingaccount` diagnostics, recent-projects error diagnostics, accessible task-picker rows, and Studio Web/local Assistant transition guidance. | PF-003 as highest-impact setup blocker; PF-006/PF-007/PF-013 as proof-critical G-003 build blockers; PF-015 as native audit insight; PF-019 as Data Fabric storage blocker; PF-017 as feed/process CLI integration issue; PF-018/PF-022 as CLI/lifecycle clarity issues; PF-009 through PF-012 as CLI/package recovery blockers; PF-004 as core human-task workflow friction. |
 
 ## Scoring Rubric For Future Feedback
 
@@ -137,6 +141,9 @@ Use accumulated entries to answer the final feedback survey.
 | PF-017 | 2026-06-25 | Orchestrator / UiPath CLI / solution feed | Upload package, read package, create/update process | Wave 07 / G-002 / G-008 | integration / UX / diagnostics | high | observed workaround | `docs/validation/VALIDATION_RESULTS.md` |
 | PF-018 | 2026-06-25 | Data Fabric / UiPath CLI | CLI command discovery for Data Fabric | G-001 / G-002 / G-008 | UX / integration / diagnostics | medium | observed | `docs/validation/VALIDATION_RESULTS.md` |
 | PF-019 | 2026-06-25 | Data Fabric / UiPath CLI | Record insert payload mapping | G-001 / G-002 / G-008 | product defect candidate / integration / diagnostics | high | open blocker | `docs/validation/VALIDATION_RESULTS.md` |
+| PF-020 | 2026-06-25 | Test Manager / Test Cloud CLI | Eval-suite project/case/test-set mapping | G-007 | UX / integration | medium | observed | `docs/validation/TEST_MANAGER_MAPPING.md` |
+| PF-021 | 2026-06-25 | Test Manager / CLI | Manual execution aggregate status | G-007 | UX / product defect candidate | medium | open | `docs/validation/VALIDATION_RESULTS.md` |
+| PF-022 | 2026-06-26 | Orchestrator / Action Center CLI | Case job/task lifecycle readback | Demo repeatability / G-008 | UX / integration / diagnostics | medium | observed | `docs/validation/VALIDATION_RESULTS.md` |
 
 ## Entry Template
 
@@ -394,6 +401,91 @@ Evidence:
 Classification:
 
 - UX / product defect
+
+Survey tags:
+
+- product-used
+- pain-point
+- workaround
+- improvement
+- evidence
+
+### PF-022 - 2026-06-26 - Orchestrator / Action Center CLI Case Lifecycle Readback
+
+Context:
+
+- ID: PF-022.
+- Status: observed.
+- Goal: make the live E-002/E-004 Case rerun path repeatable without guessing at process/job/task state.
+- Product surface: UiPath CLI for Orchestrator processes/jobs and Action Center tasks.
+- Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `arshgill6120@gmail.com`.
+- Wave/gate: demo repeatability / G-008.
+
+What worked:
+
+- `uip login status --output json` confirmed the correct org and tenant.
+- `uip or processes get <process-key>` read back the active Case process version, type, and auto-update setting.
+- `uip or processes version-history <process-key> --folder-key <folder-key>` read back the package version progression from `1.0.3` to `1.0.5`.
+- `uip tasks get 4300080` and `uip tasks get 4300219` read back completed AppTask records, reviewer actions, comments, source Case IDs, and folder ID.
+- `uip or jobs get <case-job-key>` read back the CaseManagement job references, package release version IDs, and user/process context.
+
+What failed or confused us:
+
+- `uip or processes get <process-key> --folder-key <folder-key>` failed with `unknown option '--folder-key'`, while `version-history` accepts `--folder-key`. The CLI help says process keys are globally unique, but the option difference is easy to miss when writing a runbook.
+- E-002 and E-004 AppTasks were completed with reviewer comments, but the corresponding Case jobs still read back as `State: Running`.
+- E-004 `jobs history` only showed `Pending` and `Running`; it did not explain whether the Case was waiting on post-task continuation, long-running Case lifecycle, or another completion condition.
+
+Expected:
+
+- Process readback subcommands should either support consistent folder flags or make the per-command difference prominent in examples.
+- After a human task is completed, Case job readback should show whether the job is still waiting, continuing, completed, or blocked, and link to the relevant task/case stage state.
+
+Observed:
+
+- Current process:
+  - `ProcessVersion: 1.0.5`,
+  - `AutoUpdate: false`,
+  - `IsLatestVersion: false`,
+  - `ProcessType: CaseManagement`.
+- E-002 task `4300080`: completed `AppTask`, `Action: reject`, source/case ID `3af41e1d-8b04-4eba-aa5e-a95c5c673730`, reviewer comment confirms missing-authoritative-signal override to `verify_telemetry`.
+- E-004 task `4300219`: completed `AppTask`, `Action: reject`, source/case ID `60e52ca5-6891-45b4-9e98-e1b08a984f06`, reviewer comment confirms fresh telemetry contradiction route to `human_review`.
+- E-002 and E-004 jobs still read back as `Running`.
+
+Impact:
+
+- Build impact: medium. The CLI exposes the necessary primitives, but the live-run operator needs several readbacks and caveats to avoid claiming more than the platform state proves.
+- Demo/submission impact: medium. The final demo can honestly show task lifecycle and audit bundle proof, but should not claim terminal Case job completion unless a fresh job reaches terminal state.
+- Severity: medium.
+
+Workaround:
+
+- Use `uip or processes get <process-key>` without `--folder-key`.
+- Use `uip or processes version-history <process-key> --folder-key <folder-key>` for version progression.
+- Treat completed task readback plus `service-recovery-audit-v1` audit bundle as reviewer/audit proof.
+- Do not claim terminal case-job completion while `uip or jobs get` reports `State: Running`.
+
+Suggested improvement:
+
+- Harmonize folder option support across process readback subcommands, or add examples that clearly show which commands infer folder and which accept folder filters.
+- Add a Case-aware job state explanation to `jobs get` / `jobs history`, such as `waiting_for_human_task`, `human_task_completed_continuing`, `case_completed`, or `blocked`.
+- Include linked task IDs and current Case stage in CaseManagement job readbacks so operators can reconstruct lifecycle without manually correlating task source metadata.
+
+Evidence:
+
+- Commands/logs: see `docs/validation/VALIDATION_RESULTS.md`, 2026-06-26 00:36 IST Demo Live-Ops Readback Check.
+- Runbook: `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`.
+
+Classification:
+
+- UX / integration / diagnostics
+
+Confidence:
+
+- high. Based on direct CLI help/readback commands against the live tenant.
+
+Follow-up validation needed:
+
+- Start a fresh E-002/E-004 run and observe whether the Case job ever reaches terminal state after task completion.
 
 Survey tags:
 

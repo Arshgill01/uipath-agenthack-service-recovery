@@ -1311,3 +1311,66 @@ Product feedback:
 
 - PF-020 added for Test Manager eval onboarding: CLI project/case/test-set lifecycle worked, but importing an eval suite from JSON/JUnit-style output still requires custom scripting/manual object creation.
 - PF-021 added for manual execution status clarity: all test case logs can pass while the aggregate execution remains `Running` and wait times out.
+
+## 2026-06-26 00:36 IST - Demo Live-Ops Readback Check
+
+Environment:
+
+- UiPath org `keepingitlowkey`, tenant `DefaultTenant`.
+- UiPath CLI authenticated as `arshgill6120@gmail.com`.
+- No new live Case job was started in this check.
+
+Gate/wave:
+
+- Demo repeatability after G-001 through G-005.
+- G-008 CLI/coding-agent lifecycle support.
+
+Assumption tested:
+
+- The current live validation process, task, and job state can be read back with exact CLI commands and turned into a repeatable operator path.
+
+Steps:
+
+1. Ran `uip login status --output json`.
+2. Inspected `uip or processes`, `uip or jobs`, `uip tasks`, `uip or jobs start`, `uip or processes update-version`, `uip tasks complete`, and `uip or bucket-files upload` help output.
+3. Tried `uip or processes get 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`.
+4. Ran `uip or processes get 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --output json`.
+5. Ran `uip or processes version-history 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`.
+6. Read back tasks `4300080` and `4300219`.
+7. Read back jobs `3af41e1d-8b04-4eba-aa5e-a95c5c673730` and `60e52ca5-6891-45b4-9e98-e1b08a984f06`, plus E-004 job history.
+
+Observed:
+
+- CLI auth remained valid for org `keepingitlowkey`, tenant `DefaultTenant`.
+- `jobs start` help confirms fresh case jobs can be started with `--input-arguments`, `--reference`, and optional `--wait-for-completion`.
+- `tasks complete` help confirms AppTasks can be completed with `--type AppTask`, `--folder-id`, `--action`, and `--data`.
+- `bucket-files upload` help confirms the audit-bundle upload path and `--content-type application/json` flag.
+- `processes get` rejected `--folder-key` with `unknown option '--folder-key'`; the corrected command is `uip or processes get <process-key> --output json`.
+- `processes version-history` accepted `--folder-key`.
+- Current process readback:
+  - `ProcessVersion: 1.0.5`,
+  - `AutoUpdate: false`,
+  - `IsLatestVersion: false`,
+  - `ProcessType: CaseManagement`.
+- Version history showed `1.0.3`, `1.0.4`, and `1.0.5`.
+- E-002 task `4300080` read back as completed `AppTask`, `Action: reject`, `FolderId: 7978263`, source `CaseManagement`, source/case ID `3af41e1d-8b04-4eba-aa5e-a95c5c673730`, and reviewer comment describing the missing-authoritative-signal override to `verify_telemetry`.
+- E-004 task `4300219` read back as completed `AppTask`, `Action: reject`, `FolderId: 7978263`, source `CaseManagement`, source/case ID `60e52ca5-6891-45b4-9e98-e1b08a984f06`, and reviewer comment describing the fresh telemetry contradiction route to `human_review`.
+- E-002 and E-004 jobs still read back as `State: Running` after task completion.
+- E-004 job history only returned `Pending` and `Running` transitions.
+
+Result:
+
+- PASS: live process package/version pinning can be read back and tied to the demo-safe proof path.
+- PASS: completed Action Center task lifecycle and reviewer return can be read back by CLI for both proof beats.
+- PARTIAL: live case-job terminal completion is not proven; completed reviewer tasks do not automatically prove terminal case job completion.
+- PASS: exact live-ops command surface is now documented in `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`.
+
+Decision impact:
+
+- Keep using completed task readback plus `service-recovery-audit-v1` bundle as the human-review/audit proof.
+- Do not claim live case-job completion unless a fresh run reaches terminal job state.
+- Next live-ops step should start fresh E-002/E-004 jobs only after choosing the package version/reference and operator expected stop state.
+
+Product feedback:
+
+- PF-022 added for CLI/live-run lifecycle clarity: some command flag patterns differ across process subcommands, and completed human tasks do not make case-job completion status self-evident from the job readback.

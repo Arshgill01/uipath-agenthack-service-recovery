@@ -1340,3 +1340,51 @@ Open risks:
 Next:
 
 - Add or execute the live UiPath operator path around this helper: package/update process, start E-002/E-004 cases, poll tasks, complete reviewer outputs, upload/read back audit bundle.
+
+### 2026-06-26 00:36 IST - Agent / Demo Live-Ops Readback
+
+What changed:
+
+- Updated `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md` with exact read-only live process/task/job readback commands and observed caveats.
+- Updated `docs/validation/VALIDATION_RESULTS.md` with the Demo Live-Ops Readback Check.
+- Updated `docs/product/PRODUCT_FEEDBACK_AWARD.md` with PF-022 and refreshed the evidence matrix/index for PF-020 through PF-022.
+- Updated `docs/logs/RISK_REGISTER.md` to capture the completed-task-versus-running-job nuance.
+
+Commands run:
+
+- `uip login status --output json`
+- `uip or processes --help --output json`
+- `uip or jobs --help --output json`
+- `uip tasks --help --output json`
+- `uip or jobs start --help --output json`
+- `uip or processes update-version --help --output json`
+- `uip tasks complete --help --output json`
+- `uip or bucket-files upload --help --output json`
+- `uip or processes get 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip or processes get 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --output json`
+- `uip or processes version-history 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip tasks get 4300080 --output json`
+- `uip tasks get 4300219 --output json`
+- `uip or jobs get 3af41e1d-8b04-4eba-aa5e-a95c5c673730 --output json`
+- `uip or jobs get 60e52ca5-6891-45b4-9e98-e1b08a984f06 --output json`
+- `uip or jobs history 60e52ca5-6891-45b4-9e98-e1b08a984f06 --output json`
+
+Validation:
+
+- PASS: CLI auth still points to org `keepingitlowkey`, tenant `DefaultTenant`.
+- PASS: process readback confirms `ProcessVersion: 1.0.5`, `AutoUpdate: false`, and `ProcessType: CaseManagement`.
+- PASS: process version history shows `1.0.3`, `1.0.4`, and `1.0.5`.
+- PASS: tasks `4300080` and `4300219` read back as completed AppTasks with reviewer comments and CaseManagement source IDs.
+- PARTIAL: E-002 and E-004 Case jobs still read back as `Running`; terminal Case job completion is not claimed.
+
+Product feedback:
+
+- PF-022 added for CaseManagement process/job/task CLI lifecycle clarity.
+
+Open risks:
+
+- A fresh live case rerun still needs an intentional start/complete/terminal-state validation if the final demo wants to show terminal job completion.
+
+Next:
+
+- Decide whether to start fresh E-002/E-004 runs now or keep the final video on completed task readback plus bucket-backed audit proof.

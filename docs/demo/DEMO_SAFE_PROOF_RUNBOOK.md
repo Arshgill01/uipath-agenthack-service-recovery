@@ -163,7 +163,9 @@ uip login status --output json
 Read the pinned process:
 
 ```sh
-uip or processes get 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 \
+uip or processes get 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --output json
+
+uip or processes version-history 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 \
   --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de \
   --output json
 ```
@@ -174,6 +176,22 @@ Read Action Center task state when validating a run:
 uip tasks get 4300080 --output json
 uip tasks get 4300219 --output json
 ```
+
+Read live case/job state:
+
+```sh
+uip or jobs get 3af41e1d-8b04-4eba-aa5e-a95c5c673730 --output json
+uip or jobs get 60e52ca5-6891-45b4-9e98-e1b08a984f06 --output json
+uip or jobs history 60e52ca5-6891-45b4-9e98-e1b08a984f06 --output json
+```
+
+Observed readback on 2026-06-26:
+
+- `processes get` infers folder by process key and rejects `--folder-key`; `version-history` accepts `--folder-key`.
+- Current process readback: `ProcessVersion: 1.0.5`, `AutoUpdate: false`, `IsLatestVersion: false`.
+- Version history shows `1.0.3`, `1.0.4`, and `1.0.5`.
+- E-002 task `4300080` and E-004 task `4300219` read back as completed `AppTask` records with `Action: reject`, reviewer comments, `FolderId: 7978263`, and `TaskSource.SourceName: CaseManagement`.
+- E-002 and E-004 jobs still read back as `State: Running` after task completion; use task completion plus audit bundle as proof of reviewer action, and do not claim terminal case-job completion unless a fresh job reaches a terminal state.
 
 Expected proof fields in task or payload readback:
 

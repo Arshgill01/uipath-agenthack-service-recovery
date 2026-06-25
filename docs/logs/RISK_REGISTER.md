@@ -152,3 +152,10 @@
 - R-005 remains open for automated crossover. The local eval harness is not yet linked to a Test Manager automated execution or Orchestrator test automation.
 - New nuance: the execution aggregate still reports top-level `Status: Running` after all logs pass, so final claims should cite the passed manual logs and not imply a clean terminal aggregate status until that is resolved.
 - Mitigation update: describe the current state as live Test Manager representation plus passed manual logs, not automated Test Cloud execution, until an automated execution record or automation link is validated.
+
+### 2026-06-26 00:36 IST - Demo Live-Ops Readback
+
+- R-007 is reduced for operator repeatability: exact CLI readback commands are now documented for process version, version history, task state, job state, and job history.
+- New nuance: completed Action Center AppTasks `4300080` and `4300219` do not prove terminal Case job completion. Both corresponding Case jobs still read back as `State: Running`.
+- Mitigation: for the final demo, claim Action Center task lifecycle/reviewer return and audit-bundle reconstruction, but do not claim terminal Case job completion unless a fresh case run reaches a terminal job state.
+- New product feedback captured as PF-022: CaseManagement job/task lifecycle readback needs clearer Case-aware state explanation and more consistent process subcommand folder flag behavior.
