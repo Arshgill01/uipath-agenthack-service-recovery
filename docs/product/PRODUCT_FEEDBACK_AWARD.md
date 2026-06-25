@@ -2,6 +2,8 @@
 
 The team wants to seriously compete for the Best Product Feedback award. This file is the working evidence log.
 
+Curated survey/deck appendix: [FEEDBACK_AWARD_APPENDIX.md](FEEDBACK_AWARD_APPENDIX.md).
+
 ## Feedback Principles
 
 Good feedback is:

@@ -2,6 +2,8 @@
 
 This file preserves the exact evidence fields requested for product-feedback preparation. It is not final survey prose.
 
+Curated appendix: [FEEDBACK_AWARD_APPENDIX.md](FEEDBACK_AWARD_APPENDIX.md).
+
 ## Exact Evidence Fields
 
 - product surface
@@ -57,7 +59,7 @@ These are the fields to answer near submission time. Do not fill final prose unt
 
 Do not invent final answers here. Draft survey responses only after the matching `PF-XXX` entries in `PRODUCT_FEEDBACK_AWARD.md` have evidence paths, confidence, and follow-up validation status.
 
-## Current Evidence-Backed Draft - 2026-06-25
+## Current Evidence-Backed Draft - 2026-06-26
 
 This is not final submission prose. It is the current best draft assembled from observed PF entries so the final form can be completed without one-shot memory reconstruction.
 

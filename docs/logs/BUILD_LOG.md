@@ -1388,3 +1388,40 @@ Open risks:
 Next:
 
 - Decide whether to start fresh E-002/E-004 runs now or keep the final video on completed task readback plus bucket-backed audit proof.
+
+### 2026-06-26 00:47 IST - Agent / Feedback Award Appendix
+
+What changed:
+
+- Added `docs/product/FEEDBACK_AWARD_APPENDIX.md` as the curated survey/deck appendix for PF-001 through PF-022.
+- Linked the appendix from `docs/product/PRODUCT_FEEDBACK_AWARD.md` and `docs/product/FEEDBACK_SURVEY_DRAFT.md`.
+- Updated `docs/product/FEEDBACK_SURVEY_DRAFT.md` to mark the current evidence-backed draft as 2026-06-26.
+- Updated `PROJECT_BRIEF.md` so its validation status matches the current hard-gate results and demo-safe proof path.
+
+Commands run:
+
+- `git status --short --branch`
+- `sed -n '1,260p' docs/product/FEEDBACK_SURVEY_DRAFT.md`
+- `sed -n '1,180p' docs/product/PRODUCT_FEEDBACK_AWARD.md`
+- `sed -n '1,180p' PROJECT_BRIEF.md`
+- `sed -n '1,160p' docs/product/SCOPE_BOUNDARY.md`
+- `sed -n '1,180p' docs/demo/DEMO_STORYBOARD.md`
+- `sed -n '1,140p' docs/validation/VALIDATION_GATES.md`
+
+Validation:
+
+- PASS: appendix keeps the project anchored in telecom service recovery, not a generic governance platform.
+- PASS: appendix separates positive platform findings from critical feedback and avoids unsupported claims about automated Test Cloud, Data Fabric record persistence, generated Action Center UI readiness, native-only G-001, and terminal Case job completion.
+
+Product feedback:
+
+- No new PF entry. This is synthesis of existing PF-001 through PF-022 evidence.
+
+Open risks:
+
+- Final survey submission still needs user-confirmed team name and sharing preference.
+- If the final demo starts fresh live E-002/E-004 cases, update the appendix with new run IDs and any new product observations.
+
+Next:
+
+- Use `FEEDBACK_AWARD_APPENDIX.md` as the high-signal source when drafting the final survey answers or deck appendix.

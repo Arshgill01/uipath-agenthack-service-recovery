@@ -95,13 +95,15 @@ Secondary:
 
 ## Current Validation Status
 
-This repository contains a local/provisional recovery core plus UiPath Labs validation logs. Wave 01 access and Maestro Case design-surface validation have run against org `keepingitlowkey`, tenant `DefaultTenant`; hard gates G-001 through G-004 remain PARTIAL until a live case proves runtime audit reconstruction, policy version pinning, evidence-packet review/return, and raw recommendation visibility before policy override.
+This repository contains a local/provisional recovery core plus UiPath Labs validation logs. Wave 01 access and live Maestro Case validation have run against org `keepingitlowkey`, tenant `DefaultTenant`.
 
-Before major application scaffolding, complete or explicitly waive:
+Hard gates G-001 through G-004 are now answered with implementation implications:
 
-- Maestro Case state/audit reconstruction.
-- Policy version pinning.
-- Human evidence packet rendering.
-- Raw agent recommendation visibility before policy override.
+- G-001 is PARTIAL natively and PASS with the custom UiPath-hosted audit artifact fallback.
+- G-002 is PASS for explicit package/process/artifact policy-version pinning.
+- G-003 is PASS for Action Center lifecycle/structured reviewer return and PARTIAL for generated Action Center UI legibility.
+- G-004 is PASS for persisted raw agent recommendation and linked policy decision in task/API/audit data.
+
+Proceed with the demo-safe proof path: Action Center owns task lifecycle, the custom evidence packet owns judge-readable proof, and the Orchestrator bucket audit bundle owns durable UiPath-hosted domain audit evidence.
 
 See [docs/validation/VALIDATION_GATES.md](docs/validation/VALIDATION_GATES.md).
