@@ -1508,3 +1508,40 @@ Open risks:
 Next:
 
 - Use `docs/product/FEEDBACK_SURVEY_COPY_READY.md` as the primary source when filling the feedback form.
+
+### 2026-06-26 00:46 IST - Agent / Submission Brief and README Status
+
+What changed:
+
+- Updated `README.md` so the repo front door reflects the validated UiPath Labs hard-gate status instead of the pre-access provisional state.
+- Added `docs/submission/SUBMISSION_BRIEF.md` as a concise evidence-backed project pitch and Devpost-style source.
+- Included honest boundaries for simulated telecom systems, native Case audit limitations, generated Action Center UI legibility, Data Fabric record persistence, manual Test Manager validation, and non-terminal E-002/E-004 Case jobs.
+
+Commands run:
+
+- `git status --short --branch`
+- `rg --files docs | rg 'submission|pitch|demo|brief|story|README|PROJECT'`
+- `sed -n '1,220p' docs/demo/NEXT_DEMO_PLAN.md`
+- `sed -n '1,220p' README.md`
+- `sed -n '1,170p' PROJECT_BRIEF.md`
+- `rg -n "hard gates have not been run|ready to map once Labs access is granted|automated Test Cloud execution|Data Fabric audit record persistence|native Maestro Case history is not claimed|terminal Case job completion|generic governance platform" README.md PROJECT_BRIEF.md docs/submission/SUBMISSION_BRIEF.md docs/product/FEEDBACK_SURVEY_COPY_READY.md`
+- `test -f docs/submission/SUBMISSION_BRIEF.md && test -x scripts/run_demo.sh && test -f docs/demo/artifacts/demo_proof_manifest.json && echo submission-references-present`
+
+Validation:
+
+- PASS: submission brief keeps the project scoped to telecom service recovery and does not upgrade manual/provisional evidence into unsupported live claims.
+- PASS: stale README hard-gate language is removed; overclaim search only returned intentional guardrail lines.
+- PASS: submission brief, executable demo wrapper, and proof manifest references exist.
+
+Product feedback:
+
+- No new PF entry. This checkpoint packages existing validation/product-feedback evidence for submission readiness.
+
+Open risks:
+
+- Final submission still needs user-selected team name and story-sharing preference.
+- If fresh live cases are run, update the brief with new case/task IDs only after readback.
+
+Next:
+
+- Use `docs/submission/SUBMISSION_BRIEF.md` as the short project-copy source and `docs/product/FEEDBACK_SURVEY_COPY_READY.md` as the feedback-form source.

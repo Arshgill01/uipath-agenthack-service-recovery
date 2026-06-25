@@ -10,6 +10,7 @@ Start here:
 4. [waves/00_WAVES_INDEX.md](waves/00_WAVES_INDEX.md)
 5. [docs/validation/VALIDATION_GATES.md](docs/validation/VALIDATION_GATES.md)
 6. [docs/product/PRODUCT_FEEDBACK_AWARD.md](docs/product/PRODUCT_FEEDBACK_AWARD.md)
+7. [docs/submission/SUBMISSION_BRIEF.md](docs/submission/SUBMISSION_BRIEF.md)
 
 Current project direction:
 
@@ -34,6 +35,17 @@ The local core is intentionally portable and has no runtime dependencies outside
 
 Validation status:
 
-- UiPath Labs hard gates have not been run.
-- The data model is provisional until validation gates 1-4 are answered or explicitly waived.
-- The local core does not implement Maestro-specific behavior; it is ready to map once Labs access is granted.
+- UiPath Labs access and Maestro Case validation have run against org `keepingitlowkey`, tenant `DefaultTenant`.
+- G-001 is PARTIAL natively and PASS with the custom UiPath-hosted audit artifact fallback.
+- G-002 is PASS for explicit package/process/artifact policy-version pinning.
+- G-003 is PASS for Action Center lifecycle/structured reviewer return and PARTIAL for generated Action Center UI legibility.
+- G-004 is PASS for persisted raw agent recommendation and linked policy decision in task/API/audit data.
+- The demo-safe proof path is: Action Center for human-task lifecycle, custom evidence packet for judge-readable proof, and Orchestrator bucket audit bundle for durable UiPath-hosted domain audit evidence.
+
+Repeatable demo proof:
+
+```sh
+scripts/run_demo.sh --with-local-checks
+```
+
+This refreshes and verifies the E-002/E-004 proof artifacts without mutating the live tenant.
