@@ -95,3 +95,11 @@
 - R-003 likelihood decreases: Action Center can create, assign, complete, and return structured AppTask output to the case. R-003 remains open for demo legibility because `PolicyDecisionJson` rendered as `Unnamed String 1`.
 - R-004 likelihood decreases substantially: task `4295299` persisted raw `AgentInterpretationEvent` with `recommended_next_stage: closure_candidate` and linked `PolicyDecisionEvent` with `decision: override_recommendation`, `to_stage: verify_telemetry`, and `block_reason: missing_authoritative_signal`. Keep R-004 open only for final reviewer UI polish and explicit audit-event implementation.
 - R-008 is mitigated for current development: CLI login, Maestro Case, Actions, Orchestrator packages/jobs, and Action Center task APIs are usable in `keepingitlowkey / DefaultTenant`.
+
+### 2026-06-25 19:05 IST - Live 1.0.4 Generated Payload Validation
+
+- R-001 remains open but reduced: live case `3af41e1d-8b04-4eba-aa5e-a95c5c673730` proves explicit E-002 payloads can carry evidence state, raw recommendation, policy decision, block reason, and policy versions through a real Case task. Native one-query domain audit still requires explicit custom audit payloads/events.
+- R-002 likelihood decreases again: process `9a7eb300-7b16-4856-b14f-d6f2da3dbe61` read back `ProcessVersion: 1.0.4`, `AutoUpdate: false`, and version history with explicit `1.0.3` then `1.0.4` records. Active-case migration semantics remain a custom-audit concern, but package/process pinning is now observed more strongly.
+- R-003 remains open for reviewer UI quality but the task lifecycle is stronger: unassigned task `4300080` required assignment before completion, then returned `Action: reject` and the reviewer comment.
+- R-004 is functionally mitigated for API/persistence proof: generated local eval output reached a live task with raw `AIE-E002` `closure_candidate` and linked `PDE-E-002` `override_recommendation` to `verify_telemetry`. Keep open only for final demo UI legibility and custom audit timeline.
+- New integration risk: feed-scoped package upload/read succeeded for `1.0.4`, while default package lookup and process creation could not bind the same version. Mitigation: use feed-scoped verification plus `processes update-version` for current validation; log PF-017 and avoid claiming that direct create is reliable for solution-feed Case packages.

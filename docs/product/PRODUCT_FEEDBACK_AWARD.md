@@ -55,6 +55,7 @@ This matrix groups the current evidence into issue classes. Add new observations
 | Generated app image component placeholder | PF-014 | UX / generated app quality | low/medium | Generated apps should avoid unconfigured media placeholders or show a clear design-time configuration message. | Generated app image component showed `Unable to render image` when no/invalid image was configured. | Remove or configure the image component before demo; do not treat it as a blocking G-003 issue unless it obscures evidence fields. | Omit image controls from generated forms unless an image source exists, or render a design-time-only placeholder with a direct configure/remove action. | `docs/validation/artifacts/2026-06-25/g004-action-center-raw-recommendation-visible-task-4295299.png`; PF-014. |
 | Live Case audit and override visibility | PF-015 | integration / UX / missing feature | high for G-001/G-004 audit | One case view or one query reconstructs evidence state, policy versions, raw recommendation, policy decision, closure block, human action, and timestamps. | CLI/task APIs can reconstruct most of the evidence chain, but native Case history still needs explicit custom payloads for a clean one-query domain audit; Action Center UI hid the policy value behind a generated label issue. | Use explicit audit payloads and package/policy version fields; keep generated Action Center UI as reviewer task mechanics, not the sole audit surface. | Add a native Case audit/event inspector for custom domain events with linked agent interpretation, policy decision, human action, and package/policy versions in one timeline/query. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 18:47 IST; PF-015. |
 | Action Center refresh after external task completion | PF-016 | UX / integration | medium | If a task is completed through API/CLI, an open Action Center task tab should either update automatically or clearly require refresh. | After `uip tasks complete` returned success and task API showed `Completed`, the open Safari tab still displayed the task under `Pending` until browser refresh. | Refresh the task tab; after refresh, Action Center correctly moved task `4295299` to `Completed` and showed `(reject)`. | Add real-time status sync or a stale-state banner when an open task has been completed outside the current browser session. | `docs/validation/artifacts/2026-06-25/g004-action-center-stale-pending-after-cli-complete-task-4295299.png`; `docs/validation/artifacts/2026-06-25/g004-action-center-completed-reject-task-4295299.png`; PF-016. |
+| Solution-feed package visibility and process binding | PF-017 | integration / UX / diagnostics | high for CLI/package recovery | A package uploaded successfully to a solution feed should be visible to the process-binding path, or the CLI should require/propagate the feed selector consistently. | Upload and feed-scoped `packages get` succeeded for `Solution.caseManagement.Maestro.Case:1.0.4`; default package lookup and `processes create --package-version 1.0.4` could not bind it. | Use `packages get --feed-id` to verify the package and `processes update-version` on an existing process to move to `1.0.4`. | Add feed-aware process creation or a clear diagnostic that says the package exists in feed X but the requested folder/process binding is resolving feed Y. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 19:05 IST; PF-017. |
 
 ## Best Insights So Far
 
@@ -125,6 +126,7 @@ Use accumulated entries to answer the final feedback survey.
 | PF-014 | 2026-06-25 | Studio Web / generated app | Image component rendering | G-003 | UX / generated app quality | low/medium | observed | `docs/validation/artifacts/2026-06-25/g004-action-center-raw-recommendation-visible-task-4295299.png` |
 | PF-015 | 2026-06-25 | Maestro Case / Action Center / CLI | Live case audit and override proof | G-001 / G-002 / G-004 | integration / UX / missing feature | high | observed / implementation decision made | `docs/validation/VALIDATION_RESULTS.md` |
 | PF-016 | 2026-06-25 | Action Center / Tasks API | Open task tab after CLI completion | G-003 / G-008 | UX / integration | medium | observed | `docs/validation/artifacts/2026-06-25/g004-action-center-completed-reject-task-4295299.png` |
+| PF-017 | 2026-06-25 | Orchestrator / UiPath CLI / solution feed | Upload package, read package, create/update process | Wave 07 / G-002 / G-008 | integration / UX / diagnostics | high | observed workaround | `docs/validation/VALIDATION_RESULTS.md` |
 
 ## Entry Template
 
@@ -237,6 +239,81 @@ Evidence:
 Classification:
 
 - access / UX / docs
+
+Survey tags:
+
+- product-used
+- pain-point
+- workaround
+- improvement
+- evidence
+
+### PF-017 - 2026-06-25 - Orchestrator / CLI Solution-Feed Package Binding
+
+Context:
+
+- ID: PF-017.
+- Status: observed workaround.
+- Goal: validate Wave 07 with a generated E-002 payload in a fresh live Case package version.
+- Product surface: UiPath CLI, Orchestrator package feed, solution feed, process versioning.
+- Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `Arshdeep Singh`.
+- Wave/gate: Wave 07, G-002, G-008.
+
+What worked:
+
+- `uip or packages upload ... --feed-id 831bf59a-a3f1-4aa8-8890-f01b857c18f3` successfully uploaded `Solution.caseManagement.Maestro.Case:1.0.4`.
+- `uip or packages get Solution.caseManagement.Maestro.Case:1.0.4 --feed-id 831bf59a-a3f1-4aa8-8890-f01b857c18f3 --all-fields` confirmed the package as active Case Management package version `1.0.4`.
+- `uip or processes update-version ... --package-version 1.0.4` successfully moved the existing validation process to `1.0.4`.
+- Process readback and version history showed explicit `1.0.3` then `1.0.4` records while `AutoUpdate` remained `false`.
+
+What failed or confused us:
+
+- Default `uip or packages get Solution.caseManagement.Maestro.Case:1.0.4` returned `HTTP 404: Package not found` unless the solution feed ID was supplied.
+- `uip or processes create ... --package-version 1.0.4` failed with `Error validating process runtime prerequisites` and instructed the builder to run the default package lookup command, which also could not see the feed-scoped package.
+- `processes create` did not expose a `--feed-id` option, so the successful upload/read path could not be passed into new process creation.
+- A second upload using `--folder-key` reported `HTTP 409: Package already exists`, confirming the package existed while the default process-create path still could not bind it.
+
+Expected:
+
+- If package upload succeeds to a solution feed, process creation in the same folder should resolve that feed or expose the required feed selector.
+- If the package exists in one feed but the process binder is checking another feed, the CLI should say that explicitly and name both feed/folder contexts.
+
+Observed:
+
+- Feed-scoped package read succeeded for feed `831bf59a-a3f1-4aa8-8890-f01b857c18f3`.
+- Default package read returned 404.
+- Direct process creation failed prerequisite validation.
+- Existing-process `update-version` succeeded and let the live validation continue.
+
+Impact:
+
+- Build impact: high during hackathon iteration because it looked like the package version was uploaded but unusable for a new process.
+- Demo/submission impact: medium/high; package/version repeatability is central to policy-version pinning evidence and CLI/coding-agent bonus proof.
+- Severity: high for CLI recovery path and repeatable build operations.
+
+Workaround:
+
+- Verify solution-feed packages with `--feed-id`.
+- Use `uip or processes update-version <existing-process> --package-version <version> --folder-key <folder>` when new process creation cannot bind the feed-scoped package.
+- Always read back `uip or processes get` and `uip or processes version-history` before starting a case.
+
+Suggested improvement:
+
+- Add `--feed-id` to `uip or processes create`, or make it infer the folder's solution feed when `--folder-key` targets a solution folder.
+- When package validation fails, return a diagnostic such as: `Package exists in feed 831... but process creation searched tenant feed/default feed`.
+- Make upload/get/list/create process commands use consistent feed-resolution rules, or show the resolved feed in every command response.
+- In process-create error instructions, include the exact `packages get ... --feed-id ...` command if the package was uploaded to a non-default feed.
+
+Evidence:
+
+- Commands/logs: `docs/validation/VALIDATION_RESULTS.md`, 2026-06-25 19:05 IST Wave 07 Live Generated Payload Run.
+- Package under test: `Solution.caseManagement.Maestro.Case:1.0.4`.
+- Process updated: `9a7eb300-7b16-4856-b14f-d6f2da3dbe61`.
+- Live case proving workaround: `3af41e1d-8b04-4eba-aa5e-a95c5c673730`.
+
+Classification:
+
+- integration / UX / diagnostics
 
 Survey tags:
 

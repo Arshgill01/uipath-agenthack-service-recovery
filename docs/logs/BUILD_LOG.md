@@ -751,3 +751,53 @@ Next:
 
 - Use the exporter output as the source for the next `1.0.4` or repaired-package run.
 - Repair the reviewer UI label/binding or move the evidence packet into a custom view before final demo.
+
+### 2026-06-25 19:05 IST - Agent / Wave 07 Live E-002 Payload Run
+
+What changed:
+
+- Built temporary package `Solution.caseManagement.Maestro.Case.1.0.4.nupkg` from the known-good `1.0.3` package.
+- Injected the generated E-002 payload from `service_recovery_core.evals --uipath-payload-scenario E-002` into the Case task `HitlTaskArguments`.
+- Uploaded package `Solution.caseManagement.Maestro.Case:1.0.4`.
+- Updated existing validation process `9a7eb300-7b16-4856-b14f-d6f2da3dbe61` from `1.0.3` to `1.0.4` with explicit version history.
+- Started and completed live case `3af41e1d-8b04-4eba-aa5e-a95c5c673730`, task `4300080`.
+
+Commands run:
+
+- `python -m service_recovery_core.evals --uipath-payload-scenario E-002 --output eval_results/uipath_action_payload_E002.json`
+- `uip or packages upload tmp/uipath-case-packages/Solution.caseManagement.Maestro.Case.1.0.4.nupkg --feed-id 831bf59a-a3f1-4aa8-8890-f01b857c18f3 --output json`
+- `uip or packages get Solution.caseManagement.Maestro.Case:1.0.4 --feed-id 831bf59a-a3f1-4aa8-8890-f01b857c18f3 --all-fields --output json`
+- `uip or processes update-version 9A7EB300-7B16-4856-B14F-D6F2DA3DBE61 --package-version 1.0.4 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip or processes version-history 9A7EB300-7B16-4856-B14F-D6F2DA3DBE61 --output json`
+- `uip or jobs start 9A7EB300-7B16-4856-B14F-D6F2DA3DBE61 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --jobs-count 1 --reference wave07-e002-payload-1-0-4 --output json`
+- `uip tasks get 4300080 --folder-id 7978263 --output json`
+- `uip tasks assign 4300080 --user arshgill6120@gmail.com --output json`
+- `uip tasks complete 4300080 --type AppTask --folder-id 7978263 --action reject --data '{"Comment":"Wave 07 E-002 validation: generated local eval payload preserved closure_candidate raw recommendation and policy override to verify_telemetry for missing_authoritative_signal; reviewer rejects closure and requests authoritative telemetry."}' --output json`
+- `uip maestro case instance get 3af41e1d-8b04-4eba-aa5e-a95c5c673730 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+
+Validation:
+
+- PASS: live case `3af41e1d-8b04-4eba-aa5e-a95c5c673730` ran on `PackageKey: Solution.caseManagement.Maestro.Case:1.0.4`.
+- PASS: task `4300080` persisted generated E-002 raw agent recommendation `AIE-E002` with `recommended_next_stage: closure_candidate` and `interpretation_policy_version: ip-v1`.
+- PASS: task `4300080` persisted linked policy decision `PDE-E-002` with `decision: override_recommendation`, `to_stage: verify_telemetry`, `block_reason: missing_authoritative_signal`, and `decision_policy_version: dp-v1`.
+- PASS: process version history explicitly records `1.0.3` then `1.0.4`, while process readback kept `AutoUpdate: false`.
+- PASS: assigned task `4300080` to the logged-in user, completed it with `reject`, and the case completed at `2026-06-25T13:35:08.0998188Z`.
+- PARTIAL: package `1.0.4` was visible only with `--feed-id`; default package lookup/process create could not bind it directly, so `update-version` was the working path.
+- PASS: `python -m unittest discover -s tests` ran 19 tests.
+- PASS: `python -m service_recovery_core.evals --output eval_results/local_baseline.json` passed 9/9 scenarios.
+
+Product feedback:
+
+- PF-013
+- PF-017
+
+Open risks:
+
+- Native Case audit remains partial without explicit domain audit events/fields.
+- Generated Action Center policy-field label remains a demo-legibility risk.
+- Feed-scoped package visibility and process-binding mismatch should be captured as high-quality integration feedback.
+
+Next:
+
+- Repair the Action Center policy-decision label or build a custom evidence-packet view.
+- Add the contradiction route as the next UiPath-grounded slice.

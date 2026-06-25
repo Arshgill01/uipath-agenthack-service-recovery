@@ -83,8 +83,34 @@ Validated:
 
 Still next:
 
-- Use the exported payload in a fresh UiPath package/run.
 - Repair Action Center `PolicyDecisionJson` rendering before demo polish.
+
+## 2026-06-25 Live UiPath Checkpoint
+
+Completed:
+
+- Repacked the known-good Case package as `Solution.caseManagement.Maestro.Case:1.0.4` using the generated E-002 payload.
+- Updated validation process `9a7eb300-7b16-4856-b14f-d6f2da3dbe61` to `1.0.4` with `AutoUpdate: false`.
+- Started live case `3af41e1d-8b04-4eba-aa5e-a95c5c673730`.
+- Verified task `4300080` before human action contained:
+  - raw `AIE-E002` recommendation to `closure_candidate`,
+  - linked `PDE-E-002` override to `verify_telemetry`,
+  - `missing_authoritative_signal`,
+  - `interpretation_policy_version: ip-v1`,
+  - `decision_policy_version: dp-v1`.
+- Assigned and rejected the task; the case completed.
+
+Validated:
+
+- Local eval output can drive a real UiPath-visible Case task without hand-writing the proof payload.
+- The first slice exit criteria are met at API/persistence level.
+- Reviewer UI polish remains incomplete because generated Action Center labels still need repair.
+
+Still next:
+
+- Repair Action Center `PolicyDecisionJson` rendering before demo polish.
+- Build and validate the contradiction route from the same canonical green business fixture.
+- Add explicit custom audit event/state storage for one-query domain reconstruction.
 
 ## Follow-On Order
 

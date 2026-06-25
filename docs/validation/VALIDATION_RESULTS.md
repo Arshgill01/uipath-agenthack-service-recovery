@@ -675,3 +675,60 @@ Evidence:
 - `docs/validation/artifacts/2026-06-25/g004-action-center-policy-field-mislabeled-task-4295299.png`
 - `docs/validation/artifacts/2026-06-25/g004-action-center-stale-pending-after-cli-complete-task-4295299.png`
 - `docs/validation/artifacts/2026-06-25/g004-action-center-completed-reject-task-4295299.png`
+
+## 2026-06-25 19:05 IST - Wave 07 Live Generated Payload Run
+
+Environment:
+
+- UiPath Automation Cloud org `keepingitlowkey`, tenant `DefaultTenant`.
+- UiPath CLI authenticated for `arshgill6120@gmail.com`.
+- Orchestrator folder key `9d7ae568-d60e-4395-94d7-db115bfb25de`, folder ID `7978263`.
+- Case package feed ID `831bf59a-a3f1-4aa8-8890-f01b857c18f3`.
+- Generated local payload source: `python -m service_recovery_core.evals --uipath-payload-scenario E-002 --output eval_results/uipath_action_payload_E002.json`.
+- Uploaded package: `Solution.caseManagement.Maestro.Case:1.0.4`.
+- Updated validation process: `9a7eb300-7b16-4856-b14f-d6f2da3dbe61`.
+- Live case instance/job key: `3af41e1d-8b04-4eba-aa5e-a95c5c673730`.
+- Live case external ID: `CASE-693863006`.
+- Action Center task ID: `4300080`, task key `77261fcd-d77a-411d-91df-070797dd761c`.
+
+Steps:
+
+1. Exported the local E-002 missing-authoritative-telemetry scenario into the UiPath Action Center payload shape.
+2. Repacked the known-good `1.0.3` Case package as `1.0.4`, changing only the package version and `HitlTaskArguments` / Case task input values to the generated E-002 payload.
+3. Uploaded `1.0.4` to the solution package feed.
+4. Observed that default `uip or packages get Solution.caseManagement.Maestro.Case:1.0.4` could not find the package, while `--feed-id 831bf59a-a3f1-4aa8-8890-f01b857c18f3` did find it.
+5. Observed that `uip or processes create ... --package-version 1.0.4` failed prerequisite validation even though the feed-scoped package read succeeded.
+6. Updated existing validation process `9a7eb300-7b16-4856-b14f-d6f2da3dbe61` to `1.0.4` with `uip or processes update-version ... --package-version 1.0.4`.
+7. Verified process readback: `ProcessVersion: 1.0.4`, `AutoUpdate: false`.
+8. Verified process version history contained explicit `1.0.3` and `1.0.4` entries.
+9. Started a fresh case job from the updated pinned process.
+10. Read Action Center task `4300080` before human action and verified the generated payload.
+11. Assigned task `4300080` to `arshgill6120@gmail.com`, completed it with `--action reject`, and verified task/case completion.
+
+Observed:
+
+- `uip or packages upload ... --feed-id 831bf59a-a3f1-4aa8-8890-f01b857c18f3` returned package `Solution.caseManagement.Maestro.Case:1.0.4`.
+- Feed-scoped package read returned `PackageType: CaseManagement`, `ProjectType: CaseManagement`, `PackageVersion: 1.0.4`, and `IsActive: true`.
+- Default package read did not see the same package, and process creation did not expose a feed selector.
+- `uip or processes update-version` succeeded and produced explicit version history for the existing process.
+- `uip maestro case instance get 3af41e1d...` returned `PackageKey: Solution.caseManagement.Maestro.Case:1.0.4`, `PackageVersion: 1.0.4`, and later `LatestRunStatus: Completed`.
+- `uip tasks get 4300080` before completion returned:
+  - `RawAgentRecommendation` with `event_id: AIE-E002`, `interpretation_policy_version: ip-v1`, and `recommended_next_stage: closure_candidate`.
+  - `PolicyDecisionJson` with `event_id: PDE-E-002`, `links_to: AIE-E002`, `decision_policy_version: dp-v1`, `decision: override_recommendation`, `from_recommended_stage: closure_candidate`, `to_stage: verify_telemetry`, and `block_reason: missing_authoritative_signal`.
+  - `EvidencePacketJson` with `business_state: green`, `derived_evidence_state: missing_pending`, and `closure_block_reason: missing_authoritative_signal`.
+- Initial task completion failed with `This action is no longer assigned to you` because the task was `Unassigned`; assigning it to the logged-in user first resolved the lifecycle.
+- Task `4300080` completed with `Action: reject` at `2026-06-25T13:34:53.493Z`.
+- Case `3af41e1d...` completed at `2026-06-25T13:35:08.0998188Z`.
+
+Result:
+
+- Wave 07 first slice: PASS for live UiPath-visible generated payload propagation. The payload used in Action Center came from the local eval exporter rather than hand-written demo data.
+- G-002 strengthened: process `AutoUpdate: false`, case `PackageVersion: 1.0.4`, and version history explicitly records movement from `1.0.3` to `1.0.4`.
+- G-004 strengthened: raw local-agent recommendation and final policy decision are visible in the same pre-human task payload and remain separate linked JSON events.
+- G-003 strengthened for lifecycle: unassigned Action tasks require assignment before CLI completion, then return structured action/comment.
+- G-001 remains PARTIAL for native one-query domain audit: explicit payloads make reconstruction possible, but the native case surface still does not provide a dedicated domain audit timeline without custom audit fields/events.
+
+Product feedback:
+
+- PF-013 updated by the unassigned task lifecycle observation.
+- PF-017 added for feed-scoped package visibility and process-binding mismatch.
