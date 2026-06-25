@@ -331,6 +331,78 @@ Survey tags:
 - improvement
 - evidence
 
+### PF-021 - 2026-06-25 - Test Manager Manual Execution Aggregate Status
+
+Context:
+
+- ID: PF-021.
+- Status: open.
+- Goal: validate whether G-007 can include a real Test Manager execution record, not only a project/test-set mapping.
+- Product surface: UiPath Test Manager manual execution / CLI wait.
+- Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `Arshdeep Singh`.
+- Wave/gate: G-007.
+
+What worked:
+
+- `uip tm testsets run --test-set-key SREV:9 --execution-type manual --output json` created execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad`.
+- `uip tm testcaselog finish` marked each of the nine manual test case logs `Passed` with `HasError: false`.
+- `uip tm executions testcaselogs list` read back all nine test case logs as passed.
+- `uip tm executions list` read back aggregate counts `Passed: 9`, `Failed: 0`, `None: 0`.
+
+What failed or confused us:
+
+- After all nine manual logs were passed, the aggregate execution still read back top-level `Status: Running`.
+- `uip tm wait --project-key SREV --execution-id d50a7be6-35ed-1100-95aa-0b49cf9b8cad --timeout 30 --output json` timed out with last status `Running`.
+- The wait output said it was polling every 60000 ms even though the requested timeout was 30000 ms, which makes short diagnostic waits confusing.
+
+Expected:
+
+- When every test case log in a manual execution has terminal results, the aggregate execution should either become terminal automatically or tell the builder which explicit action is required to finish/close the manual execution.
+- The wait command should choose a polling interval compatible with the timeout, or warn that the timeout is shorter than the polling interval.
+
+Observed:
+
+- Execution ID: `d50a7be6-35ed-1100-95aa-0b49cf9b8cad`.
+- Aggregate counts: `Passed: 9`, `Failed: 0`, `None: 0`.
+- Aggregate metadata: `ExecutionType: Manual`, `IsRunningAutomated: false`.
+- Aggregate status: `Running`.
+- Wait result: `Failure`, message `Timed out after 30s waiting for execution 'd50a7be6-35ed-1100-95aa-0b49cf9b8cad'. Last status: Running.`
+
+Impact:
+
+- Build impact: low/medium. The pass evidence exists at the test-case-log level, but the aggregate status is confusing for final reporting.
+- Demo/submission impact: medium. A judge or reviewer may expect the Test Manager execution to show a terminal passed status, not a running aggregate with passed child logs.
+- Severity: medium.
+
+Workaround:
+
+- Cite the test case log readback and aggregate counts rather than claiming terminal aggregate execution status.
+- Keep the execution ID and passed log evidence in `docs/validation/TEST_MANAGER_MAPPING.md`.
+- Do not claim automated Test Cloud execution.
+
+Suggested improvement:
+
+- Add an explicit `finish manual execution` action or CLI command when all manual logs have terminal results.
+- If a manual execution cannot close automatically, expose the remaining blocker in `executions list`, `wait`, and the UI.
+- Make `uip tm wait` adapt the default polling interval when the user passes a shorter timeout.
+
+Evidence:
+
+- Repository mapping: `docs/validation/TEST_MANAGER_MAPPING.md`.
+- Commands/logs: see `docs/validation/VALIDATION_RESULTS.md`, 2026-06-25 23:58 IST Test Manager Eval Crossover.
+
+Classification:
+
+- UX / product defect
+
+Survey tags:
+
+- product-used
+- pain-point
+- workaround
+- improvement
+- evidence
+
 ### PF-015 - 2026-06-25 - Maestro Case / Domain Audit And Override Timeline
 
 Context:

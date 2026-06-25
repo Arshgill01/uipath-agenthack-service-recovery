@@ -148,5 +148,7 @@
 ### 2026-06-25 23:58 IST - Test Manager Eval Mapping
 
 - R-005 is reduced: the tenant now contains live Test Manager project `SREV` with nine manual test cases and test set `SREV:9` representing E-001 through E-009.
+- R-005 is reduced again: manual execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad` contains nine passed manual test case logs.
 - R-005 remains open for automated crossover. The local eval harness is not yet linked to a Test Manager automated execution or Orchestrator test automation.
-- Mitigation update: describe the current state as live Test Manager representation, not automated Test Cloud execution, until an execution record or automation link is validated.
+- New nuance: the execution aggregate still reports top-level `Status: Running` after all logs pass, so final claims should cite the passed manual logs and not imply a clean terminal aggregate status until that is resolved.
+- Mitigation update: describe the current state as live Test Manager representation plus passed manual logs, not automated Test Cloud execution, until an automated execution record or automation link is validated.

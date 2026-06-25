@@ -14,6 +14,7 @@ Environment:
 - Test set: `Service Recovery E-001 through E-009 Baseline`
 - Test set key: `SREV:9`
 - Test set ID: `6881c763-b871-0200-165b-0b49cf9ac490`
+- Manual execution ID: `d50a7be6-35ed-1100-95aa-0b49cf9b8cad`
 
 Scope:
 
@@ -52,6 +53,11 @@ Commands used:
 - `uip tm testcases list --project-key SREV --output json`
 - `uip tm testsets list --project-key SREV --include-last-execution --output json`
 - `uip tm testsets list-testcases --project-key SREV --test-set-key SREV:9 --output json`
+- `uip tm testsets run --test-set-key SREV:9 --execution-type manual --output json`
+- `uip tm testcaselog finish --project-key SREV --execution-id d50a7be6-35ed-1100-95aa-0b49cf9b8cad --test-case-id ... --result Passed --has-error false --executed-by arshgill6120@gmail.com --detail-link https://github.com/Arshgill01/uipath-agenthack-service-recovery/blob/e7b881d/docs/validation/TEST_MANAGER_MAPPING.md --run-id 1 --is-post-condition-met true --output json`
+- `uip tm executions list --project-key SREV --output json`
+- `uip tm executions testcaselogs list --project-key SREV --execution-id d50a7be6-35ed-1100-95aa-0b49cf9b8cad --output json`
+- `uip tm wait --project-key SREV --execution-id d50a7be6-35ed-1100-95aa-0b49cf9b8cad --timeout 30 --output json`
 
 Observed:
 
@@ -61,8 +67,13 @@ Observed:
 - Nine test cases were created and read back.
 - Test set `SREV:9` was created and read back.
 - `SREV:9` read back with all nine expected test cases attached.
+- Manual execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad` was created for test set `SREV:9`.
+- All nine manual test case logs were marked `Passed` with `has-error: false`, executor `arshgill6120@gmail.com`, and detail link back to this mapping artifact.
+- Execution aggregate readback reported `Passed: 9`, `Failed: 0`, `None: 0`, `ExecutionType: Manual`, and `IsRunningAutomated: false`.
+- The same aggregate readback still reported top-level `Status: Running`; `uip tm wait --timeout 30` timed out with last status `Running`.
 
 Result:
 
 - G-007: PASS for live Test Manager representation of E-001 through E-009 as manual test cases.
+- G-007: PASS/PARTIAL for manual Test Manager execution: all nine test case logs are passed, but the top-level execution status remains `Running`.
 - G-007: PARTIAL for automated Test Cloud crossover because no automated Test Manager execution was created or linked to an Orchestrator test automation.

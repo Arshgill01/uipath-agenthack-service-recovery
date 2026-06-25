@@ -1195,6 +1195,11 @@ Commands run:
 - `uip tm testcases list --project-key SREV --output json`
 - `uip tm testsets list --project-key SREV --include-last-execution --output json`
 - `uip tm testsets list-testcases --project-key SREV --test-set-key SREV:9 --output json`
+- `uip tm testsets run --test-set-key SREV:9 --execution-type manual --output json`
+- `uip tm testcaselog finish --project-key SREV --execution-id d50a7be6-35ed-1100-95aa-0b49cf9b8cad --test-case-id ... --result Passed --has-error false --executed-by arshgill6120@gmail.com --detail-link https://github.com/Arshgill01/uipath-agenthack-service-recovery/blob/e7b881d/docs/validation/TEST_MANAGER_MAPPING.md --run-id 1 --is-post-condition-met true --output json`
+- `uip tm executions list --project-key SREV --output json`
+- `uip tm executions testcaselogs list --project-key SREV --execution-id d50a7be6-35ed-1100-95aa-0b49cf9b8cad --output json`
+- `uip tm wait --project-key SREV --execution-id d50a7be6-35ed-1100-95aa-0b49cf9b8cad --timeout 30 --output json`
 
 Validation:
 
@@ -1203,12 +1208,16 @@ Validation:
 - PASS: project `SREV` was created and read back as active.
 - PASS: nine manual test cases were created and read back.
 - PASS: test set `SREV:9` was created and read back with all nine expected test cases.
+- PASS: manual execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad` was created.
+- PASS: all nine manual test case logs were marked `Passed` with `HasError: false`.
+- PARTIAL: execution aggregate still reports top-level `Status: Running`, and `uip tm wait --timeout 30` timed out despite `Passed: 9`, `Failed: 0`, `None: 0`.
 - PARTIAL: no automated Test Manager execution or Orchestrator test automation linkage has been created yet.
 
 Product feedback:
 
 - PF-020 added for eval-suite import/onboarding improvement.
+- PF-021 added for manual execution aggregate status/wait behavior.
 
 Open risks:
 
-- G-007 remains PARTIAL for automation. The mapping is live in Test Manager, but final claims must distinguish manual Test Manager representation from automated Test Cloud execution.
+- G-007 remains PARTIAL for automation. The mapping and manual passed logs are live in Test Manager, but final claims must distinguish manual Test Manager execution from automated Test Cloud execution.

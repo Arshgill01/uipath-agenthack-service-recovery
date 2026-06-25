@@ -1269,10 +1269,28 @@ Observed:
   - E-008: `SREV:8`,
   - E-009: `SREV:10`.
 - Created test cases are manual Test Manager cases. `IsAutomated` read back as `false` for each case.
+- Manual execution creation succeeded:
+  - `ExecutionId: d50a7be6-35ed-1100-95aa-0b49cf9b8cad`,
+  - `TestSetKey: SREV:9`,
+  - initial `Status: Pending`,
+  - start time `2026-06-25T18:33:27.985Z`.
+- All nine manual test case logs were finished with:
+  - `Result: Passed`,
+  - `HasError: false`,
+  - `ExecutedBy: arshgill6120@gmail.com`,
+  - detail link to `docs/validation/TEST_MANAGER_MAPPING.md` at commit `e7b881d`.
+- Execution aggregate readback reported:
+  - `Passed: 9`,
+  - `Failed: 0`,
+  - `None: 0`,
+  - `ExecutionType: Manual`,
+  - `IsRunningAutomated: false`.
+- Top-level execution status still read back as `Running`; `uip tm wait --timeout 30` timed out with last status `Running`.
 
 Result:
 
 - G-007: PASS for live UiPath Test Manager representation of E-001 through E-009.
+- G-007: PASS/PARTIAL for manual Test Manager execution. The execution contains nine passed manual test case logs, but the aggregate execution status remains `Running`.
 - G-007: PARTIAL for automated Test Cloud crossover. The eval suite is represented in Test Manager as manual cases and grouped in a test set, but no automated Test Manager execution or Orchestrator test automation link has been created.
 
 Evidence:
@@ -1280,14 +1298,16 @@ Evidence:
 - `docs/validation/TEST_MANAGER_MAPPING.md`.
 - Test Manager project `SREV`.
 - Test set `SREV:9`.
+- Manual execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad`.
 - Local eval output `eval_results/local_baseline.json`.
 
 Decision impact:
 
 - It is now fair to select/report Test Cloud/Test Manager participation only as a live Test Manager mapping unless an automated execution is added later.
 - Keep the final survey guardrail: do not claim automated Test Cloud validation yet.
-- Next G-007 step, if time allows, is either a manual execution record in Test Manager or a real automation link from Test Manager to an Orchestrator test package.
+- Next G-007 step, if time allows, is to resolve why the manual execution aggregate remains `Running` after all case logs passed, then decide whether to add a real automation link from Test Manager to an Orchestrator test package.
 
 Product feedback:
 
 - PF-020 added for Test Manager eval onboarding: CLI project/case/test-set lifecycle worked, but importing an eval suite from JSON/JUnit-style output still requires custom scripting/manual object creation.
+- PF-021 added for manual execution status clarity: all test case logs can pass while the aggregate execution remains `Running` and wait times out.
