@@ -1,0 +1,727 @@
+{
+  "adversarial_interpretation": {
+    "advocate_interpretation": {
+      "audit_explanation": "The technician observed a solid green modem and the customer reported stable service after an activation retry. Support notes confirm CRM active, billing clear, and dispatch complete, all indicating a successful resolution of the activation issue.",
+      "category_confidence": 0.85,
+      "closure_block_reason_code": "none",
+      "customer_impact_summary": "Customer was previously frustrated but now reports stable service and a green modem, suggesting the service issue has been resolved.",
+      "event_id": "AIE-LLM-E-003-ADV",
+      "evidence_gaps": [
+        "No direct authoritative telemetry confirmation of sustained service stability is available in the provided notes (this is handled by the policy engine).",
+        "Customer's statement 'looks stable' is not an explicit confirmation of full satisfaction or long-term stability."
+      ],
+      "extracted_claims": [
+        {
+          "claim_type": "technician_observation",
+          "source": "technician_note",
+          "timestamp": "2026-06-18T10:05:00Z",
+          "value": "Modem shows solid green."
+        },
+        {
+          "claim_type": "customer_reported_symptom",
+          "source": "technician_note",
+          "timestamp": "2026-06-18T10:05:00Z",
+          "value": "service looks stable after activation retry."
+        },
+        {
+          "claim_type": "customer_reported_symptom",
+          "source": "customer_message",
+          "timestamp": "2026-06-18T10:06:00Z",
+          "value": "Customer is frustrated after a third callback"
+        },
+        {
+          "claim_type": "customer_reported_symptom",
+          "source": "customer_message",
+          "timestamp": "2026-06-18T10:06:00Z",
+          "value": "modem is now green."
+        },
+        {
+          "claim_type": "support_note_claim",
+          "source": "support_note",
+          "timestamp": "2026-06-18T10:07:00Z",
+          "value": "CRM shows Active."
+        },
+        {
+          "claim_type": "support_note_claim",
+          "source": "support_note",
+          "timestamp": "2026-06-18T10:07:00Z",
+          "value": "Billing clear."
+        },
+        {
+          "claim_type": "support_note_claim",
+          "source": "support_note",
+          "timestamp": "2026-06-18T10:07:00Z",
+          "value": "Dispatch marked complete."
+        }
+      ],
+      "failure_category": "activation_failure",
+      "input_refs": [
+        "llm_demo_E-003"
+      ],
+      "interpretation_rationale_codes": [
+        "mentions_signal_absent",
+        "mentions_system_timeout"
+      ],
+      "operator_note": "Case appears resolved based on technician observation and customer report of stable service and green modem. CRM, billing, and dispatch are all in order. Recommend moving to closure pending authoritative telemetry verification.",
+      "recommendation_confidence": 0.85,
+      "recommended_actions": [
+        "Verify authoritative telemetry for service activation and sustained stability.",
+        "Consider a follow-up with the customer to confirm ongoing service quality and satisfaction."
+      ],
+      "recommended_next_stage": "closure_candidate",
+      "reviewer_questions": [
+        "Has authoritative telemetry confirmed sustained service activation and stability since the technician visit?",
+        "Is a customer follow-up call deemed necessary to confirm long-term satisfaction?"
+      ],
+      "urgency": "normal"
+    },
+    "disagreement": {
+      "advocate_recommendation": "closure_candidate",
+      "claim_overlap_ratio": 0.667,
+      "confidence_delta": 0.15,
+      "disagreement_score": 0.712,
+      "skeptic_recommendation": "verify_telemetry",
+      "stage_match": false,
+      "threshold": 0.6,
+      "unique_advocate_gaps": [
+        "customer's statement 'looks stable' is not an explicit confirmation of full satisfaction or long-term stability.",
+        "no direct authoritative telemetry confirmation of sustained service stability is available in the provided notes (this is handled by the policy engine)."
+      ],
+      "unique_skeptic_gaps": [
+        "lack of authoritative, real-time telemetry confirming sustained service stability post-activation retry.",
+        "no explicit root cause identified for the previous activation failures that led to multiple callbacks.",
+        "the term 'stable' is subjective and requires objective verification."
+      ]
+    },
+    "skeptic_interpretation": {
+      "audit_explanation": "The notes indicate a resolved activation failure, with the modem showing solid green and the customer reporting stable service after an activation retry. CRM and billing status are clear, and dispatch is complete. However, as a closure skeptic, the claims of 'stable' service are based on customer and technician observation, not authoritative telemetry. The customer's prior frustration ('third callback') suggests a history of instability, warranting a verification of sustained service health via telemetry before considering closure. The 'activation retry' points to a previous system-level issue.",
+      "category_confidence": 0.85,
+      "closure_block_reason_code": "missing_authoritative_signal",
+      "customer_impact_summary": "Customer experienced significant frustration due to multiple service interruptions, requiring a third callback and technician visit. Service is currently reported as stable, but long-term stability is unconfirmed.",
+      "event_id": "AIE-LLM-E-003-SKP",
+      "evidence_gaps": [
+        "Lack of authoritative, real-time telemetry confirming sustained service stability post-activation retry.",
+        "No explicit root cause identified for the previous activation failures that led to multiple callbacks.",
+        "The term 'stable' is subjective and requires objective verification."
+      ],
+      "extracted_claims": [
+        {
+          "claim_type": "technician_observation",
+          "source": "technician_note",
+          "timestamp": "2026-06-18T10:05:00Z",
+          "value": "Tech visited at 14:30."
+        },
+        {
+          "claim_type": "technician_observation",
+          "source": "technician_note",
+          "timestamp": "2026-06-18T10:05:00Z",
+          "value": "Modem shows solid green."
+        },
+        {
+          "claim_type": "customer_reported_symptom",
+          "source": "technician_note",
+          "timestamp": "2026-06-18T10:05:00Z",
+          "value": "Customer says service looks stable after activation retry."
+        },
+        {
+          "claim_type": "customer_reported_symptom",
+          "source": "customer_message",
+          "timestamp": "2026-06-18T10:06:00Z",
+          "value": "Customer is frustrated after a third callback"
+        },
+        {
+          "claim_type": "customer_reported_symptom",
+          "source": "customer_message",
+          "timestamp": "2026-06-18T10:06:00Z",
+          "value": "modem is now green."
+        },
+        {
+          "claim_type": "support_note_claim",
+          "source": "support_note",
+          "timestamp": "2026-06-18T10:07:00Z",
+          "value": "CRM shows Active."
+        },
+        {
+          "claim_type": "support_note_claim",
+          "source": "support_note",
+          "timestamp": "2026-06-18T10:07:00Z",
+          "value": "Billing clear."
+        },
+        {
+          "claim_type": "support_note_claim",
+          "source": "support_note",
+          "timestamp": "2026-06-18T10:07:00Z",
+          "value": "Dispatch marked complete."
+        }
+      ],
+      "failure_category": "activation_failure",
+      "input_refs": [
+        "llm_demo_E-003"
+      ],
+      "interpretation_rationale_codes": [
+        "mentions_signal_absent",
+        "mentions_system_timeout"
+      ],
+      "operator_note": "Case appears to have a positive resolution based on technician and customer reports (modem green, service stable after retry). However, given the customer's history of frustration ('third callback') and the subjective nature of 'stable,' authoritative telemetry verification is crucial before closure. The policy engine should confirm the absence of any underlying issues.",
+      "recommendation_confidence": 0.7,
+      "recommended_actions": [
+        "Initiate a check of authoritative network telemetry to confirm sustained service stability since the technician visit.",
+        "Monitor the service for any recurrence of activation or connectivity issues over the next 24-48 hours.",
+        "Consider a proactive customer follow-up call in 2-3 days to confirm satisfaction and service performance."
+      ],
+      "recommended_next_stage": "verify_telemetry",
+      "reviewer_questions": [
+        "Has the authoritative telemetry confirmed sustained service stability since the technician's visit on 2026-06-18?",
+        "What was the specific technical root cause of the prior activation failures that necessitated multiple callbacks?",
+        "Is there a plan to proactively engage the customer to ensure long-term satisfaction?"
+      ],
+      "urgency": "normal"
+    },
+    "synthesized_agent_event": {
+      "adversarial_interpretation": {
+        "advocate_event_id": "AIE-LLM-E-003-ADV",
+        "advocate_interpretation": {
+          "audit_explanation": "The technician observed a solid green modem and the customer reported stable service after an activation retry. Support notes confirm CRM active, billing clear, and dispatch complete, all indicating a successful resolution of the activation issue.",
+          "category_confidence": 0.85,
+          "closure_block_reason_code": "none",
+          "customer_impact_summary": "Customer was previously frustrated but now reports stable service and a green modem, suggesting the service issue has been resolved.",
+          "event_id": "AIE-LLM-E-003-ADV",
+          "evidence_gaps": [
+            "No direct authoritative telemetry confirmation of sustained service stability is available in the provided notes (this is handled by the policy engine).",
+            "Customer's statement 'looks stable' is not an explicit confirmation of full satisfaction or long-term stability."
+          ],
+          "extracted_claims": [
+            {
+              "claim_type": "technician_observation",
+              "source": "technician_note",
+              "timestamp": "2026-06-18T10:05:00Z",
+              "value": "Modem shows solid green."
+            },
+            {
+              "claim_type": "customer_reported_symptom",
+              "source": "technician_note",
+              "timestamp": "2026-06-18T10:05:00Z",
+              "value": "service looks stable after activation retry."
+            },
+            {
+              "claim_type": "customer_reported_symptom",
+              "source": "customer_message",
+              "timestamp": "2026-06-18T10:06:00Z",
+              "value": "Customer is frustrated after a third callback"
+            },
+            {
+              "claim_type": "customer_reported_symptom",
+              "source": "customer_message",
+              "timestamp": "2026-06-18T10:06:00Z",
+              "value": "modem is now green."
+            },
+            {
+              "claim_type": "support_note_claim",
+              "source": "support_note",
+              "timestamp": "2026-06-18T10:07:00Z",
+              "value": "CRM shows Active."
+            },
+            {
+              "claim_type": "support_note_claim",
+              "source": "support_note",
+              "timestamp": "2026-06-18T10:07:00Z",
+              "value": "Billing clear."
+            },
+            {
+              "claim_type": "support_note_claim",
+              "source": "support_note",
+              "timestamp": "2026-06-18T10:07:00Z",
+              "value": "Dispatch marked complete."
+            }
+          ],
+          "failure_category": "activation_failure",
+          "input_refs": [
+            "llm_demo_E-003"
+          ],
+          "interpretation_rationale_codes": [
+            "mentions_signal_absent",
+            "mentions_system_timeout"
+          ],
+          "operator_note": "Case appears resolved based on technician observation and customer report of stable service and green modem. CRM, billing, and dispatch are all in order. Recommend moving to closure pending authoritative telemetry verification.",
+          "recommendation_confidence": 0.85,
+          "recommended_actions": [
+            "Verify authoritative telemetry for service activation and sustained stability.",
+            "Consider a follow-up with the customer to confirm ongoing service quality and satisfaction."
+          ],
+          "recommended_next_stage": "closure_candidate",
+          "reviewer_questions": [
+            "Has authoritative telemetry confirmed sustained service activation and stability since the technician visit?",
+            "Is a customer follow-up call deemed necessary to confirm long-term satisfaction?"
+          ],
+          "urgency": "normal"
+        },
+        "disagreement": {
+          "advocate_recommendation": "closure_candidate",
+          "claim_overlap_ratio": 0.667,
+          "confidence_delta": 0.15,
+          "disagreement_score": 0.712,
+          "skeptic_recommendation": "verify_telemetry",
+          "stage_match": false,
+          "threshold": 0.6,
+          "unique_advocate_gaps": [
+            "customer's statement 'looks stable' is not an explicit confirmation of full satisfaction or long-term stability.",
+            "no direct authoritative telemetry confirmation of sustained service stability is available in the provided notes (this is handled by the policy engine)."
+          ],
+          "unique_skeptic_gaps": [
+            "lack of authoritative, real-time telemetry confirming sustained service stability post-activation retry.",
+            "no explicit root cause identified for the previous activation failures that led to multiple callbacks.",
+            "the term 'stable' is subjective and requires objective verification."
+          ]
+        },
+        "skeptic_event_id": "AIE-LLM-E-003-SKP",
+        "skeptic_interpretation": {
+          "audit_explanation": "The notes indicate a resolved activation failure, with the modem showing solid green and the customer reporting stable service after an activation retry. CRM and billing status are clear, and dispatch is complete. However, as a closure skeptic, the claims of 'stable' service are based on customer and technician observation, not authoritative telemetry. The customer's prior frustration ('third callback') suggests a history of instability, warranting a verification of sustained service health via telemetry before considering closure. The 'activation retry' points to a previous system-level issue.",
+          "category_confidence": 0.85,
+          "closure_block_reason_code": "missing_authoritative_signal",
+          "customer_impact_summary": "Customer experienced significant frustration due to multiple service interruptions, requiring a third callback and technician visit. Service is currently reported as stable, but long-term stability is unconfirmed.",
+          "event_id": "AIE-LLM-E-003-SKP",
+          "evidence_gaps": [
+            "Lack of authoritative, real-time telemetry confirming sustained service stability post-activation retry.",
+            "No explicit root cause identified for the previous activation failures that led to multiple callbacks.",
+            "The term 'stable' is subjective and requires objective verification."
+          ],
+          "extracted_claims": [
+            {
+              "claim_type": "technician_observation",
+              "source": "technician_note",
+              "timestamp": "2026-06-18T10:05:00Z",
+              "value": "Tech visited at 14:30."
+            },
+            {
+              "claim_type": "technician_observation",
+              "source": "technician_note",
+              "timestamp": "2026-06-18T10:05:00Z",
+              "value": "Modem shows solid green."
+            },
+            {
+              "claim_type": "customer_reported_symptom",
+              "source": "technician_note",
+              "timestamp": "2026-06-18T10:05:00Z",
+              "value": "Customer says service looks stable after activation retry."
+            },
+            {
+              "claim_type": "customer_reported_symptom",
+              "source": "customer_message",
+              "timestamp": "2026-06-18T10:06:00Z",
+              "value": "Customer is frustrated after a third callback"
+            },
+            {
+              "claim_type": "customer_reported_symptom",
+              "source": "customer_message",
+              "timestamp": "2026-06-18T10:06:00Z",
+              "value": "modem is now green."
+            },
+            {
+              "claim_type": "support_note_claim",
+              "source": "support_note",
+              "timestamp": "2026-06-18T10:07:00Z",
+              "value": "CRM shows Active."
+            },
+            {
+              "claim_type": "support_note_claim",
+              "source": "support_note",
+              "timestamp": "2026-06-18T10:07:00Z",
+              "value": "Billing clear."
+            },
+            {
+              "claim_type": "support_note_claim",
+              "source": "support_note",
+              "timestamp": "2026-06-18T10:07:00Z",
+              "value": "Dispatch marked complete."
+            }
+          ],
+          "failure_category": "activation_failure",
+          "input_refs": [
+            "llm_demo_E-003"
+          ],
+          "interpretation_rationale_codes": [
+            "mentions_signal_absent",
+            "mentions_system_timeout"
+          ],
+          "operator_note": "Case appears to have a positive resolution based on technician and customer reports (modem green, service stable after retry). However, given the customer's history of frustration ('third callback') and the subjective nature of 'stable,' authoritative telemetry verification is crucial before closure. The policy engine should confirm the absence of any underlying issues.",
+          "recommendation_confidence": 0.7,
+          "recommended_actions": [
+            "Initiate a check of authoritative network telemetry to confirm sustained service stability since the technician visit.",
+            "Monitor the service for any recurrence of activation or connectivity issues over the next 24-48 hours.",
+            "Consider a proactive customer follow-up call in 2-3 days to confirm satisfaction and service performance."
+          ],
+          "recommended_next_stage": "verify_telemetry",
+          "reviewer_questions": [
+            "Has the authoritative telemetry confirmed sustained service stability since the technician's visit on 2026-06-18?",
+            "What was the specific technical root cause of the prior activation failures that necessitated multiple callbacks?",
+            "Is there a plan to proactively engage the customer to ensure long-term satisfaction?"
+          ],
+          "urgency": "normal"
+        }
+      },
+      "audit_explanation": "The technician observed a solid green modem and the customer reported stable service after an activation retry. Support notes confirm CRM active, billing clear, and dispatch complete, all indicating a successful resolution of the activation issue.",
+      "category_confidence": 0.85,
+      "closure_block_reason_code": "none",
+      "customer_impact_summary": "Customer was previously frustrated but now reports stable service and a green modem, suggesting the service issue has been resolved.",
+      "event_id": "AIE-LLM-E-003",
+      "evidence_gaps": [
+        "No direct authoritative telemetry confirmation of sustained service stability is available in the provided notes (this is handled by the policy engine).",
+        "Customer's statement 'looks stable' is not an explicit confirmation of full satisfaction or long-term stability.",
+        "Lack of authoritative, real-time telemetry confirming sustained service stability post-activation retry.",
+        "No explicit root cause identified for the previous activation failures that led to multiple callbacks.",
+        "The term 'stable' is subjective and requires objective verification."
+      ],
+      "extracted_claims": [
+        {
+          "claim_type": "technician_observation",
+          "source": "technician_note",
+          "timestamp": "2026-06-18T10:05:00Z",
+          "value": "Modem shows solid green."
+        },
+        {
+          "claim_type": "customer_reported_symptom",
+          "source": "technician_note",
+          "timestamp": "2026-06-18T10:05:00Z",
+          "value": "service looks stable after activation retry."
+        },
+        {
+          "claim_type": "customer_reported_symptom",
+          "source": "customer_message",
+          "timestamp": "2026-06-18T10:06:00Z",
+          "value": "Customer is frustrated after a third callback"
+        },
+        {
+          "claim_type": "customer_reported_symptom",
+          "source": "customer_message",
+          "timestamp": "2026-06-18T10:06:00Z",
+          "value": "modem is now green."
+        },
+        {
+          "claim_type": "support_note_claim",
+          "source": "support_note",
+          "timestamp": "2026-06-18T10:07:00Z",
+          "value": "CRM shows Active."
+        },
+        {
+          "claim_type": "support_note_claim",
+          "source": "support_note",
+          "timestamp": "2026-06-18T10:07:00Z",
+          "value": "Billing clear."
+        },
+        {
+          "claim_type": "support_note_claim",
+          "source": "support_note",
+          "timestamp": "2026-06-18T10:07:00Z",
+          "value": "Dispatch marked complete."
+        }
+      ],
+      "failure_category": "activation_failure",
+      "input_refs": [
+        "llm_demo_E-003"
+      ],
+      "interpretation_rationale_codes": [
+        "mentions_signal_absent",
+        "mentions_system_timeout"
+      ],
+      "operator_note": "Adversarial dual interpretation preserved the advocate closure recommendation, while the skeptic found unresolved risk. Disagreement score 0.712 met threshold 0.6; deterministic policy treats this as ambiguity requiring review.",
+      "recommendation_confidence": 0.85,
+      "recommended_actions": [
+        "Verify authoritative telemetry for service activation and sustained stability.",
+        "Consider a follow-up with the customer to confirm ongoing service quality and satisfaction."
+      ],
+      "recommended_next_stage": "closure_candidate",
+      "reviewer_questions": [
+        "Has authoritative telemetry confirmed sustained service activation and stability since the technician visit?",
+        "Is a customer follow-up call deemed necessary to confirm long-term satisfaction?",
+        "Has the authoritative telemetry confirmed sustained service stability since the technician's visit on 2026-06-18?",
+        "What was the specific technical root cause of the prior activation failures that necessitated multiple callbacks?",
+        "Is there a plan to proactively engage the customer to ensure long-term satisfaction?",
+        "Why did the advocate and skeptic interpretations diverge on the same evidence?"
+      ],
+      "urgency": "normal"
+    }
+  },
+  "agent_interpretation_event": {
+    "adversarial_interpretation": {
+      "advocate_event_id": "AIE-LLM-E-003-ADV",
+      "advocate_interpretation": {
+        "audit_explanation": "The technician observed a solid green modem and the customer reported stable service after an activation retry. Support notes confirm CRM active, billing clear, and dispatch complete, all indicating a successful resolution of the activation issue.",
+        "category_confidence": 0.85,
+        "closure_block_reason_code": "none",
+        "customer_impact_summary": "Customer was previously frustrated but now reports stable service and a green modem, suggesting the service issue has been resolved.",
+        "event_id": "AIE-LLM-E-003-ADV",
+        "evidence_gaps": [
+          "No direct authoritative telemetry confirmation of sustained service stability is available in the provided notes (this is handled by the policy engine).",
+          "Customer's statement 'looks stable' is not an explicit confirmation of full satisfaction or long-term stability."
+        ],
+        "extracted_claims": [
+          {
+            "claim_type": "technician_observation",
+            "source": "technician_note",
+            "timestamp": "2026-06-18T10:05:00Z",
+            "value": "Modem shows solid green."
+          },
+          {
+            "claim_type": "customer_reported_symptom",
+            "source": "technician_note",
+            "timestamp": "2026-06-18T10:05:00Z",
+            "value": "service looks stable after activation retry."
+          },
+          {
+            "claim_type": "customer_reported_symptom",
+            "source": "customer_message",
+            "timestamp": "2026-06-18T10:06:00Z",
+            "value": "Customer is frustrated after a third callback"
+          },
+          {
+            "claim_type": "customer_reported_symptom",
+            "source": "customer_message",
+            "timestamp": "2026-06-18T10:06:00Z",
+            "value": "modem is now green."
+          },
+          {
+            "claim_type": "support_note_claim",
+            "source": "support_note",
+            "timestamp": "2026-06-18T10:07:00Z",
+            "value": "CRM shows Active."
+          },
+          {
+            "claim_type": "support_note_claim",
+            "source": "support_note",
+            "timestamp": "2026-06-18T10:07:00Z",
+            "value": "Billing clear."
+          },
+          {
+            "claim_type": "support_note_claim",
+            "source": "support_note",
+            "timestamp": "2026-06-18T10:07:00Z",
+            "value": "Dispatch marked complete."
+          }
+        ],
+        "failure_category": "activation_failure",
+        "input_refs": [
+          "llm_demo_E-003"
+        ],
+        "interpretation_rationale_codes": [
+          "mentions_signal_absent",
+          "mentions_system_timeout"
+        ],
+        "operator_note": "Case appears resolved based on technician observation and customer report of stable service and green modem. CRM, billing, and dispatch are all in order. Recommend moving to closure pending authoritative telemetry verification.",
+        "recommendation_confidence": 0.85,
+        "recommended_actions": [
+          "Verify authoritative telemetry for service activation and sustained stability.",
+          "Consider a follow-up with the customer to confirm ongoing service quality and satisfaction."
+        ],
+        "recommended_next_stage": "closure_candidate",
+        "reviewer_questions": [
+          "Has authoritative telemetry confirmed sustained service activation and stability since the technician visit?",
+          "Is a customer follow-up call deemed necessary to confirm long-term satisfaction?"
+        ],
+        "urgency": "normal"
+      },
+      "disagreement": {
+        "advocate_recommendation": "closure_candidate",
+        "claim_overlap_ratio": 0.667,
+        "confidence_delta": 0.15,
+        "disagreement_score": 0.712,
+        "skeptic_recommendation": "verify_telemetry",
+        "stage_match": false,
+        "threshold": 0.6,
+        "unique_advocate_gaps": [
+          "customer's statement 'looks stable' is not an explicit confirmation of full satisfaction or long-term stability.",
+          "no direct authoritative telemetry confirmation of sustained service stability is available in the provided notes (this is handled by the policy engine)."
+        ],
+        "unique_skeptic_gaps": [
+          "lack of authoritative, real-time telemetry confirming sustained service stability post-activation retry.",
+          "no explicit root cause identified for the previous activation failures that led to multiple callbacks.",
+          "the term 'stable' is subjective and requires objective verification."
+        ]
+      },
+      "skeptic_event_id": "AIE-LLM-E-003-SKP",
+      "skeptic_interpretation": {
+        "audit_explanation": "The notes indicate a resolved activation failure, with the modem showing solid green and the customer reporting stable service after an activation retry. CRM and billing status are clear, and dispatch is complete. However, as a closure skeptic, the claims of 'stable' service are based on customer and technician observation, not authoritative telemetry. The customer's prior frustration ('third callback') suggests a history of instability, warranting a verification of sustained service health via telemetry before considering closure. The 'activation retry' points to a previous system-level issue.",
+        "category_confidence": 0.85,
+        "closure_block_reason_code": "missing_authoritative_signal",
+        "customer_impact_summary": "Customer experienced significant frustration due to multiple service interruptions, requiring a third callback and technician visit. Service is currently reported as stable, but long-term stability is unconfirmed.",
+        "event_id": "AIE-LLM-E-003-SKP",
+        "evidence_gaps": [
+          "Lack of authoritative, real-time telemetry confirming sustained service stability post-activation retry.",
+          "No explicit root cause identified for the previous activation failures that led to multiple callbacks.",
+          "The term 'stable' is subjective and requires objective verification."
+        ],
+        "extracted_claims": [
+          {
+            "claim_type": "technician_observation",
+            "source": "technician_note",
+            "timestamp": "2026-06-18T10:05:00Z",
+            "value": "Tech visited at 14:30."
+          },
+          {
+            "claim_type": "technician_observation",
+            "source": "technician_note",
+            "timestamp": "2026-06-18T10:05:00Z",
+            "value": "Modem shows solid green."
+          },
+          {
+            "claim_type": "customer_reported_symptom",
+            "source": "technician_note",
+            "timestamp": "2026-06-18T10:05:00Z",
+            "value": "Customer says service looks stable after activation retry."
+          },
+          {
+            "claim_type": "customer_reported_symptom",
+            "source": "customer_message",
+            "timestamp": "2026-06-18T10:06:00Z",
+            "value": "Customer is frustrated after a third callback"
+          },
+          {
+            "claim_type": "customer_reported_symptom",
+            "source": "customer_message",
+            "timestamp": "2026-06-18T10:06:00Z",
+            "value": "modem is now green."
+          },
+          {
+            "claim_type": "support_note_claim",
+            "source": "support_note",
+            "timestamp": "2026-06-18T10:07:00Z",
+            "value": "CRM shows Active."
+          },
+          {
+            "claim_type": "support_note_claim",
+            "source": "support_note",
+            "timestamp": "2026-06-18T10:07:00Z",
+            "value": "Billing clear."
+          },
+          {
+            "claim_type": "support_note_claim",
+            "source": "support_note",
+            "timestamp": "2026-06-18T10:07:00Z",
+            "value": "Dispatch marked complete."
+          }
+        ],
+        "failure_category": "activation_failure",
+        "input_refs": [
+          "llm_demo_E-003"
+        ],
+        "interpretation_rationale_codes": [
+          "mentions_signal_absent",
+          "mentions_system_timeout"
+        ],
+        "operator_note": "Case appears to have a positive resolution based on technician and customer reports (modem green, service stable after retry). However, given the customer's history of frustration ('third callback') and the subjective nature of 'stable,' authoritative telemetry verification is crucial before closure. The policy engine should confirm the absence of any underlying issues.",
+        "recommendation_confidence": 0.7,
+        "recommended_actions": [
+          "Initiate a check of authoritative network telemetry to confirm sustained service stability since the technician visit.",
+          "Monitor the service for any recurrence of activation or connectivity issues over the next 24-48 hours.",
+          "Consider a proactive customer follow-up call in 2-3 days to confirm satisfaction and service performance."
+        ],
+        "recommended_next_stage": "verify_telemetry",
+        "reviewer_questions": [
+          "Has the authoritative telemetry confirmed sustained service stability since the technician's visit on 2026-06-18?",
+          "What was the specific technical root cause of the prior activation failures that necessitated multiple callbacks?",
+          "Is there a plan to proactively engage the customer to ensure long-term satisfaction?"
+        ],
+        "urgency": "normal"
+      }
+    },
+    "audit_explanation": "The technician observed a solid green modem and the customer reported stable service after an activation retry. Support notes confirm CRM active, billing clear, and dispatch complete, all indicating a successful resolution of the activation issue.",
+    "category_confidence": 0.85,
+    "closure_block_reason_code": "none",
+    "customer_impact_summary": "Customer was previously frustrated but now reports stable service and a green modem, suggesting the service issue has been resolved.",
+    "event_id": "AIE-LLM-E-003",
+    "evidence_gaps": [
+      "No direct authoritative telemetry confirmation of sustained service stability is available in the provided notes (this is handled by the policy engine).",
+      "Customer's statement 'looks stable' is not an explicit confirmation of full satisfaction or long-term stability.",
+      "Lack of authoritative, real-time telemetry confirming sustained service stability post-activation retry.",
+      "No explicit root cause identified for the previous activation failures that led to multiple callbacks.",
+      "The term 'stable' is subjective and requires objective verification."
+    ],
+    "extracted_claims": [
+      {
+        "claim_type": "technician_observation",
+        "source": "technician_note",
+        "timestamp": "2026-06-18T10:05:00Z",
+        "value": "Modem shows solid green."
+      },
+      {
+        "claim_type": "customer_reported_symptom",
+        "source": "technician_note",
+        "timestamp": "2026-06-18T10:05:00Z",
+        "value": "service looks stable after activation retry."
+      },
+      {
+        "claim_type": "customer_reported_symptom",
+        "source": "customer_message",
+        "timestamp": "2026-06-18T10:06:00Z",
+        "value": "Customer is frustrated after a third callback"
+      },
+      {
+        "claim_type": "customer_reported_symptom",
+        "source": "customer_message",
+        "timestamp": "2026-06-18T10:06:00Z",
+        "value": "modem is now green."
+      },
+      {
+        "claim_type": "support_note_claim",
+        "source": "support_note",
+        "timestamp": "2026-06-18T10:07:00Z",
+        "value": "CRM shows Active."
+      },
+      {
+        "claim_type": "support_note_claim",
+        "source": "support_note",
+        "timestamp": "2026-06-18T10:07:00Z",
+        "value": "Billing clear."
+      },
+      {
+        "claim_type": "support_note_claim",
+        "source": "support_note",
+        "timestamp": "2026-06-18T10:07:00Z",
+        "value": "Dispatch marked complete."
+      }
+    ],
+    "failure_category": "activation_failure",
+    "input_refs": [
+      "llm_demo_E-003"
+    ],
+    "interpretation_rationale_codes": [
+      "mentions_signal_absent",
+      "mentions_system_timeout"
+    ],
+    "operator_note": "Adversarial dual interpretation preserved the advocate closure recommendation, while the skeptic found unresolved risk. Disagreement score 0.712 met threshold 0.6; deterministic policy treats this as ambiguity requiring review.",
+    "recommendation_confidence": 0.85,
+    "recommended_actions": [
+      "Verify authoritative telemetry for service activation and sustained stability.",
+      "Consider a follow-up with the customer to confirm ongoing service quality and satisfaction."
+    ],
+    "recommended_next_stage": "closure_candidate",
+    "reviewer_questions": [
+      "Has authoritative telemetry confirmed sustained service activation and stability since the technician visit?",
+      "Is a customer follow-up call deemed necessary to confirm long-term satisfaction?",
+      "Has the authoritative telemetry confirmed sustained service stability since the technician's visit on 2026-06-18?",
+      "What was the specific technical root cause of the prior activation failures that necessitated multiple callbacks?",
+      "Is there a plan to proactively engage the customer to ensure long-term satisfaction?",
+      "Why did the advocate and skeptic interpretations diverge on the same evidence?"
+    ],
+    "urgency": "normal"
+  },
+  "agent_validation": {
+    "errors": [],
+    "valid": true
+  },
+  "policy_decision_event": {
+    "agent_event_id": "AIE-LLM-E-003",
+    "case_id": "CASE-BG-STALE",
+    "closure_allowed": false,
+    "decision": "require_human_review",
+    "decision_policy_version": "dp-v1",
+    "derived_evidence_state": "authoritative_unavailable_or_stale",
+    "from_recommended_stage": "closure_candidate",
+    "reason_codes": [
+      "stale_authoritative_signal",
+      "high_interpretation_disagreement"
+    ],
+    "severity": "elevated",
+    "to_stage": "human_review"
+  },
+  "scenario_id": "E-003"
+}

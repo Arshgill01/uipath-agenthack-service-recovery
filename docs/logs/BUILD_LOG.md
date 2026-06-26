@@ -1837,3 +1837,47 @@ Open risks:
 Next:
 
 - Add a focused prompt/repair eval loop for live adversarial Gemini if the final story needs live advocate/skeptic output.
+
+### 2026-06-26 13:23 IST - Agent / Live Adversarial Gemini Repair Loop
+
+What changed:
+
+- Added a bounded one-shot LLM repair loop for invalid Gemini interpretation payloads.
+- Kept `agent_validator.py` strict; repaired output must pass the same schema and semantic validation before policy sees it.
+- Added tests for live-observed drift: confident classified output with `none` rationale, unsupported `mentions_customer_pressure`, and adversarial role repair before disagreement scoring.
+- Tuned deterministic disagreement scoring so stage mismatch crosses the `0.60` high-disagreement threshold.
+- Captured a live Vertex adversarial artifact at `docs/demo/artifacts/llm_interpreter_E003_adversarial_live.json`.
+
+Commands run:
+
+- `python -m unittest tests.test_llm_interpreter`
+- `python -m unittest tests.test_policy_state_eval tests.test_uipath_payload tests.test_evidence_packet_view`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- `python -m service_recovery_core.demo_proof --output-dir docs/demo/artifacts --verify-only`
+- `bash -n scripts/run_llm_demo.sh`
+- `scripts/run_llm_demo.sh --scenario-id E-003 --model gemini-2.5-flash --project project-61c59251-6618-46b7-a8c --location us-central1 --adversarial --output eval_results/llm_interpreter_E003_adversarial_live.json`
+- `jq -r '{valid:.agent_validation.valid, decision:.policy_decision_event.decision, to:.policy_decision_event.to_stage, reasons:.policy_decision_event.reason_codes, disagreement:.adversarial_interpretation.disagreement.disagreement_score, advocate:.adversarial_interpretation.disagreement.advocate_recommendation, skeptic:.adversarial_interpretation.disagreement.skeptic_recommendation}' docs/demo/artifacts/llm_interpreter_E003_adversarial_live.json`
+
+Validation:
+
+- PASS: LLM interpreter tests passed 11 tests before score tuning and repair docs.
+- PASS: targeted policy/payload/evidence-packet tests passed 12 tests.
+- PASS: full unit suite passed 38 tests.
+- PASS: local eval suite passed 9/9 scenarios.
+- PASS: demo proof verifier passed E-002/E-004.
+- PASS: live Vertex adversarial run produced a valid Agent Interpretation Event.
+- PASS: live artifact shows advocate `closure_candidate`, skeptic `verify_telemetry`, disagreement `0.712`, policy `require_human_review`, route `human_review`, and reason codes `stale_authoritative_signal` plus `high_interpretation_disagreement`.
+
+Product feedback:
+
+- No new PF entry. This checkpoint used Google Vertex/Gemini and local repo validation, not a new UiPath product surface.
+
+Open risks:
+
+- The live adversarial path is now valid, but it is model-dependent; re-run before final recording if prompt/model/scoring changes.
+- This proof is a supplemental LLM-governance beat. The core E-002/E-004 UiPath proof beats remain the authoritative submission path.
+
+Next:
+
+- Consider rendering a dedicated evidence packet from the live adversarial artifact if it becomes a final demo visual.

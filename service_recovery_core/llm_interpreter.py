@@ -45,6 +45,7 @@ def interpret_notes_with_llm(
     location: str | None = None,
     client: ContentClient | None = None,
     role_framing: str | None = None,
+    repair_attempts: int = 1,
 ) -> dict[str, Any]:
     """Return a schema-validated Agent Interpretation Event from unstructured text."""
 
@@ -65,6 +66,21 @@ def interpret_notes_with_llm(
     payload["event_id"] = event_id
     payload["input_refs"] = input_refs
     result = validate_agent_interpretation(payload)
+    repairs_used = 0
+    while not result["valid"] and repairs_used < repair_attempts:
+        repairs_used += 1
+        payload = _repair_payload_with_llm(
+            client=active_client,
+            model=model,
+            invalid_payload=payload,
+            validation_errors=result["errors"],
+            notes=notes,
+            business_context=business_context,
+            role_framing=role_framing,
+            event_id=event_id,
+            input_refs=input_refs,
+        )
+        result = validate_agent_interpretation(payload)
     if not result["valid"]:
         raise LlmInterpreterError(f"LLM agent output failed validation: {result['errors']}")
     return payload
@@ -111,7 +127,7 @@ def build_interpretation_prompt(
             "Allowed recommended_next_stage values:",
             "verify_telemetry, retry_activation, dispatch_followup, inventory_reconciliation, billing_review, human_exception_review, closure_candidate",
             "Allowed closure_block_reason_code values:",
-            "none, missing_authoritative_signal, stale_authoritative_signal, source_contradiction, low_category_confidence, low_recommendation_confidence, high_impact_exception, invalid_agent_output",
+            "none, missing_authoritative_signal, stale_authoritative_signal, source_contradiction, low_category_confidence, low_recommendation_confidence, high_impact_exception, high_interpretation_disagreement, invalid_agent_output",
             "",
             "If business context and notes look resolved, you may recommend closure_candidate with closure_block_reason_code none.",
             "You should still provide useful triage value: urgency, customer impact, evidence gaps, recommended actions, reviewer questions, and an operator note.",
@@ -132,6 +148,70 @@ def build_interpretation_prompt(
             f"Unstructured notes JSON:\n{json.dumps(notes, indent=2, sort_keys=True)}",
         ]
     )
+
+
+def build_repair_prompt(
+    *,
+    invalid_payload: dict[str, Any],
+    validation_errors: list[str],
+    notes: list[dict[str, str]],
+    business_context: dict[str, str],
+    role_framing: str | None = None,
+) -> str:
+    return "\n".join(
+        [
+            "You returned a JSON object for the telecom service recovery interpretation agent, but it failed validation.",
+            "Repair the JSON object. Return only one corrected JSON object with the exact same schema.",
+            role_framing or _standard_role_framing(),
+            "Do not add prose outside JSON. Do not invent new facts.",
+            "Keep the operational recommendation honest, but make the confidence, rationale codes, and extracted claims internally consistent.",
+            "Required repairs by validator error:",
+            "- If category_confidence >= 0.90, include two supported rationale codes or lower category_confidence below 0.90.",
+            "- Do not use interpretation_rationale_codes [\"none\"] unless failure_category is unclassified with category_confidence <= 0.40.",
+            "- A rationale code must be supported by at least one extracted_claims claim_type allowed for that rationale.",
+            "- mentions_customer_pressure requires a pressure_to_bypass extracted claim; ordinary frustration is not enough.",
+            "- For closure_candidate, closure_block_reason_code must be none and recommendation_confidence must be >= 0.75.",
+            "",
+            f"Validation errors JSON:\n{json.dumps(validation_errors, indent=2, sort_keys=True)}",
+            f"Invalid payload JSON:\n{json.dumps(invalid_payload, indent=2, sort_keys=True)}",
+            f"Business context JSON:\n{json.dumps(business_context, indent=2, sort_keys=True)}",
+            f"Unstructured notes JSON:\n{json.dumps(notes, indent=2, sort_keys=True)}",
+        ]
+    )
+
+
+def _repair_payload_with_llm(
+    *,
+    client: ContentClient,
+    model: str,
+    invalid_payload: dict[str, Any],
+    validation_errors: list[str],
+    notes: list[dict[str, str]],
+    business_context: dict[str, str],
+    role_framing: str | None,
+    event_id: str,
+    input_refs: list[str],
+) -> dict[str, Any]:
+    try:
+        raw_text = _response_text(
+            client.generate_content(
+                model=model,
+                contents=build_repair_prompt(
+                    invalid_payload=invalid_payload,
+                    validation_errors=validation_errors,
+                    notes=notes,
+                    business_context=business_context,
+                    role_framing=role_framing,
+                ),
+                config=_generation_config(),
+            )
+        )
+    except Exception as exc:
+        raise LlmInterpreterError(f"LLM provider call failed during repair: {exc}") from exc
+    repaired = _normalize_payload(_json_object(raw_text))
+    repaired["event_id"] = event_id
+    repaired["input_refs"] = input_refs
+    return repaired
 
 
 def advocate_role_framing() -> str:
@@ -164,7 +244,7 @@ def compute_interpretation_disagreement(advocate: dict[str, Any], skeptic: dict[
     claim_overlap_ratio = len(advocate_claims & skeptic_claims) / max(len(claim_union), 1)
     advocate_gaps = {str(value).strip().lower() for value in advocate.get("evidence_gaps", []) if str(value).strip()}
     skeptic_gaps = {str(value).strip().lower() for value in skeptic.get("evidence_gaps", []) if str(value).strip()}
-    stage_penalty = 0.50 if advocate_stage != skeptic_stage else 0.0
+    stage_penalty = 0.60 if advocate_stage != skeptic_stage else 0.0
     score = min(stage_penalty + (confidence_delta * 0.30) + ((1 - claim_overlap_ratio) * 0.20), 1.0)
     return {
         "disagreement_score": round(score, 3),

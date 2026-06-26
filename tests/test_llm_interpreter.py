@@ -103,6 +103,45 @@ class LlmInterpreterTests(unittest.TestCase):
         self.assertEqual(event["recommendation_confidence"], 0.83)
         self.assertEqual(event["extracted_claims"][0]["source"], "support_note")
 
+    def test_repairs_live_observed_none_rationale_drift(self):
+        invalid = _valid_llm_payload()
+        invalid["interpretation_rationale_codes"] = ["none"]
+        repaired = _valid_llm_payload()
+        client = SequenceFakeModels([invalid, repaired])
+
+        event = interpret_notes_with_llm(
+            notes=[],
+            business_context={"case_id": "CASE-BG-STALE"},
+            event_id="AIE-REPAIRED",
+            input_refs=["repair_demo"],
+            client=client,
+        )
+
+        self.assertEqual(len(client.prompts), 2)
+        self.assertIn("failed validation", client.prompts[1])
+        self.assertIn("none rationale requires low confidence", client.prompts[1])
+        self.assertEqual(event["interpretation_rationale_codes"], ["mentions_signal_absent"])
+
+    def test_repairs_live_observed_unsupported_customer_pressure_drift(self):
+        invalid = _valid_llm_payload()
+        invalid["category_confidence"] = 0.91
+        invalid["interpretation_rationale_codes"] = ["mentions_customer_pressure"]
+        repaired = _valid_llm_payload()
+        repaired["category_confidence"] = 0.82
+        client = SequenceFakeModels([invalid, repaired])
+
+        event = interpret_notes_with_llm(
+            notes=[],
+            business_context={"case_id": "CASE-BG-STALE"},
+            event_id="AIE-REPAIRED-PRESSURE",
+            input_refs=["repair_demo"],
+            client=client,
+        )
+
+        self.assertEqual(len(client.prompts), 2)
+        self.assertIn("mentions_customer_pressure requires a pressure_to_bypass extracted claim", client.prompts[1])
+        self.assertEqual(event["category_confidence"], 0.82)
+
     def test_rich_llm_package_reaches_audit_and_packet(self):
         fixture = scenario("E-003")
         agent_event = dict(_valid_llm_payload(), event_id="AIE-LLM-E003", input_refs=["llm_demo_E003"])
@@ -141,6 +180,18 @@ class LlmInterpreterTests(unittest.TestCase):
         self.assertEqual(result["policy_decision_event"]["decision"], "require_human_review")
         self.assertEqual(result["policy_decision_event"]["to_stage"], "human_review")
         self.assertIn("high_interpretation_disagreement", result["policy_decision_event"]["reason_codes"])
+
+    def test_adversarial_mode_repairs_each_role_before_disagreement(self):
+        invalid_advocate = _valid_llm_payload()
+        invalid_advocate["interpretation_rationale_codes"] = ["none"]
+        client = SequenceFakeModels([invalid_advocate, _valid_llm_payload(), _skeptic_payload()])
+
+        result = run_governed_llm_demo(scenario_id="E-001", client=client, adversarial=True)
+
+        self.assertEqual(len(client.prompts), 3)
+        self.assertIn("failed validation", client.prompts[1])
+        self.assertTrue(result["agent_validation"]["valid"], result["agent_validation"]["errors"])
+        self.assertEqual(result["policy_decision_event"]["to_stage"], "human_review")
 
     def test_adversarial_trace_reaches_audit_and_packet(self):
         fixture = scenario("E-001")
