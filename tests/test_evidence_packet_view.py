@@ -25,6 +25,8 @@ class EvidencePacketViewTests(unittest.TestCase):
         self.assertIn("generated Action Center page hid or mislabeled proof-critical fields", html)
         self.assertIn("Closure is not available until fresh authoritative service evidence confirms recovery", html)
         self.assertIn("retry_telemetry", html)
+        self.assertIn('class="table-scroll"', html)
+        self.assertNotIn("@import url(", html)
 
     def test_contradiction_html_shows_human_review_route(self):
         html = build_evidence_packet_html("E-004")
@@ -40,6 +42,7 @@ class EvidencePacketViewTests(unittest.TestCase):
         self.assertIn("authoritative", html)
         self.assertIn("open_investigation", html)
         self.assertIn("fresh authoritative telemetry contradicts", html)
+        self.assertIn("background-image:", html)
 
 
 if __name__ == "__main__":

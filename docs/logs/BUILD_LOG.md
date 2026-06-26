@@ -1881,3 +1881,66 @@ Open risks:
 Next:
 
 - Consider rendering a dedicated evidence packet from the live adversarial artifact if it becomes a final demo visual.
+
+### 2026-06-26 13:55 IST - Agent / Gemini Branch Review and Evidence Packet Polish
+
+What changed:
+
+- Reviewed Gemini branches `feature/llm-engine-adv`, `feature/ui-design`, and `feature/service-recovery-combined` against current `master`.
+- Rejected whole-branch merges because they would regress current adversarial LLM support, policy reason handling, tests, docs, and responsive table behavior.
+- Selectively ported restrained offline-safe evidence-packet styling from the UI branch without remote fonts, hover-heavy motion, or theme-dependent product claims.
+- Preserved adversarial dual-interpretation rendering and `.table-scroll` behavior.
+- Added regression checks that evidence packets keep the table scroller and avoid remote font imports.
+- Added `docs/plans/LONG_RUNNING_AGENTIC_LOOP_RUNBOOK.md` to guide sustained multi-hour work loops.
+
+Commands run:
+
+- `git branch --all --verbose --no-abbrev`
+- `git diff --name-status master..feature/llm-engine-adv`
+- `git diff --name-status master..feature/ui-design`
+- `git diff --stat master..feature/llm-engine-adv`
+- `git diff --stat master..feature/ui-design`
+- `git worktree add /tmp/srev-review-llm feature/llm-engine-adv`
+- `git worktree add /tmp/srev-review-ui feature/ui-design`
+- `python -m unittest discover -s tests` in `/tmp/srev-review-llm`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json` in `/tmp/srev-review-llm`
+- `python -m service_recovery_core.demo_proof --output-dir docs/demo/artifacts --verify-only` in `/tmp/srev-review-llm`
+- `python -m unittest discover -s tests` in `/tmp/srev-review-ui`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json` in `/tmp/srev-review-ui`
+- `python -m service_recovery_core.demo_proof --output-dir docs/demo/artifacts --verify-only` in `/tmp/srev-review-ui`
+- `python -m service_recovery_core.demo_proof --output-dir docs/demo/artifacts`
+- `python -m unittest tests.test_evidence_packet_view`
+- `python -m unittest tests.test_evidence_packet_view tests.test_llm_interpreter`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- `python -m service_recovery_core.demo_proof --output-dir docs/demo/artifacts --verify-only`
+- `bash -n scripts/run_llm_demo.sh`
+- `git diff --check`
+- `npx playwright screenshot --viewport-size=1440,1100 file://$PWD/docs/demo/artifacts/evidence_packet_E002.html docs/demo/artifacts/evidence_packet_E002_desktop_review.png`
+- `npx playwright screenshot --viewport-size=390,900 file://$PWD/docs/demo/artifacts/evidence_packet_E004.html docs/demo/artifacts/evidence_packet_E004_mobile_review.png`
+- Playwright DOM checks for desktop/mobile proof text, route text, table scroll containment, and page-level horizontal overflow.
+
+Validation:
+
+- PASS: `feature/llm-engine-adv` worktree passed 35 unit tests, 9/9 evals, and demo proof verification, but is obsolete relative to current master.
+- PASS: `feature/ui-design` worktree passed 32 unit tests, 9/9 evals, and demo proof verification, but is not merge-safe relative to current master.
+- PASS: current evidence-packet targeted tests passed.
+- PASS: current master full unit suite passed 38 tests.
+- PASS: current master local eval suite passed 9/9 scenarios.
+- PASS: regenerated E-002/E-004 demo proof artifacts verified.
+- PASS: `bash -n scripts/run_llm_demo.sh` and `git diff --check`.
+- PASS: Playwright desktop check for E-002 found AIE/PDE proof text, table scroller, and no page-level horizontal overflow.
+- PASS: Playwright mobile check for E-004 found AIE/PDE proof text, `closure_candidate -> human_review`, table scroll containment, and no page-level horizontal overflow after CSS min-width fix.
+
+Product feedback:
+
+- No new PF entry. This checkpoint reviewed local branches and local demo artifacts; no new UiPath product surface was exercised.
+
+Open risks:
+
+- The UI polish is intentionally restrained. Do not merge `feature/ui-design` or `feature/service-recovery-combined` wholesale without a fresh diff review against `master`.
+- Dedicated adversarial packet generation remains optional; current E-002/E-004 proof packets are the authoritative demo-safe path.
+
+Next:
+
+- Continue with product-feedback award polish or a dedicated adversarial evidence packet only if it becomes part of the final demo.
