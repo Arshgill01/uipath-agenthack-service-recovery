@@ -23,7 +23,7 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 | --- | --- | --- | --- |
 | G-001 Native Case State / Audit Reconstruction | PARTIAL natively; PASS with Data Fabric V2 and Orchestrator bucket full-payload fallbacks | Data Fabric entity `ServiceRecoveryAuditBundleV2` record `F9D838CE-4671-F111-AC9A-0022489A9A06` queries by `CaseId` and returns parseable AIE/PDE/audit JSON; Orchestrator bucket artifact `audit/service_recovery_audit_bundle_E004.json` | Native Case history is still not the full domain audit by itself. Use Data Fabric V2 or bucket artifact as the full-payload audit proof. |
 | G-002 Policy Version Pinning | PASS for explicit package/process/artifact pinning | Process readback/version history; payload/audit fields `interpretation_policy_version` and `decision_policy_version` | Represent policy migrations as explicit audited events. |
-| G-003 Human Evidence Packet | PASS for Action Center lifecycle/structured return; PARTIAL for generated UI legibility | Live tasks `4300080`, `4300219`; `docs/demo/artifacts/evidence_packet_E002.html`; `docs/demo/artifacts/evidence_packet_E004.html` | Use Action Center for lifecycle and custom packet for judge-readable proof. |
+| G-003 Human Evidence Packet | PASS for Action Center lifecycle/structured return; PARTIAL for generated UI legibility | Live tasks `4300080`, `4300219`; `docs/demo/artifacts/evidence_packet_E002.html`; `docs/demo/artifacts/evidence_packet_E004.html`; generated UI repair assessment `docs/validation/ACTION_CENTER_UI_REPAIR_ASSESSMENT.md` | Use Action Center for lifecycle and custom packet for judge-readable proof. |
 | G-004 Agent Recommendation Visible Before Override | PASS for persistence/API/audit visibility; PARTIAL for generated UI display | Live E-002/E-004 task payloads; audit bundle AIE/PDE linkage; evidence packet comparison panels | Do not depend on generated Action Center UI to show the boundary. |
 
 ## Soft Gates
@@ -62,6 +62,7 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 | Live adversarial LLM proof artifact | Ready | `docs/demo/artifacts/llm_interpreter_E003_adversarial_live.json` |
 | Live adversarial LLM evidence packet | Ready | `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html` |
 | Live adversarial packet screenshots | Ready | `docs/demo/artifacts/evidence_packet_E003_adversarial_desktop.png`; `docs/demo/artifacts/evidence_packet_E003_adversarial_mobile.png` |
+| Action Center UI repair assessment | Ready | `docs/validation/ACTION_CENTER_UI_REPAIR_ASSESSMENT.md` |
 
 ## Do Not Claim
 

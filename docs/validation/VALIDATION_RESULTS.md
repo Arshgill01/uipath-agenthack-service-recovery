@@ -1580,3 +1580,56 @@ Decision impact:
 - Use execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` as the current Test Manager evidence ID.
 - Keep the final guardrail: do not claim automated Test Cloud execution.
 - Update PF-021 from unresolved blocker to lifecycle/UX feedback: direct finish calls can leave a manual aggregate `Running`; explicit start-then-finish reconciles it.
+
+## 2026-06-26 16:02 UTC - Action Center Generated UI Repair Assessment
+
+Environment:
+
+- Local repo and downloaded UiPath package artifacts under `tmp/uipath-downloads/maestro-case-current/SimpleApprovalApp`.
+- No new live UiPath mutation was performed.
+
+Gate/wave:
+
+- G-003 Human Evidence Packet.
+- G-004 Agent Recommendation Visible Before Override.
+- PF-013 generated Action Center UI legibility.
+
+Assumption tested:
+
+- The generated Action Center UI might be repairable from downloaded package/source artifacts without another Studio Web UI session.
+
+Steps:
+
+1. Searched the repo and temporary UiPath downloads for `action-schema.json`, `app.config.json`, `project.uiproj`, `caseplan.json`, and generated app artifacts.
+2. Inspected `SimpleApprovalApp/project.uiproj`.
+3. Inspected `.app/schemas/schema-5e4cfd91-d8f9-46f7-83da-fdb3572e6ece.json`.
+4. Inspected `.app/models/*.json` for controls corresponding to `Content`, `EvidencePacketJson`, `RawAgentRecommendation`, `PolicyDecisionJson`, and `UnnamedString1`.
+
+Observed:
+
+- The downloaded `SimpleApprovalApp` is a `WebApp` project with generated model JSON and compiled form DLLs, not an obvious editable coded-app source tree.
+- The Action schema contains the expected `PolicyDecisionJson` input.
+- The generated form model contains visible controls for `Content`, `EvidencePacketJson`, `RawAgentRecommendation`, and `UnnamedString1`.
+- This matches the live Action Center behavior where `PolicyDecisionJson` persisted in APIs but rendered as `Unnamed String 1`.
+
+Result:
+
+- G-003/G-004 generated UI legibility remains PARTIAL.
+- PF-013 is strengthened: this is a generated UI binding/naming issue after a correct schema and persisted backend payload, not a missing data-contract issue.
+- Repo-only repair is not safe without an editable Studio Web/Coded App source path, a documented `uip` binding update command, or a fresh Studio UI repair/revalidation cycle.
+
+Decision impact:
+
+- Keep Action Center for task lifecycle and structured reviewer return.
+- Keep custom evidence packet/Data Fabric/bucket audit as final judge-readable proof surfaces.
+- Do not spend more submission-critical cycles on generated Action Center repair unless an editable binding path becomes available and can be revalidated live.
+
+Evidence:
+
+- `docs/validation/ACTION_CENTER_UI_REPAIR_ASSESSMENT.md`
+- `tmp/uipath-downloads/maestro-case-current/SimpleApprovalApp/.app/schemas/schema-5e4cfd91-d8f9-46f7-83da-fdb3572e6ece.json`
+- `tmp/uipath-downloads/maestro-case-current/SimpleApprovalApp/.app/models/models-IDeb3af66806404a4eaa3b9049014bb4d0.json`
+
+Product feedback:
+
+- PF-013 updated with local package/model inspection evidence.

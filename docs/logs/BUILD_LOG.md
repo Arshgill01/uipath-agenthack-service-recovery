@@ -2658,3 +2658,36 @@ Product feedback:
 Open risks:
 
 - The wrapper supports manual Test Manager execution only; automated Test Cloud execution remains unvalidated.
+
+### 2026-06-26 16:02 UTC - Agent / Action Center UI Repair Assessment
+
+What changed:
+
+- Investigated whether the generated Action Center UI legibility issue could be repaired from repo/downloaded package artifacts.
+- Inspected downloaded `SimpleApprovalApp` artifacts under `tmp/uipath-downloads/maestro-case-current/SimpleApprovalApp`.
+- Confirmed the Action schema contains `PolicyDecisionJson`.
+- Confirmed the generated form model contains an `UnnamedString1` control where the live UI rendered `PolicyDecisionJson` as `Unnamed String 1`.
+- Added `docs/validation/ACTION_CENTER_UI_REPAIR_ASSESSMENT.md`.
+- Updated validation/readiness/product-feedback docs to keep Action Center as lifecycle proof and custom evidence packet/Data Fabric/bucket as judge-readable proof.
+
+Commands run:
+
+- `rg --files | rg 'action-schema|app\\.config|Action|action|caseplan|uiproj|nupkg|evidence_packet'`
+- `find tmp -maxdepth 5 \\( -name 'action-schema.json' -o -name 'app.config.json' -o -name '*.uiproj' -o -name 'caseplan.json' -o -name '*.nupkg' \\) -print`
+- `find tmp/uipath-downloads/maestro-case-current/SimpleApprovalApp -maxdepth 4 -type f -print`
+- `python -m json.tool tmp/uipath-downloads/maestro-case-current/SimpleApprovalApp/.app/schemas/schema-5e4cfd91-d8f9-46f7-83da-fdb3572e6ece.json`
+- Python model inspection over `tmp/uipath-downloads/maestro-case-current/SimpleApprovalApp/.app/models/*.json`
+
+Validation:
+
+- PASS: schema inspection found `PolicyDecisionJson` as an Action input.
+- PASS: generated form model inspection found `UnnamedString1`, matching live Action Center screenshots/API observations.
+- PASS/PARTIAL: generated UI legibility remains partial; this checkpoint validates that a repo-only repair is not safe from the available artifacts.
+
+Product feedback:
+
+- PF-013 strengthened with package/model evidence: the schema and backend payload are correct, while generated UI binding/control naming loses the proof-critical display name.
+
+Open risks:
+
+- Generated Action Center UI should still not be used as the judge-facing proof surface unless repaired in Studio/UI and revalidated with a fresh live task.
