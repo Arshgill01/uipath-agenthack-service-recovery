@@ -1979,3 +1979,41 @@ Product feedback:
 Open risks:
 
 - Team name and story-sharing preference still require user confirmation before final survey submission.
+
+### 2026-06-26 14:31 IST - Agent / Live Adversarial Evidence Packet
+
+What changed:
+
+- Added a CLI path to render a saved governed LLM demo result as the standard evidence-packet HTML.
+- Generated `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html` from the live Vertex adversarial artifact.
+- Updated the evidence-packet renderer to show full policy reason codes, so `high_interpretation_disagreement` is visible rather than hidden behind the primary block reason.
+- Updated route labeling so policy routes to `human_review` read as escalated review, including adversarial-disagreement escalation.
+- Added regression coverage for rendering the live adversarial artifact into a packet.
+- Linked the adversarial packet from submission/readiness docs.
+
+Commands run:
+
+- `python -m service_recovery_core.evals --llm-result-evidence-packet docs/demo/artifacts/llm_interpreter_E003_adversarial_live.json --output docs/demo/artifacts/evidence_packet_E003_adversarial_live.html`
+- `python -m unittest tests.test_llm_interpreter tests.test_evidence_packet_view`
+- `rg "Adversarial dual interpretation|Resolution advocate|Closure skeptic|closure_candidate -&gt; human_review|high_interpretation_disagreement|Escalated exception review" docs/demo/artifacts/evidence_packet_E003_adversarial_live.html`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- `python -m service_recovery_core.demo_proof --output-dir docs/demo/artifacts --verify-only`
+- `bash -n scripts/run_llm_demo.sh && test -f docs/demo/artifacts/evidence_packet_E003_adversarial_live.html && git diff --check`
+
+Validation:
+
+- PASS: targeted LLM/evidence-packet tests passed 14 tests.
+- PASS: generated adversarial packet shows advocate, skeptic, escalated route, and `high_interpretation_disagreement`.
+- PASS: full unit suite passed 39 tests.
+- PASS: local eval suite passed 9/9 scenarios.
+- PASS: demo proof verifier passed E-002/E-004.
+- PASS: `bash -n scripts/run_llm_demo.sh`, artifact existence check, and `git diff --check`.
+
+Product feedback:
+
+- No new PF entry. This checkpoint used a previously captured live LLM artifact and local rendering, not a new UiPath product surface.
+
+Open risks:
+
+- The adversarial packet is supplemental. The authoritative UiPath proof beats remain E-002 and E-004.

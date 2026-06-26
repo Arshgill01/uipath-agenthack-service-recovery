@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Evidence Packet - CASE-BG-MISSING</title>
+<title>Evidence Packet - CASE-BG-STALE</title>
 <style>
 :root {
   color-scheme: light;
@@ -452,12 +452,12 @@ code {
 <header class="topbar controlled">
   <div>
     <h1>Review service recovery evidence</h1>
-    <p>CASE-BG-MISSING / SVC-BG-1</p>
+    <p>CASE-BG-STALE / SVC-BG-1</p>
   </div>
   <dl class="summary">
     <div><dt>Business state</dt><dd>green</dd></div>
-    <div><dt>Evidence state</dt><dd>missing_pending</dd></div>
-    <div><dt>Block reason</dt><dd>missing_authoritative_signal</dd></div>
+    <div><dt>Evidence state</dt><dd>authoritative_unavailable_or_stale</dd></div>
+    <div><dt>Block reason</dt><dd>stale_authoritative_signal</dd></div>
     </dl>
 </header>
 <section class="proof-strip" aria-label="Demo proof summary">
@@ -467,15 +467,15 @@ code {
   </div>
   <div>
     <span>Policy decision</span>
-    <strong>override_recommendation</strong>
+    <strong>require_human_review</strong>
   </div>
   <div>
     <span>Final route</span>
-    <strong>verify_telemetry</strong>
+    <strong>human_review</strong>
   </div>
   <div>
     <span>Closure guard</span>
-    <strong>missing_authoritative_signal</strong>
+    <strong>stale_authoritative_signal</strong>
   </div>
   <div>
     <span>Policy versions</span>
@@ -487,25 +487,25 @@ code {
     <span class="eyebrow">Raw Agent Interpretation Event</span>
     <h2>closure_candidate</h2>
     <dl>
-      <div><dt>AIE ID</dt><dd>AIE-E002</dd></div>
-      <div><dt>Confidence</dt><dd>0.82</dd></div>
+      <div><dt>AIE ID</dt><dd>AIE-LLM-E-003</dd></div>
+      <div><dt>Confidence</dt><dd>0.85</dd></div>
       <div><dt>Failure category</dt><dd>activation_failure</dd></div>
     </dl>
   </article>
   <div class="override-arrow" aria-hidden="true">-></div>
   <article>
     <span class="eyebrow">Linked Policy Decision Event</span>
-    <h2>override_recommendation</h2>
+    <h2>require_human_review</h2>
     <dl>
-      <div><dt>PDE ID</dt><dd>PDE-E-002</dd></div>
-      <div><dt>Links to</dt><dd>AIE-E002</dd></div>
-      <div><dt>Route</dt><dd>verify_telemetry</dd></div>
+      <div><dt>PDE ID</dt><dd>PDE-LLM-E-003</dd></div>
+      <div><dt>Links to</dt><dd>AIE-LLM-E-003</dd></div>
+      <div><dt>Route</dt><dd>human_review</dd></div>
     </dl>
   </article>
   <div class="route-banner">
-    <span>Controlled verification retry</span>
-    <strong>closure_candidate -> verify_telemetry</strong>
-    <em>missing_authoritative_signal</em>
+    <span>Escalated exception review</span>
+    <strong>closure_candidate -> human_review</strong>
+    <em>stale_authoritative_signal</em>
   </div>
 </section>
 <section class="layout">
@@ -520,31 +520,90 @@ code {
     <article>
       <h3>Raw agent interpretation</h3>
       <dl>
-        <div><dt>Event</dt><dd>AIE-E002</dd></div>
+        <div><dt>Event</dt><dd>AIE-LLM-E-003</dd></div>
         <div><dt>Recommendation</dt><dd>closure_candidate</dd></div>
         <div><dt>Failure category</dt><dd>activation_failure</dd></div>
-        <div><dt>Confidence</dt><dd>0.82</dd></div>
+        <div><dt>Confidence</dt><dd>0.85</dd></div>
         <div><dt>Policy version</dt><dd>ip-v1</dd></div>
       </dl>
-      <p>Business systems look complete, so the agent recommends closure pending policy review.</p>
+      <p>The technician observed a solid green modem and the customer reported stable service after an activation retry. Support notes confirm CRM active, billing clear, and dispatch complete, all indicating a successful resolution of the activation issue.</p>
     </article>
     <article>
       <h3>Final policy decision</h3>
       <dl>
-        <div><dt>Event</dt><dd>PDE-E-002</dd></div>
-        <div><dt>Links to</dt><dd>AIE-E002</dd></div>
-        <div><dt>Decision</dt><dd>override_recommendation</dd></div>
-        <div><dt>Block reason</dt><dd>missing_authoritative_signal</dd></div>
-        <div><dt>Reason codes</dt><dd>missing_authoritative_signal</dd></div>
+        <div><dt>Event</dt><dd>PDE-LLM-E-003</dd></div>
+        <div><dt>Links to</dt><dd>AIE-LLM-E-003</dd></div>
+        <div><dt>Decision</dt><dd>require_human_review</dd></div>
+        <div><dt>Block reason</dt><dd>stale_authoritative_signal</dd></div>
+        <div><dt>Reason codes</dt><dd>stale_authoritative_signal, high_interpretation_disagreement</dd></div>
         <div><dt>From</dt><dd>closure_candidate</dd></div>
-        <div><dt>To</dt><dd>verify_telemetry</dd></div>
+        <div><dt>To</dt><dd>human_review</dd></div>
         <div><dt>Policy version</dt><dd>dp-v1</dd></div>
       </dl>
     </article>
   </div>
 </section>
-
-
+<section class="panel adversarial">
+  <h2>Adversarial dual interpretation</h2>
+  <div class="disagreement-score">
+    <span>Disagreement score</span>
+    <strong>0.712</strong>
+    <em>threshold 0.6</em>
+  </div>
+  <div class="adversarial-grid">
+    <article>
+  <h3>Resolution advocate</h3>
+  <dl>
+    <div><dt>Event</dt><dd>AIE-LLM-E-003-ADV</dd></div>
+    <div><dt>Recommendation</dt><dd>closure_candidate</dd></div>
+    <div><dt>Confidence</dt><dd>0.85</dd></div>
+    <div><dt>Failure category</dt><dd>activation_failure</dd></div>
+  </dl>
+  <p>The technician observed a solid green modem and the customer reported stable service after an activation retry. Support notes confirm CRM active, billing clear, and dispatch complete, all indicating a successful resolution of the activation issue.</p>
+</article>
+    <article>
+  <h3>Closure skeptic</h3>
+  <dl>
+    <div><dt>Event</dt><dd>AIE-LLM-E-003-SKP</dd></div>
+    <div><dt>Recommendation</dt><dd>verify_telemetry</dd></div>
+    <div><dt>Confidence</dt><dd>0.7</dd></div>
+    <div><dt>Failure category</dt><dd>activation_failure</dd></div>
+  </dl>
+  <p>The notes indicate a resolved activation failure, with the modem showing solid green and the customer reporting stable service after an activation retry. CRM and billing status are clear, and dispatch is complete. However, as a closure skeptic, the claims of &#x27;stable&#x27; service are based on customer and technician observation, not authoritative telemetry. The customer&#x27;s prior frustration (&#x27;third callback&#x27;) suggests a history of instability, warranting a verification of sustained service health via telemetry before considering closure. The &#x27;activation retry&#x27; points to a previous system-level issue.</p>
+</article>
+  </div>
+  <dl>
+    <div><dt>Stage match</dt><dd>False</dd></div>
+    <div><dt>Confidence delta</dt><dd>0.15</dd></div>
+    <div><dt>Claim overlap</dt><dd>0.667</dd></div>
+  </dl>
+  <article><h3>Skeptic-only gaps</h3><ul class="actions"><li>lack of authoritative, real-time telemetry confirming sustained service stability post-activation retry.</li>
+<li>no explicit root cause identified for the previous activation failures that led to multiple callbacks.</li>
+<li>the term &#x27;stable&#x27; is subjective and requires objective verification.</li></ul></article>
+</section>
+<section class="panel">
+  <h2>LLM triage package</h2>
+  <dl>
+    <div><dt>Urgency</dt><dd>normal</dd></div>
+    <div><dt>Customer impact</dt><dd>Customer was previously frustrated but now reports stable service and a green modem, suggesting the service issue has been resolved.</dd></div>
+    <div><dt>Operator note</dt><dd>Adversarial dual interpretation preserved the advocate closure recommendation, while the skeptic found unresolved risk. Disagreement score 0.712 met threshold 0.6; deterministic policy treats this as ambiguity requiring review.</dd></div>
+  </dl>
+  <div class="triage-grid">
+    <article><h3>Evidence gaps</h3><ul class="actions"><li>No direct authoritative telemetry confirmation of sustained service stability is available in the provided notes (this is handled by the policy engine).</li>
+<li>Customer&#x27;s statement &#x27;looks stable&#x27; is not an explicit confirmation of full satisfaction or long-term stability.</li>
+<li>Lack of authoritative, real-time telemetry confirming sustained service stability post-activation retry.</li>
+<li>No explicit root cause identified for the previous activation failures that led to multiple callbacks.</li>
+<li>The term &#x27;stable&#x27; is subjective and requires objective verification.</li></ul></article>
+    <article><h3>Recommended actions</h3><ul class="actions"><li>Verify authoritative telemetry for service activation and sustained stability.</li>
+<li>Consider a follow-up with the customer to confirm ongoing service quality and satisfaction.</li></ul></article>
+    <article><h3>Reviewer questions</h3><ul class="actions"><li>Has authoritative telemetry confirmed sustained service activation and stability since the technician visit?</li>
+<li>Is a customer follow-up call deemed necessary to confirm long-term satisfaction?</li>
+<li>Has the authoritative telemetry confirmed sustained service stability since the technician&#x27;s visit on 2026-06-18?</li>
+<li>What was the specific technical root cause of the prior activation failures that necessitated multiple callbacks?</li>
+<li>Is there a plan to proactively engage the customer to ensure long-term satisfaction?</li>
+<li>Why did the advocate and skeptic interpretations diverge on the same evidence?</li></ul></article>
+  </div>
+</section>
 <section class="panel">
   <h2>Evidence table</h2>
   <div class="table-scroll">
@@ -589,20 +648,20 @@ code {
         </tr>
 
         <tr>
+          <td>service_live_status</td>
+          <td>network_telemetry</td>
+          <td>live</td>
+          <td><span class="status">stale</span></td>
+          <td><span class="authority">authoritative</span></td>
+          <td>300</td>
+        </tr>
+
+        <tr>
           <td>dispatch_status</td>
           <td>dispatch</td>
           <td>complete</td>
           <td><span class="status">fresh</span></td>
           <td><span class="authority">authoritative</span></td>
-          <td>86400</td>
-        </tr>
-
-        <tr>
-          <td>service_live_status</td>
-          <td>support_note</td>
-          <td>resolved</td>
-          <td><span class="status">fresh</span></td>
-          <td><span class="authority">supporting</span></td>
           <td>86400</td>
         </tr>
     </tbody>
@@ -613,15 +672,15 @@ code {
 <aside class="side">
 <section class="panel">
   <h2>Reviewer packet</h2>
-  <p>Service recovery verification required: CRM/order/billing/support notes are green, but closure is blocked by missing_authoritative_signal. Do not close until authoritative evidence satisfies policy.</p>
+  <p>Service recovery verification required: CRM/order/billing/support notes are green, but closure is blocked by stale_authoritative_signal. Do not close until authoritative evidence satisfies policy.</p>
   <dl>
-    <div><dt>Block reason</dt><dd>missing_authoritative_signal</dd></div>
+    <div><dt>Block reason</dt><dd>stale_authoritative_signal</dd></div>
     <div><dt>Rendering status</dt><dd>structured_packet_ready</dd></div>
   </dl>
   <h3>Recommended options</h3>
-  <ul class="actions"><li>retry_telemetry</li>
+  <ul class="actions"><li>human_review</li>
 <li>request_evidence</li>
-<li>human_review</li></ul>
+<li>open_investigation</li></ul>
   <p class="guardrail">Closure is not available until fresh authoritative service evidence confirms recovery.</p>
 </section>
 <section class="panel">
@@ -631,25 +690,25 @@ code {
         <li>
           <span>10</span>
           <strong>EvidenceStateEvent</strong>
-          <code>ESE-CASE-BG-MISSING</code>
+          <code>ESE-CASE-BG-STALE</code>
         </li>
 
         <li>
           <span>20</span>
           <strong>AgentInterpretationEvent</strong>
-          <code>AIE-E002</code>
+          <code>AIE-LLM-E-003</code>
         </li>
 
         <li>
           <span>30</span>
           <strong>PolicyDecisionEvent</strong>
-          <code>PDE-E-002</code>
+          <code>PDE-LLM-E-003</code>
         </li>
 
         <li>
           <span>40</span>
           <strong>HumanReviewEvent</strong>
-          <code>HRE-CASE-BG-MISSING-PENDING</code>
+          <code>HRE-CASE-BG-STALE-PENDING</code>
         </li>
   </ol>
 </section>

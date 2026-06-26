@@ -1,6 +1,8 @@
 import json
 import unittest
+from pathlib import Path
 
+from service_recovery_core.evals import build_llm_result_evidence_packet_html
 from service_recovery_core.llm_interpreter import (
     LlmInterpreterError,
     compute_interpretation_disagreement,
@@ -221,6 +223,18 @@ class LlmInterpreterTests(unittest.TestCase):
         self.assertIn("Adversarial dual interpretation", html)
         self.assertIn("Resolution advocate", html)
         self.assertIn("Closure skeptic", html)
+        self.assertIn("high_interpretation_disagreement", html)
+
+    def test_live_adversarial_artifact_renders_packet(self):
+        artifact_path = Path("docs/demo/artifacts/llm_interpreter_E003_adversarial_live.json")
+
+        html = build_llm_result_evidence_packet_html(artifact_path)
+
+        self.assertIn("Adversarial dual interpretation", html)
+        self.assertIn("Resolution advocate", html)
+        self.assertIn("Closure skeptic", html)
+        self.assertIn("Disagreement score", html)
+        self.assertIn("closure_candidate -> human_review", html)
         self.assertIn("high_interpretation_disagreement", html)
 
 

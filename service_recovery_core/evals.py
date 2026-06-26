@@ -97,6 +97,11 @@ def main() -> int:
         default=None,
         help="Optional scenario ID to export as a Data Fabric audit record body.",
     )
+    parser.add_argument(
+        "--llm-result-evidence-packet",
+        default=None,
+        help="Optional governed LLM demo result JSON to export as a static reviewer evidence-packet HTML file.",
+    )
     args = parser.parse_args()
     if args.uipath_payload_scenario:
         payload = build_uipath_payload(args.uipath_payload_scenario)
@@ -132,6 +137,14 @@ def main() -> int:
             output_path.parent.mkdir(parents=True, exist_ok=True)
             output_path.write_text(rendered_record + "\n", encoding="utf-8")
         print(rendered_record)
+        return 0
+    if args.llm_result_evidence_packet:
+        html = build_llm_result_evidence_packet_html(Path(args.llm_result_evidence_packet))
+        if args.output:
+            output_path = Path(args.output)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_text(html, encoding="utf-8")
+        print(html)
         return 0
 
     results = run_eval_suite()
@@ -172,6 +185,19 @@ def build_audit_record(scenario_id: str) -> dict[str, Any]:
         },
     }
     return build_data_fabric_record(build_audit_bundle(scenario_id), scenario_id=scenario_id, **live_refs.get(scenario_id, {}))
+
+
+def build_llm_result_evidence_packet_html(result_path: Path) -> str:
+    result = json.loads(result_path.read_text(encoding="utf-8"))
+    scenario_id = result["scenario_id"]
+    scenario = load_scenarios()[scenario_id]
+    transition = apply_policy_decision(
+        scenario["case"],
+        result["agent_interpretation_event"],
+        result["policy_decision_event"],
+        event_id=f"PDE-LLM-{scenario_id}",
+    )
+    return render_evidence_packet_html(build_case_audit_bundle(scenario["case"], scenario["evidence"], transition))
 
 
 def _scenario_transition(scenario_id: str) -> tuple[dict[str, Any], dict[str, Any]]:

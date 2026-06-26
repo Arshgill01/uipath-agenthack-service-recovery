@@ -120,7 +120,7 @@ def _decision_compare(agent: dict[str, Any], policy: dict[str, Any], state: dict
     </dl>
   </article>
   <div class="route-banner">
-    <span>{escape(_route_label(state))}</span>
+    <span>{escape(_route_label(state, policy))}</span>
     <strong>{escape(policy["from_recommended_stage"])} -> {escape(policy["to_stage"])}</strong>
     <em>{escape(policy["block_reason"])}</em>
   </div>
@@ -158,6 +158,7 @@ def _policy_boundary(agent: dict[str, Any], policy: dict[str, Any]) -> str:
         <div><dt>Links to</dt><dd>{escape(policy["links_to"])}</dd></div>
         <div><dt>Decision</dt><dd>{escape(policy["decision"])}</dd></div>
         <div><dt>Block reason</dt><dd>{escape(policy["block_reason"])}</dd></div>
+        <div><dt>Reason codes</dt><dd>{escape(", ".join(policy.get("reason_codes", [])))}</dd></div>
         <div><dt>From</dt><dd>{escape(policy["from_recommended_stage"])}</dd></div>
         <div><dt>To</dt><dd>{escape(policy["to_stage"])}</dd></div>
         <div><dt>Policy version</dt><dd>{escape(policy["decision_policy_version"])}</dd></div>
@@ -322,8 +323,8 @@ def _case_mode(state: dict[str, Any]) -> str:
     return "controlled"
 
 
-def _route_label(state: dict[str, Any]) -> str:
-    if state["closure_block_reason"] == "source_contradiction":
+def _route_label(state: dict[str, Any], policy: dict[str, Any]) -> str:
+    if policy["to_stage"] == "human_review" or state["closure_block_reason"] == "source_contradiction":
         return "Escalated exception review"
     return "Controlled verification retry"
 
