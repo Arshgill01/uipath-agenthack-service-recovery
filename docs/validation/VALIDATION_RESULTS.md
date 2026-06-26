@@ -1754,3 +1754,57 @@ Decision impact:
 Product feedback:
 
 - PF-025 added for home-dashboard recent execution recency/status clarity.
+
+## 2026-06-26 17:25 UTC - Current Blocker Verification Loop
+
+Scope:
+
+- Re-check current blockers and mitigations instead of leaving them as stale caveats.
+
+Commands / interactions:
+
+1. `uip login status --output json`
+2. `uip tm executions get-stats --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --output json`
+3. `uip tm testsets list --project-key SREV --include-last-execution --output json`
+4. `uip maestro case instance get 9fc6fece-55ed-4fb2-b11a-6c96f7a3314e --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+5. `uip df records get 35e8f6c7-4671-f111-ac9a-002248a16d28 F9D838CE-4671-F111-AC9A-0022489A9A06 --output json`
+6. `uip df records query 35e8f6c7-4671-f111-ac9a-002248a16d28 --body ... --output json`
+7. `uip or bucket-files list dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --prefix audit/service_recovery_audit_bundle_E004.json --output json`
+8. Computer Use Safari state inspection on `SimpleApprovalApp - Main.xaml - UiPath Studio`.
+9. Computer Use selection of the generated `Unnamed String 1:` label and its properties panel.
+10. Computer Use edit of `Label4.Text` to `"Policy Decision Json:"`.
+11. Studio Web publish of the repaired app as version `1.0.1`.
+
+Observed:
+
+- CLI auth is still valid for org `keepingitlowkey`, tenant `DefaultTenant`.
+- Terminal Test Manager manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` still reports `Status: Finished`, `Passed: 9`, `Failed: 0`, and `None: 0`.
+- Test set `SREV:9` still reports `LastExecutionStatus: Finished`.
+- Fresh package `1.0.6` Case Instance `9fc6fece-55ed-4fb2-b11a-6c96f7a3314e` still reports `LatestRunStatus: Completed`, `CompletedTimeUtc: 2026-06-26T09:06:42.1482079Z`, and no incidents.
+- Data Fabric V2 record `F9D838CE-4671-F111-AC9A-0022489A9A06` still returns first-class fields for `CaseId`, `InterpretationPolicyVersion`, `DecisionPolicyVersion`, `ClosureBlockReason`, `SourceCaseInstanceKey`, `SourceTaskId`, and `PackageVersion`.
+- The same Data Fabric record returns JSON fields containing raw AIE `recommended_next_stage: closure_candidate`, linked PDE `decision: require_human_review`, and the full audit bundle.
+- Querying Data Fabric V2 by `CaseId = CASE-BG-CONTRA` returns exactly one row with the expected E-004 domain fields.
+- Orchestrator bucket `service-recovery-audit-validation` still lists `/audit/service_recovery_audit_bundle_E004.json`.
+- Safari Studio Web opens `SimpleApprovalApp` project `986ee0c8-915c-4569-8df9-a74b454589a9` and visibly shows the generated app preview.
+- The generated app preview initially showed `Unnamed String 1:` in the policy field position.
+- Selecting that label exposed `Label - Label4`; its `Text` property was `"Unnamed String 1:"`.
+- Computer Use keyboard input changed the property to `"Policy Decision Json:"`.
+- The Studio preview now shows `Policy Decision Json:` in the policy field position.
+- Studio Web reported `Published v1.0.1`, `arshgill6120@gmail.com's workspace`, and `Solution package created and deployed Package name: Solution ver. 1.0.1`.
+- No fresh Case/AppTask has been started against the republished app in this pass.
+
+Result:
+
+- G-001: still PARTIAL natively and PASS with Data Fabric V2/bucket custom audit proof.
+- G-003: still PASS for Action Center lifecycle/return and PARTIAL for generated UI legibility. A Studio Web label repair was applied and published, but runtime Action Center rendering is not revalidated until a fresh task proves it.
+- G-004: still PASS for persisted raw AIE/PDE and PARTIAL only for generated UI display.
+- G-007: still PASS for terminal manual Test Manager execution/report/JUnit and PARTIAL for automated Test Cloud execution.
+
+Decision impact:
+
+- Keep custom evidence packet/Data Fabric/bucket as the final judge-readable proof path.
+- The next acceptable generated-UI pass is a fresh Action Center task against the republished app that renders the corrected `Policy Decision Json:` label and the policy decision value.
+
+Product feedback:
+
+- PF-013 strengthened with a concrete Studio Web designer observation.

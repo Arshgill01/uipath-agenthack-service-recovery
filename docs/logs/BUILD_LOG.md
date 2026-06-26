@@ -2796,3 +2796,45 @@ Product feedback:
 Open risks:
 
 - Do not use the Automation Cloud home recent-executions widget as the proof surface for G-007; use CLI/report/JUnit evidence.
+
+### 2026-06-26 17:25 UTC - Agent / Current Blocker Verification Loop
+
+What changed:
+
+- Re-checked the active blockers instead of leaving them as static caveats.
+- Fixed stale integration-map wording that still described product access as unconfirmed.
+- Updated the Action Center UI repair assessment and PF-013 with a current Safari Studio Web designer observation and label-only repair/publish.
+
+Commands / interactions run:
+
+- `uip login status --output json`
+- `uip tm executions get-stats --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --output json`
+- `uip tm testsets list --project-key SREV --include-last-execution --output json`
+- `uip maestro case instance get 9fc6fece-55ed-4fb2-b11a-6c96f7a3314e --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip df records get 35e8f6c7-4671-f111-ac9a-002248a16d28 F9D838CE-4671-F111-AC9A-0022489A9A06 --output json`
+- `uip df records query 35e8f6c7-4671-f111-ac9a-002248a16d28 --body ... --output json`
+- `uip or bucket-files list dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --prefix audit/service_recovery_audit_bundle_E004.json --output json`
+- Computer Use Safari state inspection on `SimpleApprovalApp - Main.xaml - UiPath Studio`.
+- Computer Use click/selection of the generated `Unnamed String 1:` label.
+- Computer Use edit of `Label4.Text` to `"Policy Decision Json:"`.
+- Studio Web publish of repaired `SimpleApprovalApp` as version `1.0.1`.
+
+Validation:
+
+- PASS: CLI auth remained valid for `keepingitlowkey / DefaultTenant`.
+- PASS: Test Manager execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` still reports `Status: Finished`, 9 passed, 0 failed.
+- PASS: Test set `SREV:9` still reports `LastExecutionStatus: Finished`.
+- PASS: Case Instance `9fc6fece-55ed-4fb2-b11a-6c96f7a3314e` still reports package `1.0.6`, `LatestRunStatus: Completed`, and no incidents.
+- PASS: Data Fabric V2 record `F9D838CE-4671-F111-AC9A-0022489A9A06` still returns policy versions, block reason, live refs, and full AIE/PDE/audit JSON payloads.
+- PASS: Orchestrator bucket still lists `/audit/service_recovery_audit_bundle_E004.json`.
+- PARTIAL: Safari Studio Web exposed the generated Action app designer, `Label4.Text = "Unnamed String 1:"` was repaired to `"Policy Decision Json:"`, and Studio reported `Published v1.0.1` plus `Solution package created and deployed Package name: Solution ver. 1.0.1`. Runtime Action Center rendering is not revalidated until a fresh task proves the corrected label and value.
+
+Product feedback:
+
+- PF-013 strengthened. The blocker is no longer simply "no UI route found"; the designer route exists and a label-only repair can be published. The current validated state remains that generated Action Center UI is not runtime-repaired until a fresh task proves the label and value render correctly.
+
+Open risks:
+
+- Generated Action Center UI should still not be used as the judge-facing proof surface unless the republished Studio repair is runtime-revalidated with a fresh task.
+- Automated Test Cloud execution remains unvalidated.
+- Do not claim terminal completion for older E-002/E-004 jobs.

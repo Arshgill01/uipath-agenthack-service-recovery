@@ -8,6 +8,8 @@ Purpose: determine whether PF-013 can be repaired safely from the repository art
 
 The generated Action Center page is not safely repairable from committed repository source today.
 
+The Studio Web designer exposes the broken generated label and its `Text` property. A label-only repair was applied and published as `SimpleApprovalApp` version `1.0.1`; the Studio preview now shows `Policy Decision Json:` instead of `Unnamed String 1:`. This is not yet a generated Action Center runtime PASS because no fresh human task has been started against the republished app and verified in Action Center.
+
 Use Action Center for lifecycle, assignment, completion, reviewer comment, and structured return. Use the custom evidence packet/Data Fabric/bucket audit surfaces for judge-readable proof.
 
 ## Evidence Inspected
@@ -124,3 +126,43 @@ Updated decision:
 - Keep generated Action Center UI repair as an honest remaining partial.
 - Do not attempt speculative local model/DLL edits.
 - Continue using custom evidence packet plus Data Fabric V2/bucket audit proof as the final judge-readable path.
+
+### 2026-06-26 17:25 UTC - Safari Studio Designer Repair And Publish Probe
+
+Assumption tested:
+
+- The logged-in Safari session might expose the generated Action app designer and allow direct repair of the `Unnamed String 1` label.
+
+Observed:
+
+- Safari is authenticated on the Studio Web designer URL for `SimpleApprovalApp` project `986ee0c8-915c-4569-8df9-a74b454589a9`.
+- The page title is `SimpleApprovalApp - Main.xaml - UiPath Studio`.
+- The app preview visibly contains:
+  - `Content:`
+  - `Evidence Packet Json:`
+  - `Raw Agent Recommendation:`
+  - `Unnamed String 1:`
+  - `Comment`
+  - `Approve` / `Reject`
+- Selecting `Unnamed String 1:` opens the properties panel for `Label - Label4`.
+- The properties panel exposes a `Text` property with value `"Unnamed String 1:"`.
+- The same designer still shows the July 22 local UiPath Assistant migration prompt for RPA/app editing and debugging.
+- Initial macOS `osascript` input was blocked, but Computer Use keyboard actions were then used to edit the expression.
+- `Label4.Text` was changed from `"Unnamed String 1:"` to `"Policy Decision Json:"`.
+- The stale duplicate expression editor was canceled so it did not revert the saved value.
+- The Studio preview updated and now shows `Policy Decision Json:` in the policy-field position.
+- Publishing was started from the visible `Publish` control.
+- The publish dialog used default personal workspace scope with version `1.0.1`.
+- Studio reported `Published v1.0.1`, `arshgill6120@gmail.com's workspace`, and snackbar text `Solution package created and deployed Package name: Solution ver. 1.0.1`.
+- Change history now shows `Published v1.0.1` with a `View package` link.
+
+Interpretation:
+
+- PF-013 is more precise now: the generated app is not pullable as coded-app source through CLI, but Studio Web can expose and repair the broken label at design time.
+- A label-only repair improves Studio preview legibility, but it is not enough to claim G-003/G-004 generated Action Center UI PASS until a fresh task proves the corrected label and policy decision value render correctly in Action Center after publish/deploy.
+
+Updated decision:
+
+- Keep generated Action Center UI legibility as PARTIAL until runtime revalidation.
+- Next feasible repair attempt is to start a fresh Case/AppTask against the republished app and verify that Action Center renders both the corrected `Policy Decision Json:` label and the policy decision value.
+- Until that end-to-end validation exists, keep the custom evidence packet as the judge-facing surface.

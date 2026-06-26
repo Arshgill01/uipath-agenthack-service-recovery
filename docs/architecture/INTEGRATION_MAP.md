@@ -26,9 +26,9 @@ Do not use a UiPath component for checkbox breadth. Use it when it has visible r
 Observed on 2026-06-24:
 
 - Local `uip` CLI is installed and currently reports version `1.195.1`.
-- Automation Cloud browser access did not reach a tenant; Safari landed at `portal_/missingaccount`.
-- Product access for Maestro, Maestro Case, Studio Web, Action Center, Test Cloud/Test Manager, Integration Service, and Orchestrator is unconfirmed.
-- Initial access blocker is historical. Current Automation Cloud tenant access and Maestro Case availability are confirmed.
+- Initial Automation Cloud browser access did not reach a tenant; Safari landed at `portal_/missingaccount`.
+- That access blocker is historical. Current Automation Cloud tenant access is confirmed for org `keepingitlowkey`, tenant `DefaultTenant`, and user `arshgill6120@gmail.com`.
+- Product access for Maestro, Maestro Case, Studio Web, Action Center, Test Cloud/Test Manager, Integration Service, Data Fabric, and Orchestrator has since been validated as documented below.
 
 Observed on 2026-06-24 20:30 IST rerun:
 
