@@ -8,7 +8,7 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 
 | Requirement | Status | Evidence | Remaining caution |
 | --- | --- | --- | --- |
-| Local unit tests pass. | PASS | `python -m unittest discover -s tests` passed 39 tests on 2026-06-26. | Re-run before final submission if code changes. |
+| Local unit tests pass. | PASS | `python -m unittest discover -s tests` passed 42 tests on 2026-06-26. | Re-run before final submission if code changes. |
 | Local eval suite E-001 through E-009 passes. | PASS | `python -m service_recovery_core.evals --output eval_results/local_baseline.json` passed 9/9. | Re-run before final submission if fixtures/policy change. |
 | Repeatable E-002/E-004 proof artifacts exist. | PASS | `scripts/run_demo.sh --with-local-checks --no-uipath-next-steps`; `docs/demo/artifacts/demo_proof_manifest.json`. | Script is local/default-safe; it does not start live cases. |
 | Optional real LLM interpretation path exists. | PASS with live Vertex run | `scripts/run_llm_demo.sh --scenario-id E-003 --model gemini-2.5-flash --project <project> --location us-central1 --output eval_results/llm_interpreter_E003_live.json`; committed artifact `docs/demo/artifacts/llm_interpreter_E003_live.json` | Re-run if model, prompt, Google project, or ADC environment changes before recording. |

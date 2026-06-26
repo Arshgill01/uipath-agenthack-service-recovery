@@ -30,6 +30,43 @@ Next:
 
 - ...
 
+### 2026-06-26 16:55 IST - Agent / Post-Merge Status Refresh
+
+What changed:
+
+- Updated `AGENTS.md`, `docs/submission/READINESS_CHECKLIST.md`, and `docs/validation/OBJECTIVE_COMPLETION_AUDIT.md` after merging the open-risk mitigations.
+- Refreshed the current validation baseline from 39 to 42 unit tests.
+- Recorded current pushed checkpoints through `43d0181`.
+- Kept the current caveats precise: Data Fabric persistence is validated for the E-004 CSV import path, direct JSON insert remains unvalidated, and terminal Case Instance completion is claimed only for the fresh package `1.0.6` run.
+
+Commands run:
+
+- `git status --short --branch`
+- `git log --oneline -8`
+- `tail -120 docs/logs/BUILD_LOG.md`
+- `sed -n '1,120p' docs/validation/OBJECTIVE_COMPLETION_AUDIT.md`
+- `sed -n '1,170p' AGENTS.md`
+- `rg -n "39 tests|42 tests|Data Fabric|1\\.0\\.6|LatestRunStatus|43d0181|8b5b91e|2a23523|c4c83ae|53e4abe" AGENTS.md docs/submission/READINESS_CHECKLIST.md docs/validation/OBJECTIVE_COMPLETION_AUDIT.md docs/logs/RISK_REGISTER.md`
+- `scripts/run_submission_check.sh`
+- `git diff --check`
+- `git diff --stat`
+
+Validation:
+
+- PASS: `scripts/run_submission_check.sh` completed successfully.
+- PASS: the check ran the 42-test unit suite and verified proof artifacts in `docs/demo/artifacts`.
+- PASS: `git diff --check`.
+
+Product feedback:
+
+- No new PF entry expected. This is post-merge repository status maintenance, not a new UiPath product interaction.
+
+Open risks:
+
+- Direct Data Fabric JSON insert remains unvalidated.
+- Older E-002/E-004 job terminal completion remains unclaimed.
+- Test Manager remains manual, not automated Test Cloud execution.
+
 ### 2026-06-26 16:20 IST - Agent / Product Feedback Answer Bank Polish
 
 What changed:
