@@ -25,6 +25,7 @@ Architecture thesis:
 - Local tests/evals should pass:
   - `python -m unittest discover -s tests`
   - `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- Current local validation baseline is 39 unit tests and E-001 through E-009 passing 9/9.
 - UiPath CLI is installed locally as `uip` version `1.196.0`.
 - UiPath Labs access is working for org `keepingitlowkey`, tenant `DefaultTenant`, user `arshgill6120@gmail.com`.
 - Live validation has answered the hard gates with implementation implications:
@@ -40,6 +41,16 @@ Architecture thesis:
   - Custom evidence packet = judge-readable proof surface.
   - Orchestrator bucket audit bundle = durable UiPath-hosted audit proof.
   - Do not rely on the generated Action Center page as the final evidence-packet UI unless repaired and revalidated.
+- Repeatable local proof commands:
+  - `scripts/run_demo.sh` regenerates/verifies E-002/E-004 proof artifacts without starting live UiPath work by default.
+  - `scripts/run_llm_demo.sh --evidence-packet-output ...` can produce a fresh governed Gemini/Vertex JSON artifact and evidence-packet HTML when ADC/API auth is intentionally available.
+  - `scripts/run_submission_check.sh` is the non-mutating final sanity check for tests, evals, committed proof artifacts, proof strings, and wrapper syntax.
+- Live Gemini/Vertex proof artifacts exist:
+  - `docs/demo/artifacts/llm_interpreter_E003_live.json`
+  - `docs/demo/artifacts/llm_interpreter_E003_adversarial_live.json`
+  - `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html`
+  - `docs/demo/artifacts/evidence_packet_E003_adversarial_desktop.png`
+  - `docs/demo/artifacts/evidence_packet_E003_adversarial_mobile.png`
 
 If this status conflicts with newer entries in `docs/validation/VALIDATION_RESULTS.md`, `docs/logs/BUILD_LOG.md`, or `docs/decisions/DECISIONS.md`, trust the newer dated evidence and update this section in the same commit.
 
@@ -84,11 +95,11 @@ Update these as applicable:
 
 ## Immediate Priority
 
-The hard gates are answered enough to proceed with the validated demo-safe proof path. Next work should make the live run repeatable and productize the two proof beats:
+The hard gates are answered enough to proceed with the validated demo-safe proof path. The local proof path is now repeatable. Next work should preserve the validated proof set and only run fresh live UiPath or Gemini operations when new IDs/artifacts are intentionally needed:
 
-1. Write/run scripts or runbooks for generating E-002/E-004 payloads, starting/polling cases and tasks, completing review, uploading/downloading audit bundles, and verifying AIE/PDE linkage.
+1. Run `scripts/run_submission_check.sh` before final submission and after any code/artifact change.
 2. Keep the canonical green business fixture stable, changing only authoritative telemetry/inventory state between 2A and 2B.
-3. Polish the custom evidence packet for judge readability.
+3. Use the custom evidence packets and screenshots as the primary judge-readable surface.
 4. Continue product-feedback logging during every UiPath interaction.
 
 Do not restart broad platform validation unless new platform behavior contradicts the current evidence or a remaining partial item becomes demo-critical.

@@ -2141,3 +2141,32 @@ Product feedback:
 Open risks:
 
 - The active thread goal remains open until the user explicitly says to close it.
+
+### 2026-06-26 15:49 IST - Agent / Control File Status Refresh
+
+What changed:
+
+- Updated `AGENTS.md` so future agents start from the current proof state: 39 tests, repeatable local proof scripts, live Gemini/Vertex artifacts, adversarial evidence packet, and submission sanity check.
+- Updated `docs/validation/OBJECTIVE_COMPLETION_AUDIT.md` to include the latest pushed checkpoint `8b5b91e`.
+
+Commands run:
+
+- `git status --short --branch`
+- `sed -n '1,220p' AGENTS.md`
+- `rg "adversarial|submission_check|53e4abe|8b5b91e|39 tests|run_llm_demo|Current Status|Immediate Priority" AGENTS.md docs/validation/OBJECTIVE_COMPLETION_AUDIT.md docs/submission/READINESS_CHECKLIST.md -n`
+- `scripts/run_submission_check.sh`
+- `git diff --check`
+
+Validation:
+
+- PASS: `scripts/run_submission_check.sh` completed successfully.
+- PASS: the check ran the 39-test unit suite, local eval baseline, E-002/E-004 artifact verification, LLM/adversarial artifact presence checks, screenshot artifact checks, proof-string checks, and wrapper syntax checks.
+- PASS: `git diff --check`.
+
+Product feedback:
+
+- No new PF entry expected. This is repository control-file maintenance, not a new UiPath product interaction.
+
+Open risks:
+
+- The active thread goal remains open until the user explicitly says to close it.
