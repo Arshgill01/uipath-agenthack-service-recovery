@@ -2078,3 +2078,36 @@ Product feedback:
 Open risks:
 
 - This check verifies local committed proof artifacts only. It intentionally does not start live UiPath cases, complete Action Center tasks, or call Gemini/Vertex.
+
+### 2026-06-26 15:16 IST - Agent / Adversarial Packet Visual Evidence
+
+What changed:
+
+- Captured desktop and mobile Playwright screenshots for the live adversarial LLM evidence packet.
+- Added those screenshots to the submission readiness artifact list and product-feedback evidence appendix.
+- Updated `scripts/run_submission_check.sh` to require the adversarial packet screenshots.
+
+Commands run:
+
+- `npx playwright screenshot --viewport-size=1440,1100 file://$PWD/docs/demo/artifacts/evidence_packet_E003_adversarial_live.html docs/demo/artifacts/evidence_packet_E003_adversarial_desktop.png`
+- `npx playwright screenshot --viewport-size=390,900 file://$PWD/docs/demo/artifacts/evidence_packet_E003_adversarial_live.html docs/demo/artifacts/evidence_packet_E003_adversarial_mobile.png`
+- `file docs/demo/artifacts/evidence_packet_E003_adversarial_desktop.png docs/demo/artifacts/evidence_packet_E003_adversarial_mobile.png`
+- Playwright Chromium DOM check for required adversarial proof text and no page-level horizontal overflow at desktop/mobile viewports.
+- `scripts/run_submission_check.sh`
+- `git diff --check`
+
+Validation:
+
+- PASS: desktop screenshot captured as a 1440x1100 PNG.
+- PASS: mobile screenshot captured as a 390x900 PNG.
+- PASS: Playwright DOM checks found `Adversarial dual interpretation`, `Resolution advocate`, `Closure skeptic`, `closure_candidate -> human_review`, `high_interpretation_disagreement`, and `Escalated exception review` visible on desktop and mobile, with no page-level horizontal overflow.
+- PASS: `scripts/run_submission_check.sh` completed successfully after adding the screenshot requirements.
+- PASS: `git diff --check`.
+
+Product feedback:
+
+- No new PF entry expected. This strengthens evidence for the existing Action Center UI workaround and custom evidence-packet path; it does not exercise a new UiPath surface.
+
+Open risks:
+
+- Screenshots are local artifact evidence for the judge-facing custom packet, not proof of generated Action Center UI repair.

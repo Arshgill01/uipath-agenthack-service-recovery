@@ -46,6 +46,8 @@ test -f "$ARTIFACT_DIR/demo_proof_manifest.json"
 test -f "$ARTIFACT_DIR/llm_interpreter_E003_live.json"
 test -f "$ARTIFACT_DIR/llm_interpreter_E003_adversarial_live.json"
 test -f "$ARTIFACT_DIR/evidence_packet_E003_adversarial_live.html"
+test -f "$ARTIFACT_DIR/evidence_packet_E003_adversarial_desktop.png"
+test -f "$ARTIFACT_DIR/evidence_packet_E003_adversarial_mobile.png"
 
 rg "closure_candidate -> verify_telemetry|missing_authoritative_signal|Raw agent interpretation|Final policy decision" \
   "$ARTIFACT_DIR/evidence_packet_E002.html" >/dev/null

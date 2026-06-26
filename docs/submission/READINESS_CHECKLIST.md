@@ -31,7 +31,7 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 | Gate | Result | Evidence | Remaining caution |
 | --- | --- | --- | --- |
 | G-005 Distinct 2A/2B routing | PASS | E-002 route `verify_telemetry`; E-004 route `human_review`; live tasks and local artifacts | Keep both beats on same green business fixture with only authoritative signal changed. |
-| G-006 Demo surface visibility | PASS for custom packet; PARTIAL for generated Action Center UI | `evidence_packet_E002_desktop.png`; `evidence_packet_E004_desktop.png`; PF-013 | Use custom packet as primary visual surface. |
+| G-006 Demo surface visibility | PASS for custom packet; PARTIAL for generated Action Center UI | `evidence_packet_E002_desktop.png`; `evidence_packet_E004_desktop.png`; `evidence_packet_E003_adversarial_desktop.png`; PF-013 | Use custom packet as primary visual surface. |
 | G-007 Test Cloud/Test Manager crossover | PARTIAL/PASS for manual Test Manager representation | Project `SREV`, test set `SREV:9`, manual execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad`, mapping doc | Do not claim automated Test Cloud execution. |
 | G-008 Coding-agent/CLI bonus | PASS for CLI-assisted lifecycle artifacts | `uip` CLI validation, package/process/task/bucket/test-manager commands in logs, `scripts/run_demo.sh` | If shown live, run readback commands deliberately and log new evidence. |
 
@@ -59,6 +59,7 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 | Live LLM proof artifact | Ready | `docs/demo/artifacts/llm_interpreter_E003_live.json` |
 | Live adversarial LLM proof artifact | Ready | `docs/demo/artifacts/llm_interpreter_E003_adversarial_live.json` |
 | Live adversarial LLM evidence packet | Ready | `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html` |
+| Live adversarial packet screenshots | Ready | `docs/demo/artifacts/evidence_packet_E003_adversarial_desktop.png`; `docs/demo/artifacts/evidence_packet_E003_adversarial_mobile.png` |
 
 ## Do Not Claim
 

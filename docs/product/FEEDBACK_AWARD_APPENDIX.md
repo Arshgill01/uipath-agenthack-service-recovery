@@ -142,7 +142,10 @@ Without Maestro, we would have had to stitch together case state, task lifecycle
 | `docs/validation/VALIDATION_GATES.md` | Hard gate PASS/PARTIAL implications. |
 | `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md` | Repeatable proof path and live readback commands. |
 | `scripts/run_demo.sh` | Safe local command to regenerate and verify E-002/E-004 proof artifacts before submission work. |
+| `scripts/run_submission_check.sh` | Non-mutating local sanity check for tests, evals, proof artifacts, and key proof strings. |
 | `docs/demo/artifacts/demo_proof_manifest.json` | Local 2A/2B proof artifact manifest. |
 | `docs/demo/artifacts/evidence_packet_E002_desktop.png` | Judge-facing 2A packet screenshot with controlled verification route. |
 | `docs/demo/artifacts/evidence_packet_E004_desktop.png` | Judge-facing 2B packet screenshot with escalated human-review route. |
+| `docs/demo/artifacts/evidence_packet_E003_adversarial_desktop.png` | Judge-facing adversarial LLM packet screenshot showing advocate, skeptic, disagreement, and policy escalation. |
+| `docs/demo/artifacts/evidence_packet_E003_adversarial_mobile.png` | Mobile viewport check for the adversarial LLM packet. |
 | `docs/validation/TEST_MANAGER_MAPPING.md` | Test Manager eval mapping and manual execution evidence. |
