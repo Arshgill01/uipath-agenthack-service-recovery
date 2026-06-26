@@ -2988,8 +2988,24 @@ What changed:
 
 Validation:
 
-- Pending in this checkpoint: run `git diff --check` and `scripts/run_submission_check.sh` before commit/push.
+- PASS: `git diff --check` completed successfully.
+- PASS: `scripts/run_submission_check.sh` completed successfully with 43 unit tests and artifact verification.
 
 Open risks:
 
 - Automated Test Cloud execution remains unvalidated and must not be claimed.
+
+### 2026-06-26 15:20 UTC - Agent / Audit Reference Refresh
+
+What changed:
+
+- Refreshed `docs/validation/OBJECTIVE_COMPLETION_AUDIT.md` so latest pushed checkpoints include `fa82241`, `a8dbe6b`, and `a14152f`.
+- Updated the G-007 readiness row to mention the concrete `ServiceRecoveryEvalProcessProbe:0.0.2/0.0.3` package probe, matching the product-feedback survey copy.
+
+Validation:
+
+- Pending in this checkpoint: run `git diff --check` and `scripts/run_submission_check.sh` before commit/push.
+
+Open risks:
+
+- No new platform risk. Automated Test Cloud remains unvalidated and must not be claimed.
