@@ -149,6 +149,21 @@ Result:
 - G-007 remains PARTIAL for automated Test Cloud execution. This was actively probed, not ignored: the tenant/folder evidence does not expose a ready test automation target to link and run.
 - Product feedback PF-024 was added for opaque automation discovery failure in a Solution folder.
 
+## 2026-06-26 15:04 UTC - Automated Package Probe Update
+
+Follow-up package work narrowed the blocker:
+
+- A macOS-compatible Portable RPA process probe with a coded `[TestCase]` method validated, built, packed, and uploaded as `ServiceRecoveryEvalProcessProbe:0.0.2`.
+- Orchestrator listed one package entry point: `ServiceRecoveryEvalSmokeTest.cs`.
+- Test Manager still returned `Data: []` for `list-automations` against package `ServiceRecoveryEvalProcessProbe` in the Standard `Shared` folder.
+- Direct `link-automation` attempts with `ServiceRecoveryEvalSmokeTest.cs`, `Execute`, and `ServiceRecoveryEvalSmokeTest` failed with `Test ... not found in package`.
+- Repacking as `0.0.3` with the test metadata lifecycle set to `Publishable` did not help; packed project metadata still stripped `designOptions.fileInfoCollection`.
+
+Current conclusion:
+
+- G-007 stays PASS for terminal manual Test Manager execution/report/JUnit and PARTIAL for automated Test Cloud execution.
+- Do not claim automated execution unless a supported UiPath Test Automation publishing path produces a Test Manager-visible test entry point.
+
 ## 2026-06-26 14:55 UTC - Automated Execution Follow-Up
 
 Purpose:

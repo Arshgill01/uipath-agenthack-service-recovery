@@ -213,3 +213,11 @@
 - R-005/G-007 remains mitigated for manual Test Manager evidence but open for automated Test Cloud execution. An automated run of `SREV:9` first failed because no folder was assigned, then progressed after setting project default folder to Standard `Shared`, but failed with `No Automatic package selection could be done for test set to execute.`
 - `uip tm testcases list-automations` returned `Data: []` for `Shared`, but returned HTTP 400 `Internal Server Error` for the personal workspace and `Solution` folders. Setting the project default folder to the `Solution` folder returned HTTP 500.
 - Current mitigation: do not claim automated Test Cloud execution. Keep the terminal manual execution/report/JUnit as the validated G-007 evidence unless a real UiPath test automation package is intentionally built and linked later.
+
+### 2026-06-26 15:04 UTC - Automated Test Manager Package Entry-Point Probe
+
+- R-005/G-007 automated execution remains open after a deeper package probe. A macOS-compatible Portable process package with a coded `[TestCase]` method validated, built, uploaded, and exposed an Orchestrator entry point as `ServiceRecoveryEvalProcessProbe:0.0.2`.
+- Test Manager still did not discover it: `uip tm testcases list-automations --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --package-name ServiceRecoveryEvalProcessProbe --output json` returned `Data: []`.
+- Direct `link-automation` attempts for `ServiceRecoveryEvalSmokeTest.cs`, `Execute`, and `ServiceRecoveryEvalSmokeTest` all failed with `Test ... not found in package`.
+- Changing the test metadata state to `Publishable` and repacking/uploading `0.0.3` did not help; packed `content/project.json` still stripped `designOptions.fileInfoCollection`.
+- Current mitigation remains unchanged: do not claim automated Test Cloud execution. The next credible mitigation requires a supported Studio/Test Manager publishing path that preserves Test Manager-visible test metadata, not more hand-edited package JSON.

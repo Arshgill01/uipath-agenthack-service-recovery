@@ -1904,3 +1904,56 @@ Decision impact:
 Product feedback:
 
 - Add/strengthen feedback for Test Manager automation discovery and folder binding diagnostics: solution/personal folder automation discovery returned server errors, solution folder default assignment returned HTTP 500, and automated run errors only became actionable after trying multiple folders.
+
+## 2026-06-26 15:04 UTC - Automated Test Manager Package Entry-Point Probe
+
+Scope:
+
+- Continue working the G-007 automated Test Manager blocker after the first automation-discovery pass.
+- Determine whether a minimal UiPath RPA package can be made visible to Test Manager automation discovery and linked to `SREV:1`.
+
+Commands:
+
+1. `uip rpa init --name ServiceRecoveryEvalAutomationProbe --template-id TestAutomationProjectTemplate --location tmp --expression-language CSharp --target-framework Windows --output json`
+2. `uip rpa init --name ServiceRecoveryEvalAutomationProbePortable --template-id TestAutomationProjectTemplate --location tmp --expression-language CSharp --target-framework Portable --output json`
+3. `uip rpa build tmp/ServiceRecoveryEvalAutomationProbePortable --output json`
+4. `uip rpa pack tmp/ServiceRecoveryEvalAutomationProbePortable tmp/uipath-rpa-packages-probe-002 --package-id ServiceRecoveryEvalAutomationProbe --package-version 0.0.2 --output json`
+5. `uip or packages upload tmp/uipath-rpa-packages-probe-002/ServiceRecoveryEvalAutomationProbe.0.0.2.nupkg --output json`
+6. `uip rpa init --name ServiceRecoveryEvalProcessProbe --template-id BlankTemplate --location tmp --expression-language CSharp --target-framework Portable --output json`
+7. `uip rpa validate --project-dir tmp/ServiceRecoveryEvalProcessProbe --file-path ServiceRecoveryEvalSmokeTest.cs --min-severity error --output json`
+8. `uip rpa build tmp/ServiceRecoveryEvalProcessProbe --output json`
+9. `uip rpa pack tmp/ServiceRecoveryEvalProcessProbe tmp/uipath-rpa-process-probe-package-002 --package-id ServiceRecoveryEvalProcessProbe --package-version 0.0.2 --package-author AgentHack --package-description "Probe package for Test Manager automation wiring; contains one coded smoke test for the service recovery closure override boundary." --output json`
+10. `unzip -p tmp/uipath-rpa-process-probe-package-002/ServiceRecoveryEvalProcessProbe.0.0.2.nupkg content/entry-points.json`
+11. `uip or packages upload tmp/uipath-rpa-process-probe-package-002/ServiceRecoveryEvalProcessProbe.0.0.2.nupkg --output json`
+12. `uip or packages entry-points ServiceRecoveryEvalProcessProbe:0.0.2 --output json`
+13. `uip tm testcases list-automations --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --package-name ServiceRecoveryEvalProcessProbe --output json`
+14. `uip tm testcases link-automation --project-key SREV --test-case-key SREV:1 --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --package-name ServiceRecoveryEvalProcessProbe --test-name ServiceRecoveryEvalSmokeTest.cs --output json`
+15. `uip tm testcases link-automation --project-key SREV --test-case-key SREV:1 --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --package-name ServiceRecoveryEvalProcessProbe --test-name Execute --output json`
+16. `uip tm testcases link-automation --project-key SREV --test-case-key SREV:1 --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --package-name ServiceRecoveryEvalProcessProbe --test-name ServiceRecoveryEvalSmokeTest --output json`
+
+Observed:
+
+- Windows-targeted `TestAutomationProjectTemplate` could be created but could not build on the local macOS/Helm runtime: `Cannot execute Windows projects on Linux platform`.
+- Portable `TestAutomationProjectTemplate` built and packed, but upload failed with `A testing project should contain at least one entry point`.
+- A Portable `BlankTemplate` process project with a coded `[TestCase]` method validated, built, packed, and uploaded as `ServiceRecoveryEvalProcessProbe`.
+- Package version `0.0.1` uploaded but exposed no Orchestrator entry points.
+- After adding an explicit `entryPoints` entry, package version `0.0.2` packed with non-empty `content/entry-points.json` and uploaded successfully.
+- `uip or packages entry-points ServiceRecoveryEvalProcessProbe:0.0.2` returned one entry point: `Path: ServiceRecoveryEvalSmokeTest.cs`, `UniqueId: 143e2347-8dfd-418f-92a3-eb27d51bda09`.
+- `uip tm testcases list-automations` for package `ServiceRecoveryEvalProcessProbe` in Standard `Shared` still returned `Data: []`.
+- Direct `link-automation` attempts with `ServiceRecoveryEvalSmokeTest.cs`, `Execute`, and `ServiceRecoveryEvalSmokeTest` all failed with `Test ... not found in package`.
+- Changing the test case metadata lifecycle from `InProgress` to `Publishable` and repacking/uploading `0.0.3` did not change the outcome. The packer still stripped `designOptions.fileInfoCollection`, and Test Manager discovery remained empty.
+
+Result:
+
+- G-007 remains PASS for terminal manual Test Manager execution/report/JUnit and PARTIAL for automated Test Cloud execution.
+- The automated blocker is narrower than before: package upload and Orchestrator entry-point exposure can work, but a CLI-packed process entry point is not sufficient for Test Manager to discover or link a test automation.
+- No automated Test Cloud execution is claimed.
+
+Decision impact:
+
+- Do not spend more submission-critical time hand-editing RPA package metadata for Test Manager automation. The next credible path requires a supported Studio/Test Manager publishing path that preserves Test Manager-visible test metadata, or an official CLI command that creates a discoverable test automation package.
+- Keep the validated final story as local evals plus live terminal manual Test Manager evidence.
+
+Product feedback:
+
+- PF-024 strengthened with the distinction between Orchestrator-visible process entry points and Test Manager-visible test automations. The product should expose a preflight diagnostic explaining why a package does not appear in `list-automations`.

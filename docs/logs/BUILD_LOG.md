@@ -2916,3 +2916,48 @@ Open risks:
 
 - Automated Test Cloud execution is still not claimed.
 - The validated proof remains terminal manual Test Manager execution/report/JUnit for E-001 through E-009.
+
+### 2026-06-26 15:04 UTC - Agent / Automated Test Manager Package Entry-Point Probe
+
+What changed:
+
+- Continued the G-007 automated Test Manager blocker rather than leaving it at the earlier discovery failure.
+- Built throwaway UiPath RPA probe packages under `tmp/` to test whether a minimal automation could become Test Manager-discoverable.
+- Strengthened PF-024, validation results, and the risk register with the observed package/readback boundary.
+
+Commands run:
+
+- `uip rpa init --name ServiceRecoveryEvalAutomationProbe --template-id TestAutomationProjectTemplate --location tmp --expression-language CSharp --target-framework Windows --output json`
+- `uip rpa init --name ServiceRecoveryEvalAutomationProbePortable --template-id TestAutomationProjectTemplate --location tmp --expression-language CSharp --target-framework Portable --output json`
+- `uip rpa build tmp/ServiceRecoveryEvalAutomationProbePortable --output json`
+- `uip rpa pack tmp/ServiceRecoveryEvalAutomationProbePortable tmp/uipath-rpa-packages-probe-002 --package-id ServiceRecoveryEvalAutomationProbe --package-version 0.0.2 --output json`
+- `uip or packages upload tmp/uipath-rpa-packages-probe-002/ServiceRecoveryEvalAutomationProbe.0.0.2.nupkg --output json`
+- `uip rpa init --name ServiceRecoveryEvalProcessProbe --template-id BlankTemplate --location tmp --expression-language CSharp --target-framework Portable --output json`
+- `uip rpa validate --project-dir tmp/ServiceRecoveryEvalProcessProbe --file-path ServiceRecoveryEvalSmokeTest.cs --min-severity error --output json`
+- `uip rpa build tmp/ServiceRecoveryEvalProcessProbe --output json`
+- `uip rpa pack tmp/ServiceRecoveryEvalProcessProbe tmp/uipath-rpa-process-probe-package-002 --package-id ServiceRecoveryEvalProcessProbe --package-version 0.0.2 --package-author AgentHack --package-description "Probe package for Test Manager automation wiring; contains one coded smoke test for the service recovery closure override boundary." --output json`
+- `unzip -p tmp/uipath-rpa-process-probe-package-002/ServiceRecoveryEvalProcessProbe.0.0.2.nupkg content/entry-points.json`
+- `uip or packages upload tmp/uipath-rpa-process-probe-package-002/ServiceRecoveryEvalProcessProbe.0.0.2.nupkg --output json`
+- `uip or packages entry-points ServiceRecoveryEvalProcessProbe:0.0.2 --output json`
+- `uip tm testcases list-automations --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --package-name ServiceRecoveryEvalProcessProbe --output json`
+- `uip tm testcases link-automation --project-key SREV --test-case-key SREV:1 --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --package-name ServiceRecoveryEvalProcessProbe --test-name ServiceRecoveryEvalSmokeTest.cs --output json`
+- `uip tm testcases link-automation --project-key SREV --test-case-key SREV:1 --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --package-name ServiceRecoveryEvalProcessProbe --test-name Execute --output json`
+- `uip tm testcases link-automation --project-key SREV --test-case-key SREV:1 --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --package-name ServiceRecoveryEvalProcessProbe --test-name ServiceRecoveryEvalSmokeTest --output json`
+
+Validation:
+
+- PASS: Portable process probe validated and built.
+- PASS: package `ServiceRecoveryEvalProcessProbe:0.0.2` uploaded to Orchestrator.
+- PASS: Orchestrator listed one entry point for `ServiceRecoveryEvalProcessProbe:0.0.2`.
+- FAIL/PARTIAL: Test Manager `list-automations` still returned `Data: []` for the same package/folder.
+- FAIL: direct `link-automation` could not find `ServiceRecoveryEvalSmokeTest.cs`, `Execute`, or `ServiceRecoveryEvalSmokeTest` in the package.
+- FAIL/PARTIAL: changing test metadata lifecycle to `Publishable` and repacking/uploading `0.0.3` did not preserve `designOptions.fileInfoCollection` in the packed project metadata.
+
+Product feedback:
+
+- PF-024 strengthened. The key insight is that an Orchestrator-visible package entry point is not enough for Test Manager automation discovery, and the CLI does not explain which package metadata is missing for `list-automations`.
+
+Open risks:
+
+- Automated Test Cloud execution remains unvalidated and must not be claimed.
+- Further progress likely requires a supported Studio/Test Manager publish path for test automation metadata, not hand-edited package metadata.
