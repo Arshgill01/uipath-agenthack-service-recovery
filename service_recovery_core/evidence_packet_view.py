@@ -369,7 +369,7 @@ body {
 
 .topbar {
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) auto;
+  grid-template-columns: minmax(250px, 0.75fr) minmax(660px, 1.65fr);
   align-items: center;
   gap: 24px;
   border-bottom: 2px double var(--line);
@@ -418,7 +418,7 @@ body {
   display: block;
   font-size: 15px;
   line-height: 1.25;
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
 }
 
 .decision-compare {
@@ -517,17 +517,26 @@ p { color: var(--muted); }
 
 .summary {
   display: grid;
-  grid-template-columns: repeat(3, minmax(160px, 1fr));
+  grid-template-columns: repeat(3, minmax(190px, 1fr));
   gap: 12px;
   margin: 0;
 }
 
 .summary div {
+  display: block;
   background: rgba(255, 255, 255, 0.72);
   border: 1px solid var(--line);
   border-radius: 6px;
   box-shadow: var(--shadow);
   padding: 12px 14px;
+}
+
+.summary dt {
+  margin-bottom: 6px;
+}
+
+.summary dd {
+  line-height: 1.35;
 }
 
 .layout {
@@ -654,7 +663,7 @@ dd {
   margin: 0;
   color: var(--ink);
   font-weight: 600;
-  overflow-wrap: break-word;
+  overflow-wrap: anywhere;
 }
 
 .table-scroll {
@@ -748,6 +757,7 @@ th {
 code {
   color: var(--muted);
   white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 900px) {

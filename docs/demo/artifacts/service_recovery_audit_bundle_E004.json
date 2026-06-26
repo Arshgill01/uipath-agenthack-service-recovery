@@ -1,13 +1,20 @@
 {
   "agent_interpretation_event": {
+    "adversarial_interpretation": null,
     "case_id": "CASE-BG-CONTRA",
     "confidence": 0.82,
+    "customer_impact_summary": null,
     "event_id": "AIE-E004",
     "event_type": "AgentInterpretationEvent",
+    "evidence_gaps": [],
     "failure_category": "activation_failure",
     "interpretation_policy_version": "ip-v1",
+    "operator_note": null,
     "rationale": "Business systems look complete, so the agent recommends closure pending policy review.",
-    "recommended_next_stage": "closure_candidate"
+    "recommended_actions": [],
+    "recommended_next_stage": "closure_candidate",
+    "reviewer_questions": [],
+    "urgency": null
   },
   "audit_contract_version": "service-recovery-audit-v1",
   "case_id": "CASE-BG-CONTRA",
@@ -31,15 +38,22 @@
       "sort_order": 10
     },
     {
+      "adversarial_interpretation": null,
       "case_id": "CASE-BG-CONTRA",
       "confidence": 0.82,
+      "customer_impact_summary": null,
       "event_id": "AIE-E004",
       "event_type": "AgentInterpretationEvent",
+      "evidence_gaps": [],
       "failure_category": "activation_failure",
       "interpretation_policy_version": "ip-v1",
+      "operator_note": null,
       "rationale": "Business systems look complete, so the agent recommends closure pending policy review.",
+      "recommended_actions": [],
       "recommended_next_stage": "closure_candidate",
-      "sort_order": 20
+      "reviewer_questions": [],
+      "sort_order": 20,
+      "urgency": null
     },
     {
       "allowed_actions": [
@@ -184,14 +198,21 @@
       "to_stage": "human_review"
     },
     "raw_agent_recommendation": {
+      "adversarial_interpretation": null,
       "case_id": "CASE-BG-CONTRA",
       "confidence": 0.82,
+      "customer_impact_summary": null,
       "event_id": "AIE-E004",
       "event_type": "AgentInterpretationEvent",
+      "evidence_gaps": [],
       "failure_category": "activation_failure",
       "interpretation_policy_version": "ip-v1",
+      "operator_note": null,
       "rationale": "Business systems look complete, so the agent recommends closure pending policy review.",
-      "recommended_next_stage": "closure_candidate"
+      "recommended_actions": [],
+      "recommended_next_stage": "closure_candidate",
+      "reviewer_questions": [],
+      "urgency": null
     },
     "recommended_options": [
       "human_review",

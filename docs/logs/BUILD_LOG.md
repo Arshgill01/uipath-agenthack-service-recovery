@@ -30,6 +30,50 @@ Next:
 
 - ...
 
+### 2026-06-26 14:20 IST - Agent / Evidence Packet Readability Polish
+
+What changed:
+
+- Improved the custom evidence-packet renderer so long enum/code values wrap safely in summary cards, proof cards, detail fields, and audit-code fields.
+- Regenerated E-002/E-004 demo proof artifacts from `scripts/run_demo.sh`.
+- Regenerated the live adversarial E-003 evidence-packet HTML from the committed live LLM JSON artifact.
+- Refreshed desktop screenshots for E-002, E-004, and adversarial E-003, plus the adversarial mobile screenshot.
+
+Commands run:
+
+- `scripts/run_demo.sh --no-uipath-next-steps`
+- `python -m unittest tests.test_evidence_packet_view`
+- `python -m service_recovery_core.evals --llm-result-evidence-packet docs/demo/artifacts/llm_interpreter_E003_adversarial_live.json --output docs/demo/artifacts/evidence_packet_E003_adversarial_live.html`
+- `python -m unittest tests.test_llm_interpreter.LlmInterpreterTests.test_live_adversarial_artifact_renders_packet`
+- `python -m unittest tests.test_evidence_packet_view tests.test_llm_interpreter.LlmInterpreterTests.test_live_adversarial_artifact_renders_packet`
+- `npx playwright screenshot --viewport-size=1440,1100 file://$PWD/docs/demo/artifacts/evidence_packet_E002.html docs/demo/artifacts/evidence_packet_E002_desktop.png`
+- `npx playwright screenshot --viewport-size=1440,1100 file://$PWD/docs/demo/artifacts/evidence_packet_E004.html docs/demo/artifacts/evidence_packet_E004_desktop.png`
+- `npx playwright screenshot --viewport-size=1440,1100 file://$PWD/docs/demo/artifacts/evidence_packet_E003_adversarial_live.html docs/demo/artifacts/evidence_packet_E003_adversarial_desktop.png`
+- `npx playwright screenshot --viewport-size=390,900 file://$PWD/docs/demo/artifacts/evidence_packet_E003_adversarial_live.html docs/demo/artifacts/evidence_packet_E003_adversarial_mobile.png`
+- `file docs/demo/artifacts/evidence_packet_E002_desktop.png docs/demo/artifacts/evidence_packet_E004_desktop.png docs/demo/artifacts/evidence_packet_E003_adversarial_desktop.png docs/demo/artifacts/evidence_packet_E003_adversarial_mobile.png`
+- `scripts/run_submission_check.sh`
+- `git diff --check`
+
+Validation:
+
+- PASS: targeted evidence-packet tests passed.
+- PASS: Playwright refreshed packet screenshots at 1440x1100 desktop and 390x900 mobile for the adversarial packet.
+- PASS: manual image inspection confirmed the adversarial desktop/mobile packet keeps long proof values readable.
+- PASS: `scripts/run_submission_check.sh` completed successfully with 39 tests and artifact checks.
+- PASS: `git diff --check`.
+
+Product feedback:
+
+- No new PF entry expected. This was custom packet polish, not a new UiPath product interaction.
+
+Open risks:
+
+- The custom packet remains the primary judge-readable surface; generated Action Center UI is still not treated as final-demo safe.
+
+Next:
+
+- Continue with submission copy/demo-run hardening or a live read-only UiPath evidence refresh if needed before final recording.
+
 ### 2026-06-26 14:00 IST - Agent / Candidate Branch Review And Wave Index Refresh
 
 What changed:
