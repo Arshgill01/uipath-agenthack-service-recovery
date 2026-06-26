@@ -52,6 +52,7 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 | Feedback answer bank | Ready except user fields | `docs/product/FEEDBACK_SURVEY_COPY_READY.md` |
 | Demo-safe runbook | Ready | `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md` |
 | Repeatable proof wrapper | Ready | `scripts/run_demo.sh` |
+| Repeatable Test Manager manual eval wrapper | Ready | `scripts/run_test_manager_manual_eval.sh` |
 | Submission sanity check | Ready | `scripts/run_submission_check.sh` |
 | E-002 evidence packet | Ready | `docs/demo/artifacts/evidence_packet_E002.html` |
 | E-004 evidence packet | Ready | `docs/demo/artifacts/evidence_packet_E004.html` |

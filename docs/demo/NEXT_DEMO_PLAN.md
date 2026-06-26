@@ -162,6 +162,7 @@ Hard-gate facts are now validated enough to build:
 - G-004: raw agent recommendation and linked policy decision persist separately in task/API/audit data.
 - G-005: E-002 and E-004 live runs prove distinct missing/stale versus contradiction routes.
 - G-007: Test Manager project `SREV`, test set `SREV:9`, terminal manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11`, and exported JUnit evidence represent E-001 through E-009; automated Test Cloud execution is not claimed.
+- Repeat G-007 with `scripts/run_test_manager_manual_eval.sh --execute` only when a fresh terminal manual execution ID is intentionally needed. The script dry-runs by default.
 
 Remaining optional platform improvements:
 

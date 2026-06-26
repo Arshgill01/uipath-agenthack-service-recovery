@@ -39,6 +39,7 @@ python -m service_recovery_core.demo_proof --output-dir "$ARTIFACT_DIR" --verify
 
 bash -n scripts/run_demo.sh
 bash -n scripts/run_llm_demo.sh
+bash -n scripts/run_test_manager_manual_eval.sh
 
 test -f "$ARTIFACT_DIR/evidence_packet_E002.html"
 test -f "$ARTIFACT_DIR/evidence_packet_E004.html"

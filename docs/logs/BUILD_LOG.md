@@ -2630,3 +2630,31 @@ Product feedback:
 Open risks:
 
 - Automated Test Cloud execution remains unvalidated and must not be claimed.
+
+### 2026-06-26 15:57 UTC - Agent / Test Manager Manual Eval Wrapper
+
+What changed:
+
+- Added `scripts/run_test_manager_manual_eval.sh` to make the validated G-007 manual Test Manager lifecycle repeatable.
+- The wrapper is dry-run by default and prints the exact `uip tm` command sequence without mutating the tenant.
+- `--execute` intentionally creates a fresh manual execution, starts and finishes all nine E-001 through E-009 test case logs, waits for terminal status, generates a Test Manager report, and exports JUnit evidence.
+- Added the wrapper to `scripts/run_submission_check.sh` shell syntax coverage.
+- Updated runbook/readiness docs to cite the wrapper while preserving the boundary that automated Test Cloud execution is not claimed.
+
+Commands run:
+
+- `bash -n scripts/run_test_manager_manual_eval.sh`
+- `scripts/run_test_manager_manual_eval.sh`
+
+Validation:
+
+- PASS: script syntax check passed.
+- PASS: default dry-run printed the expected tenant-safe command sequence and did not create a live Test Manager execution.
+
+Product feedback:
+
+- No new PF entry. This is an implementation/runbook improvement based on PF-021, not newly observed UiPath behavior.
+
+Open risks:
+
+- The wrapper supports manual Test Manager execution only; automated Test Cloud execution remains unvalidated.

@@ -35,6 +35,7 @@ Test Manager:
 - Terminal manual execution: `40a1b334-5df8-1100-0a4b-0b49d0564f11`
 - Result artifact: `docs/validation/artifacts/test-manager-results/Service_Recovery_E_001_through_E_009_Baseline___20260626_1017.xml`
 - Readback nuance: the first manual execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad` stayed `Running` after direct finish calls. The repaired run used explicit `testcaselog start` before `testcaselog finish` for each case and reached `Status: Finished`.
+- Repeatable wrapper: `scripts/run_test_manager_manual_eval.sh` prints the exact dry-run command sequence by default; add `--execute` only when intentionally creating a fresh live Test Manager manual execution.
 
 ## Proof Beat Contract
 
@@ -78,6 +79,18 @@ Run the full local validation set before recording or submission:
 
 ```sh
 scripts/run_demo.sh --with-local-checks
+```
+
+Dry-run the validated Test Manager manual execution lifecycle:
+
+```sh
+scripts/run_test_manager_manual_eval.sh
+```
+
+Create a fresh live Test Manager manual execution only when a new G-007 evidence ID is intentionally needed:
+
+```sh
+scripts/run_test_manager_manual_eval.sh --execute
 ```
 
 Suppress UiPath next-step commands when only refreshing local artifacts:
