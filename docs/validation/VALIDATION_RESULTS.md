@@ -1676,3 +1676,44 @@ Decision impact:
 Product feedback:
 
 - PF-024 added for Test Manager automation discovery diagnostics.
+
+## 2026-06-26 16:55 UTC - G-003/G-004 Generated Action Center UI Repair Probe
+
+Gate:
+
+- G-003: Human Evidence Packet.
+- G-004: Agent Recommendation Visible Before Override.
+
+Assumption tested:
+
+- The generated Action Center UI legibility blocker might be repairable through `uip codedapp` source pull/publish, or through an obvious authenticated Safari designer path.
+
+Steps:
+
+1. Probed `uip codedapp` command surfaces.
+2. Located `SimpleApprovalApp` project ID `986ee0c8-915c-4569-8df9-a74b454589a9` in downloaded solution metadata.
+3. Attempted `uip codedapp pull` into ignored temp directory `tmp/uipath-codedapp-pull-simpleapproval`.
+4. Took a Computer Use state snapshot of Safari on Automation Cloud home and inspected available project links.
+5. Clicked the `SimpleApprovalApp` accessibility node from the dashboard and observed no reliable navigation during this pass.
+
+Observed:
+
+- `uip codedapp` supports `pull`, `push`, `pack`, `publish`, and `deploy`.
+- `uip codedapp pull` rejected the `SimpleApprovalApp` project with: `The project you are pulling is not supported. Only Studio Web coded app projects can be pulled.`
+- Safari is authenticated and shows `SimpleApprovalApp` under Automation Cloud home `Automations > Draft projects in Studio Web`.
+- The dashboard click path did not expose a deterministic designer repair route in this pass.
+
+Result:
+
+- G-003/G-004 generated UI legibility remains PARTIAL.
+- This is now a worked blocker with an additional failed repair path, not an untouched caveat.
+- The final proof path remains Action Center lifecycle plus custom evidence packet and Data Fabric V2/bucket audit surfaces.
+
+Decision impact:
+
+- Do not attempt speculative edits to generated model JSON or compiled app DLLs.
+- Only revisit generated Action Center UI repair if Studio UI exposes a clear field-binding edit/publish route and there is time to validate a fresh live task.
+
+Product feedback:
+
+- PF-013 strengthened: the field exists in schema/API, generated UI loses the binding/label, and the generated app is not pullable as coded-app source through the current CLI.

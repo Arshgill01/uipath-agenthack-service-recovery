@@ -2730,3 +2730,40 @@ Product feedback:
 Open risks:
 
 - Automated Test Cloud execution remains unvalidated and must not be claimed until a real test automation target is available and linkable.
+
+### 2026-06-26 16:55 UTC - Agent / Action Center UI Repair Blocker Pass
+
+What changed:
+
+- Worked the generated Action Center UI legibility blocker again through CLI and Safari inspection.
+- Confirmed `SimpleApprovalApp` project ID from downloaded solution metadata.
+- Attempted to pull the generated app through `uip codedapp pull`.
+- Updated the Action Center UI repair assessment, validation results, and PF-013 product feedback.
+
+Commands / interactions run:
+
+- `uip codedapp --help --output json`
+- `uip codedapp build --help --output json`
+- `uip codedapp pull --help --output json`
+- `uip codedapp push --help --output json`
+- `uip codedapp deploy --help --output json`
+- `uip codedapp pack --help --output json`
+- `rg -n "projectId|project-id|ProjectId|SimpleApprovalApp|5e4cfd91|PolicyDecisionJson|UnnamedString1" tmp/uipath-downloads docs/validation/artifacts service_recovery_core docs -S`
+- `uip codedapp pull --project-id 986ee0c8-915c-4569-8df9-a74b454589a9 --target-dir tmp/uipath-codedapp-pull-simpleapproval --verbose --output json`
+- Computer Use Safari state inspection on Automation Cloud home.
+- Computer Use click on `SimpleApprovalApp` dashboard project node.
+
+Validation:
+
+- PASS: coded-app CLI surfaces were discovered without secrets.
+- PASS: `SimpleApprovalApp` project ID `986ee0c8-915c-4569-8df9-a74b454589a9` was found in `SolutionStorage.json`.
+- PARTIAL/BLOCKED: `uip codedapp pull` rejected the project as unsupported because only Studio Web coded app projects can be pulled.
+- PARTIAL/BLOCKED: Safari is authenticated and shows `SimpleApprovalApp`, but the dashboard click path did not expose a deterministic designer repair route during this pass.
+
+Product feedback:
+
+- PF-013 strengthened. Generated app field binding remains a product-feedback-quality finding with more evidence: correct schema/API payload, generated model `UnnamedString1`, and no supported coded-app source pull path.
+
+Open risks:
+
+- Generated Action Center UI remains unsuitable as the judge-facing proof surface unless repaired in Studio UI and revalidated with a fresh live task.

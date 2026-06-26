@@ -79,3 +79,48 @@ PF-013 is stronger after this inspection:
 - the downloadable package does not expose an obvious safe source-level repair path.
 
 Suggested product improvement: generated Action app artifacts should include a field-binding inspector and repair path that maps every action schema field to its rendered control name, binding expression, runtime visibility, and validation status.
+
+## Follow-Up Repair Probes
+
+### 2026-06-26 16:55 UTC - Coded App CLI / Studio Web Pull Probe
+
+Assumption tested:
+
+- The generated `SimpleApprovalApp` might still be retrievable as editable coded-app source through `uip codedapp pull`, allowing a source-level repair of the `PolicyDecisionJson` binding.
+
+Commands and observations:
+
+- `uip codedapp --help --output json` showed `init`, `push`, `pull`, `pack`, `publish`, and `deploy` surfaces.
+- `uip codedapp build --help --output json` returned `unknown command 'build'`; build remains a project-local npm concern for coded apps, not a `uip` subcommand.
+- `uip codedapp pull --help --output json` confirmed pull requires a Studio Web `--project-id`.
+- `tmp/uipath-downloads/maestro-case-pack-experiment/SolutionStorage.json` identifies `SimpleApprovalApp` project ID `986ee0c8-915c-4569-8df9-a74b454589a9`.
+- `uip codedapp pull --project-id 986ee0c8-915c-4569-8df9-a74b454589a9 --target-dir tmp/uipath-codedapp-pull-simpleapproval --verbose --output json` failed with: `The project you are pulling is not supported. Only Studio Web coded app projects can be pulled. Please check that you have the correct project ID.`
+
+Interpretation:
+
+- `SimpleApprovalApp` is a generated Studio Web app/action app artifact, not a supported coded-app source project for the current `uip codedapp pull` path.
+- A source-level CLI repair is not available from the current project shape.
+
+### 2026-06-26 16:58 UTC - Safari Dashboard Probe
+
+Assumption tested:
+
+- The existing logged-in Safari session might expose a direct, low-risk route from Automation Cloud home to the `SimpleApprovalApp` designer.
+
+Observed:
+
+- Safari is authenticated on `cloud.uipath.com/keepingitlowkey/portal_/home`.
+- The Automation Cloud home page lists `SimpleApprovalApp` under `Automations > Draft projects in Studio Web`.
+- The same page also shows the historical Test Manager recent execution as `Running`, while the validated terminal run is documented through CLI/JUnit evidence.
+- Clicking the `SimpleApprovalApp` accessibility node from this dashboard state did not navigate to an editable designer during this pass.
+
+Interpretation:
+
+- Browser access is available, but this snapshot did not expose a deterministic edit/publish/revalidate route for repairing the generated Action Center UI.
+- Starting manual UI edits without a clear publish and fresh task validation path would risk stale/unverifiable changes.
+
+Updated decision:
+
+- Keep generated Action Center UI repair as an honest remaining partial.
+- Do not attempt speculative local model/DLL edits.
+- Continue using custom evidence packet plus Data Fabric V2/bucket audit proof as the final judge-readable path.
