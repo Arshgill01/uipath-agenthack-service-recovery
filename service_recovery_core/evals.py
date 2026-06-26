@@ -130,14 +130,26 @@ def main() -> int:
         print(html)
         return 0
     if args.data_fabric_record_scenario:
-        record = build_audit_record(args.data_fabric_record_scenario)
-        rendered_record = json.dumps(record, indent=2, sort_keys=True)
-        if args.output:
+        if args.output and args.output.endswith(".csv"):
+            import csv
+            record = build_audit_record(args.data_fabric_record_scenario, for_csv=True)
             output_path = Path(args.output)
             output_path.parent.mkdir(parents=True, exist_ok=True)
-            output_path.write_text(rendered_record + "\n", encoding="utf-8")
-        print(rendered_record)
-        return 0
+            with open(output_path, "w", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=list(record.keys()))
+                writer.writeheader()
+                writer.writerow(record)
+            print(f"Exported Data Fabric CSV record to {args.output}")
+            return 0
+        else:
+            record = build_audit_record(args.data_fabric_record_scenario, for_csv=False)
+            rendered_record = json.dumps(record, indent=2, sort_keys=True)
+            if args.output:
+                output_path = Path(args.output)
+                output_path.parent.mkdir(parents=True, exist_ok=True)
+                output_path.write_text(rendered_record + "\n", encoding="utf-8")
+            print(rendered_record)
+            return 0
     if args.llm_result_evidence_packet:
         html = build_llm_result_evidence_packet_html(Path(args.llm_result_evidence_packet))
         if args.output:
@@ -171,7 +183,7 @@ def build_evidence_packet_html(scenario_id: str) -> str:
     return render_evidence_packet_html(build_audit_bundle(scenario_id))
 
 
-def build_audit_record(scenario_id: str) -> dict[str, Any]:
+def build_audit_record(scenario_id: str, for_csv: bool = False) -> dict[str, Any]:
     live_refs = {
         "E-002": {
             "source_case_instance_key": "3af41e1d-8b04-4eba-aa5e-a95c5c673730",
@@ -184,7 +196,12 @@ def build_audit_record(scenario_id: str) -> dict[str, Any]:
             "package_version": "1.0.5",
         },
     }
-    return build_data_fabric_record(build_audit_bundle(scenario_id), scenario_id=scenario_id, **live_refs.get(scenario_id, {}))
+    return build_data_fabric_record(
+        build_audit_bundle(scenario_id),
+        scenario_id=scenario_id,
+        for_csv=for_csv,
+        **live_refs.get(scenario_id, {}),
+    )
 
 
 def build_llm_result_evidence_packet_html(result_path: Path) -> str:

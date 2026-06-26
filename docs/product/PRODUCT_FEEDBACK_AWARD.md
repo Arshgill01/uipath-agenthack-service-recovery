@@ -63,10 +63,10 @@ This matrix groups the current evidence into issue classes. Add new observations
 | Action Center refresh after external task completion | PF-016 | UX / integration | medium | If a task is completed through API/CLI, an open Action Center task tab should either update automatically or clearly require refresh. | After `uip tasks complete` returned success and task API showed `Completed`, the open Safari tab still displayed the task under `Pending` until browser refresh. | Refresh the task tab; after refresh, Action Center correctly moved task `4295299` to `Completed` and showed `(reject)`. | Add real-time status sync or a stale-state banner when an open task has been completed outside the current browser session. | `docs/validation/artifacts/2026-06-25/g004-action-center-stale-pending-after-cli-complete-task-4295299.png`; `docs/validation/artifacts/2026-06-25/g004-action-center-completed-reject-task-4295299.png`; PF-016. |
 | Solution-feed package visibility and process binding | PF-017 | integration / UX / diagnostics | high for CLI/package recovery | A package uploaded successfully to a solution feed should be visible to the process-binding path, or the CLI should require/propagate the feed selector consistently. | Upload and feed-scoped `packages get` succeeded for `Solution.caseManagement.Maestro.Case:1.0.4`; default package lookup and `processes create --package-version 1.0.4` could not bind it. | Use `packages get --feed-id` to verify the package and `processes update-version` on an existing process to move to `1.0.4`. | Add feed-aware process creation or a clear diagnostic that says the package exists in feed X but the requested folder/process binding is resolving feed Y. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 19:05 IST; PF-017. |
 | Data Fabric CLI discovery mismatch | PF-018 | UX / integration / diagnostics | medium | CLI tool discovery should show the Data Fabric capability when `uip df` is installed and usable, or explain why it is a built-in command rather than a listed tool. | `uip df --help` and `uip df entities list --native-only --output json` worked, but `uip tools list --output json` did not expose a corresponding Data Fabric tool entry during discovery. | Use direct `uip df` commands and document the exact entity schema/record commands before mutating the tenant. | Make `uip tools list` include built-in product command surfaces or add a `uip tools explain df` style diagnostic so builders can discover available CLI capabilities consistently. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 21:01 IST; `docs/architecture/data_fabric/service_recovery_audit_bundle_entity.json`; PF-018. |
-| Data Fabric record insertion payload mapping | PF-019 | product defect candidate / integration / diagnostics | high for G-001 custom audit storage | After creating and reading a Data Fabric entity, `records insert` should accept JSON keyed by documented field names or return the exact expected payload shape. | Entity create/readback succeeded, but `records insert` rejected file, inline object, minimal object, wrapper object, field-ID keyed object, and array payloads with `case_id` reported missing even when debug parsing showed `case_id` in the body. CSV import returned success envelope but inserted `0` of `1` records. | Keep the entity for continued validation; inspect import error file/API docs if accessible; use Case custom payload/file artifact if insert remains blocked. | Add schema-aware insert/import validation that echoes recognized/unrecognized fields, fixes docs/help examples if the expected shape differs, and includes a correlation/session ID for support. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 21:08 IST; PF-019. |
+| Data Fabric record insertion payload mapping | PF-019 | product defect candidate / integration / diagnostics | high for G-001 custom audit storage | After creating and reading a Data Fabric entity, `records insert` should accept JSON keyed by documented field names or return the exact expected payload shape. | Entity create/readback succeeded, but `records insert` rejected file, inline object, minimal object, wrapper object, field-ID keyed object, and array payloads with `case_id` reported missing even when debug parsing showed `case_id` in the body. CSV import initially inserted `0` of `1` records; a later CSV import succeeded only after nested payload fields were rendered with a custom Data-Fabric-safe wire format. | Use the validated CSV import path for the E-004 audit record; keep Orchestrator bucket artifact as fallback; do not claim direct JSON insert. | Add schema-aware insert/import validation that echoes recognized/unrecognized fields, fixes docs/help examples if the expected shape differs, includes a correlation/session ID for support, and documents nested text-field escaping for CSV import. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 21:08 IST and 2026-06-26 16:00 IST; PF-019. |
 | Test Manager eval-suite onboarding | PF-020 | UX / integration | medium | A local eval output can be imported or mapped into Test Manager without bespoke object creation. | CLI project/case/test-set lifecycle worked, but E-001 through E-009 had to be manually represented as Test Manager objects. | Created project `SREV`, nine manual cases, test set `SREV:9`, and mapping doc. | Add eval/JUnit/JSON import flow with scenario preview and field mapping for AI evals. | `docs/validation/TEST_MANAGER_MAPPING.md`; PF-020. |
 | Test Manager manual execution aggregate status | PF-021 | UX / product defect candidate | medium | Manual execution aggregate becomes terminal or explains the required close action when all child logs pass. | All nine test case logs passed, but aggregate execution stayed `Running` and `uip tm wait --timeout 30` timed out. | Cite child log pass evidence and aggregate counts; do not claim terminal aggregate status. | Add explicit finish/close manual execution action or surface the remaining blocker in execution readback. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 23:58 IST; PF-021. |
-| Case job/task lifecycle CLI clarity | PF-022 | UX / integration / diagnostics | medium | Process, job, and task CLI readbacks should make a fresh Case run's package, human-task completion, and terminal case state easy to reconstruct with consistent flags. | `processes get` rejected `--folder-key` while `version-history` accepted it; completed E-002/E-004 AppTasks returned reviewer actions/comments, but their Case jobs still read as `Running` with only Pending/Running history. | Use corrected `processes get <key>` command, read `version-history`, rely on task readback plus audit bundle for reviewer proof, and do not claim terminal job completion. | Harmonize folder option support or document per-subcommand differences; show whether a Case job is waiting for human task, post-task continuation, or terminal completion. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-26 00:36 IST; `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`; PF-022. |
+| Case job/task lifecycle CLI clarity | PF-022 | UX / integration / diagnostics | medium | Process, job, task, and Case Instance readbacks should make a fresh Case run's package, human-task completion, and terminal case state easy to reconstruct with consistent flags. | `processes get` rejected `--folder-key` while `version-history` accepted it; completed E-002/E-004 AppTasks returned reviewer actions/comments, but their older Case jobs still read as `Running` with only Pending/Running history. A fresh package `1.0.6` Case Instance later reached `LatestRunStatus: Completed` after an unbound required placeholder task was made optional. | Use corrected `processes get <key>` command, read `version-history`, rely on task readback plus audit bundle for reviewer proof on older runs, and cite terminal Case Instance completion only for the fresh package `1.0.6` run. | Harmonize folder option support or document per-subcommand differences; show whether a Case job is waiting for human task, post-task continuation, optional placeholder task, terminal completion, or blocked state. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-26 00:36 IST and 2026-06-26 16:00 IST; `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`; PF-022. |
 
 ## Best Insights So Far
 
@@ -804,7 +804,7 @@ Survey tags:
 Context:
 
 - ID: PF-019.
-- Status: open blocker.
+- Status: resolved for E-004 CSV import; direct JSON insert remains unvalidated.
 - Goal: persist the E-004 `service-recovery-audit-v1` contradiction audit bundle in Data Fabric for G-001/G-002 reconstruction.
 - Product surface: UiPath CLI, Data Fabric entity and record APIs.
 - Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `Arshdeep Singh`.
@@ -824,7 +824,7 @@ What failed or confused us:
 - Record insert failed when using the generated file object, inline full object, minimal required field object, `{"Data": {...}}` wrapper, field UUID keys, and array object.
 - Every insert attempt failed with `Required field "case_id" (...) is not provided and there is no default.`
 - A debug run showed the CLI parsed a `--body` containing `case_id`, so the failure appears to be in payload mapping or expected request shape rather than shell quoting.
-- CSV import inserted `0` of `1` records and returned an error file link, so the documented import fallback did not prove persistence either.
+- CSV import initially inserted `0` of `1` records and returned an error file link; a later import succeeded after nested payload fields were rendered with the Data-Fabric-safe wire format from `service_recovery_core.data_fabric_record.serialize_for_data_fabric_csv`.
 
 Expected:
 
@@ -836,20 +836,20 @@ Observed:
 - Schema creation/readback worked.
 - Insert payload parsing happened.
 - Required field validation still behaved as if no supplied fields were mapped.
-- CSV import returned an error file link with zero inserted records.
-- Record list remained empty after failures.
+- Initial CSV import returned an error file link with zero inserted records.
+- Follow-up CSV import inserted record `DA42769C-33B7-4701-A266-019F032AF376` after using the Data-Fabric-safe wire format.
 
 Impact:
 
-- Build impact: high for G-001 custom audit storage. Data Fabric is the cleanest durable one-query audit store candidate, but record insert/query-back is the proof step.
-- Demo/submission impact: medium/high. The team can still use Case custom payload or file artifact, but Data Fabric would be stronger cross-platform integration if insert works.
+- Build impact: high for G-001 custom audit storage. Data Fabric is now viable for the E-004 CSV import path, but direct JSON insert remains a documentation/diagnostic gap.
+- Demo/submission impact: medium/high. The team can cite validated Data Fabric persistence for the E-004 audit record, while keeping Orchestrator bucket storage as the simpler fallback.
 - Severity: high for CLI/API storage path, product defect candidate until a documented alternate payload shape is found.
 
 Workaround:
 
-- Keep the entity for continued validation.
-- Inspect the CSV import error file or official API/docs if accessible without exposing secrets.
-- If insert remains blocked, use a UiPath-accessible file artifact or Case custom payload for final demo audit reconstruction and submit PF-019 as Data Fabric feedback.
+- Use CSV import with `serialize_for_data_fabric_csv` for nested payload fields.
+- Keep Orchestrator bucket storage as a fallback if CSV import is not part of the final demo path.
+- Continue treating direct JSON insert as unvalidated until the expected request shape is documented or proven.
 
 Suggested improvement:
 

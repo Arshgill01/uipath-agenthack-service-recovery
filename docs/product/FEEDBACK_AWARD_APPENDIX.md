@@ -49,7 +49,7 @@ Evidence:
 | 2 | Add native Case domain audit/event reconstruction for agent + policy + human workflows. | It ties directly to Maestro's value proposition and our hard gate G-001. It is strategic, not just a bug report. | PF-015, G-001 validation, audit bundle artifacts. | Keep as the strongest product-design insight. |
 | 3 | Improve generated Action app field binding inspection/repair. | The platform persisted proof-critical data but the generated UI hid it, which is precise and fair. | PF-006, PF-013. | Keep as the concrete G-003 example. |
 | 4 | Make package/feed/process binding diagnostics consistent. | It shows deep usage beyond UI clicks and supports the coding-agent/CLI story. | PF-017, PF-010, PF-011, PF-012. | Keep as integration/CLI feedback. |
-| 5 | Add schema-aware Data Fabric record insert diagnostics. | Strong for regulated audit storage, but keep secondary because Orchestrator bucket gave a workaround. | PF-018, PF-019. | Keep as a secondary storage/audit point. |
+| 5 | Add schema-aware Data Fabric record insert/import diagnostics. | Strong for regulated audit storage: direct JSON insert remained confusing, while CSV import worked only after a custom nested-payload wire format. | PF-018, PF-019. | Keep as a secondary storage/audit point. |
 | 6 | Support eval-suite import into Test Manager and clarify manual execution terminal status. | Good cross-platform feedback and useful for agent evals, but less central than Maestro Case. | PF-020, PF-021. | Keep if selecting Test Cloud/Test Manager category. |
 | 7 | Clarify Case job/task lifecycle readback. | Practical CLI/operator feedback; helps repeatability and demo honesty. | PF-022. | Keep as supporting detail, not headline. |
 
@@ -128,7 +128,7 @@ Without Maestro, we would have had to stitch together case state, task lifecycle
 ## Claims To Avoid
 
 - Do not claim automated Test Cloud execution; current Test Manager validation is manual mapping plus passed manual logs.
-- Do not claim Data Fabric audit record persistence; entity creation/readback worked, but record insert remains blocked.
+- Claim Data Fabric audit record persistence only for the validated E-004 CSV import path; direct JSON insert remains unvalidated.
 - Do not claim generated Action Center UI is final-demo ready.
 - Do not claim native Case history alone passes the domain audit gate.
 - Do not pitch the project as a generic governance platform.

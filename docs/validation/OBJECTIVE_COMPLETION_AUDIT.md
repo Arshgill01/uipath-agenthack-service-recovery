@@ -53,7 +53,7 @@ This file is an evidence map, not permission to overclaim. The active goal remai
 
 - Do not claim native Maestro Case history alone passes G-001.
 - Do not claim generated Action Center UI is final-demo ready.
-- Do not claim Data Fabric record persistence.
+- Claim Data Fabric record persistence only for the validated E-004 CSV import path; direct JSON insert remains unvalidated.
 - Do not claim automated Test Cloud execution.
 - Do not claim E-002/E-004 Case jobs reached terminal completion while job readback remains `Running`.
 - Do not claim real production telecom integrations.

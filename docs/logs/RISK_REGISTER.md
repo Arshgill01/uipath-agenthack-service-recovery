@@ -2,7 +2,7 @@
 
 | ID | Risk | Impact | Likelihood | Mitigation | Owner | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| R-001 | Maestro Case native state/history is insufficient for audit reconstruction. | High | Medium | Use explicit `service-recovery-audit-v1` bundle stored in Orchestrator bucket; do not claim native Case history alone. | Platform spike agent | Mitigated with fallback |
+| R-001 | Maestro Case native state/history is insufficient for audit reconstruction. | High | Medium | Use explicit `service-recovery-audit-v1` bundle stored in Orchestrator bucket or persisted in Data Fabric; do not claim native Case history alone. | Platform spike agent | Mitigated via Data Fabric and Bucket |
 | R-002 | Policy version pinning is not natively supported. | Medium | Medium | Store policy versions as explicit case metadata/artifact fields and represent migration as audited event. | Platform spike agent | Mitigated explicitly |
 | R-003 | Action Center cannot render evidence packet clearly. | Medium | Medium | Use Action Center for lifecycle/return and custom evidence packet/screenshots for judge-readable proof. | UX/build agent | Mitigated with custom surface |
 | R-004 | Raw agent recommendation cannot be shown before policy override. | High | Low | Persist agent interpretation event separately from policy decision event in payloads, audit bundles, and evidence packet. | Architecture/build agent | Mitigated |
@@ -157,7 +157,7 @@
 
 - R-007 is reduced for operator repeatability: exact CLI readback commands are now documented for process version, version history, task state, job state, and job history.
 - New nuance: completed Action Center AppTasks `4300080` and `4300219` do not prove terminal Case job completion. Both corresponding Case jobs still read back as `State: Running`.
-- Mitigation: for the final demo, claim Action Center task lifecycle/reviewer return and audit-bundle reconstruction, but do not claim terminal Case job completion unless a fresh case run reaches a terminal job state.
+- Mitigation: for the final demo, claim Action Center task lifecycle/reviewer return and audit-bundle reconstruction for the older E-002/E-004 jobs; claim terminal Case Instance completion only for the fresh package `1.0.6` run that reached `LatestRunStatus: Completed`.
 - New product feedback captured as PF-022: CaseManagement job/task lifecycle readback needs clearer Case-aware state explanation and more consistent process subcommand folder flag behavior.
 
 ### 2026-06-26 00:41 IST - Demo Repeatability and Packet Surface
@@ -169,7 +169,7 @@
 
 ### 2026-06-26 15:56 IST - Current Risk Posture Refresh
 
-- R-001 remains PARTIAL natively but is mitigated for the submission path by the validated Orchestrator bucket audit bundle fallback.
+- R-001 is mitigated via live Data Fabric record persistence and Orchestrator bucket audit bundle fallbacks.
 - R-002 is mitigated through explicit package/process/artifact policy-version pinning. Native active-case migration still requires a custom audited event.
 - R-003 is mitigated for final presentation by custom evidence packets and committed desktop/mobile screenshot artifacts. Generated Action Center UI remains unsuitable as the primary judge-facing surface.
 - R-004 is mitigated by separate persisted AIE/PDE artifacts and evidence-packet comparison panels for E-002, E-004, and the adversarial E-003 packet.
@@ -177,3 +177,8 @@
 - R-006 is mitigated locally by schema validation, the bounded Gemini repair loop, eval coverage, and deterministic policy fallback.
 - R-007 is reduced by `scripts/run_submission_check.sh`, `scripts/run_demo.sh`, `scripts/run_llm_demo.sh --evidence-packet-output ...`, and curated proof artifacts.
 - R-008 is mitigated for current development because UiPath Labs access and required product surfaces have been validated in `keepingitlowkey / DefaultTenant`.
+
+### 2026-06-26 16:00 IST - Open Risks Resolution (Data Fabric & Case Completion)
+
+- **PF-019 (Data Fabric CSV Import Resolution)**: Resolved Data Fabric persistence for the E-004 audit record through CSV import. Direct JSON insert remains unvalidated, but nested payload text fields imported successfully after using `serialize_for_data_fabric_csv` in `service_recovery_core/data_fabric_record.py`. This was verified by generating E-004 CSV records and successfully importing them into Data Fabric via `uip df records import`, increasing the active record count.
+- **PF-022 (Case Instance Completion Resolution)**: Resolved the Case Instance stuck in `Running` status. The issue was due to a required placeholder human task (`tfTXjrum9`) that had no implementation binding. By updating the Maestro Case package to version `1.0.6`, making the placeholder task optional (`isRequired: false`), uploading it to the Orchestrator solution feed, and updating the process version, new Case Instances now terminally complete (`LatestRunStatus: Completed`) upon completion/submission of the Action Center review tasks.

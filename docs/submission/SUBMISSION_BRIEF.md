@@ -65,6 +65,6 @@ The UiPath implementation uses Maestro Case and Action Center for lifecycle and 
 - The telecom systems are simulated fixtures, not production integrations.
 - Native Maestro Case history is not claimed as a complete domain audit by itself.
 - Generated Action Center UI is not the final judge-facing evidence surface because it hid or mislabeled proof-critical fields during validation.
-- Data Fabric audit record persistence is not claimed; Orchestrator bucket artifact storage is the validated fallback.
+- Data Fabric audit record persistence is validated for the E-004 audit record via CSV import using the Data-Fabric-safe wire format; Orchestrator bucket artifact storage remains available as a fallback.
 - Test Manager validation is manual mapping/logging, not automated Test Cloud execution.
-- E-002/E-004 Case jobs still read back as `Running`, so the submission should claim Action Center task lifecycle and audit proof, not terminal Case job completion.
+- A fresh Case Instance on package `1.0.6` reached terminal lifecycle completion (`LatestRunStatus: Completed`) after the unbound placeholder task was made optional. Do not generalize this to older E-002/E-004 jobs.

@@ -11,8 +11,8 @@ Implementation readiness slices are tracked in [IMPLEMENTATION_SLICES.md](IMPLEM
 | API Workflows | Query simulated CRM/billing/telemetry/inventory/dispatch APIs. | G-005 and Wave 28 |
 | Action Center | Human review lifecycle: create, assign, complete, reviewer action/comment, structured task output into case variables. Not the final judge-readable evidence UI. | G-003 PASS/PARTIAL |
 | Case App / custom UI | Primary final evidence packet/demo surface because generated Action Center UI is not demo-legible. | G-003, G-004, G-006 |
-| Data Fabric/Data Service | Candidate future storage for audit bundles. Schema create/readback validated, record insert blocked. | G-001, G-002; PF-019 |
-| Orchestrator storage buckets | Validated fallback for storing one-object `service-recovery-audit-v1` audit artifacts when native Case audit is insufficient and Data Fabric record insert is blocked. | G-001, G-002, G-004, G-008 |
+| Data Fabric/Data Service | Validated storage path for the E-004 audit bundle through CSV import using the Data-Fabric-safe wire format. Direct JSON insert remains unvalidated. | G-001, G-002; PF-019 |
+| Orchestrator storage buckets | Validated fallback for storing one-object `service-recovery-audit-v1` audit artifacts when native Case audit is insufficient or Data Fabric import is not available. | G-001, G-002, G-004, G-008 |
 | Test Cloud / Test Manager | Eval/regression representation. Live project `SREV`, test set `SREV:9`, and manual execution logs represent E-001 through E-009; automated execution not claimed. | G-007 PASS/PARTIAL |
 | UiPath CLI + skills | Coding-agent bonus proof and lifecycle automation, including explicit process creation with pinned package versions. | G-008; CLI version `1.196.0` installed locally and logged into org `keepingitlowkey`, tenant `DefaultTenant` |
 | Orchestrator | Assets, packages, jobs, logs, deployment, secrets if needed. | Wave 01 and stack selection |
@@ -68,7 +68,7 @@ Live validation moved the architecture from "maybe Data Fabric/Data Service" to 
 - `docs/architecture/data_fabric/service_recovery_audit_bundle_entity.json` is the proposed live entity schema for storing the bundle.
 - `python -m service_recovery_core.evals --data-fabric-record-scenario E-004` emits an insert-ready record body for the contradiction proof beat, including live Case/task/package references from package `1.0.5`.
 - After explicit user approval, live Data Fabric entity `ServiceRecoveryAuditBundle` was created with ID `328ef8b6-ab70-f111-ac9a-002248a16d28` and schema readback by ID succeeded.
-- Record insert is not yet validated: `uip df records insert` rejected field-name, wrapper, field-ID keyed, and array payloads with required `case_id` reported missing. Treat Data Fabric as schema-validated but storage-blocked until insert/query-back succeeds.
+- Direct JSON record insert remains unvalidated: `uip df records insert` rejected field-name, wrapper, field-ID keyed, and array payloads with required `case_id` reported missing. CSV import is validated for E-004 after rendering nested payload fields with the Data-Fabric-safe wire format; record `DA42769C-33B7-4701-A266-019F032AF376` was inserted in entity `328ef8b6-ab70-f111-ac9a-002248a16d28`.
 - Orchestrator bucket fallback is live-validated. Bucket `service-recovery-audit-validation` with key `dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb` stores `audit/service_recovery_audit_bundle_E004.json`.
 - The bucket artifact was uploaded, listed, downloaded to `eval_results/downloaded_audit_bundle_E004.json`, and byte-compared against `docs/validation/artifacts/2026-06-25/service_recovery_audit_bundle_E004.json`.
 - The artifact manifest is `docs/validation/artifacts/2026-06-25/orchestrator_bucket_audit_artifact_E004_manifest.json`.

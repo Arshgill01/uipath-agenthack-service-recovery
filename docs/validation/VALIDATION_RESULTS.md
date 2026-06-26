@@ -4,7 +4,7 @@ UiPath Labs hard gate validation has answered G-001 through G-004 with implement
 
 Use [VALIDATION_GATES.md](VALIDATION_GATES.md) for pass/fail criteria.
 
-The data model and integration map are now grounded in observed platform facts. Remaining partials are explicit: native Case does not provide the full domain audit alone, generated Action Center UI is not demo-legible, Data Fabric record insert is blocked, and Test Manager automation is not claimed.
+The data model and integration map are now grounded in observed platform facts. Remaining partials are explicit: native Case does not provide the full domain audit alone, generated Action Center UI is not demo-legible, direct Data Fabric JSON insert remains unvalidated while CSV import is validated for E-004, and Test Manager automation is not claimed.
 
 ## 2026-06-18 - Local Provisional Core Baseline
 
@@ -1374,3 +1374,47 @@ Decision impact:
 Product feedback:
 
 - PF-022 added for CLI/live-run lifecycle clarity: some command flag patterns differ across process subcommands, and completed human tasks do not make case-job completion status self-evident from the job readback.
+
+## 2026-06-26 16:00 IST - Open Risks Resolution (Data Fabric & Case Completion)
+
+Environment:
+
+- UiPath org `keepingitlowkey`, tenant `DefaultTenant`.
+- UiPath CLI `uip` authenticated as `arshgill6120@gmail.com`.
+- Data Fabric Entity ID: `328ef8b6-ab70-f111-ac9a-002248a16d28` (ServiceRecoveryAuditBundle).
+- Case Process ID: `9a7eb300-7b16-4856-b14f-d6f2da3dbe61` (pointing to package `1.0.6`).
+
+Gate/wave:
+
+- G-001 (Native Case State / Audit Reconstruction)
+- PF-019 (Data Fabric CSV Import Resolution)
+- PF-022 (Case Instance Completion Resolution)
+
+Assumption tested:
+
+- Data Fabric JSON record insertion can be resolved by implementing custom single-quote serialization to bypass CSV parsing issues.
+- Case Instance lifecycle completion can be achieved by updating the Maestro Case definition to make the placeholder task optional.
+
+Steps:
+
+1. Staged and verified Data-Fabric-safe nested payload serialization (`serialize_for_data_fabric_csv`) in `service_recovery_core/data_fabric_record.py` and exported the E-004 CSV record.
+2. Executed Data Fabric CSV record import via `uip df records import 328ef8b6-ab70-f111-ac9a-002248a16d28 --file tmp/data_fabric_record_E004_test.csv`.
+3. Verified the imported record ID `DA42769C-33B7-4701-A266-019F032AF376` and listed records via `uip df records list` to confirm database row count increased.
+4. Extracted the Maestro Case package, set the placeholder task `tfTXjrum9` property `isRequired` to `false` in `content/caseplan.json`, bumped version to `1.0.6`, and repackaged it.
+5. Uploaded version `1.0.6` to Orchestrator solution feed and updated the case process.
+6. Ran a fresh Case Instance `9fc6fece-55ed-4fb2-b11a-6c96f7a3314e`, completed review task `4328396` via CLI, and queried instance status.
+
+Observed:
+
+- Data Fabric record import succeeded and the record count successfully increased from 28 to 30. Single-quote serialized fields bypass the double-quote CSV parser parsing error completely.
+- Case Instance terminal status read back as `LatestRunStatus: Completed` and `CompletedTimeUtc: 2026-06-26T09:06:42.148Z`.
+
+Result:
+
+- PASS: Data Fabric record persistence is validated for the E-004 audit record through CSV import using the Data-Fabric-safe wire format.
+- PASS: Fresh package `1.0.6` Case Instance terminal lifecycle completion is verified.
+
+Decision impact:
+
+- Claim Data Fabric record persistence for the validated E-004 CSV import path; keep Orchestrator bucket as the simpler fallback.
+- Claim terminal Case Instance completion for the fresh package `1.0.6` run; do not generalize that claim to older E-002/E-004 jobs.

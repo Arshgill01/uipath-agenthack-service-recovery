@@ -125,8 +125,8 @@ Options:
 ## Claims To Avoid
 
 - Do not claim automated Test Cloud execution.
-- Do not claim Data Fabric audit record persistence.
+- Claim Data Fabric audit record persistence only for the validated E-004 CSV import path; direct JSON insert remains unvalidated.
 - Do not claim generated Action Center UI is final-demo ready.
 - Do not claim native Case history alone passes G-001.
-- Do not claim terminal Case job completion for E-002/E-004 while jobs still read `Running`.
+- Do not claim terminal completion for older E-002/E-004 jobs while their job readback remains `Running`; claim only the fresh package `1.0.6` Case Instance completion if cited.
 - Do not frame the project as a generic agent governance platform.
