@@ -5,9 +5,22 @@ This directory breaks the build into 40 waves. Each wave should be independently
 ## How To Use
 
 1. Read [AGENTS.md](../AGENTS.md), [PROJECT_BRIEF.md](../PROJECT_BRIEF.md), and the relevant architecture docs.
-2. Pick the next incomplete wave.
-3. Update [docs/logs/BUILD_LOG.md](../docs/logs/BUILD_LOG.md) before finishing.
-4. Do not skip hard validation waves unless explicitly waived in [docs/decisions/DECISIONS.md](../docs/decisions/DECISIONS.md).
+2. Check the current status table below before picking work. Do not restart completed validation waves unless new platform evidence contradicts them.
+3. Run `scripts/run_submission_check.sh` before final submission and after any code/artifact change.
+4. Update [docs/logs/BUILD_LOG.md](../docs/logs/BUILD_LOG.md) before finishing.
+5. Do not skip hard validation waves unless explicitly waived in [docs/decisions/DECISIONS.md](../docs/decisions/DECISIONS.md).
+
+## Current Status Overlay
+
+The original wave files remain useful for historical intent, but the current repository state is more advanced than the initial wave order.
+
+| Area | Current status | Evidence |
+| --- | --- | --- |
+| Waves 01-06 / gates G-001 through G-006 | Answered with PASS/PARTIAL implications. Do not redo broad validation without new contradictory platform behavior. | [VALIDATION_RESULTS.md](../docs/validation/VALIDATION_RESULTS.md), [OBJECTIVE_COMPLETION_AUDIT.md](../docs/validation/OBJECTIVE_COMPLETION_AUDIT.md) |
+| Demo-safe proof path | Ready locally: Action Center lifecycle, custom evidence packet, Orchestrator audit bundle. | [DEMO_SAFE_PROOF_RUNBOOK.md](../docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md), `scripts/run_demo.sh` |
+| Submission sanity check | Ready and non-mutating. | `scripts/run_submission_check.sh` |
+| Optional live LLM proof | Gemini/Vertex standard and adversarial artifacts are committed; rerun only intentionally. | `scripts/run_llm_demo.sh`, `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html` |
+| Product feedback | PF-001 through PF-022 captured and curated. | [PRODUCT_FEEDBACK_AWARD.md](../docs/product/PRODUCT_FEEDBACK_AWARD.md), [FEEDBACK_SURVEY_FINAL_DRAFT.md](../docs/product/FEEDBACK_SURVEY_FINAL_DRAFT.md) |
 
 ## Wave List
 

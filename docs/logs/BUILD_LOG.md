@@ -30,6 +30,51 @@ Next:
 
 - ...
 
+### 2026-06-26 14:00 IST - Agent / Candidate Branch Review And Wave Index Refresh
+
+What changed:
+
+- Reviewed candidate branches `feature/llm-engine-adv`, `feature/ui-design`, and `feature/service-recovery-combined` against current `master`.
+- Added `docs/plans/CANDIDATE_BRANCH_REVIEW.md` with merge verdicts and branch-specific blockers.
+- Updated `waves/00_WAVES_INDEX.md` with the current status overlay so future agents do not restart completed hard-gate validation.
+
+Commands run:
+
+- `git status --short --branch`
+- `git log --oneline -5`
+- `git worktree list`
+- `git branch --all --verbose --no-abbrev`
+- `git diff --stat master...feature/llm-engine-adv`
+- `git log --oneline master..feature/llm-engine-adv`
+- `git diff --name-status master...feature/llm-engine-adv`
+- `git diff master...feature/llm-engine-adv -- service_recovery_core/llm_interpreter.py service_recovery_core/policy.py service_recovery_core/agent_validator.py service_recovery_core/enums.py tests/test_llm_interpreter.py`
+- `git show feature/llm-engine-adv:test_output.log`
+- `git diff --stat master...feature/ui-design`
+- `git log --oneline master..feature/ui-design`
+- `git diff --name-status master...feature/ui-design`
+- `git diff master...feature/ui-design -- service_recovery_core/evidence_packet_view.py`
+- `scripts/run_submission_check.sh`
+- `git diff --check`
+
+Validation:
+
+- PASS: `scripts/run_submission_check.sh` completed successfully.
+- PASS: the check ran the 39-test unit suite and verified the committed proof artifacts.
+- PASS: `git diff --check`.
+
+Product feedback:
+
+- No new PF entry expected. This was repository branch review and planning, not a new UiPath product interaction.
+
+Open risks:
+
+- Do not merge `feature/llm-engine-adv` directly; it is older than current `master` and weakens adversarial closure-candidate validation.
+- Do not merge `feature/ui-design` directly; selectively rework useful visual ideas on current `master` so adversarial rendering and offline reliability are preserved.
+
+Next:
+
+- Continue with selective evidence-packet polish on current `master`, not branch merging, using `docs/plans/LONG_RUNNING_AGENTIC_LOOP_RUNBOOK.md`.
+
 ## 2026-06-18 - Scaffolding Setup
 
 What changed:
