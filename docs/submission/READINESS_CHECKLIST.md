@@ -13,6 +13,7 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 | Repeatable E-002/E-004 proof artifacts exist. | PASS | `scripts/run_demo.sh --with-local-checks --no-uipath-next-steps`; `docs/demo/artifacts/demo_proof_manifest.json`. | Script is local/default-safe; it does not start live cases. |
 | Optional real LLM interpretation path exists. | PASS with live Vertex run | `scripts/run_llm_demo.sh --scenario-id E-003 --model gemini-2.5-flash --project <project> --location us-central1 --output eval_results/llm_interpreter_E003_live.json`; committed artifact `docs/demo/artifacts/llm_interpreter_E003_live.json` | Re-run if model, prompt, Google project, or ADC environment changes before recording. |
 | Optional adversarial LLM interpretation path exists. | PASS with live Vertex run | Unit tests cover advocate/skeptic interpretation, repair of schema/semantic drift, disagreement scoring, policy route to `human_review`, and evidence-packet display. Live artifact: `docs/demo/artifacts/llm_interpreter_E003_adversarial_live.json`. | Re-run before final recording if prompt, model, scoring, Google project, or ADC environment changes. |
+| Non-mutating submission sanity check exists. | PASS | `scripts/run_submission_check.sh` runs tests, evals, existing artifact verification, script syntax checks, and proof-string checks without live UiPath/Vertex calls. | Use before final submission and after any code or artifact change. |
 | UiPath Labs access is confirmed. | PASS | Org `keepingitlowkey`, tenant `DefaultTenant`, user `arshgill6120@gmail.com` in validation logs. | Do not store credentials or tokens. |
 | Maestro Case access is confirmed. | PASS | Wave 01 and live Case validation entries in `docs/validation/VALIDATION_RESULTS.md`. | Native Case history is not full domain audit by itself. |
 
@@ -51,6 +52,7 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 | Feedback answer bank | Ready except user fields | `docs/product/FEEDBACK_SURVEY_COPY_READY.md` |
 | Demo-safe runbook | Ready | `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md` |
 | Repeatable proof wrapper | Ready | `scripts/run_demo.sh` |
+| Submission sanity check | Ready | `scripts/run_submission_check.sh` |
 | E-002 evidence packet | Ready | `docs/demo/artifacts/evidence_packet_E002.html` |
 | E-004 evidence packet | Ready | `docs/demo/artifacts/evidence_packet_E004.html` |
 | Audit proof manifest | Ready | `docs/demo/artifacts/demo_proof_manifest.json` |

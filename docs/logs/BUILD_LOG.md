@@ -2051,3 +2051,30 @@ Product feedback:
 Open risks:
 
 - The wrapper should be used only when Vertex/API auth is available. Failed or blocked LLM runs do not render an evidence packet.
+
+### 2026-06-26 15:02 IST - Agent / Submission Sanity Check Script
+
+What changed:
+
+- Added `scripts/run_submission_check.sh` as a non-mutating final sanity check for the local submission proof set.
+- Linked the script from submission readiness docs and the submission brief.
+
+Commands run:
+
+- `chmod +x scripts/run_submission_check.sh`
+- `scripts/run_submission_check.sh`
+- `git diff --check`
+
+Validation:
+
+- PASS: `scripts/run_submission_check.sh` completed successfully.
+- PASS: the check ran the 39-test unit suite, local eval baseline, E-002/E-004 artifact verification, LLM/adversarial artifact presence checks, proof-string checks, and wrapper syntax checks.
+- PASS: `git diff --check`.
+
+Product feedback:
+
+- No new PF entry expected. This is local verification workflow work, not a new UiPath product interaction.
+
+Open risks:
+
+- This check verifies local committed proof artifacts only. It intentionally does not start live UiPath cases, complete Action Center tasks, or call Gemini/Vertex.

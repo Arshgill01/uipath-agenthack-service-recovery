@@ -28,6 +28,7 @@ The UiPath implementation uses Maestro Case and Action Center for lifecycle and 
 - Live Orchestrator bucket audit artifact for E-004.
 - Test Manager project/test-set/manual logs representing E-001 through E-009.
 - `scripts/run_demo.sh` repeatably regenerates and verifies the local E-002/E-004 proof artifacts.
+- `scripts/run_submission_check.sh` verifies the local submission proof set without starting live UiPath cases or live LLM calls.
 
 ## Core Proof Beats
 
@@ -47,6 +48,7 @@ The UiPath implementation uses Maestro Case and Action Center for lifecycle and 
 ## Evidence Links
 
 - Repeatable local proof: `scripts/run_demo.sh`
+- Non-mutating submission check: `scripts/run_submission_check.sh`
 - Demo runbook: `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`
 - E-002 packet: `docs/demo/artifacts/evidence_packet_E002.html`
 - E-004 packet: `docs/demo/artifacts/evidence_packet_E004.html`
