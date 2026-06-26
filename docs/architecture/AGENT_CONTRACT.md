@@ -21,7 +21,7 @@ The agent converts ambiguous unstructured evidence into structured signals and a
   ],
   "recommended_next_stage": "verify_telemetry | retry_activation | dispatch_followup | inventory_reconciliation | billing_review | human_exception_review | closure_candidate",
   "recommendation_confidence": 0.0,
-  "closure_block_reason_code": "none | missing_authoritative_signal | stale_authoritative_signal | source_contradiction | low_category_confidence | low_recommendation_confidence | high_impact_exception | invalid_agent_output",
+  "closure_block_reason_code": "none | missing_authoritative_signal | stale_authoritative_signal | source_contradiction | low_category_confidence | low_recommendation_confidence | high_impact_exception | high_interpretation_disagreement | invalid_agent_output",
   "audit_explanation": "generated once and logged for this stage-transition event",
   "urgency": "low | normal | high | critical",
   "customer_impact_summary": "business impact and customer-risk summary",
@@ -31,6 +31,32 @@ The agent converts ambiguous unstructured evidence into structured signals and a
   "operator_note": "short operational note for the case owner"
 }
 ```
+
+## Optional Adversarial Interpretation
+
+The Gemini-backed demo path can run two structured interpretations over the same notes:
+
+- resolution advocate: strongest honest case for closure or recovery,
+- closure skeptic: strongest honest case against premature closure.
+
+Both calls must independently satisfy the same agent contract above. The synthesized Agent Interpretation Event preserves the advocate's raw recommendation and stores the full advocate/skeptic trace under `adversarial_interpretation`.
+
+Policy receives only the structured disagreement metadata, not prose:
+
+```json
+{
+  "disagreement_score": 0.826,
+  "threshold": 0.6,
+  "stage_match": false,
+  "confidence_delta": 0.42,
+  "claim_overlap_ratio": 0.0,
+  "advocate_recommendation": "closure_candidate",
+  "skeptic_recommendation": "human_exception_review",
+  "unique_skeptic_gaps": ["confirm upstream signal stability"]
+}
+```
+
+If the score crosses threshold, policy may add `high_interpretation_disagreement` and route to human review. This does not relax validation: a `closure_candidate` still requires `recommendation_confidence >= 0.75` and `closure_block_reason_code: none`.
 
 ## Rules
 

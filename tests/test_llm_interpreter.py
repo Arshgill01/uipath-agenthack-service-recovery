@@ -3,7 +3,9 @@ import unittest
 
 from service_recovery_core.llm_interpreter import (
     LlmInterpreterError,
+    compute_interpretation_disagreement,
     interpret_notes_with_llm,
+    run_adversarial_interpretation,
     run_governed_llm_demo,
 )
 from service_recovery_core.audit_bundle import build_case_audit_bundle
@@ -26,6 +28,16 @@ class FakeModels:
     def generate_content(self, *, model, contents, config=None):
         self.last_prompt = contents
         return FakeResponse(json.dumps(self.payload))
+
+
+class SequenceFakeModels:
+    def __init__(self, payloads):
+        self.payloads = list(payloads)
+        self.prompts = []
+
+    def generate_content(self, *, model, contents, config=None):
+        self.prompts.append(contents)
+        return FakeResponse(json.dumps(self.payloads.pop(0)))
 
 
 class LlmInterpreterTests(unittest.TestCase):
@@ -104,6 +116,62 @@ class LlmInterpreterTests(unittest.TestCase):
         self.assertIn("LLM triage package", html)
         self.assertIn("override_recommendation", html)
 
+    def test_computes_interpretation_disagreement(self):
+        advocate = _valid_llm_payload()
+        skeptic = _skeptic_payload()
+
+        disagreement = compute_interpretation_disagreement(advocate, skeptic)
+
+        self.assertGreaterEqual(disagreement["disagreement_score"], 0.60)
+        self.assertFalse(disagreement["stage_match"])
+        self.assertEqual(disagreement["advocate_recommendation"], "closure_candidate")
+        self.assertEqual(disagreement["skeptic_recommendation"], "human_exception_review")
+        self.assertIn("confirm upstream signal stability", disagreement["unique_skeptic_gaps"])
+
+    def test_adversarial_disagreement_escalates_policy_to_human_review(self):
+        client = SequenceFakeModels([_valid_llm_payload(), _skeptic_payload()])
+
+        result = run_governed_llm_demo(scenario_id="E-001", client=client, adversarial=True)
+
+        self.assertEqual(len(client.prompts), 2)
+        self.assertIn("RESOLUTION ADVOCATE", client.prompts[0])
+        self.assertIn("CLOSURE SKEPTIC", client.prompts[1])
+        self.assertTrue(result["agent_validation"]["valid"], result["agent_validation"]["errors"])
+        self.assertGreaterEqual(result["adversarial_interpretation"]["disagreement"]["disagreement_score"], 0.60)
+        self.assertEqual(result["policy_decision_event"]["decision"], "require_human_review")
+        self.assertEqual(result["policy_decision_event"]["to_stage"], "human_review")
+        self.assertIn("high_interpretation_disagreement", result["policy_decision_event"]["reason_codes"])
+
+    def test_adversarial_trace_reaches_audit_and_packet(self):
+        fixture = scenario("E-001")
+        result = run_adversarial_interpretation(
+            notes=[],
+            business_context={"case_id": "CASE-E001"},
+            event_id="AIE-ADV",
+            input_refs=["adversarial_demo"],
+            client=SequenceFakeModels([_valid_llm_payload(), _skeptic_payload()]),
+        )
+        policy_decision = decide_policy(
+            fixture["case"],
+            fixture["evidence"],
+            result["synthesized_agent_event"],
+            result["disagreement"],
+        )
+        transition = apply_policy_decision(
+            fixture["case"],
+            result["synthesized_agent_event"],
+            policy_decision,
+            event_id="PDE-ADV",
+        )
+        audit_bundle = build_case_audit_bundle(fixture["case"], fixture["evidence"], transition)
+        html = render_evidence_packet_html(audit_bundle)
+
+        self.assertIn("adversarial_interpretation", audit_bundle["agent_interpretation_event"])
+        self.assertIn("Adversarial dual interpretation", html)
+        self.assertIn("Resolution advocate", html)
+        self.assertIn("Closure skeptic", html)
+        self.assertIn("high_interpretation_disagreement", html)
+
 
 def _valid_llm_payload():
     return {
@@ -129,6 +197,41 @@ def _valid_llm_payload():
         "reviewer_questions": ["Is the latest network telemetry fresh enough for closure?"],
         "operator_note": "LLM sees a likely resolved activation, but policy must verify source-of-truth freshness.",
     }
+
+
+def _skeptic_payload():
+    payload = _valid_llm_payload()
+    payload.update(
+        {
+            "failure_category": "telemetry_gap",
+            "category_confidence": 0.82,
+            "interpretation_rationale_codes": ["mentions_signal_absent", "mentions_system_timeout"],
+            "recommended_next_stage": "human_exception_review",
+            "recommendation_confidence": 0.41,
+            "closure_block_reason_code": "stale_authoritative_signal",
+            "audit_explanation": "The green modem note is not enough because the customer had repeated callbacks and upstream stability is unverified.",
+            "urgency": "high",
+            "evidence_gaps": ["Confirm upstream signal stability", "Verify fresh authoritative telemetry"],
+            "recommended_actions": ["Escalate for human review before closure."],
+            "reviewer_questions": ["Did the upstream signal remain stable after the technician left?"],
+            "operator_note": "Skeptic interpretation found unresolved signal-risk language in the same evidence.",
+        }
+    )
+    payload["extracted_claims"] = [
+        {
+            "claim_type": "customer_reported_symptom",
+            "value": "Customer is frustrated after a third callback.",
+            "source": "customer_message",
+            "timestamp": "2026-06-18T10:06:00Z",
+        },
+        {
+            "claim_type": "technician_observation",
+            "value": "Upstream signal stability is not confirmed.",
+            "source": "technician_note",
+            "timestamp": "2026-06-18T10:05:00Z",
+        },
+    ]
+    return payload
 
 
 if __name__ == "__main__":

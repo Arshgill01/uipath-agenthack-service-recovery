@@ -1791,3 +1791,49 @@ Open risks:
 Next:
 
 - Validate, commit, and push the audit checkpoint.
+
+### 2026-06-26 13:13 IST - Agent / Adversarial LLM Integration Review
+
+What changed:
+
+- Reviewed `feature/llm-engine-adv` and `feature/ui-design` with local inspection plus subagent review.
+- Ported the adversarial advocate/skeptic LLM concept into `master` without the branch's validator relaxation.
+- Added `high_interpretation_disagreement` as a deterministic policy reason that routes high disagreement to human review.
+- Added evidence-packet rendering for advocate vs skeptic interpretation and restrained offline-safe packet styling/table responsiveness.
+- Updated LLM run wrapper with `--adversarial` and documented the mode in architecture/runbook/readiness docs.
+
+Commands run:
+
+- `git worktree list`
+- `git diff master...feature/llm-engine-adv`
+- `git diff master...feature/ui-design`
+- `python -m unittest tests.test_llm_interpreter tests.test_policy_state_eval tests.test_uipath_payload`
+- `python -m unittest tests.test_llm_interpreter tests.test_policy_state_eval tests.test_uipath_payload tests.test_evidence_packet_view tests.test_demo_proof`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- `python -m service_recovery_core.demo_proof --output-dir docs/demo/artifacts --verify-only`
+- `bash -n scripts/run_llm_demo.sh`
+- `scripts/run_llm_demo.sh --scenario-id E-003 --model gemini-2.5-flash --project project-61c59251-6618-46b7-a8c --location us-central1 --adversarial --output eval_results/llm_interpreter_E003_adversarial_live.json`
+
+Validation:
+
+- PASS: targeted LLM/policy/payload/evidence-packet tests passed.
+- PASS: full unit suite passed 35 tests.
+- PASS: local eval suite passed 9/9 scenarios.
+- PASS: demo proof verifier passed E-002/E-004.
+- PASS: `scripts/run_llm_demo.sh` shell syntax check.
+- PARTIAL: live Vertex adversarial run reached Gemini auth/provider, but three attempts returned schema/semantic validation failures; do not claim live adversarial LLM validation yet.
+
+Product feedback:
+
+- No new PF entry. This checkpoint did not exercise a new UiPath product surface.
+
+Open risks:
+
+- Adversarial mode is unit-tested locally but still needs a successful Vertex-backed `--adversarial` run before claiming live adversarial LLM validation.
+- The live model failures were useful calibration signals: inflated confidence without enough rationale, `none` rationale on a classified case, and unsupported `mentions_customer_pressure` rationale. The validator correctly rejected all three.
+- The disagreement score is intentionally simple and documented as interpretation-policy behavior; tune only with eval evidence, not demo aesthetics.
+
+Next:
+
+- Add a focused prompt/repair eval loop for live adversarial Gemini if the final story needs live advocate/skeptic output.

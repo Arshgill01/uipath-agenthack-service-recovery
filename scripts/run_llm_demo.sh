@@ -12,7 +12,7 @@ PROJECT="${PROJECT:-${GOOGLE_CLOUD_PROJECT:-${GOOGLE_PROJECT_ID:-}}}"
 
 usage() {
   cat <<'EOF'
-Usage: scripts/run_llm_demo.sh [--scenario-id E-003] [--model gemini-3-flash] [--project PROJECT_ID] [--location us-central1] [--output PATH]
+Usage: scripts/run_llm_demo.sh [--scenario-id E-003] [--model gemini-3-flash] [--project PROJECT_ID] [--location us-central1] [--output PATH] [--adversarial]
 
 Runs the optional Gemini-backed LLM interpretation proof.
 
@@ -47,6 +47,9 @@ while [[ $# -gt 0 ]]; do
       OUTPUT="$2"
       shift
       ;;
+    --adversarial)
+      ADVERSARIAL=1
+      ;;
     -h|--help)
       usage
       exit 0
@@ -65,6 +68,9 @@ mkdir -p "$(dirname "$OUTPUT")"
 cmd=(python -m service_recovery_core.llm_interpreter --scenario-id "$SCENARIO_ID" --model "$MODEL" --location "$LOCATION" --output "$OUTPUT")
 if [[ -n "$PROJECT" ]]; then
   cmd+=(--project "$PROJECT")
+fi
+if [[ "${ADVERSARIAL:-0}" == "1" ]]; then
+  cmd+=(--adversarial)
 fi
 
 set +e

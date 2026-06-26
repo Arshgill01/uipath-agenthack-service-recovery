@@ -19,10 +19,12 @@ def decide_policy(
     case: dict[str, Any],
     evidence: list[dict[str, Any]],
     agent_event: dict[str, Any],
+    interpretation_disagreement: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     agent_validation = validate_agent_interpretation(agent_event)
     reconciliation = reconcile_evidence(evidence)
     reason_codes = list(reconciliation["reason_codes"])
+    high_disagreement = _is_high_interpretation_disagreement(interpretation_disagreement)
 
     if not agent_validation["valid"]:
         reason_codes.append("invalid_agent_output")
@@ -33,6 +35,8 @@ def decide_policy(
             reason_codes.append("low_category_confidence")
         if agent_event["recommendation_confidence"] < 0.50:
             reason_codes.append("low_recommendation_confidence")
+    if high_disagreement:
+        reason_codes.append("high_interpretation_disagreement")
 
     closure_allowed = (
         reconciliation["derived_evidence_state"] == "confirmed_aligned"
@@ -42,6 +46,9 @@ def decide_policy(
     if "invalid_agent_output" in reason_codes:
         decision = "override_recommendation"
         target_stage = "verify_telemetry"
+    elif high_disagreement:
+        decision = "require_human_review"
+        target_stage = "human_review"
     elif "low_category_confidence" in reason_codes or "low_recommendation_confidence" in reason_codes:
         decision = "block_closure"
         target_stage = "verify_telemetry"
@@ -74,7 +81,7 @@ def decide_policy(
         "closure_allowed": closure_allowed,
         "reason_codes": _dedupe(reason_codes),
         "decision_policy_version": case["decision_policy_version"],
-        "severity": reconciliation["severity"],
+        "severity": "elevated" if high_disagreement else reconciliation["severity"],
     }
 
 
@@ -169,3 +176,10 @@ def _find_contradiction(
 
 def _dedupe(values: list[str]) -> list[str]:
     return list(dict.fromkeys(values))
+
+
+def _is_high_interpretation_disagreement(disagreement: dict[str, Any] | None) -> bool:
+    if not disagreement:
+        return False
+    score = disagreement.get("disagreement_score")
+    return isinstance(score, (int, float)) and not isinstance(score, bool) and score >= 0.60

@@ -54,6 +54,20 @@ Policy can:
 
 The demo must show at least one override.
 
+## Interpretation Disagreement
+
+Policy can consume a structured `interpretation_disagreement` object produced by the optional advocate/skeptic LLM path. Policy does not parse either LLM's prose explanations.
+
+If `disagreement_score >= 0.60`, policy adds reason code `high_interpretation_disagreement`, sets severity to `elevated`, and routes to `human_review`.
+
+This is a separate safety signal from stale telemetry or source contradiction:
+
+- missing/stale authoritative evidence still routes to verification/retry,
+- fresh authoritative contradiction still routes to elevated human exception review,
+- high advocate/skeptic disagreement routes to human review because the same unstructured evidence produced materially different structured recommendations.
+
+The agent validator is unchanged. Adversarial mode may preserve a raw advocate `closure_candidate`, but it must remain valid under the normal closure-candidate confidence and block-reason rules.
+
 ## Versioning
 
 Separate policy families:

@@ -87,6 +87,7 @@ BLOCK_REASONS = {
     "source_contradiction",
     "low_category_confidence",
     "low_recommendation_confidence",
+    "high_interpretation_disagreement",
     "high_impact_exception",
     "invalid_agent_output",
 }

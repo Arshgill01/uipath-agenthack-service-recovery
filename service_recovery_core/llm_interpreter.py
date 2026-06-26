@@ -14,6 +14,7 @@ from service_recovery_core.policy import decide_policy
 
 DEFAULT_MODEL = "gemini-3-flash"
 DEFAULT_LOCATION = "us-central1"
+DISAGREEMENT_ESCALATION_THRESHOLD = 0.60
 
 
 class LlmInterpreterError(RuntimeError):
@@ -43,11 +44,12 @@ def interpret_notes_with_llm(
     project: str | None = None,
     location: str | None = None,
     client: ContentClient | None = None,
+    role_framing: str | None = None,
 ) -> dict[str, Any]:
     """Return a schema-validated Agent Interpretation Event from unstructured text."""
 
     active_client = client or _default_google_client(project=project, location=location)
-    prompt = build_interpretation_prompt(notes=notes, business_context=business_context)
+    prompt = build_interpretation_prompt(notes=notes, business_context=business_context, role_framing=role_framing)
     try:
         raw_text = _response_text(
             active_client.generate_content(
@@ -68,11 +70,17 @@ def interpret_notes_with_llm(
     return payload
 
 
-def build_interpretation_prompt(*, notes: list[dict[str, str]], business_context: dict[str, str]) -> str:
+def build_interpretation_prompt(
+    *,
+    notes: list[dict[str, str]],
+    business_context: dict[str, str],
+    role_framing: str | None = None,
+) -> str:
     return "\n".join(
         [
             "You are the interpretation agent for a telecom service recovery case.",
             "Read unstructured technician notes, customer messages, and support notes.",
+            role_framing or _standard_role_framing(),
             "Produce a structured triage recommendation package for the case owner.",
             "You may recommend closure, retry, investigation, or human review, but you do not enforce final closure or routing.",
             "The policy engine will separately check authoritative evidence freshness and contradictions.",
@@ -112,6 +120,10 @@ def build_interpretation_prompt(*, notes: list[dict[str, str]], business_context
             "- Do not use failure_category unclassified unless category_confidence <= 0.40.",
             "- If category_confidence >= 0.75, include at least one non-none rationale code.",
             "- If category_confidence >= 0.90, include at least two rationale codes or one high-specificity code.",
+            "- If you are not providing two rationale codes, keep category_confidence below 0.90.",
+            "- Prefer calibrated confidence such as 0.70-0.89 over inflated confidence when notes are mixed or incomplete.",
+            "- Do not use interpretation_rationale_codes [\"none\"] unless failure_category is unclassified with category_confidence <= 0.40.",
+            "- For any non-unclassified failure_category, choose at least one matching non-none rationale code supported by extracted_claims.",
             "- If notes mention activation retry, green modem, signal, or service stability, prefer activation_failure or telemetry_gap over unclassified.",
             "- For closure_candidate, closure_block_reason_code must be none and recommendation_confidence must be >= 0.75.",
             "Use ISO-8601 timestamps in extracted_claims. If a note lacks a timestamp, use the case timestamp.",
@@ -122,6 +134,138 @@ def build_interpretation_prompt(*, notes: list[dict[str, str]], business_context
     )
 
 
+def advocate_role_framing() -> str:
+    return (
+        "Adversarial role: RESOLUTION ADVOCATE. Give the strongest honest case that the service is resolved "
+        "and the case can move toward closure. Do not ignore problems; surface gaps if they matter, but focus "
+        "on evidence supporting resolution."
+    )
+
+
+def skeptic_role_framing() -> str:
+    return (
+        "Adversarial role: CLOSURE SKEPTIC. Give the strongest honest case against premature closure. "
+        "Look for unverified claims, instability, missing evidence, contradictions, and complexity that the "
+        "case owner should review before closure."
+    )
+
+
+def _standard_role_framing() -> str:
+    return "Role: balanced triage analyst. Weigh resolution evidence and closure risks without advocacy."
+
+
+def compute_interpretation_disagreement(advocate: dict[str, Any], skeptic: dict[str, Any]) -> dict[str, Any]:
+    advocate_stage = advocate["recommended_next_stage"]
+    skeptic_stage = skeptic["recommended_next_stage"]
+    confidence_delta = abs(advocate["recommendation_confidence"] - skeptic["recommendation_confidence"])
+    advocate_claims = _claim_values(advocate)
+    skeptic_claims = _claim_values(skeptic)
+    claim_union = advocate_claims | skeptic_claims
+    claim_overlap_ratio = len(advocate_claims & skeptic_claims) / max(len(claim_union), 1)
+    advocate_gaps = {str(value).strip().lower() for value in advocate.get("evidence_gaps", []) if str(value).strip()}
+    skeptic_gaps = {str(value).strip().lower() for value in skeptic.get("evidence_gaps", []) if str(value).strip()}
+    stage_penalty = 0.50 if advocate_stage != skeptic_stage else 0.0
+    score = min(stage_penalty + (confidence_delta * 0.30) + ((1 - claim_overlap_ratio) * 0.20), 1.0)
+    return {
+        "disagreement_score": round(score, 3),
+        "threshold": DISAGREEMENT_ESCALATION_THRESHOLD,
+        "stage_match": advocate_stage == skeptic_stage,
+        "confidence_delta": round(confidence_delta, 3),
+        "claim_overlap_ratio": round(claim_overlap_ratio, 3),
+        "advocate_recommendation": advocate_stage,
+        "skeptic_recommendation": skeptic_stage,
+        "unique_skeptic_gaps": sorted(skeptic_gaps - advocate_gaps),
+        "unique_advocate_gaps": sorted(advocate_gaps - skeptic_gaps),
+    }
+
+
+def run_adversarial_interpretation(
+    *,
+    notes: list[dict[str, str]],
+    business_context: dict[str, str],
+    event_id: str,
+    input_refs: list[str],
+    model: str = DEFAULT_MODEL,
+    project: str | None = None,
+    location: str | None = None,
+    client: ContentClient | None = None,
+) -> dict[str, Any]:
+    active_client = client or _default_google_client(project=project, location=location)
+    advocate = interpret_notes_with_llm(
+        notes=notes,
+        business_context=business_context,
+        event_id=f"{event_id}-ADV",
+        input_refs=input_refs,
+        model=model,
+        project=project,
+        location=location,
+        client=active_client,
+        role_framing=advocate_role_framing(),
+    )
+    skeptic = interpret_notes_with_llm(
+        notes=notes,
+        business_context=business_context,
+        event_id=f"{event_id}-SKP",
+        input_refs=input_refs,
+        model=model,
+        project=project,
+        location=location,
+        client=active_client,
+        role_framing=skeptic_role_framing(),
+    )
+    disagreement = compute_interpretation_disagreement(advocate, skeptic)
+    synthesized = synthesize_adversarial_agent_event(
+        event_id=event_id,
+        input_refs=input_refs,
+        advocate=advocate,
+        skeptic=skeptic,
+        disagreement=disagreement,
+    )
+    return {
+        "advocate_interpretation": advocate,
+        "skeptic_interpretation": skeptic,
+        "disagreement": disagreement,
+        "synthesized_agent_event": synthesized,
+    }
+
+
+def synthesize_adversarial_agent_event(
+    *,
+    event_id: str,
+    input_refs: list[str],
+    advocate: dict[str, Any],
+    skeptic: dict[str, Any],
+    disagreement: dict[str, Any],
+) -> dict[str, Any]:
+    synthesized = dict(advocate)
+    synthesized["event_id"] = event_id
+    synthesized["input_refs"] = input_refs
+    synthesized["adversarial_interpretation"] = {
+        "advocate_event_id": advocate["event_id"],
+        "skeptic_event_id": skeptic["event_id"],
+        "disagreement": disagreement,
+        "advocate_interpretation": advocate,
+        "skeptic_interpretation": skeptic,
+    }
+    if disagreement["disagreement_score"] >= DISAGREEMENT_ESCALATION_THRESHOLD:
+        synthesized["evidence_gaps"] = _merge_strings(
+            advocate.get("evidence_gaps", []),
+            skeptic.get("evidence_gaps", []),
+            disagreement["unique_skeptic_gaps"],
+        )
+        synthesized["reviewer_questions"] = _merge_strings(
+            advocate.get("reviewer_questions", []),
+            skeptic.get("reviewer_questions", []),
+            ["Why did the advocate and skeptic interpretations diverge on the same evidence?"],
+        )
+        synthesized["operator_note"] = (
+            "Adversarial dual interpretation preserved the advocate closure recommendation, while the skeptic "
+            f"found unresolved risk. Disagreement score {disagreement['disagreement_score']} met threshold "
+            f"{disagreement['threshold']}; deterministic policy treats this as ambiguity requiring review."
+        )
+    return synthesized
+
+
 def run_governed_llm_demo(
     *,
     scenario_id: str = "E-003",
@@ -129,25 +273,47 @@ def run_governed_llm_demo(
     project: str | None = None,
     location: str | None = None,
     client: ContentClient | None = None,
+    adversarial: bool = False,
 ) -> dict[str, Any]:
     scenario, _ = _scenario_transition(scenario_id)
-    agent_event = interpret_notes_with_llm(
-        notes=demo_notes(scenario_id),
-        business_context=demo_business_context(scenario),
-        event_id=f"AIE-LLM-{scenario_id}",
-        input_refs=[f"llm_demo_{scenario_id}"],
-        model=model,
-        project=project,
-        location=location,
-        client=client,
-    )
-    policy_decision = decide_policy(scenario["case"], scenario["evidence"], agent_event)
-    return {
+    notes = demo_notes(scenario_id)
+    business_context = demo_business_context(scenario)
+    disagreement = None
+    adversarial_result = None
+    if adversarial:
+        adversarial_result = run_adversarial_interpretation(
+            notes=notes,
+            business_context=business_context,
+            event_id=f"AIE-LLM-{scenario_id}",
+            input_refs=[f"llm_demo_{scenario_id}"],
+            model=model,
+            project=project,
+            location=location,
+            client=client,
+        )
+        agent_event = adversarial_result["synthesized_agent_event"]
+        disagreement = adversarial_result["disagreement"]
+    else:
+        agent_event = interpret_notes_with_llm(
+            notes=notes,
+            business_context=business_context,
+            event_id=f"AIE-LLM-{scenario_id}",
+            input_refs=[f"llm_demo_{scenario_id}"],
+            model=model,
+            project=project,
+            location=location,
+            client=client,
+        )
+    policy_decision = decide_policy(scenario["case"], scenario["evidence"], agent_event, disagreement)
+    result = {
         "scenario_id": scenario_id,
         "agent_interpretation_event": agent_event,
         "agent_validation": validate_agent_interpretation(agent_event),
         "policy_decision_event": policy_decision,
     }
+    if adversarial_result:
+        result["adversarial_interpretation"] = adversarial_result
+    return result
 
 
 def demo_notes(scenario_id: str) -> list[dict[str, str]]:
@@ -194,6 +360,7 @@ def main() -> int:
         default=os.environ.get("GOOGLE_CLOUD_LOCATION") or os.environ.get("GOOGLE_VERTEX_LOCATION") or DEFAULT_LOCATION,
     )
     parser.add_argument("--output", default=None)
+    parser.add_argument("--adversarial", action="store_true", help="Run advocate and skeptic LLM calls and feed disagreement into policy.")
     args = parser.parse_args()
 
     try:
@@ -202,6 +369,7 @@ def main() -> int:
             model=args.model,
             project=args.project,
             location=args.location,
+            adversarial=args.adversarial,
         )
     except LlmInterpreterError as exc:
         reason = str(exc)
@@ -360,6 +528,7 @@ def _response_json_schema() -> dict[str, Any]:
                     "source_contradiction",
                     "low_category_confidence",
                     "low_recommendation_confidence",
+                    "high_interpretation_disagreement",
                     "high_impact_exception",
                     "invalid_agent_output",
                 ],
@@ -427,6 +596,29 @@ def _normalize_claim(claim: Any) -> Any:
     normalized = dict(claim)
     normalized.setdefault("source", "support_note")
     return normalized
+
+
+def _claim_values(payload: dict[str, Any]) -> set[str]:
+    return {
+        str(claim.get("value", "")).strip().lower()
+        for claim in payload.get("extracted_claims", [])
+        if isinstance(claim, dict) and str(claim.get("value", "")).strip()
+    }
+
+
+def _merge_strings(*groups: Any) -> list[str]:
+    merged = []
+    seen = set()
+    for group in groups:
+        if not isinstance(group, list):
+            continue
+        for value in group:
+            text = str(value).strip()
+            key = text.lower()
+            if text and key not in seen:
+                seen.add(key)
+                merged.append(text)
+    return merged
 
 
 def _evidence_value(evidence: list[dict[str, Any]], field: str) -> str:

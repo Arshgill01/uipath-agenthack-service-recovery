@@ -144,11 +144,24 @@ scripts/run_llm_demo.sh \
   --location us-central1
 ```
 
+Adversarial advocate/skeptic path:
+
+```sh
+scripts/run_llm_demo.sh \
+  --scenario-id E-003 \
+  --model gemini-3-flash \
+  --project YOUR_GOOGLE_CLOUD_PROJECT_ID \
+  --location us-central1 \
+  --adversarial \
+  --output eval_results/llm_interpreter_E003_adversarial.json
+```
+
 Expected proof beat:
 
 - The LLM reads technician/customer/support text and emits a schema-validated Agent Interpretation Event.
 - The event may include urgency, customer impact, evidence gaps, recommended actions, reviewer questions, and an operator note.
 - In the stale-telemetry scenario, the LLM can recommend `closure_candidate`; policy then overrides to `verify_telemetry` with `stale_authoritative_signal`.
+- In adversarial mode, two structured LLM calls interpret the same evidence as resolution advocate and closure skeptic. A high disagreement score becomes structured policy input and can route to `human_review` with `high_interpretation_disagreement`.
 - If auth is missing, the command returns JSON with `status: blocked` and the required next step.
 - If the provider call works but the model output violates the local agent contract, the command returns JSON with `status: invalid_llm_output`; do not use that run as proof until it validates.
 

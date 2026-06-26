@@ -47,6 +47,7 @@ def _agent_interpretation_event(case: dict[str, Any], agent_event: dict[str, Any
         "recommended_actions": agent_event.get("recommended_actions", []),
         "reviewer_questions": agent_event.get("reviewer_questions", []),
         "operator_note": agent_event.get("operator_note"),
+        "adversarial_interpretation": agent_event.get("adversarial_interpretation"),
     }
 
 

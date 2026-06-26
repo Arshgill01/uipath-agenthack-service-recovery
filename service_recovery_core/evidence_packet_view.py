@@ -32,6 +32,7 @@ def render_evidence_packet_html(audit_bundle: dict[str, Any]) -> str:
             '<div class="primary">',
             _platform_note(),
             _policy_boundary(agent, policy),
+            _adversarial_interpretation(agent),
             _llm_recommendation_package(agent),
             _evidence_table(packet["evidence_table"]),
             "</div>",
@@ -195,6 +196,48 @@ def _llm_recommendation_package(agent: dict[str, Any]) -> str:
 </section>""".strip()
 
 
+def _adversarial_interpretation(agent: dict[str, Any]) -> str:
+    adversarial = agent.get("adversarial_interpretation")
+    if not isinstance(adversarial, dict):
+        return ""
+    disagreement = adversarial.get("disagreement", {})
+    advocate = adversarial.get("advocate_interpretation", {})
+    skeptic = adversarial.get("skeptic_interpretation", {})
+    return f"""
+<section class="panel adversarial">
+  <h2>Adversarial dual interpretation</h2>
+  <div class="disagreement-score">
+    <span>Disagreement score</span>
+    <strong>{escape(str(disagreement.get("disagreement_score", "not_provided")))}</strong>
+    <em>threshold {escape(str(disagreement.get("threshold", "not_provided")))}</em>
+  </div>
+  <div class="adversarial-grid">
+    {_interpretation_column("Resolution advocate", advocate)}
+    {_interpretation_column("Closure skeptic", skeptic)}
+  </div>
+  <dl>
+    <div><dt>Stage match</dt><dd>{escape(str(disagreement.get("stage_match", "not_provided")))}</dd></div>
+    <div><dt>Confidence delta</dt><dd>{escape(str(disagreement.get("confidence_delta", "not_provided")))}</dd></div>
+    <div><dt>Claim overlap</dt><dd>{escape(str(disagreement.get("claim_overlap_ratio", "not_provided")))}</dd></div>
+  </dl>
+  {_list_block("Skeptic-only gaps", disagreement.get("unique_skeptic_gaps", []))}
+</section>""".strip()
+
+
+def _interpretation_column(title: str, interpretation: dict[str, Any]) -> str:
+    return f"""
+<article>
+  <h3>{escape(title)}</h3>
+  <dl>
+    <div><dt>Event</dt><dd>{escape(str(interpretation.get("event_id", "not_provided")))}</dd></div>
+    <div><dt>Recommendation</dt><dd>{escape(str(interpretation.get("recommended_next_stage", "not_provided")))}</dd></div>
+    <div><dt>Confidence</dt><dd>{escape(str(interpretation.get("recommendation_confidence", "not_provided")))}</dd></div>
+    <div><dt>Failure category</dt><dd>{escape(str(interpretation.get("failure_category", "not_provided")))}</dd></div>
+  </dl>
+  <p>{escape(str(interpretation.get("audit_explanation", "No explanation provided.")))}</p>
+</article>""".strip()
+
+
 def _list_block(title: str, values: list[Any]) -> str:
     if not values:
         return f"<article><h3>{escape(title)}</h3><p>None provided.</p></article>"
@@ -218,6 +261,7 @@ def _evidence_table(evidence: list[dict[str, Any]]) -> str:
     return f"""
 <section class="panel">
   <h2>Evidence table</h2>
+  <div class="table-scroll">
   <table>
     <thead>
       <tr>
@@ -233,6 +277,7 @@ def _evidence_table(evidence: list[dict[str, Any]]) -> str:
 {rows}
     </tbody>
   </table>
+  </div>
 </section>""".strip()
 
 
@@ -286,17 +331,19 @@ def _route_label(state: dict[str, Any]) -> str:
 _CSS = """
 :root {
   color-scheme: light;
-  --bg: #f6f7f4;
+  --bg: #fbfaf5;
   --surface: #ffffff;
-  --ink: #171a16;
-  --muted: #60675e;
-  --line: #d8ddd4;
-  --strong: #0f766e;
-  --warn: #b45309;
+  --ink: #20231f;
+  --muted: #61675f;
+  --line: #d7ddd3;
+  --line-soft: #e8ece4;
+  --strong: #174e59;
+  --warn: #a8541f;
   --danger: #b42318;
-  --blue: #1d4ed8;
+  --blue: #2556a3;
   --controlled: #0f766e;
   --escalated: #b42318;
+  --shadow: 0 1px 2px rgba(23, 26, 22, 0.06), 0 8px 28px rgba(23, 26, 22, 0.04);
 }
 
 * { box-sizing: border-box; }
@@ -305,7 +352,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font: 14px/1.5 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
+  font: 14px/1.55 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
 }
 
 .page {
@@ -342,11 +389,12 @@ body {
 }
 
 .proof-strip div {
-  background: var(--ink);
+  background: #17201d;
   color: #ffffff;
   border-radius: 8px;
   padding: 12px;
   min-height: 76px;
+  box-shadow: var(--shadow);
 }
 
 .proof-strip span {
@@ -376,6 +424,7 @@ body {
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 18px;
+  box-shadow: var(--shadow);
 }
 
 .decision-compare.controlled article:first-child {
@@ -475,6 +524,7 @@ p { color: var(--muted); }
   border: 1px solid var(--line);
   border-radius: 8px;
   padding: 18px;
+  box-shadow: var(--shadow);
 }
 
 .platform-note {
@@ -488,7 +538,8 @@ p { color: var(--muted); }
 }
 
 .boundary article {
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-soft);
+  background: #fbfcfa;
   border-radius: 6px;
   padding: 14px;
 }
@@ -501,9 +552,50 @@ p { color: var(--muted); }
 }
 
 .triage-grid article {
-  border: 1px solid var(--line);
+  border: 1px solid var(--line-soft);
+  background: #fbfcfa;
   border-radius: 6px;
   padding: 14px;
+}
+
+.adversarial {
+  border-left: 4px solid var(--danger);
+}
+
+.adversarial-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 14px 0;
+}
+
+.adversarial-grid article {
+  border: 1px solid var(--line-soft);
+  background: #fbfcfa;
+  border-radius: 6px;
+  padding: 14px;
+}
+
+.disagreement-score {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr) minmax(140px, auto);
+  gap: 12px;
+  align-items: center;
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.disagreement-score span,
+.disagreement-score em {
+  color: var(--muted);
+  font-style: normal;
+}
+
+.disagreement-score strong {
+  color: var(--danger);
+  font-size: 20px;
 }
 
 dl {
@@ -516,6 +608,13 @@ dl div {
   display: grid;
   grid-template-columns: 140px minmax(0, 1fr);
   gap: 12px;
+  border-bottom: 1px dotted var(--line-soft);
+  padding-bottom: 4px;
+}
+
+dl div:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
 dt {
@@ -527,13 +626,19 @@ dd {
   overflow-wrap: break-word;
 }
 
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
+  min-width: 760px;
 }
 
 th, td {
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--line-soft);
   padding: 10px 8px;
   text-align: left;
   vertical-align: top;
@@ -600,7 +705,7 @@ code {
 }
 
 @media (max-width: 900px) {
-  .topbar, .layout, .boundary-grid, .summary, .proof-strip, .decision-compare, .route-banner, .triage-grid {
+  .topbar, .layout, .boundary-grid, .summary, .proof-strip, .decision-compare, .route-banner, .triage-grid, .adversarial-grid, .disagreement-score {
     display: block;
   }
 
@@ -614,7 +719,8 @@ code {
 
   .panel + .panel,
   .primary + .side,
-  .triage-grid article + article {
+  .triage-grid article + article,
+  .adversarial-grid article + article {
     margin-top: 16px;
   }
 }
