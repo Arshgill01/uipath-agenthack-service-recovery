@@ -9,10 +9,11 @@ MODEL="${MODEL:-gemini-3-flash}"
 LOCATION="${LOCATION:-us-central1}"
 OUTPUT="${OUTPUT:-eval_results/llm_interpreter_${SCENARIO_ID}.json}"
 PROJECT="${PROJECT:-${GOOGLE_CLOUD_PROJECT:-${GOOGLE_PROJECT_ID:-}}}"
+EVIDENCE_PACKET_OUTPUT=""
 
 usage() {
   cat <<'EOF'
-Usage: scripts/run_llm_demo.sh [--scenario-id E-003] [--model gemini-3-flash] [--project PROJECT_ID] [--location us-central1] [--output PATH] [--adversarial]
+Usage: scripts/run_llm_demo.sh [--scenario-id E-003] [--model gemini-3-flash] [--project PROJECT_ID] [--location us-central1] [--output PATH] [--adversarial] [--evidence-packet-output PATH]
 
 Runs the optional Gemini-backed LLM interpretation proof.
 
@@ -20,8 +21,10 @@ Auth options:
   - GEMINI_API_KEY or GOOGLE_API_KEY for Gemini API
   - --project PROJECT_ID with Application Default Credentials for Vertex AI
 
-The command writes JSON to the output path. If auth is unavailable, the JSON
-contains status=blocked and the next required action.
+The command writes JSON to the output path. If --evidence-packet-output is set,
+the command also renders judge-facing evidence-packet HTML after a successful
+governed LLM run. If auth is unavailable, the JSON contains status=blocked and
+the next required action.
 EOF
 }
 
@@ -45,6 +48,10 @@ while [[ $# -gt 0 ]]; do
       ;;
     --output)
       OUTPUT="$2"
+      shift
+      ;;
+    --evidence-packet-output)
+      EVIDENCE_PACKET_OUTPUT="$2"
       shift
       ;;
     --adversarial)
@@ -85,9 +92,20 @@ LLM demo exit code: $exit_code
 EOF
 
 if [[ "$exit_code" -eq 0 ]]; then
+  if [[ -n "$EVIDENCE_PACKET_OUTPUT" ]]; then
+    mkdir -p "$(dirname "$EVIDENCE_PACKET_OUTPUT")"
+    python -m service_recovery_core.evals \
+      --llm-result-evidence-packet "$OUTPUT" \
+      --output "$EVIDENCE_PACKET_OUTPUT" >/dev/null
+  fi
   cat <<'EOF'
 Status: live LLM interpretation succeeded. Inspect agent_interpretation_event and policy_decision_event in the output JSON.
 EOF
+  if [[ -n "$EVIDENCE_PACKET_OUTPUT" ]]; then
+    cat <<EOF
+Evidence packet output: $EVIDENCE_PACKET_OUTPUT
+EOF
+  fi
 elif [[ "$exit_code" -eq 2 ]]; then
   cat <<'EOF'
 Status: LLM run did not produce a usable governed event. Inspect the output JSON; common causes are missing auth or schema validation failure.

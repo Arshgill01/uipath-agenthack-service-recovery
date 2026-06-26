@@ -153,7 +153,8 @@ scripts/run_llm_demo.sh \
   --project YOUR_GOOGLE_CLOUD_PROJECT_ID \
   --location us-central1 \
   --adversarial \
-  --output eval_results/llm_interpreter_E003_adversarial.json
+  --output eval_results/llm_interpreter_E003_adversarial.json \
+  --evidence-packet-output docs/demo/artifacts/evidence_packet_E003_adversarial_live.html
 ```
 
 Expected proof beat:
@@ -162,6 +163,7 @@ Expected proof beat:
 - The event may include urgency, customer impact, evidence gaps, recommended actions, reviewer questions, and an operator note.
 - In the stale-telemetry scenario, the LLM can recommend `closure_candidate`; policy then overrides to `verify_telemetry` with `stale_authoritative_signal`.
 - In adversarial mode, two structured LLM calls interpret the same evidence as resolution advocate and closure skeptic. A high disagreement score becomes structured policy input and can route to `human_review` with `high_interpretation_disagreement`.
+- If `--evidence-packet-output` is set, the wrapper renders the successful governed LLM JSON into the same judge-facing evidence-packet HTML used by the deterministic proof packets.
 - If auth is missing, the command returns JSON with `status: blocked` and the required next step.
 - If the provider call works but the model output violates the local agent contract, the command returns JSON with `status: invalid_llm_output`; do not use that run as proof until it validates.
 

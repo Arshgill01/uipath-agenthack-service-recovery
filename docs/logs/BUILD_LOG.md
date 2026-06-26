@@ -1995,7 +1995,7 @@ Commands run:
 
 - `python -m service_recovery_core.evals --llm-result-evidence-packet docs/demo/artifacts/llm_interpreter_E003_adversarial_live.json --output docs/demo/artifacts/evidence_packet_E003_adversarial_live.html`
 - `python -m unittest tests.test_llm_interpreter tests.test_evidence_packet_view`
-- `rg "Adversarial dual interpretation|Resolution advocate|Closure skeptic|closure_candidate -&gt; human_review|high_interpretation_disagreement|Escalated exception review" docs/demo/artifacts/evidence_packet_E003_adversarial_live.html`
+- `rg "Adversarial dual interpretation|Resolution advocate|Closure skeptic|closure_candidate -> human_review|high_interpretation_disagreement|Escalated exception review" docs/demo/artifacts/evidence_packet_E003_adversarial_live.html`
 - `python -m unittest discover -s tests`
 - `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
 - `python -m service_recovery_core.demo_proof --output-dir docs/demo/artifacts --verify-only`
@@ -2017,3 +2017,37 @@ Product feedback:
 Open risks:
 
 - The adversarial packet is supplemental. The authoritative UiPath proof beats remain E-002 and E-004.
+
+### 2026-06-26 14:45 IST - Agent / Repeatable Adversarial Packet Wrapper
+
+What changed:
+
+- Updated `scripts/run_llm_demo.sh` with `--evidence-packet-output`, so a successful governed LLM run can produce both the JSON proof artifact and judge-facing evidence-packet HTML in one command.
+- Documented the combined adversarial JSON + evidence-packet command in the demo runbook and long-running loop runbook.
+
+Commands run:
+
+- `bash -n scripts/run_llm_demo.sh`
+- `scripts/run_llm_demo.sh --help`
+- `python -m service_recovery_core.evals --llm-result-evidence-packet docs/demo/artifacts/llm_interpreter_E003_adversarial_live.json --output /tmp/evidence_packet_E003_adversarial_live.html`
+- `rg "closure_candidate -> human_review|high_interpretation_disagreement|Escalated exception review" /tmp/evidence_packet_E003_adversarial_live.html`
+- `git diff --check`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+
+Validation:
+
+- PASS: script syntax check passed.
+- PASS: script help exposes `--evidence-packet-output` and documents success-only HTML rendering.
+- PASS: saved live adversarial result renders a packet with `closure_candidate -> human_review`, `high_interpretation_disagreement`, and escalated review.
+- PASS: `git diff --check`.
+- PASS: full unit suite passed 39 tests.
+- PASS: local eval suite passed 9/9 scenarios.
+
+Product feedback:
+
+- No new PF entry expected. This is local repeatability work around previously captured live evidence.
+
+Open risks:
+
+- The wrapper should be used only when Vertex/API auth is available. Failed or blocked LLM runs do not render an evidence packet.

@@ -73,7 +73,8 @@ scripts/run_llm_demo.sh \
   --project project-61c59251-6618-46b7-a8c \
   --location us-central1 \
   --adversarial \
-  --output eval_results/llm_interpreter_E003_adversarial_live.json
+  --output eval_results/llm_interpreter_E003_adversarial_live.json \
+  --evidence-packet-output docs/demo/artifacts/evidence_packet_E003_adversarial_live.html
 ```
 
 Promote the live output only if it validates and shows:
