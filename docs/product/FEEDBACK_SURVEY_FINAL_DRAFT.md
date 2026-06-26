@@ -78,7 +78,7 @@ The major challenge classes were:
 - Runtime validation: deployment succeeded even when a required Action task `Title` was missing. The first actionable error appeared only after a live case faulted at runtime.
 - Package/feed/process diagnostics: a package uploaded to the solution feed and could be read with `--feed-id`, while default lookup and direct process creation could not bind the same version.
 - Audit reconstruction: native Case/task history plus APIs can reconstruct operational flow, but a clean domain audit for evidence state, policy versions, raw recommendation, policy decision, block reason, human action, and timestamps still required explicit custom audit artifacts.
-- Data Fabric persistence: entity create/readback worked, direct JSON insert could not map the required `case_id` field despite multiple valid-looking payload shapes, and the later CSV-created row could not expose custom payload fields through CLI readback.
+- Data Fabric persistence: entity create/readback worked, snake_case JSON insert/update could not map required custom fields despite valid-looking payloads, and the later CSV-created row could not expose custom payload fields through CLI readback. A PascalCase V2 schema solved the storage path and gave us a useful product-feedback insight: field names accepted at schema creation should work consistently across insert/update/query/get or be rejected up front.
 - Test Manager eval mapping: project, cases, test set, and manual pass logs worked, but E-001 through E-009 had to be represented manually and the aggregate execution stayed `Running`.
 
 Evidence: PF-003, PF-004, PF-006, PF-007, PF-013, PF-015, PF-017, PF-019, PF-020, PF-021, PF-022.
@@ -125,7 +125,7 @@ Options:
 ## Claims To Avoid
 
 - Do not claim automated Test Cloud execution.
-- Claim Data Fabric only as partial E-004 row persistence until custom payload fields can be read back; direct JSON insert remains unvalidated.
+- Claim Data Fabric full-payload persistence only for the validated PascalCase V2 path; do not use the legacy snake_case entity as proof.
 - Do not claim generated Action Center UI is final-demo ready.
 - Do not claim native Case history alone passes G-001.
 - Do not claim terminal completion for older E-002/E-004 jobs while their job readback remains `Running`; claim only the fresh package `1.0.6` Case Instance completion if cited.

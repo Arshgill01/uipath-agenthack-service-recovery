@@ -173,45 +173,53 @@ Bundle shape:
 
 This is the fallback answer for G-001: if a single native Case query/view cannot reconstruct the domain proof beat, store this bundle as custom audit state/events in the Case payload, Data Fabric/Data Service, or another UiPath-accessible artifact. It preserves the exact fields the hard gate requires: evidence state, active policy versions, raw agent recommendation, policy decision, closure block reason, human action, and event order.
 
-## Proposed Data Fabric Entity
+## Data Fabric Audit Entity
 
-`docs/architecture/data_fabric/service_recovery_audit_bundle_entity.json` defines the proposed `ServiceRecoveryAuditBundle` entity for storing `service-recovery-audit-v1` in UiPath Data Fabric.
+`docs/architecture/data_fabric/service_recovery_audit_bundle_v2_entity.json` defines the live-validated `ServiceRecoveryAuditBundleV2` entity for storing `service-recovery-audit-v1` in UiPath Data Fabric.
 
 First-class query fields:
 
-- `case_id`
-- `service_id`
-- `scenario_id`
-- `audit_contract_version`
-- `business_state`
-- `derived_evidence_state`
-- `closure_block_reason`
-- `interpretation_policy_version`
-- `decision_policy_version`
-- `source_case_instance_key`
-- `source_task_id`
-- `package_version`
-- `created_at`
+- `CaseId`
+- `ServiceId`
+- `ScenarioId`
+- `AuditContractVersion`
+- `BusinessState`
+- `DerivedEvidenceState`
+- `ClosureBlockReason`
+- `InterpretationPolicyVersion`
+- `DecisionPolicyVersion`
+- `SourceCaseInstanceKey`
+- `SourceTaskId`
+- `PackageVersion`
+- `CreatedAt`
 
 JSON payload fields:
 
-- `raw_agent_event_json`
-- `policy_decision_event_json`
-- `reviewer_packet_json`
-- `audit_bundle_json`
+- `RawAgentEventJson`
+- `PolicyDecisionEventJson`
+- `ReviewerPacketJson`
+- `AuditBundleJson`
 
-`python -m service_recovery_core.evals --data-fabric-record-scenario <ID>` emits the matching record body. Live entity creation and record insertion require explicit approval because they mutate the UiPath tenant schema/data.
+`python -m service_recovery_core.evals --data-fabric-record-scenario <ID> --data-fabric-field-style pascal` emits the matching record body. Live entity creation and record insertion require explicit approval because they mutate the UiPath tenant schema/data.
 
-Live validation note from 2026-06-25:
+Live validation note from 2026-06-26:
+
+- Probe entity `DataFabricPascalProbe` proved that PascalCase custom fields insert and query back through `uip df records insert/query`.
+- Entity creation succeeded: `ServiceRecoveryAuditBundleV2`, ID `35e8f6c7-4671-f111-ac9a-002248a16d28`.
+- JSON insert succeeded for E-004 record `F9D838CE-4671-F111-AC9A-0022489A9A06`.
+- Query by `CaseId = CASE-BG-CONTRA` returned the first-class domain fields, including `InterpretationPolicyVersion = ip-v1`, `DecisionPolicyVersion = dp-v1`, `ClosureBlockReason = source_contradiction`, `SourceCaseInstanceKey = 9fc6fece-55ed-4fb2-b11a-6c96f7a3314e`, `SourceTaskId = 4328396`, and `PackageVersion = 1.0.6`.
+- Record get returned parseable `RawAgentEventJson`, `PolicyDecisionEventJson`, and `AuditBundleJson`; parsed readback proved raw recommendation `closure_candidate`, policy decision `require_human_review`, link `PDE-E-004 -> AIE-E004`, `from_recommended_stage = closure_candidate`, `to_stage = human_review`, and `block_reason = source_contradiction`.
+
+Legacy validation note from 2026-06-25:
 
 - Entity creation succeeded after user approval: `ServiceRecoveryAuditBundle`, ID `328ef8b6-ab70-f111-ac9a-002248a16d28`.
 - Schema readback by ID succeeded and returned the expected fields.
 - Name-based `entities get ServiceRecoveryAuditBundle` failed; use the entity ID for CLI operations.
-- Direct JSON record insertion remains unvalidated. `records insert` rejected file, inline object, minimal object, wrapper object, field-ID keyed object, and array payloads with required `case_id` reported missing. CSV import created E-004 record `DA42769C-33B7-4701-A266-019F032AF376` in entity `328ef8b6-ab70-f111-ac9a-002248a16d28`, but follow-up CLI readback returned only system fields and did not prove the custom payload values.
+- Direct JSON record insertion with snake_case field names failed. `records insert` rejected file, inline object, minimal object, wrapper object, field-ID keyed object, and array payloads with required `case_id` reported missing. CSV import created E-004 record `DA42769C-33B7-4701-A266-019F032AF376` in entity `328ef8b6-ab70-f111-ac9a-002248a16d28`, but follow-up CLI readback returned only system fields and did not prove the custom payload values.
 
 ## Orchestrator Bucket Audit Artifact
 
-Because native Case history does not currently reconstruct the domain proof beat by itself, direct Data Fabric JSON insertion remains unvalidated, and Data Fabric custom payload readback is not yet proven, Orchestrator storage buckets remain the validated full-payload fallback for the audit object.
+Because native Case history does not currently reconstruct the domain proof beat by itself, Data Fabric V2 and Orchestrator storage buckets are the validated UiPath-hosted full-payload audit paths.
 
 Live validation note from 2026-06-25:
 

@@ -2520,3 +2520,55 @@ Product feedback:
 Open risks:
 
 - The active thread goal remains open until the user explicitly says to close it.
+
+### 2026-06-26 15:38 UTC - Agent / Data Fabric V2 Audit Path Repair
+
+What changed:
+
+- Diagnosed the Data Fabric custom field readback blocker instead of accepting it as a platform dead end.
+- Proved the failure is tied to snake_case custom fields in the existing validation entities: simple `TestEntity.test_field` insert failed as missing, update returned success but did not make the value queryable, and REST payload wrapper variants also failed.
+- Proved PascalCase custom fields work by creating `DataFabricPascalProbe`, inserting `Title`/`CaseId`, and querying by `Title`.
+- Added `field_style="pascal"` export support and `docs/architecture/data_fabric/service_recovery_audit_bundle_v2_entity.json`.
+- Created live Data Fabric entity `ServiceRecoveryAuditBundleV2` (`35e8f6c7-4671-f111-ac9a-002248a16d28`) and inserted E-004 record `F9D838CE-4671-F111-AC9A-0022489A9A06`.
+- Updated architecture, validation, submission, risk, and product-feedback docs to claim Data Fabric V2 full-payload readback while preserving the legacy snake_case product-feedback finding.
+
+Commands run:
+
+- `uip login status --output json`
+- `uip df entities list --native-only --output json`
+- `uip df records insert 69f26b58-3871-f111-ac9a-002248a16d28 --body '{"test_field":"DF_PROBE_20260626"}' --output json`
+- direct Data Fabric REST insert probes against `TestEntity` using plain, wrapper, array, and field-ID payloads
+- `uip df records update 69f26b58-3871-f111-ac9a-002248a16d28 --body '{"Id":"F4699612-3383-484C-B547-019F030A0E0F","test_field":"DF_UPDATE_PROBE_20260626"}' --output json`
+- `uip df entities create DataFabricPascalProbe --body '{"displayName":"Data Fabric Pascal Probe",...}' --output json`
+- `uip df records insert 8fa39b80-4671-f111-ac9a-002248a16d28 --body '{"Title":"PASCAL_PROBE_20260626","CaseId":"CASE-PROBE"}' --output json`
+- `python -m unittest tests.test_data_fabric_record`
+- `python -m service_recovery_core.evals --data-fabric-record-scenario E-004 --data-fabric-field-style pascal --output eval_results/data_fabric_record_E004_v2.json`
+- `uip df entities create ServiceRecoveryAuditBundleV2 --file docs/architecture/data_fabric/service_recovery_audit_bundle_v2_entity.json --output json`
+- `uip df records insert 35e8f6c7-4671-f111-ac9a-002248a16d28 --file eval_results/data_fabric_record_E004_v2.json --output json`
+- `uip df records query 35e8f6c7-4671-f111-ac9a-002248a16d28 --body '{"filterGroup":{"logicalOperator":0,"queryFilters":[{"fieldName":"CaseId","operator":"=","value":"CASE-BG-CONTRA"}]}}' --limit 5 --output json`
+- `uip df records get 35e8f6c7-4671-f111-ac9a-002248a16d28 F9D838CE-4671-F111-AC9A-0022489A9A06 --output json`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- `scripts/run_submission_check.sh`
+- `git diff --check`
+
+Validation:
+
+- PASS: targeted Data Fabric unit tests ran 5 tests successfully.
+- PASS: full unit suite ran 43 tests successfully.
+- PASS: local eval suite passed E-001 through E-009, 9/9.
+- PASS: PascalCase Data Fabric probe inserted and queried custom fields.
+- PASS: `ServiceRecoveryAuditBundleV2` E-004 record queried by `CaseId` and returned first-class policy/version/case fields.
+- PASS: parsed Data Fabric readback proves raw `closure_candidate` AIE linked to the `require_human_review` PDE with `source_contradiction`.
+- PASS: `scripts/run_submission_check.sh` completed successfully.
+- PASS: `git diff --check`.
+
+Product feedback:
+
+- PF-019 updated from unresolved full-payload blocker to legacy snake_case/readback defect with a validated PascalCase workaround.
+- PF-023 added for Data Fabric custom field naming/write diagnostics and false-success update behavior.
+
+Open risks:
+
+- Native Maestro Case history alone remains PARTIAL for G-001.
+- Legacy snake_case Data Fabric entity should not be used for final audit reconstruction.

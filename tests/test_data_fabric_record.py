@@ -17,9 +17,9 @@ class DataFabricRecordTests(unittest.TestCase):
         self.assertEqual(record["closure_block_reason"], "source_contradiction")
         self.assertEqual(record["interpretation_policy_version"], "ip-v1")
         self.assertEqual(record["decision_policy_version"], "dp-v1")
-        self.assertEqual(record["source_case_instance_key"], "60e52ca5-6891-45b4-9e98-e1b08a984f06")
-        self.assertEqual(record["source_task_id"], "4300219")
-        self.assertEqual(record["package_version"], "1.0.5")
+        self.assertEqual(record["source_case_instance_key"], "9fc6fece-55ed-4fb2-b11a-6c96f7a3314e")
+        self.assertEqual(record["source_task_id"], "4328396")
+        self.assertEqual(record["package_version"], "1.0.6")
 
         policy = json.loads(record["policy_decision_event_json"])
         bundle = json.loads(record["audit_bundle_json"])
@@ -64,6 +64,21 @@ class DataFabricRecordTests(unittest.TestCase):
 
         for col in ["raw_agent_event_json", "policy_decision_event_json", "reviewer_packet_json", "audit_bundle_json"]:
             self.assertIsInstance(json.loads(record[col]), dict)
+
+    def test_pascal_record_matches_live_data_fabric_v2_shape(self):
+        record = build_audit_record("E-004", field_style="pascal")
+
+        self.assertEqual(record["CaseId"], "CASE-BG-CONTRA")
+        self.assertEqual(record["ServiceId"], "SVC-BG-1")
+        self.assertEqual(record["ScenarioId"], "E-004")
+        self.assertEqual(record["InterpretationPolicyVersion"], "ip-v1")
+        self.assertEqual(record["DecisionPolicyVersion"], "dp-v1")
+        self.assertEqual(record["SourceCaseInstanceKey"], "9fc6fece-55ed-4fb2-b11a-6c96f7a3314e")
+        self.assertEqual(record["SourceTaskId"], "4328396")
+        self.assertEqual(record["PackageVersion"], "1.0.6")
+
+        self.assertEqual(json.loads(record["PolicyDecisionEventJson"])["decision"], "require_human_review")
+        self.assertEqual(json.loads(record["AuditBundleJson"])["policy_versions"]["decision_policy_version"], "dp-v1")
 
 if __name__ == "__main__":
     unittest.main()

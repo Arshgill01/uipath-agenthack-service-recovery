@@ -1463,3 +1463,66 @@ Decision impact:
 - Keep Orchestrator bucket artifact as the validated full-payload UiPath-hosted audit proof for G-001.
 - Treat Data Fabric as a promising but still partial storage path until a readback method proves `case_id`, policy versions, raw AIE, PDE, and audit bundle payload values from the stored row.
 - Strengthen PF-019: the successful-looking CSV import/count increase is not enough if subsequent CLI readback cannot expose custom fields for audit reconstruction.
+
+## 2026-06-26 15:38 UTC - Data Fabric V2 Full-Payload Audit Readback
+
+Environment:
+
+- UiPath org `keepingitlowkey`, tenant `DefaultTenant`.
+- `uip login status --output json` returned `Status: Logged in`.
+- Data Fabric entity `ServiceRecoveryAuditBundleV2` was created during this validation run.
+
+Gate/wave:
+
+- G-001 Data Fabric custom audit persistence readback.
+- PF-019/PF-023 Data Fabric custom field write/read diagnostics.
+
+Assumption tested:
+
+- The prior Data Fabric failure might be schema/field naming specific rather than a complete platform inability to store the audit bundle.
+
+Steps:
+
+1. Reproduced the legacy failure on simple entity `TestEntity` (`69f26b58-3871-f111-ac9a-002248a16d28`): `uip df records insert ... --body '{"test_field":"DF_PROBE_20260626"}'` failed with required `test_field` missing.
+2. Tried direct REST insert variants against `TestEntity` with plain field name, camel/pascal variants, `Data`, `data`, `Fields`, `FieldValues`, array wrappers, and field-ID keyed body. All returned required `test_field` missing.
+3. Updated an existing `TestEntity` row with `test_field`; update returned `RecordUpdated`, but query by `test_field` returned `TotalCount: 0` and record get returned only system fields.
+4. Created probe entity `DataFabricPascalProbe` (`8fa39b80-4671-f111-ac9a-002248a16d28`) with fields `Title` and `CaseId`.
+5. Inserted `{"Title":"PASCAL_PROBE_20260626","CaseId":"CASE-PROBE"}` and queried by `Title`. Insert and query both returned the custom fields.
+6. Added PascalCase exporter/schema support locally and generated `eval_results/data_fabric_record_E004_v2.json`.
+7. Created live Data Fabric entity `ServiceRecoveryAuditBundleV2` (`35e8f6c7-4671-f111-ac9a-002248a16d28`) from `docs/architecture/data_fabric/service_recovery_audit_bundle_v2_entity.json`.
+8. Inserted the E-004 record with `uip df records insert 35e8f6c7-4671-f111-ac9a-002248a16d28 --file eval_results/data_fabric_record_E004_v2.json --output json`.
+9. Queried V2 by `CaseId = CASE-BG-CONTRA` and parsed record `RawAgentEventJson`, `PolicyDecisionEventJson`, and `AuditBundleJson`.
+
+Observed:
+
+- Legacy snake_case fields did not populate through Data Fabric JSON insert/update; CSV import created rows but readback exposed only system fields.
+- PascalCase fields populated and queried correctly.
+- `ServiceRecoveryAuditBundleV2` record `F9D838CE-4671-F111-AC9A-0022489A9A06` read back with first-class fields:
+  - `CaseId = CASE-BG-CONTRA`
+  - `ScenarioId = E-004`
+  - `InterpretationPolicyVersion = ip-v1`
+  - `DecisionPolicyVersion = dp-v1`
+  - `ClosureBlockReason = source_contradiction`
+  - `SourceCaseInstanceKey = 9fc6fece-55ed-4fb2-b11a-6c96f7a3314e`
+  - `SourceTaskId = 4328396`
+  - `PackageVersion = 1.0.6`
+- Parsed JSON readback proved:
+  - raw agent recommendation `closure_candidate`
+  - policy decision `require_human_review`
+  - policy link `PDE-E-004 -> AIE-E004`
+  - `from_recommended_stage = closure_candidate`
+  - `to_stage = human_review`
+  - `block_reason = source_contradiction`
+  - audit bundle event count `4`
+
+Result:
+
+- PASS for Data Fabric V2 as a full-payload G-001 custom audit storage/readback path.
+- PARTIAL remains for native Maestro Case history alone.
+- OPEN product feedback remains for Data Fabric snake_case field behavior and false-success update responses.
+
+Decision impact:
+
+- Use `ServiceRecoveryAuditBundleV2` as the preferred Data Fabric audit entity for the final proof path.
+- Keep Orchestrator bucket as the alternate full-payload UiPath-hosted audit artifact.
+- Keep the legacy `ServiceRecoveryAuditBundle` only as evidence for PF-019/PF-023; do not use it for final audit reconstruction.

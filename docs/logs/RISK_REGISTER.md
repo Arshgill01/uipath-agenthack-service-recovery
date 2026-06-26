@@ -182,3 +182,10 @@
 
 - **PF-019 (Data Fabric CSV Import Partial Resolution)**: Data Fabric CSV import created a live E-004 row and readback by record ID succeeds. Direct JSON insert remains unvalidated, and follow-up CLI readback did not expose the imported custom payload fields (`case_id`, policy versions, raw AIE/PDE, audit bundle), so Data Fabric is not yet a proven full audit-reconstruction path.
 - **PF-022 (Case Instance Completion Resolution)**: Resolved the Case Instance stuck in `Running` status. The issue was due to a required placeholder human task (`tfTXjrum9`) that had no implementation binding. By updating the Maestro Case package to version `1.0.6`, making the placeholder task optional (`isRequired: false`), uploading it to the Orchestrator solution feed, and updating the process version, new Case Instances now terminally complete (`LatestRunStatus: Completed`) upon completion/submission of the Action Center review tasks.
+
+### 2026-06-26 15:38 UTC - Data Fabric V2 Audit Readback
+
+- R-001 is now mitigated by two UiPath-hosted full-payload paths: Data Fabric V2 and Orchestrator bucket. Native Maestro Case history remains PARTIAL, so do not claim native-only G-001.
+- Data Fabric root cause was narrowed: snake_case custom fields in `ServiceRecoveryAuditBundle`/`TestEntity` did not populate through JSON insert/update, and CSV-imported rows read back only system fields. PascalCase custom fields did insert/query/read back correctly.
+- Created `ServiceRecoveryAuditBundleV2` (`35e8f6c7-4671-f111-ac9a-002248a16d28`) and inserted E-004 record `F9D838CE-4671-F111-AC9A-0022489A9A06`.
+- Query by `CaseId = CASE-BG-CONTRA` returned the domain fields and live refs. Record get returned parseable `RawAgentEventJson`, `PolicyDecisionEventJson`, and `AuditBundleJson`, proving `closure_candidate` raw recommendation linked to the `require_human_review` policy decision.

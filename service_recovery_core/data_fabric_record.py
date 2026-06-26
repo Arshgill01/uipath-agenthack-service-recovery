@@ -13,6 +13,7 @@ def build_data_fabric_record(
     source_task_id: str | None = None,
     package_version: str | None = None,
     for_csv: bool = False,
+    field_style: str = "snake",
 ) -> dict[str, Any]:
     """Flatten a case audit bundle into the proposed Data Fabric audit entity shape."""
     state = audit_bundle["evidence_state"]
@@ -23,7 +24,7 @@ def build_data_fabric_record(
             return serialize_for_data_fabric_csv(payload)
         return _dumps(payload)
 
-    return {
+    record = {
         "case_id": audit_bundle["case_id"],
         "service_id": audit_bundle["service_id"],
         "scenario_id": scenario_id,
@@ -42,6 +43,29 @@ def build_data_fabric_record(
         "audit_bundle_json": _serialize(audit_bundle),
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
+    if field_style == "snake":
+        return record
+    if field_style == "pascal":
+        return {
+            "CaseId": record["case_id"],
+            "ServiceId": record["service_id"],
+            "ScenarioId": record["scenario_id"],
+            "AuditContractVersion": record["audit_contract_version"],
+            "BusinessState": record["business_state"],
+            "DerivedEvidenceState": record["derived_evidence_state"],
+            "ClosureBlockReason": record["closure_block_reason"],
+            "InterpretationPolicyVersion": record["interpretation_policy_version"],
+            "DecisionPolicyVersion": record["decision_policy_version"],
+            "SourceCaseInstanceKey": record["source_case_instance_key"],
+            "SourceTaskId": record["source_task_id"],
+            "PackageVersion": record["package_version"],
+            "RawAgentEventJson": record["raw_agent_event_json"],
+            "PolicyDecisionEventJson": record["policy_decision_event_json"],
+            "ReviewerPacketJson": record["reviewer_packet_json"],
+            "AuditBundleJson": record["audit_bundle_json"],
+            "CreatedAt": record["created_at"],
+        }
+    raise ValueError(f"unsupported Data Fabric field_style: {field_style}")
 
 
 def _dumps(payload: dict[str, Any]) -> str:

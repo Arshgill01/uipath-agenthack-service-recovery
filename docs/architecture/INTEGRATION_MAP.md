@@ -11,8 +11,8 @@ Implementation readiness slices are tracked in [IMPLEMENTATION_SLICES.md](IMPLEM
 | API Workflows | Query simulated CRM/billing/telemetry/inventory/dispatch APIs. | G-005 and Wave 28 |
 | Action Center | Human review lifecycle: create, assign, complete, reviewer action/comment, structured task output into case variables. Not the final judge-readable evidence UI. | G-003 PASS/PARTIAL |
 | Case App / custom UI | Primary final evidence packet/demo surface because generated Action Center UI is not demo-legible. | G-003, G-004, G-006 |
-| Data Fabric/Data Service | Partial storage path: CSV import created/read back the E-004 row by ID, but CLI readback did not expose custom payload fields. Direct JSON insert remains unvalidated. | G-001, G-002; PF-019 |
-| Orchestrator storage buckets | Validated fallback for storing one-object `service-recovery-audit-v1` audit artifacts when native Case audit is insufficient or Data Fabric import is not available. | G-001, G-002, G-004, G-008 |
+| Data Fabric/Data Service | Validated full-payload audit storage with `ServiceRecoveryAuditBundleV2` PascalCase fields and E-004 record readback by `CaseId`. Legacy snake_case entity remains product-feedback evidence. | G-001, G-002; PF-019, PF-023 |
+| Orchestrator storage buckets | Validated alternate fallback for storing one-object `service-recovery-audit-v1` audit artifacts when native Case audit is insufficient. | G-001, G-002, G-004, G-008 |
 | Test Cloud / Test Manager | Eval/regression representation. Live project `SREV`, test set `SREV:9`, and manual execution logs represent E-001 through E-009; automated execution not claimed. | G-007 PASS/PARTIAL |
 | UiPath CLI + skills | Coding-agent bonus proof and lifecycle automation, including explicit process creation with pinned package versions. | G-008; current CLI readback `1.195.1`, logged into org `keepingitlowkey`, tenant `DefaultTenant` |
 | Orchestrator | Assets, packages, jobs, logs, deployment, secrets if needed. | Wave 01 and stack selection |
@@ -64,11 +64,14 @@ Live validation moved the architecture from "maybe Data Fabric/Data Service" to 
 - `python -m service_recovery_core.evals --audit-bundle-scenario E-002` emits the missing-telemetry proof beat.
 - `python -m service_recovery_core.evals --audit-bundle-scenario E-004` emits the contradiction/human-review proof beat.
 - The bundle can be stored as Case custom data, Data Fabric/Data Service record, or a UiPath-accessible file/artifact depending on the final implementation path.
-- Data Fabric is reachable through `uip df`; read-only entity listing returned an empty native entity list in org `keepingitlowkey`, tenant `DefaultTenant`.
-- `docs/architecture/data_fabric/service_recovery_audit_bundle_entity.json` is the proposed live entity schema for storing the bundle.
-- `python -m service_recovery_core.evals --data-fabric-record-scenario E-004` emits an insert-ready record body for the contradiction proof beat, including live Case/task/package references from package `1.0.5`.
+- Data Fabric is reachable through `uip df`; live validation now uses `ServiceRecoveryAuditBundleV2` for queryable audit storage.
+- `docs/architecture/data_fabric/service_recovery_audit_bundle_v2_entity.json` is the live-validated Data Fabric schema for storing the bundle with PascalCase fields.
+- `python -m service_recovery_core.evals --data-fabric-record-scenario E-004 --data-fabric-field-style pascal` emits an insert-ready record body for the contradiction proof beat, including live Case/task/package references from package `1.0.6`.
+- Live Data Fabric entity `ServiceRecoveryAuditBundleV2` was created with ID `35e8f6c7-4671-f111-ac9a-002248a16d28`.
+- Live Data Fabric record `F9D838CE-4671-F111-AC9A-0022489A9A06` was inserted and queried by `CaseId = CASE-BG-CONTRA`; readback includes `InterpretationPolicyVersion = ip-v1`, `DecisionPolicyVersion = dp-v1`, `ClosureBlockReason = source_contradiction`, `SourceCaseInstanceKey = 9fc6fece-55ed-4fb2-b11a-6c96f7a3314e`, `SourceTaskId = 4328396`, and `PackageVersion = 1.0.6`.
+- Parsed readback from `RawAgentEventJson`, `PolicyDecisionEventJson`, and `AuditBundleJson` proves raw recommendation `closure_candidate`, policy decision `require_human_review`, policy link `PDE-E-004 -> AIE-E004`, and event count `4`.
 - After explicit user approval, live Data Fabric entity `ServiceRecoveryAuditBundle` was created with ID `328ef8b6-ab70-f111-ac9a-002248a16d28` and schema readback by ID succeeded.
-- Direct JSON record insert remains unvalidated: `uip df records insert` rejected field-name, wrapper, field-ID keyed, and array payloads with required `case_id` reported missing. CSV import created record `DA42769C-33B7-4701-A266-019F032AF376` in entity `328ef8b6-ab70-f111-ac9a-002248a16d28`, but follow-up CLI readback returned only system fields and did not prove the domain payload values.
+- The original snake_case entity is retained only as a legacy finding: JSON insert rejected field-name, wrapper, field-ID keyed, and array payloads with required `case_id` reported missing. CSV import created record `DA42769C-33B7-4701-A266-019F032AF376` in entity `328ef8b6-ab70-f111-ac9a-002248a16d28`, but follow-up CLI readback returned only system fields and did not prove the domain payload values.
 - Orchestrator bucket fallback is live-validated. Bucket `service-recovery-audit-validation` with key `dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb` stores `audit/service_recovery_audit_bundle_E004.json`.
 - The bucket artifact was uploaded, listed, downloaded to `eval_results/downloaded_audit_bundle_E004.json`, and byte-compared against `docs/validation/artifacts/2026-06-25/service_recovery_audit_bundle_E004.json`.
 - The artifact manifest is `docs/validation/artifacts/2026-06-25/orchestrator_bucket_audit_artifact_E004_manifest.json`.

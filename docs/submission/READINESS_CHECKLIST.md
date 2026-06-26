@@ -8,7 +8,7 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 
 | Requirement | Status | Evidence | Remaining caution |
 | --- | --- | --- | --- |
-| Local unit tests pass. | PASS | `python -m unittest discover -s tests` passed 42 tests on 2026-06-26. | Re-run before final submission if code changes. |
+| Local unit tests pass. | PASS | `python -m unittest discover -s tests` passed 43 tests on 2026-06-26. | Re-run before final submission if code changes. |
 | Local eval suite E-001 through E-009 passes. | PASS | `python -m service_recovery_core.evals --output eval_results/local_baseline.json` passed 9/9. | Re-run before final submission if fixtures/policy change. |
 | Repeatable E-002/E-004 proof artifacts exist. | PASS | `scripts/run_demo.sh --with-local-checks --no-uipath-next-steps`; `docs/demo/artifacts/demo_proof_manifest.json`. | Script is local/default-safe; it does not start live cases. |
 | Optional real LLM interpretation path exists. | PASS with live Vertex run | `scripts/run_llm_demo.sh --scenario-id E-003 --model gemini-2.5-flash --project <project> --location us-central1 --output eval_results/llm_interpreter_E003_live.json`; committed artifact `docs/demo/artifacts/llm_interpreter_E003_live.json` | Re-run if model, prompt, Google project, or ADC environment changes before recording. |
@@ -21,7 +21,7 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 
 | Gate | Result | Evidence | Implementation decision |
 | --- | --- | --- | --- |
-| G-001 Native Case State / Audit Reconstruction | PARTIAL natively; PASS with Orchestrator bucket full-payload fallback; PARTIAL with Data Fabric CSV import | Data Fabric entity `ServiceRecoveryAuditBundle` record `DA42769C-33B7-4701-A266-019F032AF376` exists and queries by ID; Orchestrator bucket artifact `audit/service_recovery_audit_bundle_E004.json` | Data Fabric row persistence is validated, but CLI readback did not expose custom payload fields. Bucket remains the full-payload fallback. |
+| G-001 Native Case State / Audit Reconstruction | PARTIAL natively; PASS with Data Fabric V2 and Orchestrator bucket full-payload fallbacks | Data Fabric entity `ServiceRecoveryAuditBundleV2` record `F9D838CE-4671-F111-AC9A-0022489A9A06` queries by `CaseId` and returns parseable AIE/PDE/audit JSON; Orchestrator bucket artifact `audit/service_recovery_audit_bundle_E004.json` | Native Case history is still not the full domain audit by itself. Use Data Fabric V2 or bucket artifact as the full-payload audit proof. |
 | G-002 Policy Version Pinning | PASS for explicit package/process/artifact pinning | Process readback/version history; payload/audit fields `interpretation_policy_version` and `decision_policy_version` | Represent policy migrations as explicit audited events. |
 | G-003 Human Evidence Packet | PASS for Action Center lifecycle/structured return; PARTIAL for generated UI legibility | Live tasks `4300080`, `4300219`; `docs/demo/artifacts/evidence_packet_E002.html`; `docs/demo/artifacts/evidence_packet_E004.html` | Use Action Center for lifecycle and custom packet for judge-readable proof. |
 | G-004 Agent Recommendation Visible Before Override | PASS for persistence/API/audit visibility; PARTIAL for generated UI display | Live E-002/E-004 task payloads; audit bundle AIE/PDE linkage; evidence packet comparison panels | Do not depend on generated Action Center UI to show the boundary. |

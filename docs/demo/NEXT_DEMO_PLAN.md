@@ -108,13 +108,13 @@ These static artifacts are not a substitute for live UiPath human-task validatio
 Current audit storage fallback:
 
 - Use Maestro Case and Action Center for the live lifecycle/human-task proof.
-- Use Orchestrator bucket `service-recovery-audit-validation` for the durable one-object domain audit artifact if Data Fabric remains blocked.
+- Use Data Fabric V2 `ServiceRecoveryAuditBundleV2` for the durable queryable domain audit record, with Orchestrator bucket `service-recovery-audit-validation` as the alternate one-object artifact.
 - Live bucket key: `dc4c3bc3-fd8c-4143-93f0-57346f2b1ecb`.
 - Live path: `audit/service_recovery_audit_bundle_E004.json`.
 - Repo evidence: `docs/validation/artifacts/2026-06-25/orchestrator_bucket_audit_artifact_E004_manifest.json`.
 - The bucket-backed E-004 artifact preserves raw `AIE-E004` recommending `closure_candidate`, linked `PDE-E-004` requiring `human_review`, policy versions `ip-v1` / `dp-v1`, and `source_contradiction`.
 
-This is a real UiPath-hosted artifact path, not demo-only local data. It should be presented honestly as explicit custom audit state because native Case history did not provide the full domain audit by itself. Data Fabric CSV import is now partial for E-004 row persistence, while the bucket remains the full-payload fallback.
+This is a real UiPath-hosted artifact path, not demo-only local data. It should be presented honestly as explicit custom audit state because native Case history did not provide the full domain audit by itself. Data Fabric V2 is now the queryable full-payload audit path, while the bucket remains an alternate full-payload fallback.
 
 ## Demo Proof Sequence
 
@@ -140,7 +140,7 @@ Native Case state versus explicit audit store:
 
 - Use native Case state/history only if G-001 proves one-view or one-query reconstruction of evidence state, policy versions, raw recommendation, policy decision, closure block, human action, and timestamps.
 - Add Data Fabric/Data Service or explicit custom audit events if reconstruction requires manual log archaeology.
-- Current validated fallback is an Orchestrator bucket artifact containing the `service-recovery-audit-v1` bundle. Data Fabric CSV import is partial for E-004 row persistence, but the bucket remains the repeatable full-payload readback unless the Data Fabric row is intentionally shown as secondary evidence.
+- Current validated fallbacks are Data Fabric V2 record `F9D838CE-4671-F111-AC9A-0022489A9A06` and the Orchestrator bucket artifact containing the `service-recovery-audit-v1` bundle. Prefer Data Fabric V2 when a queryable proof is useful; use the bucket when a simple one-object artifact readback is clearer.
 
 Native version fields versus explicit metadata:
 
@@ -156,7 +156,7 @@ Raw recommendation visibility:
 
 Hard-gate facts are now validated enough to build:
 
-- G-001: native Case audit is partial; use the bucket-backed `service-recovery-audit-v1` bundle for one-object domain audit proof.
+- G-001: native Case audit is partial; use Data Fabric V2 or the bucket-backed `service-recovery-audit-v1` bundle for one-object domain audit proof.
 - G-002: explicit package/process/artifact policy-version pinning is validated; represent migrations as explicit audited events.
 - G-003: Action Center lifecycle and structured return are validated; generated Action Center UI is not demo-legible, so use the custom evidence packet for judge-facing review.
 - G-004: raw agent recommendation and linked policy decision persist separately in task/API/audit data.
@@ -166,7 +166,7 @@ Hard-gate facts are now validated enough to build:
 Remaining optional platform improvements:
 
 - Repair generated Action Center field binding only if it can be done quickly and revalidated.
-- Show Data Fabric row persistence only if it is useful for the final story; otherwise use the validated Orchestrator bucket fallback for a simpler full-payload audit readback.
+- Show Data Fabric V2 readback if it is useful for the final story; otherwise use the validated Orchestrator bucket fallback for a simpler full-payload audit readback.
 - Add a real automated Test Manager/Test Cloud execution only after the demo-safe proof path is repeatable.
 
 ## Stop Rule

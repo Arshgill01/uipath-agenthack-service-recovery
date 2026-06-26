@@ -128,7 +128,7 @@ Without Maestro, we would have had to stitch together case state, task lifecycle
 ## Claims To Avoid
 
 - Do not claim automated Test Cloud execution; current Test Manager validation is manual mapping plus passed manual logs.
-- Claim Data Fabric only as partial E-004 row persistence until custom payload fields can be read back; direct JSON insert remains unvalidated.
+- Claim Data Fabric V2 full-payload persistence only for the PascalCase `ServiceRecoveryAuditBundleV2` path; keep the legacy snake_case entity as product-feedback evidence, not final proof.
 - Do not claim generated Action Center UI is final-demo ready.
 - Do not claim native Case history alone passes the domain audit gate.
 - Do not pitch the project as a generic governance platform.

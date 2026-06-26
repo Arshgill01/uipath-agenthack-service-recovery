@@ -98,6 +98,12 @@ def main() -> int:
         help="Optional scenario ID to export as a Data Fabric audit record body.",
     )
     parser.add_argument(
+        "--data-fabric-field-style",
+        choices=["snake", "pascal"],
+        default="snake",
+        help="Field naming style for Data Fabric record export.",
+    )
+    parser.add_argument(
         "--llm-result-evidence-packet",
         default=None,
         help="Optional governed LLM demo result JSON to export as a static reviewer evidence-packet HTML file.",
@@ -132,7 +138,11 @@ def main() -> int:
     if args.data_fabric_record_scenario:
         if args.output and args.output.endswith(".csv"):
             import csv
-            record = build_audit_record(args.data_fabric_record_scenario, for_csv=True)
+            record = build_audit_record(
+                args.data_fabric_record_scenario,
+                for_csv=True,
+                field_style=args.data_fabric_field_style,
+            )
             output_path = Path(args.output)
             output_path.parent.mkdir(parents=True, exist_ok=True)
             with open(output_path, "w", newline="", encoding="utf-8") as f:
@@ -142,7 +152,11 @@ def main() -> int:
             print(f"Exported Data Fabric CSV record to {args.output}")
             return 0
         else:
-            record = build_audit_record(args.data_fabric_record_scenario, for_csv=False)
+            record = build_audit_record(
+                args.data_fabric_record_scenario,
+                for_csv=False,
+                field_style=args.data_fabric_field_style,
+            )
             rendered_record = json.dumps(record, indent=2, sort_keys=True)
             if args.output:
                 output_path = Path(args.output)
@@ -183,7 +197,7 @@ def build_evidence_packet_html(scenario_id: str) -> str:
     return render_evidence_packet_html(build_audit_bundle(scenario_id))
 
 
-def build_audit_record(scenario_id: str, for_csv: bool = False) -> dict[str, Any]:
+def build_audit_record(scenario_id: str, for_csv: bool = False, field_style: str = "snake") -> dict[str, Any]:
     live_refs = {
         "E-002": {
             "source_case_instance_key": "3af41e1d-8b04-4eba-aa5e-a95c5c673730",
@@ -191,15 +205,16 @@ def build_audit_record(scenario_id: str, for_csv: bool = False) -> dict[str, Any
             "package_version": "1.0.4",
         },
         "E-004": {
-            "source_case_instance_key": "60e52ca5-6891-45b4-9e98-e1b08a984f06",
-            "source_task_id": "4300219",
-            "package_version": "1.0.5",
+            "source_case_instance_key": "9fc6fece-55ed-4fb2-b11a-6c96f7a3314e",
+            "source_task_id": "4328396",
+            "package_version": "1.0.6",
         },
     }
     return build_data_fabric_record(
         build_audit_bundle(scenario_id),
         scenario_id=scenario_id,
         for_csv=for_csv,
+        field_style=field_style,
         **live_refs.get(scenario_id, {}),
     )
 

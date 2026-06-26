@@ -63,7 +63,8 @@ This matrix groups the current evidence into issue classes. Add new observations
 | Action Center refresh after external task completion | PF-016 | UX / integration | medium | If a task is completed through API/CLI, an open Action Center task tab should either update automatically or clearly require refresh. | After `uip tasks complete` returned success and task API showed `Completed`, the open Safari tab still displayed the task under `Pending` until browser refresh. | Refresh the task tab; after refresh, Action Center correctly moved task `4295299` to `Completed` and showed `(reject)`. | Add real-time status sync or a stale-state banner when an open task has been completed outside the current browser session. | `docs/validation/artifacts/2026-06-25/g004-action-center-stale-pending-after-cli-complete-task-4295299.png`; `docs/validation/artifacts/2026-06-25/g004-action-center-completed-reject-task-4295299.png`; PF-016. |
 | Solution-feed package visibility and process binding | PF-017 | integration / UX / diagnostics | high for CLI/package recovery | A package uploaded successfully to a solution feed should be visible to the process-binding path, or the CLI should require/propagate the feed selector consistently. | Upload and feed-scoped `packages get` succeeded for `Solution.caseManagement.Maestro.Case:1.0.4`; default package lookup and `processes create --package-version 1.0.4` could not bind it. | Use `packages get --feed-id` to verify the package and `processes update-version` on an existing process to move to `1.0.4`. | Add feed-aware process creation or a clear diagnostic that says the package exists in feed X but the requested folder/process binding is resolving feed Y. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 19:05 IST; PF-017. |
 | Data Fabric CLI discovery mismatch | PF-018 | UX / integration / diagnostics | medium | CLI tool discovery should show the Data Fabric capability when `uip df` is installed and usable, or explain why it is a built-in command rather than a listed tool. | `uip df --help` and `uip df entities list --native-only --output json` worked, but `uip tools list --output json` did not expose a corresponding Data Fabric tool entry during discovery. | Use direct `uip df` commands and document the exact entity schema/record commands before mutating the tenant. | Make `uip tools list` include built-in product command surfaces or add a `uip tools explain df` style diagnostic so builders can discover available CLI capabilities consistently. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 21:01 IST; `docs/architecture/data_fabric/service_recovery_audit_bundle_entity.json`; PF-018. |
-| Data Fabric record insertion/readback payload mapping | PF-019 | product defect candidate / integration / diagnostics | high for G-001 custom audit storage | After creating and reading a Data Fabric entity, `records insert`/CSV import should persist values for required custom fields and `records get/query` should return those values or explain why projection is unavailable. | Entity create/readback succeeded, but `records insert` rejected multiple JSON shapes with `case_id` reported missing. CSV import later created record `DA42769C-33B7-4701-A266-019F032AF376`, yet Codex follow-up readback returned only system fields even when selecting `case_id`, policy versions, and payload fields. | Use Orchestrator bucket artifact as the validated full-payload audit fallback. Treat Data Fabric as partial row persistence until custom-field payload readback is proven; do not claim direct JSON insert. | Add schema-aware insert/import validation that echoes recognized/unrecognized fields and values, fixes docs/help examples if the expected shape differs, includes a correlation/session ID for support, and documents how to read back imported custom fields. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 21:08 IST, 2026-06-26 16:00 IST, and 2026-06-26 16:38 IST; PF-019. |
+| Data Fabric record insertion/readback payload mapping | PF-019 | product defect candidate / integration / diagnostics | high for G-001 custom audit storage | After creating and reading a Data Fabric entity, `records insert`/CSV import should persist values for required custom fields and `records get/query` should return those values or explain why projection is unavailable. | Entity create/readback succeeded, but `records insert` rejected multiple snake_case JSON shapes with `case_id` reported missing. CSV import later created record `DA42769C-33B7-4701-A266-019F032AF376`, yet Codex follow-up readback returned only system fields even when selecting `case_id`, policy versions, and payload fields. PascalCase V2 fields later worked. | Use `ServiceRecoveryAuditBundleV2` with PascalCase fields for the validated full-payload Data Fabric path; keep Orchestrator bucket as alternate fallback; do not use the legacy snake_case entity for final audit reconstruction. | Add schema-aware insert/import validation that echoes recognized/unrecognized fields and values, documents field-naming constraints if any, includes a correlation/session ID for support, and documents how to read back imported custom fields. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 21:08 IST, 2026-06-26 16:38 IST, and 2026-06-26 15:38 UTC; PF-019. |
+| Data Fabric custom-field naming and false-success updates | PF-023 | product defect candidate / integration / diagnostics | high for Data Fabric adoption | Valid custom field names allowed by entity creation should behave consistently for insert, update, query, and get, or the platform should reject unsupported names at schema creation. | snake_case fields were accepted in entity schemas, but JSON insert/update did not persist them; update returned `RecordUpdated` even though query/get showed no custom value. PascalCase fields in `DataFabricPascalProbe` and `ServiceRecoveryAuditBundleV2` worked. | Use PascalCase field names for current Data Fabric audit entities and verify with query/get after every write. | Validate custom field names across the whole lifecycle, return write results that include accepted and ignored fields, make false-success updates impossible, and document any naming restrictions in CLI and UI schema builders. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-26 15:38 UTC; PF-023. |
 | Test Manager eval-suite onboarding | PF-020 | UX / integration | medium | A local eval output can be imported or mapped into Test Manager without bespoke object creation. | CLI project/case/test-set lifecycle worked, but E-001 through E-009 had to be manually represented as Test Manager objects. | Created project `SREV`, nine manual cases, test set `SREV:9`, and mapping doc. | Add eval/JUnit/JSON import flow with scenario preview and field mapping for AI evals. | `docs/validation/TEST_MANAGER_MAPPING.md`; PF-020. |
 | Test Manager manual execution aggregate status | PF-021 | UX / product defect candidate | medium | Manual execution aggregate becomes terminal or explains the required close action when all child logs pass. | All nine test case logs passed, but aggregate execution stayed `Running` and `uip tm wait --timeout 30` timed out. | Cite child log pass evidence and aggregate counts; do not claim terminal aggregate status. | Add explicit finish/close manual execution action or surface the remaining blocker in execution readback. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-25 23:58 IST; PF-021. |
 | Case job/task lifecycle CLI clarity | PF-022 | UX / integration / diagnostics | medium | Process, job, task, and Case Instance readbacks should make a fresh Case run's package, human-task completion, and terminal case state easy to reconstruct with consistent flags. | `processes get` rejected `--folder-key` while `version-history` accepted it; completed E-002/E-004 AppTasks returned reviewer actions/comments, but their older Case jobs still read as `Running` with only Pending/Running history. A fresh package `1.0.6` Case Instance later reached `LatestRunStatus: Completed` after an unbound required placeholder task was made optional. | Use corrected `processes get <key>` command, read `version-history`, rely on task readback plus audit bundle for reviewer proof on older runs, and cite terminal Case Instance completion only for the fresh package `1.0.6` run. | Harmonize folder option support or document per-subcommand differences; show whether a Case job is waiting for human task, post-task continuation, optional placeholder task, terminal completion, or blocked state. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-26 00:36 IST and 2026-06-26 16:00 IST; `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`; PF-022. |
@@ -146,10 +147,11 @@ Use accumulated entries to answer the final feedback survey.
 | PF-016 | 2026-06-25 | Action Center / Tasks API | Open task tab after CLI completion | G-003 / G-008 | UX / integration | medium | observed | `docs/validation/artifacts/2026-06-25/g004-action-center-completed-reject-task-4295299.png` |
 | PF-017 | 2026-06-25 | Orchestrator / UiPath CLI / solution feed | Upload package, read package, create/update process | Wave 07 / G-002 / G-008 | integration / UX / diagnostics | high | observed workaround | `docs/validation/VALIDATION_RESULTS.md` |
 | PF-018 | 2026-06-25 | Data Fabric / UiPath CLI | CLI command discovery for Data Fabric | G-001 / G-002 / G-008 | UX / integration / diagnostics | medium | observed | `docs/validation/VALIDATION_RESULTS.md` |
-| PF-019 | 2026-06-25 | Data Fabric / UiPath CLI | Record insert payload mapping | G-001 / G-002 / G-008 | product defect candidate / integration / diagnostics | high | open blocker | `docs/validation/VALIDATION_RESULTS.md` |
+| PF-019 | 2026-06-25 | Data Fabric / UiPath CLI | Record insert payload mapping | G-001 / G-002 / G-008 | product defect candidate / integration / diagnostics | high | mitigated with V2 | `docs/validation/VALIDATION_RESULTS.md` |
 | PF-020 | 2026-06-25 | Test Manager / Test Cloud CLI | Eval-suite project/case/test-set mapping | G-007 | UX / integration | medium | observed | `docs/validation/TEST_MANAGER_MAPPING.md` |
 | PF-021 | 2026-06-25 | Test Manager / CLI | Manual execution aggregate status | G-007 | UX / product defect candidate | medium | open | `docs/validation/VALIDATION_RESULTS.md` |
 | PF-022 | 2026-06-26 | Orchestrator / Action Center CLI | Case job/task lifecycle readback | Demo repeatability / G-008 | UX / integration / diagnostics | medium | observed | `docs/validation/VALIDATION_RESULTS.md` |
+| PF-023 | 2026-06-26 | Data Fabric / UiPath CLI | Custom-field naming and update readback | G-001 / G-008 | product defect candidate / integration / diagnostics | high | mitigated with PascalCase V2 | `docs/validation/VALIDATION_RESULTS.md` |
 
 ## Entry Template
 
@@ -804,7 +806,7 @@ Survey tags:
 Context:
 
 - ID: PF-019.
-- Status: partial. E-004 CSV import created a row, but custom-field payload readback is not proven; direct JSON insert remains unvalidated.
+- Status: mitigated with V2. The original snake_case entity remains a defect candidate; PascalCase `ServiceRecoveryAuditBundleV2` is validated for full-payload insert/query/readback.
 - Goal: persist the E-004 `service-recovery-audit-v1` contradiction audit bundle in Data Fabric for G-001/G-002 reconstruction.
 - Product surface: UiPath CLI, Data Fabric entity and record APIs.
 - Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `Arshdeep Singh`.
@@ -826,6 +828,8 @@ What failed or confused us:
 - A debug run showed the CLI parsed a `--body` containing `case_id`, so the failure appears to be in payload mapping or expected request shape rather than shell quoting.
 - CSV import initially inserted `0` of `1` records and returned an error file link; a later import created record `DA42769C-33B7-4701-A266-019F032AF376` after nested payload fields were rendered with the Data-Fabric-safe wire format from `service_recovery_core.data_fabric_record.serialize_for_data_fabric_csv`.
 - Follow-up Codex readback verified the record exists by `Id`, but `records get`, `records list`, and `records query` returned only system fields. A query selecting `case_id`, `scenario_id`, policy-version fields, package fields, and source references still returned only `Id`.
+- A later diagnostic showed the problem is field-name-sensitive rather than a total Data Fabric storage failure: PascalCase custom fields in `DataFabricPascalProbe` inserted and queried correctly.
+- `ServiceRecoveryAuditBundleV2` with PascalCase fields inserted E-004 record `F9D838CE-4671-F111-AC9A-0022489A9A06`; query by `CaseId` returned the policy-version fields, live case/task/package references, and parseable raw AIE/PDE/audit bundle JSON.
 
 Expected:
 
@@ -842,28 +846,32 @@ Observed:
 
 Impact:
 
-- Build impact: high for G-001 custom audit storage. Data Fabric proves live row creation, but it is not yet viable as the full audit reconstruction surface until custom payload readback is solved.
-- Demo/submission impact: medium/high. The team should cite Data Fabric row persistence only as partial platform evidence and keep Orchestrator bucket storage as the full-payload fallback.
+- Build impact: high for G-001 custom audit storage. The legacy entity consumed significant debugging time because it looked valid at schema creation but did not persist/read custom values correctly.
+- Demo/submission impact: medium/high before mitigation; now reduced because `ServiceRecoveryAuditBundleV2` is validated as a full-payload Data Fabric path.
 - Severity: high for CLI/API storage path, product defect candidate until a documented alternate payload shape is found.
 
 Workaround:
 
-- Use CSV import with `serialize_for_data_fabric_csv` only when a Data Fabric row is useful evidence.
-- Keep Orchestrator bucket storage as the validated full-payload audit path for final demo/submission.
-- Continue treating direct JSON insert as unvalidated until the expected request shape is documented or proven.
+- Use PascalCase field names in Data Fabric schemas that must be written/read through the current CLI/API path.
+- Use `ServiceRecoveryAuditBundleV2` (`35e8f6c7-4671-f111-ac9a-002248a16d28`) for the final Data Fabric audit proof.
+- Keep Orchestrator bucket storage as the alternate full-payload audit path.
 
 Suggested improvement:
 
 - Add schema-aware insert diagnostics that echo recognized fields, unrecognized fields, missing required fields, and the expected payload shape.
 - Make `records insert` examples include a freshly-created custom entity with required fields.
 - Make CSV import/readback diagnostics show which custom fields were persisted and how to project them through `records get/query`.
+- Validate custom field names at entity creation if some names are not supported consistently by record write/read APIs.
 - If entity ID is required for `entities get`, update help/error text to say so or make name lookup work consistently.
 - Include a correlation/session ID for insert failures to make hackathon support escalation practical.
 
 Evidence:
 
 - Commands/logs: `docs/validation/VALIDATION_RESULTS.md`, 2026-06-25 21:08 IST Live Data Fabric Entity Created / Insert Blocked.
+- Commands/logs: `docs/validation/VALIDATION_RESULTS.md`, 2026-06-26 15:38 UTC Data Fabric V2 Full-Payload Audit Readback.
 - Entity ID: `328ef8b6-ab70-f111-ac9a-002248a16d28`.
+- V2 entity ID: `35e8f6c7-4671-f111-ac9a-002248a16d28`.
+- V2 record ID: `F9D838CE-4671-F111-AC9A-0022489A9A06`.
 - Debug log was written locally to `tmp/data-fabric-insert-debug.log` but is intentionally not committed because CLI debug logs can contain request metadata.
 
 Classification:
@@ -875,6 +883,89 @@ Survey tags:
 - product-used
 - pain-point
 - blocker
+- workaround
+- improvement
+- evidence
+
+### PF-023 - 2026-06-26 - Data Fabric / Custom Field Naming And False-Success Updates
+
+Context:
+
+- ID: PF-023.
+- Status: mitigated with PascalCase V2.
+- Goal: make Data Fabric the full-payload G-001 audit storage path instead of accepting row-only persistence.
+- Product surface: UiPath CLI, Data Fabric entity and record APIs.
+- Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `Arshdeep Singh`.
+- Wave/gate: G-001 and G-008.
+
+What worked:
+
+- A PascalCase probe entity `DataFabricPascalProbe` was created successfully.
+- `uip df records insert 8fa39b80-4671-f111-ac9a-002248a16d28 --body '{"Title":"PASCAL_PROBE_20260626","CaseId":"CASE-PROBE"}' --output json` returned custom fields in the insert response.
+- Query by `Title = PASCAL_PROBE_20260626` returned the same custom fields.
+- `ServiceRecoveryAuditBundleV2` with PascalCase fields successfully stored and read back the E-004 full audit payload.
+
+What failed or confused us:
+
+- `TestEntity` with required snake_case field `test_field` was created successfully, but insert with `{"test_field":"DF_PROBE_20260626"}` failed with required `test_field` missing.
+- Direct REST insert probes using plain field name, `Data`, `data`, `Fields`, `FieldValues`, array wrappers, and field-ID keyed bodies also failed with required `test_field` missing.
+- Updating an existing `TestEntity` record with `test_field` returned `RecordUpdated`, but query by that value returned `TotalCount: 0` and record get returned only system fields.
+- The legacy `ServiceRecoveryAuditBundle` snake_case entity had the same pattern: schema existed, CSV import created rows, but custom field readback did not expose payload values.
+
+Expected:
+
+- Field names accepted during entity creation should be accepted consistently by insert, update, query, and get.
+- If a field name is unsupported for record writes/readbacks, entity creation should reject it or warn clearly before any data is written.
+- A successful update response should not ignore custom fields silently.
+
+Observed:
+
+- snake_case custom fields were schema-valid but did not work through the tested record write/read path.
+- PascalCase custom fields worked.
+- Update success could be misleading because system metadata changed while the intended custom value remained absent/unqueryable.
+
+Impact:
+
+- Build impact: high before mitigation. This directly blocked the preferred Data Fabric G-001 audit proof and consumed debugging time because schema creation and update responses looked successful.
+- Demo/submission impact: medium after mitigation. The V2 workaround is viable, but the original behavior is important feedback for first-time builders relying on generated CLI examples.
+- Severity: high.
+
+Workaround:
+
+- Use PascalCase field names for Data Fabric entities that must be written/read by `uip df records insert/query/get`.
+- After every Data Fabric write, verify through a field filter and parse any stored JSON payloads; do not trust insert/update success alone.
+- Keep legacy snake_case entities as validation artifacts only, not final proof surfaces.
+
+Suggested improvement:
+
+- Enforce one field-name contract across entity creation, insert, update, query, get, CSV import, and UI.
+- If snake_case is unsupported or partially supported, reject it at schema creation with a clear error and suggested rename.
+- Make update responses include accepted custom fields, ignored fields, and missing required fields.
+- Add a “write/readback self-test” command or UI affordance after schema creation so builders can validate a new entity before wiring it into a process.
+
+Evidence:
+
+- Commands/logs: `docs/validation/VALIDATION_RESULTS.md`, 2026-06-26 15:38 UTC Data Fabric V2 Full-Payload Audit Readback.
+- Probe entity ID: `8fa39b80-4671-f111-ac9a-002248a16d28`.
+- V2 audit entity ID: `35e8f6c7-4671-f111-ac9a-002248a16d28`.
+- V2 audit record ID: `F9D838CE-4671-F111-AC9A-0022489A9A06`.
+
+Classification:
+
+- product defect candidate / integration / diagnostics
+
+Confidence:
+
+- high, based on repeated CLI/API failures for snake_case fields and successful insert/query/readback for PascalCase fields in the same tenant.
+
+Follow-up validation needed:
+
+- Optional: confirm in the UiPath UI whether snake_case field values are absent there too, and whether the product documents any naming restriction beyond entity-creation validation.
+
+Survey tags:
+
+- product-used
+- pain-point
 - workaround
 - improvement
 - evidence

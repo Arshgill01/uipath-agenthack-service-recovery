@@ -1,0 +1,107 @@
+{
+  "displayName": "Service Recovery Audit Bundle V2",
+  "description": "Stores one governed service-recovery audit bundle using PascalCase fields verified for UiPath Data Fabric JSON insert/query readback.",
+  "fields": [
+    {
+      "fieldName": "CaseId",
+      "type": "STRING",
+      "isRequired": true,
+      "lengthLimit": 100
+    },
+    {
+      "fieldName": "ServiceId",
+      "type": "STRING",
+      "isRequired": true,
+      "lengthLimit": 100
+    },
+    {
+      "fieldName": "ScenarioId",
+      "type": "STRING",
+      "isRequired": true,
+      "lengthLimit": 20
+    },
+    {
+      "fieldName": "AuditContractVersion",
+      "type": "STRING",
+      "isRequired": true,
+      "lengthLimit": 100
+    },
+    {
+      "fieldName": "BusinessState",
+      "type": "STRING",
+      "isRequired": true,
+      "lengthLimit": 50
+    },
+    {
+      "fieldName": "DerivedEvidenceState",
+      "type": "STRING",
+      "isRequired": true,
+      "lengthLimit": 100
+    },
+    {
+      "fieldName": "ClosureBlockReason",
+      "type": "STRING",
+      "isRequired": true,
+      "lengthLimit": 100
+    },
+    {
+      "fieldName": "InterpretationPolicyVersion",
+      "type": "STRING",
+      "isRequired": true,
+      "lengthLimit": 100
+    },
+    {
+      "fieldName": "DecisionPolicyVersion",
+      "type": "STRING",
+      "isRequired": true,
+      "lengthLimit": 100
+    },
+    {
+      "fieldName": "SourceCaseInstanceKey",
+      "type": "STRING",
+      "isRequired": false,
+      "lengthLimit": 100
+    },
+    {
+      "fieldName": "SourceTaskId",
+      "type": "STRING",
+      "isRequired": false,
+      "lengthLimit": 50
+    },
+    {
+      "fieldName": "PackageVersion",
+      "type": "STRING",
+      "isRequired": false,
+      "lengthLimit": 50
+    },
+    {
+      "fieldName": "RawAgentEventJson",
+      "type": "MULTILINE_TEXT",
+      "isRequired": true,
+      "lengthLimit": 10000
+    },
+    {
+      "fieldName": "PolicyDecisionEventJson",
+      "type": "MULTILINE_TEXT",
+      "isRequired": true,
+      "lengthLimit": 10000
+    },
+    {
+      "fieldName": "ReviewerPacketJson",
+      "type": "MULTILINE_TEXT",
+      "isRequired": true,
+      "lengthLimit": 10000
+    },
+    {
+      "fieldName": "AuditBundleJson",
+      "type": "MULTILINE_TEXT",
+      "isRequired": true,
+      "lengthLimit": 10000
+    },
+    {
+      "fieldName": "CreatedAt",
+      "type": "DATETIME_WITH_TZ",
+      "isRequired": true
+    }
+  ]
+}
