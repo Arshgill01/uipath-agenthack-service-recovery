@@ -63,7 +63,7 @@ Do not invent final answers here. Draft survey responses only after the matching
 
 ## Current Evidence-Backed Draft - 2026-06-26
 
-This is not final submission prose. It is the current best draft assembled from observed PF entries so the final form can be completed without one-shot memory reconstruction.
+This is not final submission prose. It is preserved as an evidence scaffold. The canonical current answer bank is `FEEDBACK_SURVEY_COPY_READY.md`, with final-form prose in `FEEDBACK_SURVEY_FINAL_DRAFT.md`.
 
 ### 1. What's your first name?
 
@@ -83,7 +83,7 @@ Placeholder: `arshgill6120@gmail.com`
 
 ### 5. Please rate your overall satisfaction with UiPath AgentHack.
 
-Draft choice: likely `Somewhat satisfied` or `Very satisfied`, depending on final build outcome.
+Draft choice: `Somewhat satisfied`.
 
 Rationale to preserve: the platform enabled a real Maestro Case + Action Center + Orchestrator proof, but the build hit multiple setup, generated app, package, and diagnostics issues that materially slowed validation.
 
@@ -94,7 +94,7 @@ Evidence:
 
 Draft selections:
 - UiPath Maestro Case
-- UiPath Test Cloud, only if a Test Cloud mapping or run is actually validated before final submission.
+- UiPath Test Cloud, only if the final submission cites the validated Test Manager manual mapping honestly and does not imply automated Test Cloud execution.
 
 Do not select Maestro BPMN unless we actually build/validate that track.
 
@@ -102,10 +102,11 @@ Do not select Maestro BPMN unless we actually build/validate that track.
 
 Draft:
 
-We built a telecom/broadband service activation and restoration exception workflow in Maestro Case. The case starts with business systems that appear green, while an agent interprets ambiguous support evidence into structured signals. A deterministic policy layer then decides whether closure is allowed. If authoritative network telemetry is missing or stale, policy overrides a raw `closure_candidate` recommendation and routes to telemetry verification instead of closure. If fresh authoritative telemetry contradicts the green business state, severity escalates and the case routes to human exception review with an evidence packet. The point is to prevent unsafe service-closure decisions while preserving an auditable boundary between agent recommendation, policy decision, and human action.
+We built a telecom/broadband service activation and restoration exception workflow in Maestro Case. The case starts with business systems that appear green, while an agent interprets ambiguous support evidence into structured signals. A deterministic policy layer then decides whether closure is allowed. If authoritative network telemetry is missing or stale, policy overrides a raw `closure_candidate` recommendation and routes to telemetry verification instead of closure. If fresh authoritative telemetry contradicts the green business state, severity escalates and the case routes to human exception review with an evidence packet. The point is to prevent unsafe service-closure decisions while preserving an auditable boundary between agent recommendation, policy decision, and human action. We also validated a live Gemini/Vertex adversarial interpretation path where an advocate and skeptic produced competing structured interpretations, and policy escalated because the disagreement signal crossed threshold.
 
 Evidence:
 - `docs/demo/DEMO_STORYBOARD.md`
+- `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html`
 - `docs/validation/VALIDATION_RESULTS.md`
 - PF-015.
 

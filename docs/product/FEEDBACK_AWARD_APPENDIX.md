@@ -107,6 +107,8 @@ Why:
 
 We built a telecom/broadband service activation and restoration exception workflow in Maestro Case. Business systems can look green while authoritative network evidence is missing, stale, or contradictory. An agent interprets ambiguous notes into structured signals, but deterministic policy makes the closure/routing decision. The demo proves that a raw `closure_candidate` recommendation is preserved, policy can override it to `verify_telemetry` when authoritative telemetry is missing, and policy can escalate to `human_review` when fresh authoritative telemetry contradicts the business state.
 
+The optional live Gemini/Vertex path deepens the same thesis without weakening the control boundary: an advocate interpretation can recommend closure, a skeptic interpretation can find unresolved risk in the same evidence, and policy can route on the structured disagreement signal. The LLMs add useful interpretation pressure; deterministic policy still owns closure and escalation.
+
 ### Challenges
 
 The hardest part was not the local policy model. It was turning a first-time Maestro Case build into a repeatable, observable runtime proof. We had to validate tenant service readiness, generated Action app bindings, required Action task fields, package/feed resolution, process version pinning, Action Center task return, Test Manager mapping, and audit storage. The strongest pattern is that UiPath exposed the needed primitives, but the product needs more preflight and diagnostic guidance for a new builder doing agent + policy + human orchestration.
@@ -148,4 +150,6 @@ Without Maestro, we would have had to stitch together case state, task lifecycle
 | `docs/demo/artifacts/evidence_packet_E004_desktop.png` | Judge-facing 2B packet screenshot with escalated human-review route. |
 | `docs/demo/artifacts/evidence_packet_E003_adversarial_desktop.png` | Judge-facing adversarial LLM packet screenshot showing advocate, skeptic, disagreement, and policy escalation. |
 | `docs/demo/artifacts/evidence_packet_E003_adversarial_mobile.png` | Mobile viewport check for the adversarial LLM packet. |
+| `docs/validation/artifacts/2026-06-26/evidence_packet_E003_adversarial_desktop_1440x1100.png` | Refreshed 1440x1100 adversarial packet screenshot used for final visual review. |
+| `docs/validation/artifacts/2026-06-26/evidence_packet_E003_adversarial_mobile_390x900.png` | Refreshed mobile adversarial packet screenshot proving long fields remain legible. |
 | `docs/validation/TEST_MANAGER_MAPPING.md` | Test Manager eval mapping and manual execution evidence. |

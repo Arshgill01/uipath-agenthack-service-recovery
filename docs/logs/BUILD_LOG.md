@@ -30,6 +30,38 @@ Next:
 
 - ...
 
+### 2026-06-26 16:20 IST - Agent / Product Feedback Answer Bank Polish
+
+What changed:
+
+- Tightened the product feedback appendix and older survey scaffold so all survey source files reflect the current evidence posture.
+- Added the live Gemini/Vertex adversarial interpretation path to the appendix use-case building block.
+- Clarified that Test Cloud/Test Manager claims are limited to validated manual Test Manager mapping and passed manual logs, not automated Test Cloud execution.
+- Added refreshed adversarial desktop/mobile screenshot artifacts to the feedback appendix evidence index.
+
+Commands run:
+
+- `git status --short --branch`
+- `git log --oneline -5`
+- `git diff --stat`
+- `rg -n "Product Feedback Answer Bank Polish|optional live Gemini/Vertex path|validated Test Manager manual mapping honestly|evidence_packet_E003_adversarial_desktop_1440x1100" docs/logs/BUILD_LOG.md docs/product/FEEDBACK_AWARD_APPENDIX.md docs/product/FEEDBACK_SURVEY_DRAFT.md`
+- `scripts/run_submission_check.sh`
+- `git diff --check`
+
+Validation:
+
+- PASS: `scripts/run_submission_check.sh` completed successfully.
+- PASS: the check ran the 39-test unit suite and verified proof artifacts in `docs/demo/artifacts`.
+- PASS: `git diff --check`.
+
+Product feedback:
+
+- No new PF entry expected. This is survey-answer curation from existing evidence, not a new UiPath product interaction.
+
+Open risks:
+
+- Team name and story-sharing preference still require user confirmation before final survey submission.
+
 ### 2026-06-26 14:35 IST - Agent / Submission Guidance Refresh
 
 What changed:
