@@ -2111,3 +2111,33 @@ Product feedback:
 Open risks:
 
 - Screenshots are local artifact evidence for the judge-facing custom packet, not proof of generated Action Center UI repair.
+
+### 2026-06-26 15:42 IST - Agent / Objective Audit Refresh
+
+What changed:
+
+- Refreshed `docs/validation/OBJECTIVE_COMPLETION_AUDIT.md` so it matches the current pushed state after the adversarial evidence-packet, repeatable LLM wrapper, submission sanity check, and visual-evidence checkpoints.
+- Replaced stale latest-commit references with current pushed checkpoints.
+- Added explicit objective-audit rows for the live adversarial evidence packet and non-mutating submission sanity check.
+
+Commands run:
+
+- `git status --short --branch`
+- `git log --oneline -8`
+- `rg "15c774f|bcdfad1|b7477e1|38 tests|Latest pushed commit|latest pushed|evidence_packet_E003_adversarial" docs AGENTS.md README.md PROJECT_BRIEF.md PLAN.md -n`
+- `scripts/run_submission_check.sh`
+- `git diff --check`
+
+Validation:
+
+- PASS: `scripts/run_submission_check.sh` completed successfully.
+- PASS: the check ran the 39-test unit suite, local eval baseline, E-002/E-004 artifact verification, LLM/adversarial artifact presence checks, screenshot artifact checks, proof-string checks, and wrapper syntax checks.
+- PASS: `git diff --check`.
+
+Product feedback:
+
+- No new PF entry expected. This is evidence-map maintenance, not a new UiPath product interaction.
+
+Open risks:
+
+- The active thread goal remains open until the user explicitly says to close it.
