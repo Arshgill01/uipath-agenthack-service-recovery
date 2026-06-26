@@ -3004,7 +3004,8 @@ What changed:
 
 Validation:
 
-- Pending in this checkpoint: run `git diff --check` and `scripts/run_submission_check.sh` before commit/push.
+- PASS: `git diff --check` completed successfully.
+- PASS: `scripts/run_submission_check.sh` completed successfully with 43 unit tests and artifact verification.
 
 Open risks:
 
