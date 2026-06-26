@@ -8,14 +8,14 @@ Create a working UiPath AgentHack submission that proves governed agentic servic
 
 ## Build Strategy
 
-1. Validate UiPath platform assumptions before committing code shape.
-2. Build a minimal local simulation of telecom systems and policy logic.
-3. Implement structured agent interpretation with schema validation.
-4. Implement deterministic reconciliation and policy decisions.
-5. Map the local workflow to Maestro Case stages and human review.
-6. Add eval scenarios and agent usefulness checks.
-7. Add governed policy-improvement artifacts.
-8. Polish demo, documentation, and Devpost submission assets.
+1. Preserve the validated UiPath platform facts and do not reopen broad gate validation without new contradictory evidence.
+2. Keep deterministic policy separate from agent/LLM interpretation.
+3. Use Action Center for human-task lifecycle and structured return.
+4. Use custom evidence packets/screenshots for judge-readable proof.
+5. Use Orchestrator bucket artifacts for durable UiPath-hosted domain audit reconstruction.
+6. Use local evals, Test Manager manual mapping, and `scripts/run_submission_check.sh` for repeatable validation.
+7. Use the optional Gemini/Vertex interpreter only as a structured recommendation source, never as final closure authority.
+8. Polish submission and feedback assets around observed platform facts.
 
 ## Workstreams
 
@@ -34,21 +34,21 @@ Create a working UiPath AgentHack submission that proves governed agentic servic
 
 Use [waves/00_WAVES_INDEX.md](waves/00_WAVES_INDEX.md). Do not skip validation waves unless explicitly documented.
 
-Immediate next work is validation, not product implementation:
+Initial validation waves are complete enough to proceed with the demo-safe proof path:
 
-1. Wave 01: platform access and inventory.
-2. Wave 02: Maestro Case state/audit spike.
-3. Wave 03: policy version pinning spike.
-4. Wave 04: human evidence packet spike.
-5. Wave 05: raw agent recommendation before policy override.
+1. Use `scripts/run_submission_check.sh` before final submission and after any change.
+2. Use `scripts/run_demo.sh` to regenerate/verify E-002/E-004 proof artifacts.
+3. Use `scripts/run_llm_demo.sh --evidence-packet-output ...` only when intentionally refreshing the live Gemini/Vertex proof.
+4. Keep fresh live UiPath reruns scoped to new IDs/artifacts that are explicitly needed.
+5. Keep product-feedback updates tied to newly observed platform behavior.
 
 ## Current Highest-Risk Assumptions
 
-- Maestro Case native state/history may not be sufficient for one-view audit reconstruction.
-- Action Center may not render the evidence packet clearly enough for the demo.
-- Policy version pinning may need to be implemented as explicit metadata, not native behavior.
-- Showing raw agent recommendation before policy override may require deliberate event logging or custom UI.
-- Test Cloud/eval integration may need to be represented as a lightweight harness if full integration is too heavy.
+- Maestro Case native state/history is not sufficient alone for one-view domain audit reconstruction; use the Orchestrator `service-recovery-audit-v1` fallback.
+- Generated Action Center UI is not reliable enough as the judge-facing packet; use the custom packet/screenshots.
+- Active-case policy migration remains an explicit custom audit-event concern.
+- Test Cloud/Test Manager validation is manual mapping plus passed logs, not automated Test Cloud execution.
+- Fresh live reruns mutate tenant state and need explicit intent/logging.
 
 ## Quality Bar
 

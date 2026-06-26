@@ -1980,6 +1980,38 @@ Open risks:
 
 - Team name and story-sharing preference still require user confirmation before final survey submission.
 
+### 2026-06-26 16:13 IST - Agent / Public Entry Doc Refresh
+
+What changed:
+
+- Updated `README.md`, `PROJECT_BRIEF.md`, and `PLAN.md` to reflect the current validated proof path.
+- Added `scripts/run_submission_check.sh` and the optional Gemini/Vertex adversarial proof artifacts to the public entry docs.
+- Replaced stale validation-first sequencing in `PLAN.md` with the current preserve-and-verify loop.
+
+Commands run:
+
+- `git status --short --branch`
+- `sed -n '1,240p' README.md`
+- `sed -n '1,260p' PROJECT_BRIEF.md`
+- `sed -n '1,220p' PLAN.md`
+- `rg "Gemini|adversarial|submission_check|run_submission_check|39 tests|evidence_packet_E003|Vertex|LLM|Test Manager|Action Center" README.md PROJECT_BRIEF.md PLAN.md docs/submission/SUBMISSION_BRIEF.md -n`
+- `scripts/run_submission_check.sh`
+- `git diff --check`
+
+Validation:
+
+- PASS: `scripts/run_submission_check.sh` completed successfully.
+- PASS: the check ran the 39-test unit suite, local eval baseline, E-002/E-004 artifact verification, LLM/adversarial artifact presence checks, screenshot artifact checks, proof-string checks, and wrapper syntax checks.
+- PASS: `git diff --check`.
+
+Product feedback:
+
+- No new PF entry expected. This is public documentation alignment from existing validated evidence.
+
+Open risks:
+
+- Fresh live UiPath or Gemini reruns should remain intentional and logged, not automatic.
+
 ### 2026-06-26 14:31 IST - Agent / Live Adversarial Evidence Packet
 
 What changed:

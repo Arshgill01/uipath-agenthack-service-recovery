@@ -22,6 +22,7 @@ Local provisional core status:
 - Fixtures: `fixtures/eval_scenarios.json`
 - Tests: `python -m unittest discover -s tests`
 - Evals: `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- Submission sanity check: `scripts/run_submission_check.sh`
 
 Setup:
 
@@ -31,7 +32,7 @@ python -m unittest discover -s tests
 python -m service_recovery_core.evals --output eval_results/local_baseline.json
 ```
 
-The local core is intentionally portable and has no runtime dependencies outside the Python standard library. It implements provisional fixtures, schema validation, deterministic policy reconciliation, closure blocking, local case state transitions, and baseline eval scenarios E-001 through E-009.
+The local core is intentionally portable and keeps deterministic policy independent from LLM output. It implements fixtures, schema validation, deterministic policy reconciliation, closure blocking, local case state transitions, and baseline eval scenarios E-001 through E-009. Optional Gemini/Vertex paths can produce live Agent Interpretation Events, including an adversarial advocate/skeptic interpretation, but policy remains the final routing authority.
 
 Validation status:
 
@@ -41,11 +42,13 @@ Validation status:
 - G-003 is PASS for Action Center lifecycle/structured reviewer return and PARTIAL for generated Action Center UI legibility.
 - G-004 is PASS for persisted raw agent recommendation and linked policy decision in task/API/audit data.
 - The demo-safe proof path is: Action Center for human-task lifecycle, custom evidence packet for judge-readable proof, and Orchestrator bucket audit bundle for durable UiPath-hosted domain audit evidence.
+- Live Gemini/Vertex proof artifacts exist for E-003, including `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html` and desktop/mobile screenshots.
 
-Repeatable demo proof:
+Repeatable local proof:
 
 ```sh
+scripts/run_submission_check.sh
 scripts/run_demo.sh --with-local-checks
 ```
 
-This refreshes and verifies the E-002/E-004 proof artifacts without mutating the live tenant.
+`scripts/run_submission_check.sh` is non-mutating and verifies tests, evals, proof artifacts, proof strings, screenshots, and wrapper syntax. `scripts/run_demo.sh --with-local-checks` refreshes and verifies the E-002/E-004 proof artifacts without mutating the live tenant.

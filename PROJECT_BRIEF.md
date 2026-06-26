@@ -59,7 +59,7 @@ The demo must visibly show:
 - policy rejecting or downgrading the recommendation,
 - logged closure block reason,
 - distinct treatment for missing/stale vs contradicting evidence,
-- unstructured technician note changing route,
+- unstructured technician/customer/support notes interpreted into structured signals,
 - a real policy-improvement artifact or eval result.
 
 ## Architecture Thesis
@@ -105,5 +105,12 @@ Hard gates G-001 through G-004 are now answered with implementation implications
 - G-004 is PASS for persisted raw agent recommendation and linked policy decision in task/API/audit data.
 
 Proceed with the demo-safe proof path: Action Center owns task lifecycle, the custom evidence packet owns judge-readable proof, and the Orchestrator bucket audit bundle owns durable UiPath-hosted domain audit evidence.
+
+Current repeatable proof assets:
+
+- `scripts/run_submission_check.sh` verifies the local submission proof set without live UiPath or live LLM mutation.
+- `scripts/run_demo.sh` regenerates and verifies E-002/E-004 proof artifacts.
+- `scripts/run_llm_demo.sh --evidence-packet-output ...` can intentionally rerun the optional live Gemini/Vertex interpretation path.
+- Live adversarial Gemini proof artifacts exist for E-003, including `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html` and desktop/mobile screenshots.
 
 See [docs/validation/VALIDATION_GATES.md](docs/validation/VALIDATION_GATES.md).
