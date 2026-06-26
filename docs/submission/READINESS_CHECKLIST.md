@@ -21,7 +21,7 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 
 | Gate | Result | Evidence | Implementation decision |
 | --- | --- | --- | --- |
-| G-001 Native Case State / Audit Reconstruction | PARTIAL natively; PASS with Data Fabric and Orchestrator bucket fallbacks | Data Fabric entity `ServiceRecoveryAuditBundle` record `DA42769C-33B7-4701-A266-019F032AF376` inserted; Orchestrator bucket artifact `audit/service_recovery_audit_bundle_E004.json` | Data Fabric is successfully integrated using single-quote serialization. Bucket remains fallback. |
+| G-001 Native Case State / Audit Reconstruction | PARTIAL natively; PASS with Data Fabric CSV import and Orchestrator bucket fallbacks | Data Fabric entity `ServiceRecoveryAuditBundle` record `DA42769C-33B7-4701-A266-019F032AF376` inserted; Orchestrator bucket artifact `audit/service_recovery_audit_bundle_E004.json` | Data Fabric persistence is validated for the E-004 audit record using the CSV import wire format. Bucket remains fallback. |
 | G-002 Policy Version Pinning | PASS for explicit package/process/artifact pinning | Process readback/version history; payload/audit fields `interpretation_policy_version` and `decision_policy_version` | Represent policy migrations as explicit audited events. |
 | G-003 Human Evidence Packet | PASS for Action Center lifecycle/structured return; PARTIAL for generated UI legibility | Live tasks `4300080`, `4300219`; `docs/demo/artifacts/evidence_packet_E002.html`; `docs/demo/artifacts/evidence_packet_E004.html` | Use Action Center for lifecycle and custom packet for judge-readable proof. |
 | G-004 Agent Recommendation Visible Before Override | PASS for persistence/API/audit visibility; PARTIAL for generated UI display | Live E-002/E-004 task payloads; audit bundle AIE/PDE linkage; evidence packet comparison panels | Do not depend on generated Action Center UI to show the boundary. |
@@ -67,7 +67,7 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 - Automated Test Cloud execution.
 - Generated Action Center UI is final-demo ready.
 - Native Case history alone passes G-001.
-- Coordinating Case process Orchestrator jobs completed (as they remain active to orchestrate lifecycle; but terminal Case Instance completion IS claimed).
+- Terminal completion for older E-002/E-004 jobs; only the fresh package `1.0.6` Case Instance completion is claimed.
 - Real telecom production integrations.
 - LLM final closure authority.
 - Generic agent governance platform positioning.

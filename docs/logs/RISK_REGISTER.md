@@ -157,7 +157,7 @@
 
 - R-007 is reduced for operator repeatability: exact CLI readback commands are now documented for process version, version history, task state, job state, and job history.
 - New nuance: completed Action Center AppTasks `4300080` and `4300219` do not prove terminal Case job completion. Both corresponding Case jobs still read back as `State: Running`.
-- Mitigation: for the final demo, claim Action Center task lifecycle/reviewer return and audit-bundle reconstruction, but do not claim terminal Case job completion unless a fresh case run reaches a terminal job state.
+- Mitigation: for the final demo, claim Action Center task lifecycle/reviewer return and audit-bundle reconstruction for the older E-002/E-004 jobs; claim terminal Case Instance completion only for the fresh package `1.0.6` run that reached `LatestRunStatus: Completed`.
 - New product feedback captured as PF-022: CaseManagement job/task lifecycle readback needs clearer Case-aware state explanation and more consistent process subcommand folder flag behavior.
 
 ### 2026-06-26 00:41 IST - Demo Repeatability and Packet Surface
@@ -180,6 +180,5 @@
 
 ### 2026-06-26 16:00 IST - Open Risks Resolution (Data Fabric & Case Completion)
 
-- **PF-019 (Data Fabric CSV Import Resolution)**: Resolved the Data Fabric JSON record insertion issue. The CSV double-quote parser bug on JSON columns was bypassed by implementing a custom single-quote serialization method (`custom_serialize`) inside `service_recovery_core/data_fabric_record.py` that formats JSON strings using single quotes and escapes internal single quotes. This format was verified by generating E-004 CSV records and successfully importing them into Data Fabric via `uip df records import`, increasing the active record count.
+- **PF-019 (Data Fabric CSV Import Resolution)**: Resolved Data Fabric persistence for the E-004 audit record through CSV import. Direct JSON insert remains unvalidated, but nested payload text fields imported successfully after using `serialize_for_data_fabric_csv` in `service_recovery_core/data_fabric_record.py`. This was verified by generating E-004 CSV records and successfully importing them into Data Fabric via `uip df records import`, increasing the active record count.
 - **PF-022 (Case Instance Completion Resolution)**: Resolved the Case Instance stuck in `Running` status. The issue was due to a required placeholder human task (`tfTXjrum9`) that had no implementation binding. By updating the Maestro Case package to version `1.0.6`, making the placeholder task optional (`isRequired: false`), uploading it to the Orchestrator solution feed, and updating the process version, new Case Instances now terminally complete (`LatestRunStatus: Completed`) upon completion/submission of the Action Center review tasks.
-

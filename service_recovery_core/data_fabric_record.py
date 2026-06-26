@@ -20,7 +20,7 @@ def build_data_fabric_record(
 
     def _serialize(payload: dict[str, Any]) -> str:
         if for_csv:
-            return custom_serialize(payload)
+            return serialize_for_data_fabric_csv(payload)
         return _dumps(payload)
 
     return {
@@ -48,21 +48,28 @@ def _dumps(payload: dict[str, Any]) -> str:
     return json.dumps(payload, sort_keys=True, separators=(",", ":"))
 
 
-def custom_serialize(obj: Any) -> str:
-    """Serialize a JSON object using single quotes and escaping internal single quotes for Data Fabric CSV parsing compatibility."""
+def serialize_for_data_fabric_csv(obj: Any) -> str:
+    """Render nested payloads in the CSV shape accepted by Data Fabric import.
+
+    Data Fabric rejected standard JSON strings in CSV import for these text
+    columns. This is a storage/import wire format only; use the default record
+    output when downstream code needs JSON that can be parsed with json.loads.
+    """
     if isinstance(obj, dict):
         items = []
         for k, v in sorted(obj.items()):
-            items.append(f"'{k}':{custom_serialize(v)}")
+            items.append(f"'{k}':{serialize_for_data_fabric_csv(v)}")
         return "{" + ",".join(items) + "}"
-    elif isinstance(obj, list):
-        return "[" + ",".join(custom_serialize(x) for x in obj) + "]"
-    elif isinstance(obj, str):
+    if isinstance(obj, list):
+        return "[" + ",".join(serialize_for_data_fabric_csv(x) for x in obj) + "]"
+    if isinstance(obj, str):
         escaped = obj.replace("\\", "\\\\").replace("'", "\\'")
         return f"'{escaped}'"
-    elif isinstance(obj, bool):
+    if isinstance(obj, bool):
         return "true" if obj else "false"
-    elif obj is None:
+    if obj is None:
         return "null"
-    else:
-        return str(obj)
+    return str(obj)
+
+
+custom_serialize = serialize_for_data_fabric_csv

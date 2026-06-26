@@ -111,7 +111,7 @@ Evidence:
 ## Do Not Claim
 
 - Automated Test Cloud execution.
-- Data Fabric audit record persistence.
+- Broad Data Fabric persistence beyond the validated E-004 CSV import path.
 - Generated Action Center UI is final-demo ready.
 - Native Case history alone passes the domain audit gate.
 - Terminal Case job completion for E-002/E-004 while jobs still read `Running`.

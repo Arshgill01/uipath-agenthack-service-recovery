@@ -4,7 +4,7 @@ UiPath Labs hard gate validation has answered G-001 through G-004 with implement
 
 Use [VALIDATION_GATES.md](VALIDATION_GATES.md) for pass/fail criteria.
 
-The data model and integration map are now grounded in observed platform facts. Remaining partials are explicit: native Case does not provide the full domain audit alone, generated Action Center UI is not demo-legible, Data Fabric record insert is blocked, and Test Manager automation is not claimed.
+The data model and integration map are now grounded in observed platform facts. Remaining partials are explicit: native Case does not provide the full domain audit alone, generated Action Center UI is not demo-legible, direct Data Fabric JSON insert remains unvalidated while CSV import is validated for E-004, and Test Manager automation is not claimed.
 
 ## 2026-06-18 - Local Provisional Core Baseline
 
@@ -1397,7 +1397,7 @@ Assumption tested:
 
 Steps:
 
-1. Staged and verified custom single-quote JSON serialization (`custom_serialize`) in `service_recovery_core/data_fabric_record.py` and exported the E-004 CSV record.
+1. Staged and verified Data-Fabric-safe nested payload serialization (`serialize_for_data_fabric_csv`) in `service_recovery_core/data_fabric_record.py` and exported the E-004 CSV record.
 2. Executed Data Fabric CSV record import via `uip df records import 328ef8b6-ab70-f111-ac9a-002248a16d28 --file tmp/data_fabric_record_E004_test.csv`.
 3. Verified the imported record ID `DA42769C-33B7-4701-A266-019F032AF376` and listed records via `uip df records list` to confirm database row count increased.
 4. Extracted the Maestro Case package, set the placeholder task `tfTXjrum9` property `isRequired` to `false` in `content/caseplan.json`, bumped version to `1.0.6`, and repackaged it.
@@ -1411,11 +1411,10 @@ Observed:
 
 Result:
 
-- PASS: Data Fabric record persistence is fully resolved and verified.
-- PASS: Case Instance terminal lifecycle completion is fully resolved and verified.
+- PASS: Data Fabric record persistence is validated for the E-004 audit record through CSV import using the Data-Fabric-safe wire format.
+- PASS: Fresh package `1.0.6` Case Instance terminal lifecycle completion is verified.
 
 Decision impact:
 
-- Claim Data Fabric record persistence as a primary audit route.
-- Claim terminal Case Instance completion as a primary routing proof.
-
+- Claim Data Fabric record persistence for the validated E-004 CSV import path; keep Orchestrator bucket as the simpler fallback.
+- Claim terminal Case Instance completion for the fresh package `1.0.6` run; do not generalize that claim to older E-002/E-004 jobs.
