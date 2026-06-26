@@ -207,3 +207,9 @@
 - R-003 is now confirmed as a generated runtime UI blocker, not merely an untested repair. A fresh package `1.0.6` Case Instance `9eb64f9f-6613-48f7-b452-215085d8c67b` created task `4333536` after the Studio Web label-only publish. The task API contained correct `PolicyDecisionJson`, but Safari Action Center still rendered `Unnamed String 1:` / `Unnamed string 1`.
 - Mitigation remains unchanged and stronger: Action Center is validated for lifecycle/assignment/completion/structured return, but the final proof surface should be the custom evidence packet plus Data Fabric V2/Orchestrator bucket audit proof.
 - R-007/R-022 terminal completion is strengthened by a second fresh package `1.0.6` completed run. Case `9eb64f9f-6613-48f7-b452-215085d8c67b` reached `LatestRunStatus: Completed` with `CompletedTimeUtc: 2026-06-26T14:42:38.3544645Z` after task `4333536` was rejected with a validation comment.
+
+### 2026-06-26 14:55 UTC - Automated Test Manager Probe
+
+- R-005/G-007 remains mitigated for manual Test Manager evidence but open for automated Test Cloud execution. An automated run of `SREV:9` first failed because no folder was assigned, then progressed after setting project default folder to Standard `Shared`, but failed with `No Automatic package selection could be done for test set to execute.`
+- `uip tm testcases list-automations` returned `Data: []` for `Shared`, but returned HTTP 400 `Internal Server Error` for the personal workspace and `Solution` folders. Setting the project default folder to the `Solution` folder returned HTTP 500.
+- Current mitigation: do not claim automated Test Cloud execution. Keep the terminal manual execution/report/JUnit as the validated G-007 evidence unless a real UiPath test automation package is intentionally built and linked later.

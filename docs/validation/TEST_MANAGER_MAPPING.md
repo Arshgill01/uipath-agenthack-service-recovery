@@ -148,3 +148,30 @@ Result:
 - G-007 remains PASS for terminal manual Test Manager representation/execution/report/JUnit export.
 - G-007 remains PARTIAL for automated Test Cloud execution. This was actively probed, not ignored: the tenant/folder evidence does not expose a ready test automation target to link and run.
 - Product feedback PF-024 was added for opaque automation discovery failure in a Solution folder.
+
+## 2026-06-26 14:55 UTC - Automated Execution Follow-Up
+
+Purpose:
+
+- Test whether the automated execution blocker is only missing folder assignment or also missing linked automation/package selection.
+
+Commands used:
+
+- `uip tm testsets run --test-set-key SREV:9 --execution-type automated --wait --timeout 90 --poll-interval 15 --output json`
+- `uip tm project set-default-folder --project-key SREV --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip tm project set-default-folder --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --output json`
+- `uip tm testsets run --test-set-key SREV:9 --execution-type automated --wait --timeout 90 --poll-interval 15 --output json`
+
+Observed:
+
+- Automated `SREV:9` run without folder assignment failed with `Please assign a folder to the test set or at the project level to start the execution.`
+- `uip tm testsets update --help` exposes name/description only, so the CLI did not provide a test-set folder-binding path.
+- Setting the project default folder to the `Solution` folder failed with HTTP 500 `Internal Server Error`.
+- Setting the project default folder to Standard `Shared` succeeded.
+- Automated `SREV:9` run after the Shared default folder assignment failed with `No Automatic package selection could be done for test set to execute.`
+
+Result:
+
+- G-007 automated execution remains PARTIAL and should not be claimed.
+- The blocker is now better bounded: folder assignment is required, Standard `Shared` can satisfy that prerequisite, but the test set still lacks a discoverable/linked automation package.
+- The `SREV` project default folder is currently set to Standard `Shared` as the only folder assignment path that succeeded through the CLI.

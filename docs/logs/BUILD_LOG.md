@@ -2875,3 +2875,44 @@ Open risks:
 
 - Generated Action Center UI remains unsuitable as the judge-facing proof surface.
 - Custom evidence packet + Data Fabric V2 + Orchestrator bucket remain the validated final proof path.
+
+### 2026-06-26 14:55 UTC - Agent / Automated Test Manager Probe
+
+What changed:
+
+- Probed whether the existing `SREV:9` eval test set could move from terminal manual evidence to automated Test Manager/Test Cloud execution.
+- Set the `SREV` project default folder to Standard `Shared` after the solution-folder assignment path failed.
+
+Commands run:
+
+- `uip login status --output json`
+- `uip tm testcases --help --output json`
+- `uip tm project list --filter SREV --output json`
+- `uip tm testcases list-automations --project-key SREV --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip or folders list --output json`
+- `uip or packages list --output json`
+- `uip or processes list --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip tm testcases list-automations --project-key SREV --folder-key 4e4ade1a-f0b2-4c03-a7b3-14835ffb2482 --output json`
+- `uip tm testcases list-automations --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --output json`
+- `uip tm testsets run --test-set-key SREV:9 --execution-type automated --wait --timeout 90 --poll-interval 15 --output json`
+- `uip tm project set-default-folder --project-key SREV --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip tm project set-default-folder --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --output json`
+
+Validation:
+
+- PASS: `SREV` project remains active and the current Test Manager CLI command shape is supported.
+- PARTIAL/FAIL: automation discovery against the `Solution` folder and personal workspace returned HTTP 400 `Internal Server Error`.
+- PASS: automation discovery against Standard `Shared` returned a clean empty list, proving no discoverable automation package there.
+- FAIL: automated `SREV:9` run without folder assignment failed with `Please assign a folder to the test set or at the project level to start the execution.`
+- FAIL: setting the project default folder to the `Solution` folder failed with HTTP 500 `Internal Server Error`.
+- PASS/PARTIAL: setting the project default folder to Standard `Shared` succeeded.
+- FAIL: automated `SREV:9` run after folder assignment failed with `No Automatic package selection could be done for test set to execute.`
+
+Product feedback:
+
+- Test Manager automation discovery/folder binding diagnostics should be logged as a high-quality feedback item. The builder had to infer that the real blocker was absent linked automation package after encountering server errors and a folder-assignment prerequisite.
+
+Open risks:
+
+- Automated Test Cloud execution is still not claimed.
+- The validated proof remains terminal manual Test Manager execution/report/JUnit for E-001 through E-009.

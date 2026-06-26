@@ -1853,3 +1853,54 @@ Decision impact:
 - Do not spend more submission-critical time trying to make generated Action Center UI the judge-facing proof surface unless a deeper app-binding/version route is found.
 - Keep Action Center for human-task lifecycle and structured return.
 - Use the custom evidence packet plus Data Fabric V2/Orchestrator bucket audit surfaces for judge-readable proof.
+
+## 2026-06-26 14:55 UTC - Automated Test Manager / Test Cloud Probe
+
+Scope:
+
+- Work the remaining G-007 boundary instead of leaving automated Test Cloud execution as an assumed blocker.
+- Determine whether the existing `SREV:9` test set can be run as an automated Test Manager execution or linked to an available Orchestrator test automation package.
+
+Commands:
+
+1. `uip login status --output json`
+2. `uip tm testcases --help --output json`
+3. `uip tm project list --filter SREV --output json`
+4. `uip tm testcases list-automations --project-key SREV --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+5. `uip or folders list --output json`
+6. `uip or packages list --output json`
+7. `uip or processes list --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+8. `uip tm testcases list-automations --project-key SREV --folder-key 4e4ade1a-f0b2-4c03-a7b3-14835ffb2482 --output json`
+9. `uip tm testcases list-automations --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --output json`
+10. `uip tm testsets run --test-set-key SREV:9 --execution-type automated --wait --timeout 90 --poll-interval 15 --output json`
+11. `uip tm project set-default-folder --project-key SREV --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+12. `uip tm project set-default-folder --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --output json`
+13. `uip tm testsets run --test-set-key SREV:9 --execution-type automated --wait --timeout 90 --poll-interval 15 --output json`
+
+Observed:
+
+- CLI auth remained valid for `keepingitlowkey / DefaultTenant`.
+- `SREV` project exists and is active.
+- `uip tm testcases list-automations` against the `Solution` folder and personal workspace folder returned HTTP 400 with `Internal Server Error`.
+- `uip tm testcases list-automations` against the Standard `Shared` folder returned success with `Data: []`.
+- Default package list returned no packages in the default feed; the solution folder process list contains Maestro Case/App processes, not a test automation package.
+- Initial automated test-set run failed with `Please assign a folder to the test set or at the project level to start the execution.`
+- Setting `SREV` default folder to the `Solution` folder failed with HTTP 500 `Internal Server Error`.
+- Setting `SREV` default folder to Standard `Shared` succeeded.
+- Automated test-set run after the `Shared` default folder succeeded past folder validation but failed with `No Automatic package selection could be done for test set to execute.`
+- Test set `SREV:9` still shows empty `FolderKey`; `uip tm testsets update --help` exposes name/description only, not a folder binding option.
+
+Result:
+
+- G-007 remains PASS for manual Test Manager mapping/execution/report/JUnit and PARTIAL for automated Test Cloud execution.
+- Automated execution is now bounded by observed facts: no available linked test automation package was discoverable, and Test Manager could not automatically select a package for the manual eval test set.
+- The project-level default folder was set to Standard `Shared` as the only folder assignment path that succeeded through CLI.
+
+Decision impact:
+
+- Do not claim automated Test Cloud execution for submission.
+- Keep the honest story: local evals are represented in Test Manager with a terminal manual execution; automation-package linkage is a future enhancement unless a UiPath test automation package is intentionally built and linked.
+
+Product feedback:
+
+- Add/strengthen feedback for Test Manager automation discovery and folder binding diagnostics: solution/personal folder automation discovery returned server errors, solution folder default assignment returned HTTP 500, and automated run errors only became actionable after trying multiple folders.
