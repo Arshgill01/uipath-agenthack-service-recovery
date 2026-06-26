@@ -42,7 +42,7 @@ The UiPath implementation uses Maestro Case and Action Center for lifecycle and 
 - Maestro Case: case lifecycle, stage/task orchestration, runtime case validation.
 - Action Center: human task assignment, completion, reviewer comment, structured return.
 - Orchestrator: package/process/version/job readback and bucket-backed audit artifact.
-- Test Manager: eval-suite representation through manual test cases, set, and passed logs.
+- Test Manager: eval-suite representation through manual test cases, set, terminal manual execution, report, and JUnit export.
 - UiPath CLI: repeatable readback and validation operations.
 
 ## Evidence Links
@@ -66,5 +66,5 @@ The UiPath implementation uses Maestro Case and Action Center for lifecycle and 
 - Native Maestro Case history is not claimed as a complete domain audit by itself.
 - Generated Action Center UI is not the final judge-facing evidence surface because it hid or mislabeled proof-critical fields during validation.
 - Data Fabric V2 full-payload persistence is validated for E-004 through JSON insert/query/readback using PascalCase fields. The legacy snake_case `ServiceRecoveryAuditBundle` entity remains a product-feedback finding because its custom fields did not populate or read back correctly.
-- Test Manager validation is manual mapping/logging, not automated Test Cloud execution.
+- Test Manager validation is manual execution/report/export, not automated Test Cloud execution.
 - A fresh Case Instance on package `1.0.6` reached terminal lifecycle completion (`LatestRunStatus: Completed`) after the unbound placeholder task was made optional. Do not generalize this to older E-002/E-004 jobs.

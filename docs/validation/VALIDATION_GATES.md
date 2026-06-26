@@ -4,12 +4,12 @@ Do not scaffold major application code until hard gates are answered or explicit
 
 Current status: hard gates are answered with implementation implications, not all-native PASS.
 
-- G-001: PARTIAL natively, PASS for custom UiPath-hosted audit fallback. Native Case runtime reconstructs operational flow but not the full domain audit in one native view/query. The validated fallback is a `service-recovery-audit-v1` bundle stored in Orchestrator bucket `service-recovery-audit-validation`.
+- G-001: PARTIAL natively, PASS for custom UiPath-hosted audit fallback. Native Case runtime reconstructs operational flow but not the full domain audit in one native view/query. Validated fallbacks are Data Fabric V2 entity `ServiceRecoveryAuditBundleV2` with parseable E-004 payload readback and the `service-recovery-audit-v1` bundle stored in Orchestrator bucket `service-recovery-audit-validation`.
 - G-002: PASS for explicit package/process/artifact policy-version pinning. Active-case policy migration remains custom and must be represented as an explicit audited event.
 - G-003: PASS for Action Center lifecycle and structured reviewer return, PARTIAL for generated Action Center evidence-packet legibility. Use the custom evidence-packet/audit surface for final demo readability.
 - G-004: PASS for persisted raw agent recommendation and linked final policy decision in task/API/audit data, PARTIAL only for generated Action Center display.
 
-Decision: proceed with the demo-safe proof path. Action Center owns human task lifecycle; the custom evidence packet owns judge-readable proof; Orchestrator bucket owns durable audit evidence. Do not depend on generated Action Center UI for final video unless repaired and revalidated.
+Decision: proceed with the demo-safe proof path. Action Center owns human task lifecycle; the custom evidence packet owns judge-readable proof; Data Fabric V2 owns queryable audit evidence; Orchestrator bucket remains the alternate one-object artifact proof. Do not depend on generated Action Center UI for final video unless repaired and revalidated.
 
 ## Hard Gates
 
@@ -31,7 +31,7 @@ Pass condition:
 
 Strict rule: manual log archaeology across many sources is not a pass. If one-view or one-query reconstruction is not possible, use Data Fabric/Data Service or explicit custom audit events.
 
-Validated result: PARTIAL natively, PASS with custom audit artifact fallback. Native Case and task APIs reconstruct package, runtime order, task state, timestamps, reviewer return, and payload links. The one-object `service-recovery-audit-v1` bundle reconstructs the full domain audit and was uploaded/listed/downloaded from a live Orchestrator bucket.
+Validated result: PARTIAL natively, PASS with custom audit fallbacks. Native Case and task APIs reconstruct package, runtime order, task state, timestamps, reviewer return, and payload links. Data Fabric V2 record `F9D838CE-4671-F111-AC9A-0022489A9A06` reconstructs the full E-004 domain audit through query/readback of `RawAgentEventJson`, `PolicyDecisionEventJson`, and `AuditBundleJson`; the one-object `service-recovery-audit-v1` bundle was also uploaded/listed/downloaded from a live Orchestrator bucket.
 
 ### G-002: Policy Version Pinning
 

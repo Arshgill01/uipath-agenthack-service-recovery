@@ -6,7 +6,7 @@
 | R-002 | Policy version pinning is not natively supported. | Medium | Medium | Store policy versions as explicit case metadata/artifact fields and represent migration as audited event. | Platform spike agent | Mitigated explicitly |
 | R-003 | Action Center cannot render evidence packet clearly. | Medium | Medium | Use Action Center for lifecycle/return and custom evidence packet/screenshots for judge-readable proof. | UX/build agent | Mitigated with custom surface |
 | R-004 | Raw agent recommendation cannot be shown before policy override. | High | Low | Persist agent interpretation event separately from policy decision event in payloads, audit bundles, and evidence packet. | Architecture/build agent | Mitigated |
-| R-005 | Test Cloud integration is too heavy for the build timeline. | Medium | Medium | Use local eval harness plus live Test Manager manual mapping; do not claim automated Test Cloud execution. | Eval agent | Partially mitigated |
+| R-005 | Automated Test Cloud integration is too heavy for the build timeline. | Medium | Medium | Use local eval harness plus live Test Manager manual execution/report/JUnit export; do not claim automated Test Cloud execution. | Eval agent | Mitigated manually |
 | R-006 | Agent outputs invalid/low-confidence too often. | High | Medium | Use schema validation, repair loop, eval scenarios, usefulness incident, and deterministic policy fallback. | Agent/eval agent | Mitigated locally |
 | R-007 | Demo becomes too complex for five minutes. | High | Medium | Use `scripts/run_submission_check.sh`, `scripts/run_demo.sh`, curated packets/screenshots, and only intentional live reruns. | Demo agent | Reduced |
 | R-008 | Platform access/lab readiness blocks build. | High | Low | UiPath Labs access, CLI, Maestro Case, Action Center, Orchestrator, and Test Manager were validated; keep credentials out of repo. | Platform spike agent | Mitigated for current tenant |
@@ -150,8 +150,7 @@
 - R-005 is reduced: the tenant now contains live Test Manager project `SREV` with nine manual test cases and test set `SREV:9` representing E-001 through E-009.
 - R-005 is reduced again: manual execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad` contains nine passed manual test case logs.
 - R-005 remains open for automated crossover. The local eval harness is not yet linked to a Test Manager automated execution or Orchestrator test automation.
-- New nuance: the execution aggregate still reports top-level `Status: Running` after all logs pass, so final claims should cite the passed manual logs and not imply a clean terminal aggregate status until that is resolved.
-- Mitigation update: describe the current state as live Test Manager representation plus passed manual logs, not automated Test Cloud execution, until an automated execution record or automation link is validated.
+- Later update: the non-terminal aggregate was resolved by a fresh start-then-finish manual lifecycle on 2026-06-26. Use execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` for current terminal manual evidence; keep the first run as PF-021 feedback.
 
 ### 2026-06-26 00:36 IST - Demo Live-Ops Readback
 
@@ -173,14 +172,14 @@
 - R-002 is mitigated through explicit package/process/artifact policy-version pinning. Native active-case migration still requires a custom audited event.
 - R-003 is mitigated for final presentation by custom evidence packets and committed desktop/mobile screenshot artifacts. Generated Action Center UI remains unsuitable as the primary judge-facing surface.
 - R-004 is mitigated by separate persisted AIE/PDE artifacts and evidence-packet comparison panels for E-002, E-004, and the adversarial E-003 packet.
-- R-005 remains partial: Test Manager manual mapping and passed logs are validated, but automated Test Cloud execution is not claimed.
+- R-005 is mitigated manually: Test Manager manual mapping, terminal execution, report, and JUnit export are validated, but automated Test Cloud execution is not claimed.
 - R-006 is mitigated locally by schema validation, the bounded Gemini repair loop, eval coverage, and deterministic policy fallback.
 - R-007 is reduced by `scripts/run_submission_check.sh`, `scripts/run_demo.sh`, `scripts/run_llm_demo.sh --evidence-packet-output ...`, and curated proof artifacts.
 - R-008 is mitigated for current development because UiPath Labs access and required product surfaces have been validated in `keepingitlowkey / DefaultTenant`.
 
 ### 2026-06-26 16:00 IST - Open Risks Resolution (Data Fabric & Case Completion)
 
-- **PF-019 (Data Fabric CSV Import Partial Resolution)**: Data Fabric CSV import created a live E-004 row and readback by record ID succeeds. Direct JSON insert remains unvalidated, and follow-up CLI readback did not expose the imported custom payload fields (`case_id`, policy versions, raw AIE/PDE, audit bundle), so Data Fabric is not yet a proven full audit-reconstruction path.
+- **PF-019 (Data Fabric CSV Import Partial Resolution)**: Data Fabric CSV import created a live E-004 row and readback by record ID succeeds, but the legacy snake_case entity did not expose custom payload fields. A later PascalCase V2 entity resolved the full audit readback path; keep the legacy entity as product-feedback evidence.
 - **PF-022 (Case Instance Completion Resolution)**: Resolved the Case Instance stuck in `Running` status. The issue was due to a required placeholder human task (`tfTXjrum9`) that had no implementation binding. By updating the Maestro Case package to version `1.0.6`, making the placeholder task optional (`isRequired: false`), uploading it to the Orchestrator solution feed, and updating the process version, new Case Instances now terminally complete (`LatestRunStatus: Completed`) upon completion/submission of the Action Center review tasks.
 
 ### 2026-06-26 15:38 UTC - Data Fabric V2 Audit Readback
@@ -189,3 +188,9 @@
 - Data Fabric root cause was narrowed: snake_case custom fields in `ServiceRecoveryAuditBundle`/`TestEntity` did not populate through JSON insert/update, and CSV-imported rows read back only system fields. PascalCase custom fields did insert/query/read back correctly.
 - Created `ServiceRecoveryAuditBundleV2` (`35e8f6c7-4671-f111-ac9a-002248a16d28`) and inserted E-004 record `F9D838CE-4671-F111-AC9A-0022489A9A06`.
 - Query by `CaseId = CASE-BG-CONTRA` returned the domain fields and live refs. Record get returned parseable `RawAgentEventJson`, `PolicyDecisionEventJson`, and `AuditBundleJson`, proving `closure_candidate` raw recommendation linked to the `require_human_review` policy decision.
+
+### 2026-06-26 15:50 UTC - Test Manager Terminal Manual Execution
+
+- R-005 is mitigated for manual Test Manager validation: fresh execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` reached `Status: Finished` with `Passed: 9`, `Failed: 0`, and `None: 0`.
+- The fix was lifecycle-specific: run `uip tm testcaselog start` before `uip tm testcaselog finish` for each manual case. The earlier execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad` used direct finish calls and stayed `Running`.
+- Report and JUnit export succeeded for the terminal run. Automated Test Cloud execution remains unvalidated and should not be claimed.

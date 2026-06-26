@@ -14,7 +14,8 @@ Environment:
 - Test set: `Service Recovery E-001 through E-009 Baseline`
 - Test set key: `SREV:9`
 - Test set ID: `6881c763-b871-0200-165b-0b49cf9ac490`
-- Manual execution ID: `d50a7be6-35ed-1100-95aa-0b49cf9b8cad`
+- Initial manual execution ID: `d50a7be6-35ed-1100-95aa-0b49cf9b8cad`
+- Terminal manual execution ID: `40a1b334-5df8-1100-0a4b-0b49d0564f11`
 
 Scope:
 
@@ -23,6 +24,7 @@ Scope:
 - Automated Test Cloud execution is not claimed yet.
 - The source of truth for pass/fail remains:
   - `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- Latest Test Manager manual evidence is terminal execution `40a1b334-5df8-1100-0a4b-0b49d0564f11`, which reached `Status: Finished` with 9/9 passed logs.
 
 ## Scenario Mapping
 
@@ -77,3 +79,35 @@ Result:
 - G-007: PASS for live Test Manager representation of E-001 through E-009 as manual test cases.
 - G-007: PASS/PARTIAL for manual Test Manager execution: all nine test case logs are passed, but the top-level execution status remains `Running`.
 - G-007: PARTIAL for automated Test Cloud crossover because no automated Test Manager execution was created or linked to an Orchestrator test automation.
+
+## 2026-06-26 15:50 UTC - Terminal Manual Execution Rerun
+
+Purpose:
+
+- Resolve whether the non-terminal aggregate status was a hard Test Manager limitation or a lifecycle issue in the first manual execution.
+
+Commands used:
+
+- `uip tm testsets run --test-set-key SREV:9 --execution-type manual --output json`
+- `uip tm testcaselog start --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --test-case-id ... --run-id 1 --output json`
+- `uip tm testcaselog finish --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --test-case-id ... --result Passed --has-error false --executed-by arshgill6120@gmail.com --detail-link https://github.com/Arshgill01/uipath-agenthack-service-recovery/blob/master/docs/validation/TEST_MANAGER_MAPPING.md --run-id 1 --is-post-condition-met true --output json`
+- `uip tm executions get-stats --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --output json`
+- `uip tm wait --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --timeout 10 --output json`
+- `uip tm report get --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --output json`
+- `uip tm result download --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --result-path docs/validation/artifacts/test-manager-results --output json`
+
+Observed:
+
+- Fresh manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` was created for test set `SREV:9`.
+- Each manual test case log was explicitly started and then finished as passed.
+- Execution aggregate readback reported `Passed: 9`, `Failed: 0`, `None: 0`, `ExecutionType: Manual`, `IsRunningAutomated: false`, and `Status: Finished`.
+- `uip tm wait` returned `WaitComplete` with terminal status `Finished`.
+- `uip tm report get` returned `TotalTests: 9`, `Passed: 9`, `Failed: 0`, `PassRate: 100`.
+- `uip tm result download` wrote JUnit XML to `docs/validation/artifacts/test-manager-results/Service_Recovery_E_001_through_E_009_Baseline___20260626_1017.xml`.
+- CLI telemetry/AppInsights flush warnings appeared during several commands but did not prevent Test Manager operations from succeeding.
+
+Result:
+
+- G-007: PASS for manual Test Manager representation and terminal manual execution/report/export.
+- G-007: PARTIAL only for automated Test Cloud crossover because no automated Test Manager execution or Orchestrator test automation link has been created.
+- PF-021 remains useful feedback because direct `finish` calls can create passed child logs while leaving the aggregate execution `Running`; the verified workaround is to call `testcaselog start` before `testcaselog finish` for each manual case.

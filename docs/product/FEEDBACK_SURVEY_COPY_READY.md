@@ -111,7 +111,7 @@ Evidence:
 ## Do Not Claim
 
 - Automated Test Cloud execution.
-- Broad Data Fabric audit persistence beyond the validated E-004 row creation/readback-by-ID path.
+- Legacy snake_case Data Fabric audit persistence. Use the validated PascalCase `ServiceRecoveryAuditBundleV2` path for queryable E-004 audit readback.
 - Generated Action Center UI is final-demo ready.
 - Native Case history alone passes the domain audit gate.
 - Terminal Case job completion for E-002/E-004 while jobs still read `Running`.

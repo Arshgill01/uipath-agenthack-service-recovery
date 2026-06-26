@@ -2572,3 +2572,61 @@ Open risks:
 
 - Native Maestro Case history alone remains PARTIAL for G-001.
 - Legacy snake_case Data Fabric entity should not be used for final audit reconstruction.
+
+### 2026-06-26 15:50 UTC - Agent / Test Manager Terminal Manual Execution Repair
+
+What changed:
+
+- Revisited the remaining G-007/Test Manager blocker instead of leaving the old manual execution aggregate in `Running`.
+- Confirmed the original execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad` still had 9 passed child logs but top-level `Status: Running`.
+- Created fresh manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` for test set `SREV:9`.
+- Ran the stricter manual lifecycle: `testcaselog start` then `testcaselog finish` for each E-001 through E-009 test case.
+- Verified the fresh execution reached `Status: Finished`, `Passed: 9`, `Failed: 0`, `None: 0`.
+- Exported JUnit evidence to `docs/validation/artifacts/test-manager-results/Service_Recovery_E_001_through_E_009_Baseline___20260626_1017.xml`.
+- Updated validation, readiness, runbook, risk, and feedback docs so current claims cite the terminal execution and still avoid automated Test Cloud overclaiming.
+
+Commands run:
+
+- `uip login status --output json`
+- `uip tm testcases --help --output json`
+- `uip tm executions --help --output json`
+- `uip tm testcaselog --help --output json`
+- `uip tm executions list --project-key SREV --output json`
+- `uip tm executions get-stats --project-key SREV --execution-id d50a7be6-35ed-1100-95aa-0b49cf9b8cad --output json`
+- `uip tm executions testcaselogs list --project-key SREV --execution-id d50a7be6-35ed-1100-95aa-0b49cf9b8cad --output json`
+- `uip tm wait --project-key SREV --execution-id d50a7be6-35ed-1100-95aa-0b49cf9b8cad --timeout 10 --output json`
+- `uip tm report get --project-key SREV --execution-id d50a7be6-35ed-1100-95aa-0b49cf9b8cad --output json`
+- `uip tm result download --project-key SREV --execution-id d50a7be6-35ed-1100-95aa-0b49cf9b8cad --result-path docs/validation/artifacts/test-manager-results --output json`
+- `uip tm testsets run --test-set-key SREV:9 --execution-type manual --output json`
+- `uip tm testcaselog start --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --test-case-id ... --run-id 1 --output json`
+- `uip tm testcaselog finish --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --test-case-id ... --result Passed --has-error false --executed-by arshgill6120@gmail.com --detail-link https://github.com/Arshgill01/uipath-agenthack-service-recovery/blob/master/docs/validation/TEST_MANAGER_MAPPING.md --run-id 1 --is-post-condition-met true --output json`
+- `uip tm executions get-stats --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --output json`
+- `uip tm wait --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --timeout 10 --output json`
+- `uip tm report get --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --output json`
+- `uip tm result download --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --result-path docs/validation/artifacts/test-manager-results --output json`
+- `uip tm executions testcaselogs list --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --output json`
+- `rg -n "PF-001 through PF-022|Do not claim Data Fabric record storage is complete|Broad Data Fabric audit persistence beyond|manual aggregate-status caveat|manual mapping plus passed manual logs|current Test Manager validation is manual mapping plus passed manual logs|Data Fabric record storage is complete|direct Data Fabric JSON insert remains unvalidated while CSV import|Test Manager automation is not claimed" AGENTS.md docs/validation/VALIDATION_RESULTS.md docs/validation/VALIDATION_GATES.md docs/validation/OBJECTIVE_COMPLETION_AUDIT.md docs/submission docs/product/FEEDBACK_AWARD_APPENDIX.md docs/product/FEEDBACK_SURVEY_COPY_READY.md docs/product/FEEDBACK_SURVEY_DRAFT.md docs/demo -S`
+- `git diff --check`
+- `scripts/run_submission_check.sh`
+- `rg -n "token|secret|password|Bearer|Authorization|Cookie|UIPATH_ACCESS_TOKEN" docs/validation/artifacts/test-manager-results -S`
+
+Validation:
+
+- PASS: fresh Test Manager execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` reached terminal `Status: Finished`.
+- PASS: fresh execution reported `Passed: 9`, `Failed: 0`, `None: 0`, `PassRate: 100`.
+- PASS: `uip tm wait` returned `WaitComplete`.
+- PASS: `uip tm report get` returned a 9/9 report.
+- PASS: `uip tm result download` exported a JUnit XML artifact.
+- PASS: stale current-facing claim scan returned no matches.
+- PASS: `git diff --check`.
+- PASS: `scripts/run_submission_check.sh` ran 43 unit tests and artifact checks successfully.
+- PASS: secret-pattern scan of Test Manager JUnit artifacts returned no matches.
+
+Product feedback:
+
+- PF-021 updated from open blocker to mitigated lifecycle/UX feedback. Direct `finish` calls can leave a manual aggregate running even after child logs pass; explicit start-then-finish reconciles the aggregate.
+- No new PF ID needed; this run refined an existing Test Manager feedback item with stronger evidence.
+
+Open risks:
+
+- Automated Test Cloud execution remains unvalidated and must not be claimed.

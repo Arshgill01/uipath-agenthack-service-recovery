@@ -161,7 +161,7 @@ Hard-gate facts are now validated enough to build:
 - G-003: Action Center lifecycle and structured return are validated; generated Action Center UI is not demo-legible, so use the custom evidence packet for judge-facing review.
 - G-004: raw agent recommendation and linked policy decision persist separately in task/API/audit data.
 - G-005: E-002 and E-004 live runs prove distinct missing/stale versus contradiction routes.
-- G-007: Test Manager project `SREV`, test set `SREV:9`, and manual passed logs represent E-001 through E-009; automated Test Cloud execution is not claimed.
+- G-007: Test Manager project `SREV`, test set `SREV:9`, terminal manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11`, and exported JUnit evidence represent E-001 through E-009; automated Test Cloud execution is not claimed.
 
 Remaining optional platform improvements:
 

@@ -32,14 +32,14 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 | --- | --- | --- | --- |
 | G-005 Distinct 2A/2B routing | PASS | E-002 route `verify_telemetry`; E-004 route `human_review`; live tasks and local artifacts | Keep both beats on same green business fixture with only authoritative signal changed. |
 | G-006 Demo surface visibility | PASS for custom packet; PARTIAL for generated Action Center UI | `evidence_packet_E002_desktop.png`; `evidence_packet_E004_desktop.png`; `evidence_packet_E003_adversarial_desktop.png`; PF-013 | Use custom packet as primary visual surface. |
-| G-007 Test Cloud/Test Manager crossover | PARTIAL/PASS for manual Test Manager representation | Project `SREV`, test set `SREV:9`, manual execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad`, mapping doc | Do not claim automated Test Cloud execution. |
+| G-007 Test Cloud/Test Manager crossover | PASS for manual Test Manager representation/execution; PARTIAL for automated Test Cloud | Project `SREV`, test set `SREV:9`, terminal manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11`, mapping doc, JUnit export `docs/validation/artifacts/test-manager-results/Service_Recovery_E_001_through_E_009_Baseline___20260626_1017.xml` | Do not claim automated Test Cloud execution. |
 | G-008 Coding-agent/CLI bonus | PASS for CLI-assisted lifecycle artifacts | `uip` CLI validation, package/process/task/bucket/test-manager commands in logs, `scripts/run_demo.sh` | If shown live, run readback commands deliberately and log new evidence. |
 
 ## Product Feedback Award
 
 | Requirement | Status | Evidence | Remaining caution |
 | --- | --- | --- | --- |
-| Product feedback captured during UiPath interactions. | PASS | PF-001 through PF-022 in `docs/product/PRODUCT_FEEDBACK_AWARD.md`. | Add new PF entries only for newly observed UiPath behavior. |
+| Product feedback captured during UiPath interactions. | PASS | PF-001 through PF-023 in `docs/product/PRODUCT_FEEDBACK_AWARD.md`. | Add new PF entries only for newly observed UiPath behavior. |
 | Feedback is curated into final answer material. | PASS | `docs/product/FEEDBACK_AWARD_APPENDIX.md`; `docs/product/FEEDBACK_SURVEY_COPY_READY.md`. | Team name and story-sharing preference still need user confirmation. |
 | Feedback separates user/access/docs/product defects. | PASS | Feedback matrix classifications and confidence fields. | Keep fair language; do not turn workarounds into unsupported defect claims. |
 

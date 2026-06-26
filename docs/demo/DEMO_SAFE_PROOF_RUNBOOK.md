@@ -32,8 +32,9 @@ Test Manager:
 
 - Project key: `SREV`
 - Test set key: `SREV:9`
-- Manual execution: `d50a7be6-35ed-1100-95aa-0b49cf9b8cad`
-- Readback nuance: all 9 manual test case logs passed, but the aggregate execution still reported top-level `Status: Running`.
+- Terminal manual execution: `40a1b334-5df8-1100-0a4b-0b49d0564f11`
+- Result artifact: `docs/validation/artifacts/test-manager-results/Service_Recovery_E_001_through_E_009_Baseline___20260626_1017.xml`
+- Readback nuance: the first manual execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad` stayed `Running` after direct finish calls. The repaired run used explicit `testcaselog start` before `testcaselog finish` for each case and reached `Status: Finished`.
 
 ## Proof Beat Contract
 
@@ -362,13 +363,12 @@ Expected audit fields:
    - custom evidence packet shows elevated exception packet.
 5. Show Action Center task lifecycle/reviewer return as platform proof.
 6. Show Orchestrator bucket artifact readback as durable audit proof.
-7. Show Test Manager `SREV` as eval coverage proof, with the manual aggregate-status caveat.
+7. Show Test Manager `SREV` as manual eval coverage proof with terminal execution `40a1b334-5df8-1100-0a4b-0b49d0564f11`.
 
 ## Do Not Claim
 
 - Do not claim generated Action Center UI is final-demo ready.
 - Do not claim native Case history alone passes G-001.
-- Do not claim Data Fabric record storage is complete.
 - Do not claim automated Test Cloud execution.
 - Do not claim real telecom integrations.
 - Do not pitch the product as a generic agent governance platform.

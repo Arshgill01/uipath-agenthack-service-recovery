@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite time="0.000" tests="9" failures="0" errors="0" cancelled="0" id="d50a7be6-35ed-1100-95aa-0b49cf9b8cad" name="Service Recovery E-001 through E-009 Baseline - 20260625.1833" package="" timestamp="2026-06-25T18:34:55.906Z">
+    <testcase assertions="0" info="" classname="" name="E-009 Override persistence links raw and policy events" status="Passed" time="0.000">
+      <system-out>Test case E-009 Override persistence links raw and policy events (v) executed as job  and took 0ms.
+Logs are available at https://cloud.uipath.com/keepingitlowkey/DefaultTenant/testmanager_/SREV/testexecution-results/d50a7be6-35ed-1100-95aa-0b49cf9b8cad/ac219460-03f9-0a00-9bff-0b49cf9ac487?active=AutomationLogs
+Test case execution url: https://cloud.uipath.com/keepingitlowkey/DefaultTenant/testmanager_/SREV/testexecution-results/d50a7be6-35ed-1100-95aa-0b49cf9b8cad/ac219460-03f9-0a00-9bff-0b49cf9ac487
+Input arguments {}
+Output arguments {}
+</system-out>
+    </testcase>
+    <testcase assertions="0" info="" classname="" name="E-008 Low confidence creates usefulness incident" status="Passed" time="0.000">
+      <system-out>Test case E-008 Low confidence creates usefulness incident (v) executed as job  and took 0ms.
+Logs are available at https://cloud.uipath.com/keepingitlowkey/DefaultTenant/testmanager_/SREV/testexecution-results/d50a7be6-35ed-1100-95aa-0b49cf9b8cad/a20fe8f8-02f9-0a00-ec41-0b49cf9abce1?active=AutomationLogs
+Test case execution url: https://cloud.uipath.com/keepingitlowkey/DefaultTenant/testmanager_/SREV/testexecution-results/d50a7be6-35ed-1100-95aa-0b49cf9b8cad/a20fe8f8-02f9-0a00-ec41-0b49cf9abce1
+Input arguments {}
+Output arguments {}
+</system-out>
+    </testcase>
+    <testcase assertions="0" info="" classname="" name="E-005 High-impact exception stays out of closure" status="Passed" time="0.000">
+      <system-out>Test case E-005 High-impact exception stays out of closure (v) executed as job  and took 0ms.
+Logs are available at https://cloud.uipath.com/keepingitlowkey/DefaultTenant/testmanager_/SREV/testexecution-results/d50a7be6-35ed-1100-95aa-0b49cf9b8cad/ab0b0937-fff8-0a00-e67d-0b49cf9abc79?active=AutomationLogs
+Test case execution url: https://cloud.uipath.com/keepingitlowkey/DefaultTenant/testmanager_/SREV/testexecution-results/d50a7be6-35ed-1100-95aa-0b49cf9b8cad/ab0b0937-fff8-0a00-e67d-0b49cf9abc79
+Input arguments {}
+Output arguments {}
+</system-out>
+    </testcase>
+    <testcase assertions="0" info="" classname="" name="E-006 Verify telemetry cannot close on missing signal" status="Passed" time="0.000">
+      <system-out>Test case E-006 Verify telemetry cannot close on missing signal (v) executed as job  and took 0ms.
+Logs are available at https://cloud.uipath.com/keepingitlowkey/DefaultTenant/testmanager_/SREV/testexecution-results/d50a7be6-35ed-1100-95aa-0b49cf9b8cad/0b8206a1-00f9-0a00-7910-0b49cf9abc7e?active=AutomationLogs
+Test case execution url: https://cloud.uipath.com/keepingitlowkey/DefaultTenant/testmanager_/SREV/testexecution-results/d50a7be6-35ed-1100-95aa-0b49cf9b8cad/0b8206a1-00f9-0a00-7910-0b49cf9abc7e
+Input arguments {}
+Output arguments {}
+</system-out>
+    </testcase>
+    <testcase assertions="0" info="" classname="" name="E-007 Invalid agent output is overridden" status="Passed" time="0.000">
+      <system-out>Test case E-007 Invalid agent output is overridden (v) executed as job  and took 0ms.
+Logs are available at https://cloud.uipath.com/keepingitlowkey/DefaultTenant/testmanager_/SREV/testexecution-results/d50a7be6-35ed-1100-95aa-0b49cf9b8cad/c7f17b11-01f9-0a00-287e-0b49cf9abcbc?active=AutomationLogs
+Test case execution url: https://cloud.uipath.com/keepingitlowkey/DefaultTenant/testmanager_/SREV/testexecution-results/d50a7be6-35ed-1100-95aa-0b49cf9b8cad/c7f17b11-01f9-0a00-287e-0b49cf9abcbc
+Input arguments {}
+Output arguments {}
+</system-out>
+    </testcase>
+    <testcase assertions="0" info="" classname="" name="E-004 Contradicting authoritative signal escalates" status="Passed" time="0.000">
+      <system-out>Test case E-004 Contradicting authoritative signal escalates (v) executed as job  and took 0ms.
+Logs are available at https://cloud.uipath.com/keepingitlowkey/DefaultTenant/testmanager_/SREV/testexecution-results/d50a7be6-35ed-1100-95aa-0b49cf9b8cad/a6c525ac-fef8-0a00-6ae2-0b49cf9aa805?active=AutomationLogs
+Test case execution url: https://cloud.uipath.com/keepingitlowkey/DefaultTenant/testmanager_/SREV/testexecution-results/d50a7be6-35ed-1100-95aa-0b49cf9b8cad/a6c525ac-fef8-0a00-6ae2-0b49cf9aa805
+Input arguments {}
+Output arguments {}
+</system-out>
+    </testcase>
+    <testcase assertions="0" info="" classname="" name="E-002 Missing authoritative telemetry blocks closure" status="Passed" time="0.000">
+      <system-out>Test case E-002 Missing authoritative telemetry blocks closure (v) executed as job  and took 0ms.
+Logs are available at https://cloud.uipath.com/keepingitlowkey/DefaultTenant/testmanager_/SREV/testexecution-results/d50a7be6-35ed-1100-95aa-0b49cf9b8cad/ee12563e-fbf8-0a00-2871-0b49cf9aa7f4?active=AutomationLogs
+Test case execution url: https://cloud.uipath.com/keepingitlowkey/DefaultTenant/testmanager_/SREV/testexecution-results/d50a7be6-35ed-1100-95aa-0b49cf9b8cad/ee12563e-fbf8-0a00-2871-0b49cf9aa7f4
+Input arguments {}
+Output arguments {}
+</system-out>
+    </testcase>
+    <testcase assertions="0" info="" classname="" name="E-003 Stale authoritative telemetry blocks closure" status="Passed" time="0.000">
+      <system-out>Test case E-003 Stale authoritative telemetry blocks closure (v) executed as job  and took 0ms.
+Logs are available at https://cloud.uipath.com/keepingitlowkey/DefaultTenant/testmanager_/SREV/testexecution-results/d50a7be6-35ed-1100-95aa-0b49cf9b8cad/6d62f1b1-fcf8-0a00-61c0-0b49cf9aa7ff?active=AutomationLogs
+Test case execution url: https://cloud.uipath.com/keepingitlowkey/DefaultTenant/testmanager_/SREV/testexecution-results/d50a7be6-35ed-1100-95aa-0b49cf9b8cad/6d62f1b1-fcf8-0a00-61c0-0b49cf9aa7ff
+Input arguments {}
+Output arguments {}
+</system-out>
+    </testcase>
+    <testcase assertions="0" info="" classname="" name="E-001 Closure allowed with fresh aligned telemetry" status="Passed" time="0.000">
+      <system-out>Test case E-001 Closure allowed with fresh aligned telemetry (v) executed as job  and took 0ms.
+Logs are available at https://cloud.uipath.com/keepingitlowkey/DefaultTenant/testmanager_/SREV/testexecution-results/d50a7be6-35ed-1100-95aa-0b49cf9b8cad/a219914a-fdf8-0a00-6bb1-0b49cf9aa802?active=AutomationLogs
+Test case execution url: https://cloud.uipath.com/keepingitlowkey/DefaultTenant/testmanager_/SREV/testexecution-results/d50a7be6-35ed-1100-95aa-0b49cf9b8cad/a219914a-fdf8-0a00-6bb1-0b49cf9aa802
+Input arguments {}
+Output arguments {}
+</system-out>
+    </testcase>
+    <system-out>Test set execution Service Recovery E-001 through E-009 Baseline - 20260625.1833 took 0ms.
+Test set execution url: https://cloud.uipath.com/keepingitlowkey/DefaultTenant/testmanager_/SREV/testexecutions/d50a7be6-35ed-1100-95aa-0b49cf9b8cad
+</system-out>
+  </testsuite>
+</testsuites>

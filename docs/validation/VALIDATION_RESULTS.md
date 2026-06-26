@@ -4,7 +4,7 @@ UiPath Labs hard gate validation has answered G-001 through G-004 with implement
 
 Use [VALIDATION_GATES.md](VALIDATION_GATES.md) for pass/fail criteria.
 
-The data model and integration map are now grounded in observed platform facts. Remaining partials are explicit: native Case does not provide the full domain audit alone, generated Action Center UI is not demo-legible, direct Data Fabric JSON insert remains unvalidated while CSV import is verified only for E-004 row creation/readback by ID, and Test Manager automation is not claimed.
+The data model and integration map are now grounded in observed platform facts. Remaining partials are explicit: native Case does not provide the full domain audit alone, generated Action Center UI is not demo-legible, legacy snake_case Data Fabric fields are not reliable for audit payloads, and automated Test Cloud execution is not claimed. Data Fabric V2 and terminal manual Test Manager execution are validated.
 
 ## 2026-06-18 - Local Provisional Core Baseline
 
@@ -1526,3 +1526,57 @@ Decision impact:
 - Use `ServiceRecoveryAuditBundleV2` as the preferred Data Fabric audit entity for the final proof path.
 - Keep Orchestrator bucket as the alternate full-payload UiPath-hosted audit artifact.
 - Keep the legacy `ServiceRecoveryAuditBundle` only as evidence for PF-019/PF-023; do not use it for final audit reconstruction.
+
+## 2026-06-26 15:50 UTC - Test Manager Terminal Manual Execution Rerun
+
+Environment:
+
+- UiPath org `keepingitlowkey`, tenant `DefaultTenant`.
+- UiPath CLI `uip` authenticated as `arshgill6120@gmail.com`.
+- Test Manager project `SREV`.
+- Test set `SREV:9`.
+
+Gate/wave:
+
+- G-007: Test Cloud / Test Manager eval crossover.
+
+Assumption tested:
+
+- The earlier `Running` aggregate might be caused by finishing manual test case logs directly without first starting them, rather than an unavoidable platform limitation.
+
+Steps:
+
+1. Confirmed CLI auth with `uip login status --output json`.
+2. Probed Test Manager command support with `uip tm testcases --help --output json`, `uip tm executions --help --output json`, and `uip tm testcaselog --help --output json`.
+3. Re-read prior execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad` with `uip tm executions list`, `uip tm executions get-stats`, and `uip tm executions testcaselogs list`.
+4. Confirmed the prior execution still had `Passed: 9`, `Failed: 0`, `ExecutionFinished`, and `Status: Running`; `uip tm wait --timeout 10` timed out.
+5. Confirmed `uip tm report get` and `uip tm result download` could still produce report/JUnit artifacts for the prior passed-log run.
+6. Created fresh manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` with `uip tm testsets run --test-set-key SREV:9 --execution-type manual --output json`.
+7. For all nine mapped test cases, ran `uip tm testcaselog start` followed by `uip tm testcaselog finish --result Passed`.
+8. Read back the fresh execution with `uip tm executions get-stats`, `uip tm wait`, `uip tm report get`, `uip tm result download`, and `uip tm executions testcaselogs list`.
+
+Observed:
+
+- Prior execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad` remains a useful negative/control run: all child logs passed, but aggregate status remains `Running`.
+- Fresh execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` reached:
+  - `Passed: 9`,
+  - `Failed: 0`,
+  - `None: 0`,
+  - `ExecutionType: Manual`,
+  - `IsRunningAutomated: false`,
+  - `Status: Finished`.
+- `uip tm wait --timeout 10` returned `WaitComplete`, `Status: Finished`.
+- `uip tm report get` returned `TotalTests: 9`, `Passed: 9`, `Failed: 0`, `PassRate: 100`.
+- `uip tm result download` wrote `docs/validation/artifacts/test-manager-results/Service_Recovery_E_001_through_E_009_Baseline___20260626_1017.xml`.
+- Several CLI commands emitted non-fatal telemetry/AppInsights flush warnings, but the Test Manager operations completed.
+
+Result:
+
+- G-007: PASS for live Test Manager manual representation, terminal manual execution, report generation, and JUnit export.
+- G-007: PARTIAL for automated Test Cloud only; no automated Test Manager execution or Orchestrator test automation link has been validated.
+
+Decision impact:
+
+- Use execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` as the current Test Manager evidence ID.
+- Keep the final guardrail: do not claim automated Test Cloud execution.
+- Update PF-021 from unresolved blocker to lifecycle/UX feedback: direct finish calls can leave a manual aggregate `Running`; explicit start-then-finish reconciles it.

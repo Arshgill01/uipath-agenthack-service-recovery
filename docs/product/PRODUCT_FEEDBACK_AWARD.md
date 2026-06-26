@@ -149,7 +149,7 @@ Use accumulated entries to answer the final feedback survey.
 | PF-018 | 2026-06-25 | Data Fabric / UiPath CLI | CLI command discovery for Data Fabric | G-001 / G-002 / G-008 | UX / integration / diagnostics | medium | observed | `docs/validation/VALIDATION_RESULTS.md` |
 | PF-019 | 2026-06-25 | Data Fabric / UiPath CLI | Record insert payload mapping | G-001 / G-002 / G-008 | product defect candidate / integration / diagnostics | high | mitigated with V2 | `docs/validation/VALIDATION_RESULTS.md` |
 | PF-020 | 2026-06-25 | Test Manager / Test Cloud CLI | Eval-suite project/case/test-set mapping | G-007 | UX / integration | medium | observed | `docs/validation/TEST_MANAGER_MAPPING.md` |
-| PF-021 | 2026-06-25 | Test Manager / CLI | Manual execution aggregate status | G-007 | UX / product defect candidate | medium | open | `docs/validation/VALIDATION_RESULTS.md` |
+| PF-021 | 2026-06-25 | Test Manager / CLI | Manual execution aggregate status | G-007 | UX / diagnostics | medium | mitigated with explicit start/finish lifecycle | `docs/validation/VALIDATION_RESULTS.md` |
 | PF-022 | 2026-06-26 | Orchestrator / Action Center CLI | Case job/task lifecycle readback | Demo repeatability / G-008 | UX / integration / diagnostics | medium | observed | `docs/validation/VALIDATION_RESULTS.md` |
 | PF-023 | 2026-06-26 | Data Fabric / UiPath CLI | Custom-field naming and update readback | G-001 / G-008 | product defect candidate / integration / diagnostics | high | mitigated with PascalCase V2 | `docs/validation/VALIDATION_RESULTS.md` |
 
@@ -278,7 +278,7 @@ Survey tags:
 Context:
 
 - ID: PF-020.
-- Status: open.
+- Status: mitigated with explicit start/finish lifecycle.
 - Goal: validate G-007 by representing the local service-recovery eval scenarios in UiPath Test Manager.
 - Product surface: UiPath Test Manager / Test Cloud CLI.
 - Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `Arshdeep Singh`.
@@ -363,12 +363,14 @@ What worked:
 - `uip tm testcaselog finish` marked each of the nine manual test case logs `Passed` with `HasError: false`.
 - `uip tm executions testcaselogs list` read back all nine test case logs as passed.
 - `uip tm executions list` read back aggregate counts `Passed: 9`, `Failed: 0`, `None: 0`.
+- A later rerun using `uip tm testcaselog start` before each `uip tm testcaselog finish` produced terminal execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` with `Status: Finished`.
 
 What failed or confused us:
 
 - After all nine manual logs were passed, the aggregate execution still read back top-level `Status: Running`.
 - `uip tm wait --project-key SREV --execution-id d50a7be6-35ed-1100-95aa-0b49cf9b8cad --timeout 30 --output json` timed out with last status `Running`.
 - The wait output said it was polling every 60000 ms even though the requested timeout was 30000 ms, which makes short diagnostic waits confusing.
+- The lifecycle requirement was not obvious from the first execution: direct `finish` calls were accepted and produced passed child logs, but the aggregate stayed running.
 
 Expected:
 
@@ -382,23 +384,26 @@ Observed:
 - Aggregate metadata: `ExecutionType: Manual`, `IsRunningAutomated: false`.
 - Aggregate status: `Running`.
 - Wait result: `Failure`, message `Timed out after 30s waiting for execution 'd50a7be6-35ed-1100-95aa-0b49cf9b8cad'. Last status: Running.`
+- Repaired execution ID: `40a1b334-5df8-1100-0a4b-0b49d0564f11`.
+- Repaired execution status: `Finished`, with `Passed: 9`, `Failed: 0`, `PassRate: 100`, and JUnit export.
 
 Impact:
 
-- Build impact: low/medium. The pass evidence exists at the test-case-log level, but the aggregate status is confusing for final reporting.
-- Demo/submission impact: medium. A judge or reviewer may expect the Test Manager execution to show a terminal passed status, not a running aggregate with passed child logs.
+- Build impact: low/medium. The terminal run is now available, but the first accepted command sequence produced confusing non-terminal aggregate behavior.
+- Demo/submission impact: reduced. We can cite the repaired terminal run, but the product should make the required manual lifecycle clearer.
 - Severity: medium.
 
 Workaround:
 
-- Cite the test case log readback and aggregate counts rather than claiming terminal aggregate execution status.
-- Keep the execution ID and passed log evidence in `docs/validation/TEST_MANAGER_MAPPING.md`.
+- For manual executions, call `uip tm testcaselog start` before `uip tm testcaselog finish` for each case.
+- Cite terminal execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` and the exported JUnit artifact.
 - Do not claim automated Test Cloud execution.
 
 Suggested improvement:
 
 - Add an explicit `finish manual execution` action or CLI command when all manual logs have terminal results.
 - If a manual execution cannot close automatically, expose the remaining blocker in `executions list`, `wait`, and the UI.
+- Warn when `finish` is called on a manual case log that was never explicitly started, or auto-start it consistently.
 - Make `uip tm wait` adapt the default polling interval when the user passes a shorter timeout.
 
 Evidence:
