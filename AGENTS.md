@@ -38,7 +38,8 @@ Architecture thesis:
   - G-007: Test Manager project `SREV`, test set `SREV:9`, and terminal manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` represent E-001 through E-009 with 9/9 passed logs, `Status: Finished`, and exported JUnit evidence. Automated Test Cloud execution was probed through CLI discovery but is not claimed because no test automation target is available in the tenant/folder evidence so far.
 - Open-risk validation updates:
   - Data Fabric snake_case fields did not populate through JSON insert/update and CSV-imported rows read back only system fields. The repaired `ServiceRecoveryAuditBundleV2` PascalCase schema validated JSON insert/query/readback for the E-004 domain payload.
-  - A fresh package `1.0.6` Case Instance reached `LatestRunStatus: Completed`; do not generalize that terminal-completion claim to older E-002/E-004 jobs.
+  - Fresh package `1.0.6` Case Instances reached `LatestRunStatus: Completed`, including `9fc6fece-55ed-4fb2-b11a-6c96f7a3314e` and runtime recheck case `9eb64f9f-6613-48f7-b452-215085d8c67b`; do not generalize that terminal-completion claim to older E-002/E-004 jobs.
+  - A Studio Web label-only repair for generated Action Center field `Unnamed String 1:` was published, but fresh task `4333536` still rendered `Unnamed String 1:` / `Unnamed string 1` at runtime while `uip tasks get` returned correct `PolicyDecisionJson`. Treat generated Action Center UI as unsuitable for the judge-facing proof surface unless a deeper binding/version repair is proven with another fresh task.
 - Demo-safe proof path:
   - Action Center = lifecycle, assignment, reviewer action/comment, structured return.
   - Custom evidence packet = judge-readable proof surface.

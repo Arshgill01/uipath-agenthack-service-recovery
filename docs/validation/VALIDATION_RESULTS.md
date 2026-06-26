@@ -1808,3 +1808,48 @@ Decision impact:
 Product feedback:
 
 - PF-013 strengthened with a concrete Studio Web designer observation.
+
+## 2026-06-26 14:40 UTC - Action Center Runtime Label Repair Recheck
+
+Scope:
+
+- Revalidate PF-013 after the Studio Web label-only repair was published as `SimpleApprovalApp` version `1.0.1`.
+- Do not accept the Studio preview as runtime proof; start a fresh case, inspect the new Action Center task, then complete it so the tenant is not left with a pending validation task.
+
+Commands / interactions:
+
+1. `uip or processes get 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --output json`
+2. `uip or packages entry-points Solution.caseManagement.Maestro.Case:1.0.6 --output json`
+3. `uip or jobs start 9A7EB300-7B16-4856-B14F-D6F2DA3DBE61 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --jobs-count 1 --reference action-label-runtime-recheck-1-0-6-20260626 --output json`
+4. `uip maestro case instance get 9eb64f9f-6613-48f7-b452-215085d8c67b --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+5. `uip tasks list --folder-id 7978263 --output json --output-filter "[?CreatorJobKey=='9eb64f9f-6613-48f7-b452-215085d8c67b']"`
+6. `uip tasks get 4333536 --folder-id 7978263 --output json`
+7. Computer Use Safari inspection of `https://cloud.uipath.com/keepingitlowkey/DefaultTenant/actions_/tasks/4333536`.
+8. UI/CLI assignment of task `4333536` to `arshgill6120@gmail.com`.
+9. `uip tasks complete 4333536 --type AppTask --folder-id 7978263 --action reject --data ... --output json`
+10. Final task and case readbacks.
+
+Observed:
+
+- Process `9a7eb300-7b16-4856-b14f-d6f2da3dbe61` now reads back `ProcessVersion: 1.0.6`, `AutoUpdate: false`.
+- Package `Solution.caseManagement.Maestro.Case:1.0.6` exposes no entry-point input arguments; this matches the previous embedded-payload live runs.
+- Fresh Case Instance/job `9eb64f9f-6613-48f7-b452-215085d8c67b` started at `2026-06-26T14:40:25.427Z` and ran on `PackageKey: Solution.caseManagement.Maestro.Case:1.0.6`.
+- Fresh task `4333536` was created at `2026-06-26T14:40:57.103Z`.
+- `uip tasks get 4333536` returned a correct `Data.PolicyDecisionJson` value with `decision: require_human_review`, `to_stage: human_review`, `from_recommended_stage: closure_candidate`, `links_to: AIE-E004`, and `block_reason: source_contradiction`.
+- Safari Action Center runtime still rendered the policy field as `Unnamed String 1:` with value `Unnamed string 1`.
+- The runtime page did not show the published Studio Web label text `Policy Decision Json:`.
+- Task `4333536` was completed with `Action: reject`, `ActionLabel: reject`, reviewer comment, and `CompletedTime: 2026-06-26T14:42:24.72Z`.
+- Case Instance `9eb64f9f-6613-48f7-b452-215085d8c67b` later read back `LatestRunStatus: Completed`, `CompletedTimeUtc: 2026-06-26T14:42:38.3544645Z`, and no incidents.
+
+Result:
+
+- G-003 remains PASS for Action Center lifecycle/assignment/completion/structured return and PARTIAL/FAIL for generated UI legibility of the proof-critical policy field.
+- G-004 remains PASS through API/task/audit payload persistence and PARTIAL through generated Action Center UI, because the raw AIE is visible but the linked PDE is not rendered with the correct label/value.
+- PF-013 is confirmed at runtime after a fresh post-publish task. The Studio Web label-only repair did not propagate to the Case-bound runtime task in this validation path.
+- Package `1.0.6` terminal Case Instance completion is strengthened by a second fresh completed run.
+
+Decision impact:
+
+- Do not spend more submission-critical time trying to make generated Action Center UI the judge-facing proof surface unless a deeper app-binding/version route is found.
+- Keep Action Center for human-task lifecycle and structured return.
+- Use the custom evidence packet plus Data Fabric V2/Orchestrator bucket audit surfaces for judge-readable proof.

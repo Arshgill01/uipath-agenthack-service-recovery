@@ -6,9 +6,9 @@ Purpose: determine whether PF-013 can be repaired safely from the repository art
 
 ## Current Finding
 
-The generated Action Center page is not safely repairable from committed repository source today.
+The generated Action Center page is not safely repairable from committed repository source today, and the latest label-only Studio Web repair did not propagate to the Case-bound runtime task.
 
-The Studio Web designer exposes the broken generated label and its `Text` property. A label-only repair was applied and published as `SimpleApprovalApp` version `1.0.1`; the Studio preview now shows `Policy Decision Json:` instead of `Unnamed String 1:`. This is not yet a generated Action Center runtime PASS because no fresh human task has been started against the republished app and verified in Action Center.
+The Studio Web designer exposes the broken generated label and its `Text` property. A label-only repair was applied and published as `SimpleApprovalApp` version `1.0.1`; the Studio preview showed `Policy Decision Json:` instead of `Unnamed String 1:`. A fresh package `1.0.6` Case Instance then created task `4333536`, and Action Center runtime still rendered `Unnamed String 1:` / `Unnamed string 1` even though `uip tasks get` returned a correct `PolicyDecisionJson` payload.
 
 Use Action Center for lifecycle, assignment, completion, reviewer comment, and structured return. Use the custom evidence packet/Data Fabric/bucket audit surfaces for judge-readable proof.
 
@@ -63,11 +63,12 @@ Because the reviewer page is represented by generated model JSON plus compiled D
 
 ## Decision
 
-Do not spend more submission-critical time trying to repair the generated Action Center page from local package artifacts unless one of these becomes available:
+Do not spend more submission-critical time trying to repair the generated Action Center page from local package artifacts or label-only Studio edits unless one of these becomes available:
 
 - an editable Studio Web/Coded App source path with explicit control binding support,
 - a documented `uip` command that updates generated Action app field bindings,
-- enough time to repair in Studio UI and re-run a fresh live Action Center task end to end.
+- a documented way to bind the republished app version back into the Case package/process,
+- enough time to repair field binding, republish/repackage, and re-run a fresh live Action Center task end to end.
 
 Keep PF-013 as product feedback and keep the custom evidence packet as the final proof surface.
 
@@ -163,6 +164,26 @@ Interpretation:
 
 Updated decision:
 
-- Keep generated Action Center UI legibility as PARTIAL until runtime revalidation.
-- Next feasible repair attempt is to start a fresh Case/AppTask against the republished app and verify that Action Center renders both the corrected `Policy Decision Json:` label and the policy decision value.
-- Until that end-to-end validation exists, keep the custom evidence packet as the judge-facing surface.
+- Keep generated Action Center UI legibility as PARTIAL/FAILED for the proof-critical policy field after runtime revalidation.
+- Do not treat label-only Studio Web edits as sufficient. The next feasible repair would need to prove a deeper field binding/version propagation path, then start another fresh Case/AppTask.
+- Keep the custom evidence packet as the judge-facing surface.
+
+### 2026-06-26 14:40 UTC - Fresh Runtime Recheck After Publish
+
+Assumption tested:
+
+- A fresh Case/AppTask after the `SimpleApprovalApp` version `1.0.1` publish might render the corrected `Policy Decision Json:` label and the policy decision value.
+
+Commands and observations:
+
+- `uip or processes get 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --output json` returned `ProcessVersion: 1.0.6` and `AutoUpdate: false`.
+- `uip or jobs start 9A7EB300-7B16-4856-B14F-D6F2DA3DBE61 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --jobs-count 1 --reference action-label-runtime-recheck-1-0-6-20260626 --output json` created Case Instance/job `9eb64f9f-6613-48f7-b452-215085d8c67b`.
+- `uip tasks list --folder-id 7978263 --output-filter "[?CreatorJobKey=='9eb64f9f-6613-48f7-b452-215085d8c67b']"` found task `4333536`.
+- `uip tasks get 4333536 --folder-id 7978263 --output json` returned correct `Data.PolicyDecisionJson` with `decision: require_human_review`, `from_recommended_stage: closure_candidate`, `to_stage: human_review`, `links_to: AIE-E004`, and `block_reason: source_contradiction`.
+- Safari Action Center runtime for task `4333536` rendered `Unnamed String 1:` and value `Unnamed string 1`, not `Policy Decision Json:` and not the policy decision JSON.
+- The task was completed with `reject`; Case Instance `9eb64f9f-6613-48f7-b452-215085d8c67b` later read back `LatestRunStatus: Completed`.
+
+Interpretation:
+
+- The Studio Web preview/publish improved the designer view only, or did not update the Case-bound runtime app version used by this package/process path.
+- The proof-critical data is still preserved in APIs and audit artifacts; the generated Action Center runtime remains unsuitable as the final judge-readable surface.

@@ -2838,3 +2838,40 @@ Open risks:
 - Generated Action Center UI should still not be used as the judge-facing proof surface unless the republished Studio repair is runtime-revalidated with a fresh task.
 - Automated Test Cloud execution remains unvalidated.
 - Do not claim terminal completion for older E-002/E-004 jobs.
+
+### 2026-06-26 14:40 UTC - Agent / Runtime Action Center Label Repair Recheck
+
+What changed:
+
+- Started a fresh live package `1.0.6` Case Instance to verify whether the Studio Web label-only publish repaired the generated Action Center runtime.
+- Completed the fresh validation task so the tenant was not left pending.
+- Updated validation, risk, repair-assessment, and product-feedback docs with the observed runtime result.
+
+Commands / interactions run:
+
+- `uip or processes get 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --output json`
+- `uip or packages entry-points Solution.caseManagement.Maestro.Case:1.0.6 --output json`
+- `uip or jobs start 9A7EB300-7B16-4856-B14F-D6F2DA3DBE61 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --jobs-count 1 --reference action-label-runtime-recheck-1-0-6-20260626 --output json`
+- `uip maestro case instance get 9eb64f9f-6613-48f7-b452-215085d8c67b --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip tasks list --folder-id 7978263 --output json --output-filter "[?CreatorJobKey=='9eb64f9f-6613-48f7-b452-215085d8c67b']"`
+- `uip tasks get 4333536 --folder-id 7978263 --output json`
+- Computer Use Safari inspection of Action Center task `4333536`.
+- `uip tasks complete 4333536 --type AppTask --folder-id 7978263 --action reject --data ... --output json`
+- Final task/case readbacks.
+
+Validation:
+
+- PASS: active process readback shows `ProcessVersion: 1.0.6`, `AutoUpdate: false`.
+- PASS: fresh task `4333536` API payload contained correct `PolicyDecisionJson` with linked PDE details.
+- FAIL/PARTIAL: fresh Action Center runtime still rendered `Unnamed String 1:` / `Unnamed string 1`; the Studio Web label-only publish did not repair the Case-bound runtime task.
+- PASS: task `4333536` completed with `reject` and reviewer comment.
+- PASS: fresh Case Instance `9eb64f9f-6613-48f7-b452-215085d8c67b` reached `LatestRunStatus: Completed`, `CompletedTimeUtc: 2026-06-26T14:42:38.3544645Z`.
+
+Product feedback:
+
+- PF-013 strengthened from "runtime not yet revalidated after publish" to "runtime revalidated and still broken for the proof-critical policy field." The strongest product suggestion is now a generated Action app binding/version inspector showing schema field, generated control, bound runtime app version, and Case package/task binding status.
+
+Open risks:
+
+- Generated Action Center UI remains unsuitable as the judge-facing proof surface.
+- Custom evidence packet + Data Fabric V2 + Orchestrator bucket remain the validated final proof path.
