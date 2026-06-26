@@ -7,6 +7,7 @@ Source files:
 - `docs/product/PRODUCT_FEEDBACK_AWARD.md`
 - `docs/product/FEEDBACK_AWARD_APPENDIX.md`
 - `docs/product/FEEDBACK_SURVEY_DRAFT.md`
+- `docs/product/FEEDBACK_SURVEY_FINAL_DRAFT.md`
 - `docs/validation/VALIDATION_RESULTS.md`
 - `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`
 

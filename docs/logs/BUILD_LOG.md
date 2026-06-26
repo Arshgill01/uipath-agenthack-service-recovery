@@ -1944,3 +1944,38 @@ Open risks:
 Next:
 
 - Continue with product-feedback award polish or a dedicated adversarial evidence packet only if it becomes part of the final demo.
+
+### 2026-06-26 14:12 IST - Agent / Feedback Survey Final Draft
+
+What changed:
+
+- Added `docs/product/FEEDBACK_SURVEY_FINAL_DRAFT.md` with exact survey questions and evidence-backed near-final answers.
+- Linked the final draft from the product feedback log and copy-ready answer bank.
+- Updated `docs/submission/SUBMISSION_BRIEF.md` to reflect the current 38-test suite and live adversarial Gemini proof artifact.
+
+Commands run:
+
+- `sed -n '1,260p' docs/product/PRODUCT_FEEDBACK_AWARD.md`
+- `sed -n '1,320p' docs/product/FEEDBACK_SURVEY_COPY_READY.md`
+- `sed -n '1,260p' docs/product/FEEDBACK_SURVEY_DRAFT.md`
+- `sed -n '1,240p' docs/submission/SUBMISSION_BRIEF.md`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
+- `python -m service_recovery_core.demo_proof --output-dir docs/demo/artifacts --verify-only`
+- `test -f docs/product/FEEDBACK_SURVEY_FINAL_DRAFT.md && test -f docs/demo/artifacts/llm_interpreter_E003_adversarial_live.json && test -f docs/demo/artifacts/evidence_packet_E002.html && test -f docs/demo/artifacts/evidence_packet_E004.html && git diff --check`
+
+Validation:
+
+- PASS: feedback draft and referenced artifact paths exist.
+- PASS: full unit suite passed 38 tests.
+- PASS: local eval suite passed 9/9 scenarios.
+- PASS: demo proof verifier passed E-002/E-004.
+- PASS: `git diff --check`.
+
+Product feedback:
+
+- No new PF entry. This checkpoint curated already-observed feedback into survey form; it did not exercise a new UiPath product surface.
+
+Open risks:
+
+- Team name and story-sharing preference still require user confirmation before final survey submission.

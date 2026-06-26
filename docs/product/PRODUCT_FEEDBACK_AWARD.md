@@ -6,6 +6,8 @@ Curated survey/deck appendix: [FEEDBACK_AWARD_APPENDIX.md](FEEDBACK_AWARD_APPEND
 
 Copy-ready survey answer bank: [FEEDBACK_SURVEY_COPY_READY.md](FEEDBACK_SURVEY_COPY_READY.md).
 
+Near-final survey draft: [FEEDBACK_SURVEY_FINAL_DRAFT.md](FEEDBACK_SURVEY_FINAL_DRAFT.md).
+
 ## Feedback Principles
 
 Good feedback is:
