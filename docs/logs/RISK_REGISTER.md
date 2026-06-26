@@ -2,14 +2,14 @@
 
 | ID | Risk | Impact | Likelihood | Mitigation | Owner | Status |
 | --- | --- | --- | --- | --- | --- | --- |
-| R-001 | Maestro Case native state/history is insufficient for audit reconstruction. | High | Medium | Validate early; use Data Fabric/Data Service or custom audit events if needed. | Platform spike agent | Open |
-| R-002 | Policy version pinning is not natively supported. | Medium | High | Store policy versions as explicit case metadata and audit migration events. | Platform spike agent | Open |
-| R-003 | Action Center cannot render evidence packet clearly. | Medium | Medium | Use Case App/custom evidence-packet view. | UX/build agent | Open |
-| R-004 | Raw agent recommendation cannot be shown before policy override. | High | Medium | Persist agent interpretation event separately from policy decision event. | Architecture/build agent | Open |
-| R-005 | Test Cloud integration is too heavy for the build timeline. | Medium | Medium | Use a lightweight eval harness and document Test Cloud mapping; integrate if feasible. | Eval agent | Open |
-| R-006 | Agent outputs invalid/low-confidence too often. | High | Medium | Add eval scenarios, schema validation, usefulness incident, and governed improvement loop. | Agent/eval agent | Open |
-| R-007 | Demo becomes too complex for five minutes. | High | Medium | Keep demo to 2A, 2B, unstructured-route change, eval artifact, business metrics. | Demo agent | Open |
-| R-008 | Platform access/lab readiness blocks build. | High | Medium | Validate access before code; keep local simulation path. | Platform spike agent | Open |
+| R-001 | Maestro Case native state/history is insufficient for audit reconstruction. | High | Medium | Use explicit `service-recovery-audit-v1` bundle stored in Orchestrator bucket; do not claim native Case history alone. | Platform spike agent | Mitigated with fallback |
+| R-002 | Policy version pinning is not natively supported. | Medium | Medium | Store policy versions as explicit case metadata/artifact fields and represent migration as audited event. | Platform spike agent | Mitigated explicitly |
+| R-003 | Action Center cannot render evidence packet clearly. | Medium | Medium | Use Action Center for lifecycle/return and custom evidence packet/screenshots for judge-readable proof. | UX/build agent | Mitigated with custom surface |
+| R-004 | Raw agent recommendation cannot be shown before policy override. | High | Low | Persist agent interpretation event separately from policy decision event in payloads, audit bundles, and evidence packet. | Architecture/build agent | Mitigated |
+| R-005 | Test Cloud integration is too heavy for the build timeline. | Medium | Medium | Use local eval harness plus live Test Manager manual mapping; do not claim automated Test Cloud execution. | Eval agent | Partially mitigated |
+| R-006 | Agent outputs invalid/low-confidence too often. | High | Medium | Use schema validation, repair loop, eval scenarios, usefulness incident, and deterministic policy fallback. | Agent/eval agent | Mitigated locally |
+| R-007 | Demo becomes too complex for five minutes. | High | Medium | Use `scripts/run_submission_check.sh`, `scripts/run_demo.sh`, curated packets/screenshots, and only intentional live reruns. | Demo agent | Reduced |
+| R-008 | Platform access/lab readiness blocks build. | High | Low | UiPath Labs access, CLI, Maestro Case, Action Center, Orchestrator, and Test Manager were validated; keep credentials out of repo. | Platform spike agent | Mitigated for current tenant |
 
 ## Notes
 
@@ -166,3 +166,14 @@
 - R-003 is reduced for final presentation: the custom evidence packet now has a prominent raw AIE -> linked PDE comparison and visually distinguishes controlled verification from escalated exception review.
 - Remaining risk: the wrapper intentionally does not start fresh live cases or complete live tasks, because those mutate the tenant. Fresh live reruns still require an explicit operator action and log update.
 - Remaining risk: PF-013 still blocks use of generated Action Center UI as the judge-facing proof surface; custom HTML remains the validated workaround.
+
+### 2026-06-26 15:56 IST - Current Risk Posture Refresh
+
+- R-001 remains PARTIAL natively but is mitigated for the submission path by the validated Orchestrator bucket audit bundle fallback.
+- R-002 is mitigated through explicit package/process/artifact policy-version pinning. Native active-case migration still requires a custom audited event.
+- R-003 is mitigated for final presentation by custom evidence packets and committed desktop/mobile screenshot artifacts. Generated Action Center UI remains unsuitable as the primary judge-facing surface.
+- R-004 is mitigated by separate persisted AIE/PDE artifacts and evidence-packet comparison panels for E-002, E-004, and the adversarial E-003 packet.
+- R-005 remains partial: Test Manager manual mapping and passed logs are validated, but automated Test Cloud execution is not claimed.
+- R-006 is mitigated locally by schema validation, the bounded Gemini repair loop, eval coverage, and deterministic policy fallback.
+- R-007 is reduced by `scripts/run_submission_check.sh`, `scripts/run_demo.sh`, `scripts/run_llm_demo.sh --evidence-packet-output ...`, and curated proof artifacts.
+- R-008 is mitigated for current development because UiPath Labs access and required product surfaces have been validated in `keepingitlowkey / DefaultTenant`.

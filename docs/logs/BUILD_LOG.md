@@ -2142,6 +2142,35 @@ Open risks:
 
 - The active thread goal remains open until the user explicitly says to close it.
 
+### 2026-06-26 15:56 IST - Agent / Risk Register Current-State Refresh
+
+What changed:
+
+- Updated the top-level `docs/logs/RISK_REGISTER.md` table so risk statuses match the latest validation state rather than old pre-gate defaults.
+- Added a current risk-posture note for R-001 through R-008 covering Orchestrator audit fallback, explicit policy pinning, custom evidence packet mitigation, Test Manager partial status, local LLM validation, and current UiPath access.
+
+Commands run:
+
+- `git status --short --branch`
+- `sed -n '1,240p' docs/logs/RISK_REGISTER.md`
+- `rg "Action Center|generated UI|LLM|Gemini|submission|adversarial|demo|Data Fabric|Test Manager|Running|risk|Mitigation|Status" docs/logs/RISK_REGISTER.md docs/submission/READINESS_CHECKLIST.md docs/validation/OBJECTIVE_COMPLETION_AUDIT.md -n`
+- `scripts/run_submission_check.sh`
+- `git diff --check`
+
+Validation:
+
+- PASS: `scripts/run_submission_check.sh` completed successfully.
+- PASS: the check ran the 39-test unit suite, local eval baseline, E-002/E-004 artifact verification, LLM/adversarial artifact presence checks, screenshot artifact checks, proof-string checks, and wrapper syntax checks.
+- PASS: `git diff --check`.
+
+Product feedback:
+
+- No new PF entry expected. This is risk-register maintenance from existing validated evidence, not a new UiPath product interaction.
+
+Open risks:
+
+- Do not treat mitigated-with-fallback risks as native platform passes; keep the honest PASS/PARTIAL language in submission materials.
+
 ### 2026-06-26 15:49 IST - Agent / Control File Status Refresh
 
 What changed:
