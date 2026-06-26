@@ -12,10 +12,17 @@ def build_data_fabric_record(
     source_case_instance_key: str | None = None,
     source_task_id: str | None = None,
     package_version: str | None = None,
+    for_csv: bool = False,
 ) -> dict[str, Any]:
     """Flatten a case audit bundle into the proposed Data Fabric audit entity shape."""
     state = audit_bundle["evidence_state"]
     versions = audit_bundle["policy_versions"]
+
+    def _serialize(payload: dict[str, Any]) -> str:
+        if for_csv:
+            return custom_serialize(payload)
+        return _dumps(payload)
+
     return {
         "case_id": audit_bundle["case_id"],
         "service_id": audit_bundle["service_id"],
@@ -29,13 +36,33 @@ def build_data_fabric_record(
         "source_case_instance_key": source_case_instance_key or "",
         "source_task_id": source_task_id or "",
         "package_version": package_version or "",
-        "raw_agent_event_json": _dumps(audit_bundle["agent_interpretation_event"]),
-        "policy_decision_event_json": _dumps(audit_bundle["policy_decision_event"]),
-        "reviewer_packet_json": _dumps(audit_bundle["reviewer_packet"]),
-        "audit_bundle_json": _dumps(audit_bundle),
+        "raw_agent_event_json": _serialize(audit_bundle["agent_interpretation_event"]),
+        "policy_decision_event_json": _serialize(audit_bundle["policy_decision_event"]),
+        "reviewer_packet_json": _serialize(audit_bundle["reviewer_packet"]),
+        "audit_bundle_json": _serialize(audit_bundle),
         "created_at": datetime.now(timezone.utc).isoformat(),
     }
 
 
 def _dumps(payload: dict[str, Any]) -> str:
     return json.dumps(payload, sort_keys=True, separators=(",", ":"))
+
+
+def custom_serialize(obj: Any) -> str:
+    """Serialize a JSON object using single quotes and escaping internal single quotes for Data Fabric CSV parsing compatibility."""
+    if isinstance(obj, dict):
+        items = []
+        for k, v in sorted(obj.items()):
+            items.append(f"'{k}':{custom_serialize(v)}")
+        return "{" + ",".join(items) + "}"
+    elif isinstance(obj, list):
+        return "[" + ",".join(custom_serialize(x) for x in obj) + "]"
+    elif isinstance(obj, str):
+        escaped = obj.replace("\\", "\\\\").replace("'", "\\'")
+        return f"'{escaped}'"
+    elif isinstance(obj, bool):
+        return "true" if obj else "false"
+    elif obj is None:
+        return "null"
+    else:
+        return str(obj)
