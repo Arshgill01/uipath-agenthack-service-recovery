@@ -30,6 +30,34 @@ Next:
 
 - ...
 
+### 2026-06-26 17:28 IST - Agent / Objective Audit Refresh
+
+What changed:
+
+- Re-audited the current objective evidence map after pushed live readback commit `933a7e3`.
+- Updated `docs/validation/OBJECTIVE_COMPLETION_AUDIT.md` so current checkpoint references no longer stop at the pre-readback commits.
+
+Commands run:
+
+- `git status --short --branch`
+- `git log --oneline -8`
+- `sed -n '1,140p' docs/validation/OBJECTIVE_COMPLETION_AUDIT.md`
+- `rg -n "Data Fabric.*validated|Data Fabric.*full|full-payload|complete|goal complete|549f792|43d0181|933a7e3|1\\.196\\.0|row persistence|custom payload" AGENTS.md docs/validation docs/submission docs/logs docs/product docs/architecture docs/demo -S`
+
+Validation:
+
+- PASS: repo was clean at `master...origin/master` before the audit refresh.
+- PASS: stale audit checkpoint references were found and corrected.
+
+Product feedback:
+
+- No new PF entry. This was repository evidence-map maintenance after the PF-019/PF-022 live readback.
+
+Open risks:
+
+- The active objective remains open by user preference; do not call the goal complete.
+- Data Fabric remains partial row persistence until custom payload fields can be read back.
+
 ### 2026-06-26 17:18 IST - Agent / Live Open-Risk Readback Verification
 
 What changed:

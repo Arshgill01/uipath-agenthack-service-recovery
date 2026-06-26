@@ -16,14 +16,14 @@ This file is an evidence map, not permission to overclaim. The active goal remai
 | UiPath Labs access | PASS | `docs/validation/VALIDATION_RESULTS.md` Wave 01 reruns | Credentials/tokens are not stored in repo. |
 | Hard gates G-001 through G-004 | ANSWERED WITH IMPLICATIONS | `docs/validation/VALIDATION_GATES.md`; `docs/validation/VALIDATION_RESULTS.md` | Not all-native PASS; partials are explicit. |
 | Product-feedback logging | PASS | `docs/product/PRODUCT_FEEDBACK_AWARD.md`; `docs/product/FEEDBACK_AWARD_APPENDIX.md`; `docs/product/FEEDBACK_SURVEY_COPY_READY.md` | Add entries only for newly observed UiPath behavior. |
-| Repo update, commit, push | PASS for current checkpoints | Latest pushed commits include `6c3b36c`, `54c90fb`, `923076a`, `43d0181`, `549f792` | Do not mark the overall goal complete until user says to. |
+| Repo update, commit, push | PASS for current checkpoints | Latest pushed commits include `6c3b36c`, `54c90fb`, `923076a`, `43d0181`, `549f792`, `933a7e3` | Do not mark the overall goal complete until user says to. |
 
 ## Prompt-To-Artifact Checklist
 
 | Requirement | Evidence inspected | Status | Notes |
 | --- | --- | --- | --- |
-| Start in `/Users/arshdeepsingh/Developer/uipath-agenthack-service-recovery`. | `git status --short --branch` run from repo root; current branch `master...origin/master`. | PASS | Latest status was clean after `43d0181`. |
-| Confirm local repo state and recent commits. | `git status --short --branch`; `git log --oneline -8`; `docs/logs/BUILD_LOG.md`. | PASS | Latest pushed commit before this audit refresh: `43d0181 Merge open risk mitigations`. |
+| Start in `/Users/arshdeepsingh/Developer/uipath-agenthack-service-recovery`. | `git status --short --branch` run from repo root; current branch `master...origin/master`. | PASS | Latest status was clean after `933a7e3`. |
+| Confirm local repo state and recent commits. | `git status --short --branch`; `git log --oneline -8`; `docs/logs/BUILD_LOG.md`. | PASS | Latest pushed commit before this audit refresh: `933a7e3 Verify live open risk readbacks`. |
 | Re-run unit tests. | `python -m unittest discover -s tests`; `docs/logs/BUILD_LOG.md`; `docs/submission/READINESS_CHECKLIST.md`. | PASS | 42 tests passed on 2026-06-26. |
 | Re-run local eval baseline. | `python -m service_recovery_core.evals --output eval_results/local_baseline.json`; `docs/logs/BUILD_LOG.md`; `docs/submission/READINESS_CHECKLIST.md`. | PASS | E-001 through E-009 passed 9/9. |
 | Confirm UiPath Labs access. | `docs/validation/VALIDATION_RESULTS.md` Wave 01 rerun; `docs/architecture/INTEGRATION_MAP.md`. | PASS | Org `keepingitlowkey`, tenant `DefaultTenant`, user `arshgill6120@gmail.com`. |
@@ -47,7 +47,7 @@ This file is an evidence map, not permission to overclaim. The active goal remai
 | Live LLM interpretation proof added without weakening policy boundary. | `service_recovery_core/llm_interpreter.py`; `scripts/run_llm_demo.sh`; `docs/demo/artifacts/llm_interpreter_E003_live.json`; `docs/demo/artifacts/llm_interpreter_E003_adversarial_live.json`; `tests/test_llm_interpreter.py`. | PASS | LLM recommends; policy enforces. Do not claim LLM final closure authority. |
 | Live adversarial LLM evidence packet is judge-readable. | `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html`; `docs/demo/artifacts/evidence_packet_E003_adversarial_desktop.png`; `docs/demo/artifacts/evidence_packet_E003_adversarial_mobile.png`; `docs/logs/BUILD_LOG.md`. | PASS | Supplemental proof surface. Authoritative UiPath proof beats remain E-002/E-004. |
 | Non-mutating submission sanity check exists. | `scripts/run_submission_check.sh`; `docs/submission/READINESS_CHECKLIST.md`; `docs/logs/BUILD_LOG.md`. | PASS | Verifies local artifacts only; does not start live UiPath cases or call Gemini/Vertex. |
-| Commit and push meaningful checkpoints. | `git log --oneline -8`; remote head checks in final reports/build log. | PASS | Latest pushed checkpoints: `6c3b36c`, `54c90fb`, `923076a`, `43d0181`. |
+| Commit and push meaningful checkpoints. | `git log --oneline -8`; remote head checks in final reports/build log. | PASS | Latest pushed checkpoints: `6c3b36c`, `54c90fb`, `923076a`, `43d0181`, `549f792`, `933a7e3`. |
 
 ## Remaining Caveats
 
