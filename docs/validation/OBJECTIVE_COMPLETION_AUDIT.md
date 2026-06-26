@@ -16,14 +16,14 @@ This file is an evidence map, not permission to overclaim. The active goal remai
 | UiPath Labs access | PASS | `docs/validation/VALIDATION_RESULTS.md` Wave 01 reruns | Credentials/tokens are not stored in repo. |
 | Hard gates G-001 through G-004 | ANSWERED WITH IMPLICATIONS | `docs/validation/VALIDATION_GATES.md`; `docs/validation/VALIDATION_RESULTS.md` | Not all-native PASS; partials are explicit. |
 | Product-feedback logging | PASS | `docs/product/PRODUCT_FEEDBACK_AWARD.md`; `docs/product/FEEDBACK_AWARD_APPENDIX.md`; `docs/product/FEEDBACK_SURVEY_COPY_READY.md` | Add entries only for newly observed UiPath behavior. |
-| Repo update, commit, push | PASS for current checkpoints | Latest pushed commits include `efa567e`, `8de69a3`, `406e998`, `c98338e` | Do not mark the overall goal complete until user says to. |
+| Repo update, commit, push | PASS for current checkpoints | Latest pushed commits include `fff8530`, `da7d3ae`, and `fa82241` | Do not mark the overall goal complete until user says to. |
 
 ## Prompt-To-Artifact Checklist
 
 | Requirement | Evidence inspected | Status | Notes |
 | --- | --- | --- | --- |
 | Start in `/Users/arshdeepsingh/Developer/uipath-agenthack-service-recovery`. | `git status --short --branch` run from repo root; current branch `master...origin/master`. | PASS | Latest status was clean before this checkpoint. |
-| Confirm local repo state and recent commits. | `git status --short --branch`; `git log --oneline -8`; `docs/logs/BUILD_LOG.md`. | PASS | Recent pushed commits include `efa567e`, `8de69a3`, `406e998`, and `c98338e`. |
+| Confirm local repo state and recent commits. | `git status --short --branch`; `git log --oneline -8`; `docs/logs/BUILD_LOG.md`. | PASS | Recent pushed commits include `fff8530`, `da7d3ae`, and `fa82241`. |
 | Re-run unit tests. | `python -m unittest discover -s tests`; `docs/logs/BUILD_LOG.md`; `docs/submission/READINESS_CHECKLIST.md`. | PASS | 43 tests passed on 2026-06-26. |
 | Re-run local eval baseline. | `python -m service_recovery_core.evals --output eval_results/local_baseline.json`; `docs/logs/BUILD_LOG.md`; `docs/submission/READINESS_CHECKLIST.md`. | PASS | E-001 through E-009 passed 9/9. |
 | Confirm UiPath Labs access. | `docs/validation/VALIDATION_RESULTS.md` Wave 01 rerun; `docs/architecture/INTEGRATION_MAP.md`. | PASS | Org `keepingitlowkey`, tenant `DefaultTenant`, user `arshgill6120@gmail.com`. |
@@ -39,7 +39,7 @@ This file is an evidence map, not permission to overclaim. The active goal remai
 | G-004 Agent Recommendation Visible Before Override. | `docs/validation/VALIDATION_GATES.md`; live E-002/E-004 task payload logs; `docs/demo/artifacts/service_recovery_audit_bundle_E002.json`; `docs/demo/artifacts/service_recovery_audit_bundle_E004.json`. | PASS for persistence/API/audit; PARTIAL for generated UI display | Raw AIE and final PDE remain separate linked events. |
 | G-005 distinct missing/stale versus contradiction routing. | `docs/submission/READINESS_CHECKLIST.md`; live E-002/E-004 validation entries; demo proof manifest. | PASS | E-002 routes to `verify_telemetry`; E-004 routes to `human_review`. |
 | G-006 demo surface visibility. | `docs/demo/artifacts/evidence_packet_E002.html`; `docs/demo/artifacts/evidence_packet_E004.html`; `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html`; screenshots in `docs/demo/artifacts/`. | PASS for custom packet; PARTIAL for generated Action Center UI | Final demo should not rely on generated Action Center page. |
-| G-007 Test Cloud/Test Manager crossover. | `docs/validation/TEST_MANAGER_MAPPING.md`; `docs/validation/VALIDATION_RESULTS.md`; `docs/submission/READINESS_CHECKLIST.md`. | PASS/PARTIAL | Manual Test Manager representation/execution passed. Automated execution was probed with `link-automation`, `run --execution-type automated`, folder/process/package discovery, and `list-automations`; no ready automation target was found and Solution-folder automation discovery returned an opaque HTTP 400. |
+| G-007 Test Cloud/Test Manager crossover. | `docs/validation/TEST_MANAGER_MAPPING.md`; `docs/validation/VALIDATION_RESULTS.md`; `docs/submission/READINESS_CHECKLIST.md`. | PASS/PARTIAL | Manual Test Manager representation/execution passed. Automated execution was probed with `link-automation`, `run --execution-type automated`, folder/process/package discovery, `list-automations`, and package upload/link attempts for `ServiceRecoveryEvalProcessProbe:0.0.2/0.0.3`; no Test Manager-visible automation target was found. |
 | G-008 coding-agent/CLI bonus. | `docs/validation/VALIDATION_RESULTS.md`; `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`; `scripts/run_demo.sh`; `scripts/run_llm_demo.sh`. | PASS for CLI-assisted lifecycle artifacts | Show readback commands deliberately if used in final demo. |
 | Product feedback captured during UiPath interactions. | `docs/product/PRODUCT_FEEDBACK_AWARD.md` PF-001 through PF-025. | PASS | Feedback separates access, UX, integration, defect candidates, and product limitations. |
 | Product feedback curated for award submission. | `docs/product/FEEDBACK_AWARD_APPENDIX.md`; `docs/product/FEEDBACK_SURVEY_COPY_READY.md`. | PASS with manual fields remaining | Team name and story-sharing preference still require user input. |
@@ -47,7 +47,7 @@ This file is an evidence map, not permission to overclaim. The active goal remai
 | Live LLM interpretation proof added without weakening policy boundary. | `service_recovery_core/llm_interpreter.py`; `scripts/run_llm_demo.sh`; `docs/demo/artifacts/llm_interpreter_E003_live.json`; `docs/demo/artifacts/llm_interpreter_E003_adversarial_live.json`; `tests/test_llm_interpreter.py`. | PASS | LLM recommends; policy enforces. Do not claim LLM final closure authority. |
 | Live adversarial LLM evidence packet is judge-readable. | `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html`; `docs/demo/artifacts/evidence_packet_E003_adversarial_desktop.png`; `docs/demo/artifacts/evidence_packet_E003_adversarial_mobile.png`; `docs/logs/BUILD_LOG.md`. | PASS | Supplemental proof surface. Authoritative UiPath proof beats remain E-002/E-004. |
 | Non-mutating submission sanity check exists. | `scripts/run_submission_check.sh`; `docs/submission/READINESS_CHECKLIST.md`; `docs/logs/BUILD_LOG.md`. | PASS | Verifies local artifacts only; does not start live UiPath cases or call Gemini/Vertex. |
-| Commit and push meaningful checkpoints. | `git log --oneline -8`; remote head checks in final reports/build log. | PASS | Latest pushed checkpoints include `efa567e`, `8de69a3`, `406e998`, and `c98338e`; this audit will be refreshed again after the next commit/push. |
+| Commit and push meaningful checkpoints. | `git log --oneline -8`; remote head checks in final reports/build log. | PASS | Latest pushed checkpoint before this audit refresh is `fa82241`; this audit will be refreshed again after the next commit/push. |
 
 ## Remaining Caveats
 

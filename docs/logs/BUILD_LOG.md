@@ -2961,3 +2961,19 @@ Open risks:
 
 - Automated Test Cloud execution remains unvalidated and must not be claimed.
 - Further progress likely requires a supported Studio/Test Manager publish path for test automation metadata, not hand-edited package metadata.
+
+### 2026-06-26 15:12 UTC - Agent / Objective Audit Refresh
+
+What changed:
+
+- Audited current-facing status docs against the latest pushed Test Manager package-boundary checkpoint.
+- Updated `AGENTS.md` and `docs/validation/OBJECTIVE_COMPLETION_AUDIT.md` so latest-commit and G-007 blocker language includes the `ServiceRecoveryEvalProcessProbe:0.0.2/0.0.3` package upload/link attempts.
+- Clarified `docs/validation/TEST_MANAGER_MAPPING.md` so the first manual execution's `Running` aggregate is clearly historical PF-021 evidence, not the current G-007 manual proof.
+
+Validation:
+
+- Pending in this checkpoint: run `git diff --check` and `scripts/run_submission_check.sh` before commit/push.
+
+Open risks:
+
+- No new platform risk. Existing guardrails remain: do not claim automated Test Cloud execution or generated Action Center UI demo readiness.

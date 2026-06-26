@@ -40,7 +40,9 @@ Scope:
 | E-008 | `SREV:8` | `a20fe8f8-02f9-0a00-ec41-0b49cf9abce1` | Low confidence blocks closure and records a usefulness incident. |
 | E-009 | `SREV:10` | `ac219460-03f9-0a00-9bff-0b49cf9ac487` | Raw `closure_candidate` recommendation persists separately from policy override to `verify_telemetry`. |
 
-## Readback Evidence
+## Initial Readback Evidence
+
+The first manual execution below is kept as PF-021 evidence. It is not the current terminal proof; use the 2026-06-26 terminal rerun section for current G-007 manual execution status.
 
 Commands used:
 
@@ -77,7 +79,7 @@ Observed:
 Result:
 
 - G-007: PASS for live Test Manager representation of E-001 through E-009 as manual test cases.
-- G-007: PASS/PARTIAL for manual Test Manager execution: all nine test case logs are passed, but the top-level execution status remains `Running`.
+- Historical first run: PASS/PARTIAL for manual Test Manager execution because all nine test case logs passed but the top-level execution stayed `Running`.
 - G-007: PARTIAL for automated Test Cloud crossover because no automated Test Manager execution was created or linked to an Orchestrator test automation.
 
 ## 2026-06-26 15:50 UTC - Terminal Manual Execution Rerun
