@@ -2767,3 +2767,32 @@ Product feedback:
 Open risks:
 
 - Generated Action Center UI remains unsuitable as the judge-facing proof surface unless repaired in Studio UI and revalidated with a fresh live task.
+
+### 2026-06-26 17:08 UTC - Agent / Test Manager Dashboard Recency Probe
+
+What changed:
+
+- Investigated why Safari Automation Cloud home showed the older Test Manager execution as `Running` after a newer terminal run had been validated.
+- Added PF-025 and documented that the final G-007 evidence should use Test Manager CLI/report/JUnit, not the Automation Cloud home widget.
+
+Commands / interactions run:
+
+- Computer Use Safari state inspection on Automation Cloud home.
+- `uip tm executions list --project-key SREV --output json`
+- `uip tm testsets list --project-key SREV --include-last-execution --output json`
+- `uip tm executions get-stats --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --output json`
+- `uip tm executions get-stats --project-key SREV --execution-id d50a7be6-35ed-1100-95aa-0b49cf9b8cad --output json`
+
+Validation:
+
+- PASS: Test set `SREV:9` readback reports `LastExecutionStatus: Finished` and `LastExecutionAt: 2026-06-26T10:19:58.490Z`.
+- PASS: Newer execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` reports `Status: Finished`, `Passed: 9`, `Failed: 0`, `None: 0`.
+- OBSERVED UI CAVEAT: Automation Cloud home surfaced the older `Running` execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad`.
+
+Product feedback:
+
+- PF-025 added for home-dashboard recent execution recency/status clarity.
+
+Open risks:
+
+- Do not use the Automation Cloud home recent-executions widget as the proof surface for G-007; use CLI/report/JUnit evidence.

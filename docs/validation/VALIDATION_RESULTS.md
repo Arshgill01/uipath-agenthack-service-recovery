@@ -1717,3 +1717,40 @@ Decision impact:
 Product feedback:
 
 - PF-013 strengthened: the field exists in schema/API, generated UI loses the binding/label, and the generated app is not pullable as coded-app source through the current CLI.
+
+## 2026-06-26 17:08 UTC - Test Manager Home Dashboard Recency Probe
+
+Surface:
+
+- Automation Cloud home dashboard and Test Manager CLI readback.
+
+Assumption tested:
+
+- Safari home showing a `Running` Test Manager execution might mean the terminal manual run was not actually the latest/current Test Manager state.
+
+Steps:
+
+1. Inspected Safari Automation Cloud home through Computer Use.
+2. Ran `uip tm executions list --project-key SREV --output json`.
+3. Ran `uip tm testsets list --project-key SREV --include-last-execution --output json`.
+4. Ran `uip tm executions get-stats` for both the older direct-finish execution and newer start-then-finish execution.
+
+Observed:
+
+- Safari home `Recent test executions` showed older execution `Service Recovery E-001 through E-009 Baseline - 20260625.1833` with status `Running`.
+- `uip tm executions list` returned both executions: older `d50a7be6-35ed-1100-95aa-0b49cf9b8cad` as `Running`, and newer `40a1b334-5df8-1100-0a4b-0b49d0564f11` as `Finished`.
+- `uip tm testsets list --include-last-execution` returned `LastExecutionStatus: Finished` and `LastExecutionAt: 2026-06-26T10:19:58.490Z` for test set `SREV:9`.
+
+Result:
+
+- The terminal Test Manager evidence remains valid.
+- Automation Cloud home should not be used as the final Test Manager proof surface because it surfaced the older running execution rather than the latest finished test-set state.
+
+Decision impact:
+
+- Use Test Manager CLI `testsets list --include-last-execution`, `executions get-stats`, report output, and JUnit XML for G-007 evidence.
+- Keep the older running execution as PF-021 lifecycle evidence, not as current validation status.
+
+Product feedback:
+
+- PF-025 added for home-dashboard recent execution recency/status clarity.
