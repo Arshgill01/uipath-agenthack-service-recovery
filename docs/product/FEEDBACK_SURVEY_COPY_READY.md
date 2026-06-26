@@ -32,12 +32,13 @@ Source files:
 
 ## Q7 - Briefly Describe Your Use Case
 
-We built a telecom/broadband service activation and restoration exception workflow in UiPath Maestro Case. The problem is that CRM, order, billing, and support notes can all look green while authoritative network telemetry is missing, stale, or contradicts the business state. An agent interprets ambiguous evidence into structured signals, but deterministic policy makes the closure and routing decision. The proof preserves the raw agent recommendation separately from the final policy decision: when the agent recommends `closure_candidate` but telemetry is missing, policy overrides to `verify_telemetry`; when fresh authoritative telemetry contradicts the green business state, policy escalates to `human_review` with an evidence packet.
+We built a telecom/broadband service activation and restoration exception workflow in UiPath Maestro Case. The problem is that CRM, order, billing, and support notes can all look green while authoritative network telemetry is missing, stale, or contradicts the business state. An agent interprets ambiguous evidence into structured signals, but deterministic policy makes the closure and routing decision. The proof preserves the raw agent recommendation separately from the final policy decision: when the agent recommends `closure_candidate` but telemetry is missing, policy overrides to `verify_telemetry`; when fresh authoritative telemetry contradicts the green business state, policy escalates to `human_review` with an evidence packet. We also validated an optional live Gemini/Vertex path, including an adversarial advocate/skeptic interpretation where policy escalated because structured interpretation disagreement crossed threshold.
 
 Evidence:
 
 - `docs/demo/artifacts/evidence_packet_E002.html`
 - `docs/demo/artifacts/evidence_packet_E004.html`
+- `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html`
 - `docs/demo/artifacts/demo_proof_manifest.json`
 - Live E-002 task `4300080`; live E-004 task `4300219`.
 
@@ -85,11 +86,12 @@ Evidence:
 
 The positive surprise was that the UiPath primitives were closer to our architecture than expected. Maestro Case gave the long-running case shell, Action Center gave real human task lifecycle, Orchestrator gave process/package/job controls and bucket storage, and task APIs preserved structured payloads well enough to prove the boundary between raw agent recommendation and final policy decision.
 
-The advice to another developer is to validate hard gates early with API readback, not only with the designer or generated UI. Confirm tenant services, Action Center rendering, package version readback, task return shape, and audit reconstruction before polishing the app. In our build, the backend task data preserved the policy payload correctly even when the generated reviewer UI hid it, so API readback was essential.
+The advice to another developer is to validate hard gates early with API readback and committed proof artifacts, not only with the designer or generated UI. Confirm tenant services, Action Center rendering, package version readback, task return shape, audit reconstruction, and any live LLM proof path before polishing the app. In our build, the backend task data preserved the policy payload correctly even when the generated reviewer UI hid it, so API readback and repeatable local checks were essential.
 
 Evidence:
 
 - `scripts/run_demo.sh`
+- `scripts/run_submission_check.sh`
 - `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`
 - PF-013, PF-015, PF-017, PF-022.
 

@@ -48,9 +48,9 @@ We built a telecom/broadband service activation and restoration exception workfl
 
 Our agent reads messy technician notes, customer messages, and support context into a structured Agent Interpretation Event. The agent can recommend `closure_candidate`, but it does not get final authority. A deterministic policy layer checks evidence authority, freshness, contradiction, confidence, and pinned policy versions before routing the case. If authoritative telemetry is missing or stale, policy overrides closure and routes to `verify_telemetry`; if fresh authoritative telemetry contradicts the green business state, policy escalates to `human_review` with an evidence packet.
 
-The proof preserves the raw agent recommendation separately from the final Policy Decision Event, so the demo can show exactly where AI interpretation ends and governed closure control begins.
+The proof preserves the raw agent recommendation separately from the final Policy Decision Event, so the demo can show exactly where AI interpretation ends and governed closure control begins. We also validated an optional live Gemini/Vertex interpretation path, including an adversarial advocate/skeptic interpretation where the advocate recommended closure, the skeptic found unresolved risk, and deterministic policy escalated because the structured disagreement score crossed threshold.
 
-Evidence: `docs/demo/artifacts/evidence_packet_E002.html`, `docs/demo/artifacts/evidence_packet_E004.html`, `docs/demo/artifacts/demo_proof_manifest.json`, PF-015.
+Evidence: `docs/demo/artifacts/evidence_packet_E002.html`, `docs/demo/artifacts/evidence_packet_E004.html`, `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html`, `docs/demo/artifacts/demo_proof_manifest.json`, PF-015.
 
 ## 8. Please indicate your overall satisfaction with the UiPath Platform.
 
@@ -97,9 +97,9 @@ Evidence: PF-003, PF-006, PF-007, PF-013, PF-017.
 
 The positive surprise was that the UiPath primitives were closer to our target architecture than expected. Maestro Case gave the long-running case shell, Action Center gave real human task lifecycle, Orchestrator gave package/process/job and audit artifact operations, and task APIs preserved structured payloads well enough to prove the boundary between raw agent recommendation and final policy decision.
 
-The advice to another developer is to validate hard gates early with API readback, not only with the designer or generated UI. Confirm tenant services, Action Center rendering, task return shape, package version readback, and audit reconstruction before polishing the app. In our build, the backend task data preserved the policy payload correctly even when the generated reviewer UI hid it, so API readback was essential.
+The advice to another developer is to validate hard gates early with API readback and committed proof artifacts, not only with the designer or generated UI. Confirm tenant services, Action Center rendering, task return shape, package version readback, audit reconstruction, and any live LLM proof path before polishing the app. In our build, the backend task data preserved the policy payload correctly even when the generated reviewer UI hid it, so API readback and repeatable local checks were essential.
 
-Evidence: PF-013, PF-015, PF-016, PF-017, PF-022.
+Evidence: `scripts/run_submission_check.sh`, PF-013, PF-015, PF-016, PF-017, PF-022.
 
 ## 13. What did you build with Maestro that would have been a mess to stitch together without it?
 

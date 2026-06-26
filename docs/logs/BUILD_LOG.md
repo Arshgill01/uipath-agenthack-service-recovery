@@ -2171,6 +2171,37 @@ Open risks:
 
 - Do not treat mitigated-with-fallback risks as native platform passes; keep the honest PASS/PARTIAL language in submission materials.
 
+### 2026-06-26 16:05 IST - Agent / Feedback Survey Evidence Refresh
+
+What changed:
+
+- Updated the final product-feedback survey draft and copy-ready bank to include the validated live Gemini/Vertex adversarial interpretation path.
+- Added `evidence_packet_E003_adversarial_live.html` and `scripts/run_submission_check.sh` as supporting evidence in the survey answers.
+- Kept the feedback framing focused on UiPath product experience and avoided adding unsupported new PF issues.
+
+Commands run:
+
+- `git status --short --branch`
+- `sed -n '1,220p' docs/product/FEEDBACK_SURVEY_FINAL_DRAFT.md`
+- `sed -n '1,180p' docs/product/FEEDBACK_SURVEY_COPY_READY.md`
+- `rg "adversarial|submission_check|39 tests|evidence_packet_E003|31209c9|risk posture|Action Center UI|Test Manager" docs/product docs/submission -n`
+- `scripts/run_submission_check.sh`
+- `git diff --check`
+
+Validation:
+
+- PASS: `scripts/run_submission_check.sh` completed successfully.
+- PASS: the check ran the 39-test unit suite, local eval baseline, E-002/E-004 artifact verification, LLM/adversarial artifact presence checks, screenshot artifact checks, proof-string checks, and wrapper syntax checks.
+- PASS: `git diff --check`.
+
+Product feedback:
+
+- No new PF entry expected. This refresh curates existing validated evidence for the survey; it does not report a newly observed UiPath product behavior.
+
+Open risks:
+
+- Team name and story-sharing preference still require user confirmation before final survey submission.
+
 ### 2026-06-26 15:49 IST - Agent / Control File Status Refresh
 
 What changed:
