@@ -30,6 +30,42 @@ Next:
 
 - ...
 
+### 2026-06-26 14:35 IST - Agent / Submission Guidance Refresh
+
+What changed:
+
+- Updated the demo runbook screenshot commands to match the current committed 1440x1100 desktop packet screenshots and the adversarial 390x900 mobile check.
+- Updated the submission readiness artifact table to include E-002/E-004 desktop screenshots explicitly.
+- Updated the candidate branch review to record that selective evidence-packet polish was completed on `master` in `4221484`.
+
+Commands run:
+
+- `git status --short --branch`
+- `git log --oneline -5`
+- `sed -n '1,220p' docs/submission/READINESS_CHECKLIST.md`
+- `sed -n '1,220p' docs/submission/SUBMISSION_BRIEF.md`
+- `sed -n '1,260p' docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`
+- `sed -n '1,220p' docs/product/FEEDBACK_AWARD_APPENDIX.md`
+- `sed -n '1,180p' docs/plans/CANDIDATE_BRANCH_REVIEW.md`
+- `sed -n '1,220p' docs/plans/LONG_RUNNING_AGENTIC_LOOP_RUNBOOK.md`
+
+Validation:
+
+- PASS: `scripts/run_submission_check.sh` completed successfully with 39 tests and artifact checks.
+- PASS: `git diff --check`.
+
+Product feedback:
+
+- No new PF entry expected. This is submission guidance maintenance, not a new UiPath product interaction.
+
+Open risks:
+
+- None added.
+
+Next:
+
+- Continue with product-feedback final-answer polish, submission narrative accuracy, or read-only UiPath evidence refresh before recording.
+
 ### 2026-06-26 14:20 IST - Agent / Evidence Packet Readability Polish
 
 What changed:

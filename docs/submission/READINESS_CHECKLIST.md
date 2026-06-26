@@ -55,6 +55,7 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 | Submission sanity check | Ready | `scripts/run_submission_check.sh` |
 | E-002 evidence packet | Ready | `docs/demo/artifacts/evidence_packet_E002.html` |
 | E-004 evidence packet | Ready | `docs/demo/artifacts/evidence_packet_E004.html` |
+| E-002/E-004 desktop screenshots | Ready | `docs/demo/artifacts/evidence_packet_E002_desktop.png`; `docs/demo/artifacts/evidence_packet_E004_desktop.png` |
 | Audit proof manifest | Ready | `docs/demo/artifacts/demo_proof_manifest.json` |
 | Live LLM proof artifact | Ready | `docs/demo/artifacts/llm_interpreter_E003_live.json` |
 | Live adversarial LLM proof artifact | Ready | `docs/demo/artifacts/llm_interpreter_E003_adversarial_live.json` |

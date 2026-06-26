@@ -225,14 +225,24 @@ Optional screenshot capture:
 
 ```sh
 npx playwright screenshot \
-  --viewport-size=1440,1000 \
+  --viewport-size=1440,1100 \
   file://$PWD/docs/demo/artifacts/evidence_packet_E002.html \
   docs/demo/artifacts/evidence_packet_E002_desktop.png
 
 npx playwright screenshot \
-  --viewport-size=1440,1000 \
+  --viewport-size=1440,1100 \
   file://$PWD/docs/demo/artifacts/evidence_packet_E004.html \
   docs/demo/artifacts/evidence_packet_E004_desktop.png
+
+npx playwright screenshot \
+  --viewport-size=1440,1100 \
+  file://$PWD/docs/demo/artifacts/evidence_packet_E003_adversarial_live.html \
+  docs/demo/artifacts/evidence_packet_E003_adversarial_desktop.png
+
+npx playwright screenshot \
+  --viewport-size=390,900 \
+  file://$PWD/docs/demo/artifacts/evidence_packet_E003_adversarial_live.html \
+  docs/demo/artifacts/evidence_packet_E003_adversarial_mobile.png
 ```
 
 ## UiPath CLI Readback Checks

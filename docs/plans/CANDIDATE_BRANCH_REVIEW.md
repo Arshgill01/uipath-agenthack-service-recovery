@@ -100,7 +100,11 @@ Results:
 
 ## Next Loop
 
-Use `docs/plans/LONG_RUNNING_AGENTIC_LOOP_RUNBOOK.md` as the operating loop. The next high-value implementation chunk is selective evidence-packet polish on current `master`, not branch merging.
+Use `docs/plans/LONG_RUNNING_AGENTIC_LOOP_RUNBOOK.md` as the operating loop.
+
+Selective evidence-packet polish was completed on current `master` in `4221484`. The useful UI ideas were applied manually without merging `feature/ui-design`, and the renderer still preserves adversarial rendering, self-contained CSS, raw AIE/PDE visibility, and desktop/mobile screenshot evidence.
+
+The next high-value chunks are submission narrative accuracy, product-feedback final-answer polish, or a read-only UiPath evidence refresh before recording.
 
 Acceptance criteria for that chunk:
 
