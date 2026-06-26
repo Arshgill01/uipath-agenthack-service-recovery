@@ -55,7 +55,7 @@ Specific challenges:
 - Package/feed/process diagnostics required extra work. A package could be read with `--feed-id`, while default lookup and direct process creation could not bind the same version.
 - Native Case history and task APIs can reconstruct operational flow, but a clean domain audit for evidence state, raw agent recommendation, policy decision, policy versions, block reason, and human action still required explicit custom audit artifacts.
 - Data Fabric entity create/readback worked, but the first snake_case entity could not map the required `case_id` field despite multiple valid-looking JSON shapes. A PascalCase V2 schema later solved the full-payload audit storage/readback path and sharpened the product feedback around field-name lifecycle consistency.
-- Test Manager could represent the eval suite as manual cases and passed logs, but it was not a one-step import from the local eval result. A first direct-finish execution stayed `Running`; the corrected start-then-finish lifecycle produced terminal manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` with 9/9 passed logs and JUnit export. Automated Test Cloud execution still needs a real automation target.
+- Test Manager could represent the eval suite as manual cases and passed logs, but it was not a one-step import from the local eval result. A first direct-finish execution stayed `Running`; the corrected start-then-finish lifecycle produced terminal manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` with 9/9 passed logs and JUnit export. Automated Test Cloud remained unclaimable even after a follow-up package probe: Orchestrator accepted `ServiceRecoveryEvalProcessProbe:0.0.2/0.0.3` and listed an entry point, but Test Manager `list-automations` returned no rows and direct `link-automation` could not find the test in the package.
 
 Evidence:
 
@@ -110,7 +110,7 @@ Evidence:
 
 ## Do Not Claim
 
-- Automated Test Cloud execution.
+- Automated Test Cloud execution. We only validated manual Test Manager execution; package probe `ServiceRecoveryEvalProcessProbe:0.0.2/0.0.3` did not become Test Manager-discoverable/linkable automation.
 - Legacy snake_case Data Fabric audit persistence. Use the validated PascalCase `ServiceRecoveryAuditBundleV2` path for queryable E-004 audit readback.
 - Generated Action Center UI is final-demo ready.
 - Native Case history alone passes the domain audit gate.

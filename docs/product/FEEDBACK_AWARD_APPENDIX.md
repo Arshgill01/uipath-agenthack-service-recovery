@@ -50,7 +50,7 @@ Evidence:
 | 3 | Improve generated Action app field binding inspection/repair. | The platform persisted proof-critical data but the generated UI hid it, which is precise and fair. | PF-006, PF-013. | Keep as the concrete G-003 example. |
 | 4 | Make package/feed/process binding diagnostics consistent. | It shows deep usage beyond UI clicks and supports the coding-agent/CLI story. | PF-017, PF-010, PF-011, PF-012. | Keep as integration/CLI feedback. |
 | 5 | Add schema-aware Data Fabric record insert/import diagnostics. | Strong for regulated audit storage: direct JSON insert remained confusing, while CSV import worked only after a custom nested-payload wire format. | PF-018, PF-019. | Keep as a secondary storage/audit point. |
-| 6 | Support eval-suite import into Test Manager and clarify manual execution terminal status. | Good cross-platform feedback and useful for agent evals, but less central than Maestro Case. | PF-020, PF-021. | Keep if selecting Test Cloud/Test Manager category. |
+| 6 | Support eval-suite import into Test Manager and make automation discovery/package metadata diagnostics explicit. | Good cross-platform feedback and useful for agent evals, but less central than Maestro Case. It now includes both manual lifecycle feedback and a concrete failed package-discovery probe. | PF-020, PF-021, PF-024. | Keep if selecting Test Cloud/Test Manager category. |
 | 7 | Clarify Case job/task lifecycle readback. | Practical CLI/operator feedback; helps repeatability and demo honesty. | PF-022. | Keep as supporting detail, not headline. |
 
 ## What Worked Well
@@ -62,7 +62,7 @@ Use these as positive counterweights:
 - Task APIs preserved raw agent recommendation and final policy decision separately, supporting the governance boundary even when the generated UI was weak.
 - Orchestrator buckets worked cleanly for durable JSON audit artifact storage.
 - Orchestrator process readback and version history made package pinning visible.
-- Test Manager could represent E-001 through E-009 as live manual test cases and a test set.
+- Test Manager could represent E-001 through E-009 as live manual test cases and a test set; terminal manual execution/report/JUnit worked after using the correct start-then-finish lifecycle.
 
 Evidence:
 
@@ -98,7 +98,7 @@ Why:
 - Add an Action app field-binding inspector and repair flow.
 - Add feed-aware process creation and package lookup diagnostics.
 - Add schema-aware Data Fabric insert/import diagnostics.
-- Add Test Manager eval import from JSON/JUnit/agent-eval outputs.
+- Add Test Manager eval import from JSON/JUnit/agent-eval outputs, plus a package preflight that explains whether an uploaded Orchestrator package contains Test Manager-visible automations.
 - Add CaseManagement-aware job state explanations for human-task workflows.
 
 ## Final Survey Building Blocks
@@ -127,7 +127,7 @@ Without Maestro, we would have had to stitch together case state, task lifecycle
 
 ## Claims To Avoid
 
-- Do not claim automated Test Cloud execution; current Test Manager validation is manual mapping plus terminal manual execution/report/JUnit export.
+- Do not claim automated Test Cloud execution; current Test Manager validation is manual mapping plus terminal manual execution/report/JUnit export. The `ServiceRecoveryEvalProcessProbe:0.0.2/0.0.3` package probe was Orchestrator-visible but not Test Manager-discoverable/linkable.
 - Claim Data Fabric V2 full-payload persistence only for the PascalCase `ServiceRecoveryAuditBundleV2` path; keep the legacy snake_case entity as product-feedback evidence, not final proof.
 - Do not claim generated Action Center UI is final-demo ready.
 - Do not claim native Case history alone passes the domain audit gate.

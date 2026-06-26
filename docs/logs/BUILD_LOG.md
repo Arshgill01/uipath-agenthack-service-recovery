@@ -2977,3 +2977,19 @@ Validation:
 Open risks:
 
 - No new platform risk. Existing guardrails remain: do not claim automated Test Cloud execution or generated Action Center UI demo readiness.
+
+### 2026-06-26 15:16 UTC - Agent / Product Feedback PF-024 Consistency Pass
+
+What changed:
+
+- Updated the copy-ready survey bank, final survey draft, and feedback appendix so PF-024 includes the latest concrete Test Manager automation package probe.
+- Clarified that `ServiceRecoveryEvalProcessProbe:0.0.2/0.0.3` was accepted by Orchestrator and exposed an entry point, but still did not become Test Manager-discoverable/linkable automation.
+- Preserved the guardrail that only manual Test Manager execution/report/JUnit export is validated.
+
+Validation:
+
+- Pending in this checkpoint: run `git diff --check` and `scripts/run_submission_check.sh` before commit/push.
+
+Open risks:
+
+- Automated Test Cloud execution remains unvalidated and must not be claimed.
