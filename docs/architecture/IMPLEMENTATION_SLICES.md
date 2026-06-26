@@ -49,7 +49,7 @@ Do not add broad UiPath runtime adapters, package/deploy scripts, or Case JSON m
 ## Remaining Partials / Do Not Overclaim
 
 - Do not claim native Case history alone satisfies G-001; use the explicit audit bundle.
-- Claim Data Fabric record persistence only for the validated E-004 CSV import path using the Data-Fabric-safe wire format; direct JSON insert remains unvalidated.
+- Claim Data Fabric only as partial E-004 row persistence until custom payload fields can be read back; direct JSON insert remains unvalidated.
 - Do not claim generated Action Center UI is final-demo ready; use the custom evidence packet for legibility.
 - Do not claim automated Test Cloud execution; Test Manager mapping is manual.
 - Do not claim terminal completion for older E-002/E-004 jobs while their job readback remains `Running`; claim only the fresh package `1.0.6` Case Instance completion that read back `LatestRunStatus: Completed`.

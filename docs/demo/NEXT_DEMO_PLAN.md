@@ -114,7 +114,7 @@ Current audit storage fallback:
 - Repo evidence: `docs/validation/artifacts/2026-06-25/orchestrator_bucket_audit_artifact_E004_manifest.json`.
 - The bucket-backed E-004 artifact preserves raw `AIE-E004` recommending `closure_candidate`, linked `PDE-E-004` requiring `human_review`, policy versions `ip-v1` / `dp-v1`, and `source_contradiction`.
 
-This is a real UiPath-hosted artifact path, not demo-only local data. It should be presented honestly as explicit custom audit state because native Case history did not provide the full domain audit by itself. Data Fabric CSV import is now validated for E-004, while the bucket remains the simplest fallback.
+This is a real UiPath-hosted artifact path, not demo-only local data. It should be presented honestly as explicit custom audit state because native Case history did not provide the full domain audit by itself. Data Fabric CSV import is now partial for E-004 row persistence, while the bucket remains the full-payload fallback.
 
 ## Demo Proof Sequence
 
@@ -140,7 +140,7 @@ Native Case state versus explicit audit store:
 
 - Use native Case state/history only if G-001 proves one-view or one-query reconstruction of evidence state, policy versions, raw recommendation, policy decision, closure block, human action, and timestamps.
 - Add Data Fabric/Data Service or explicit custom audit events if reconstruction requires manual log archaeology.
-- Current validated fallback is an Orchestrator bucket artifact containing the `service-recovery-audit-v1` bundle. Data Fabric CSV import is also validated for E-004, but the bucket remains simpler for repeatable demo readback unless the Data Fabric record is intentionally shown.
+- Current validated fallback is an Orchestrator bucket artifact containing the `service-recovery-audit-v1` bundle. Data Fabric CSV import is partial for E-004 row persistence, but the bucket remains the repeatable full-payload readback unless the Data Fabric row is intentionally shown as secondary evidence.
 
 Native version fields versus explicit metadata:
 
@@ -166,7 +166,7 @@ Hard-gate facts are now validated enough to build:
 Remaining optional platform improvements:
 
 - Repair generated Action Center field binding only if it can be done quickly and revalidated.
-- Show Data Fabric record persistence only if it is useful for the final story; otherwise use the validated Orchestrator bucket fallback for a simpler audit readback.
+- Show Data Fabric row persistence only if it is useful for the final story; otherwise use the validated Orchestrator bucket fallback for a simpler full-payload audit readback.
 - Add a real automated Test Manager/Test Cloud execution only after the demo-safe proof path is repeatable.
 
 ## Stop Rule

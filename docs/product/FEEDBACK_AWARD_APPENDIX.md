@@ -128,7 +128,7 @@ Without Maestro, we would have had to stitch together case state, task lifecycle
 ## Claims To Avoid
 
 - Do not claim automated Test Cloud execution; current Test Manager validation is manual mapping plus passed manual logs.
-- Claim Data Fabric audit record persistence only for the validated E-004 CSV import path; direct JSON insert remains unvalidated.
+- Claim Data Fabric only as partial E-004 row persistence until custom payload fields can be read back; direct JSON insert remains unvalidated.
 - Do not claim generated Action Center UI is final-demo ready.
 - Do not claim native Case history alone passes the domain audit gate.
 - Do not pitch the project as a generic governance platform.

@@ -207,11 +207,11 @@ Live validation note from 2026-06-25:
 - Entity creation succeeded after user approval: `ServiceRecoveryAuditBundle`, ID `328ef8b6-ab70-f111-ac9a-002248a16d28`.
 - Schema readback by ID succeeded and returned the expected fields.
 - Name-based `entities get ServiceRecoveryAuditBundle` failed; use the entity ID for CLI operations.
-- Direct JSON record insertion remains unvalidated. `records insert` rejected file, inline object, minimal object, wrapper object, field-ID keyed object, and array payloads with required `case_id` reported missing. CSV import is now validated for the E-004 audit record after rendering nested payload fields with the Data-Fabric-safe wire format; record `DA42769C-33B7-4701-A266-019F032AF376` was inserted in entity `328ef8b6-ab70-f111-ac9a-002248a16d28`.
+- Direct JSON record insertion remains unvalidated. `records insert` rejected file, inline object, minimal object, wrapper object, field-ID keyed object, and array payloads with required `case_id` reported missing. CSV import created E-004 record `DA42769C-33B7-4701-A266-019F032AF376` in entity `328ef8b6-ab70-f111-ac9a-002248a16d28`, but follow-up CLI readback returned only system fields and did not prove the custom payload values.
 
 ## Orchestrator Bucket Audit Artifact
 
-Because native Case history does not currently reconstruct the domain proof beat by itself and direct Data Fabric JSON insertion remains unvalidated, Orchestrator storage buckets remain the validated fallback for the audit object.
+Because native Case history does not currently reconstruct the domain proof beat by itself, direct Data Fabric JSON insertion remains unvalidated, and Data Fabric custom payload readback is not yet proven, Orchestrator storage buckets remain the validated full-payload fallback for the audit object.
 
 Live validation note from 2026-06-25:
 

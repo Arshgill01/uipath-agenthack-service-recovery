@@ -169,7 +169,7 @@
 
 ### 2026-06-26 15:56 IST - Current Risk Posture Refresh
 
-- R-001 is mitigated via live Data Fabric record persistence and Orchestrator bucket audit bundle fallbacks.
+- R-001 is mitigated via the Orchestrator bucket audit bundle fallback. Data Fabric is reduced to a partial row-persistence path until custom payload fields can be read back.
 - R-002 is mitigated through explicit package/process/artifact policy-version pinning. Native active-case migration still requires a custom audited event.
 - R-003 is mitigated for final presentation by custom evidence packets and committed desktop/mobile screenshot artifacts. Generated Action Center UI remains unsuitable as the primary judge-facing surface.
 - R-004 is mitigated by separate persisted AIE/PDE artifacts and evidence-packet comparison panels for E-002, E-004, and the adversarial E-003 packet.
@@ -180,5 +180,5 @@
 
 ### 2026-06-26 16:00 IST - Open Risks Resolution (Data Fabric & Case Completion)
 
-- **PF-019 (Data Fabric CSV Import Resolution)**: Resolved Data Fabric persistence for the E-004 audit record through CSV import. Direct JSON insert remains unvalidated, but nested payload text fields imported successfully after using `serialize_for_data_fabric_csv` in `service_recovery_core/data_fabric_record.py`. This was verified by generating E-004 CSV records and successfully importing them into Data Fabric via `uip df records import`, increasing the active record count.
+- **PF-019 (Data Fabric CSV Import Partial Resolution)**: Data Fabric CSV import created a live E-004 row and readback by record ID succeeds. Direct JSON insert remains unvalidated, and follow-up CLI readback did not expose the imported custom payload fields (`case_id`, policy versions, raw AIE/PDE, audit bundle), so Data Fabric is not yet a proven full audit-reconstruction path.
 - **PF-022 (Case Instance Completion Resolution)**: Resolved the Case Instance stuck in `Running` status. The issue was due to a required placeholder human task (`tfTXjrum9`) that had no implementation binding. By updating the Maestro Case package to version `1.0.6`, making the placeholder task optional (`isRequired: false`), uploading it to the Orchestrator solution feed, and updating the process version, new Case Instances now terminally complete (`LatestRunStatus: Completed`) upon completion/submission of the Action Center review tasks.

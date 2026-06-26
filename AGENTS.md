@@ -26,10 +26,10 @@ Architecture thesis:
   - `python -m unittest discover -s tests`
   - `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
 - Current local validation baseline is 42 unit tests and E-001 through E-009 passing 9/9.
-- UiPath CLI is installed locally as `uip` version `1.196.0`.
+- UiPath CLI is installed locally as `uip` version `1.195.1`.
 - UiPath Labs access is working for org `keepingitlowkey`, tenant `DefaultTenant`, user `arshgill6120@gmail.com`.
 - Live validation has answered the hard gates with implementation implications:
-  - G-001: native Case runtime audit is PARTIAL; Data Fabric CSV import for the E-004 audit record and the Orchestrator bucket `service-recovery-audit-v1` bundle are validated UiPath-hosted audit paths.
+  - G-001: native Case runtime audit is PARTIAL; Data Fabric CSV import created a live E-004 row and the Orchestrator bucket `service-recovery-audit-v1` bundle remains the validated full-payload audit path.
   - G-002: PASS for explicit package/process/artifact policy-version pinning; native active-case migration must be represented as an explicit custom audit event.
   - G-003: PASS for Action Center lifecycle and structured reviewer return; PARTIAL for generated Action Center UI legibility. Use custom evidence-packet/audit surface for the final demo.
   - G-004: PASS for persisted raw Agent Interpretation Event and linked Policy Decision Event; PARTIAL only for generated Action Center display.
@@ -37,12 +37,12 @@ Architecture thesis:
   - G-005: live E-002/E-004 runs prove distinct missing/stale versus contradiction routes.
   - G-007: Test Manager project `SREV`, test set `SREV:9`, and manual execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad` represent E-001 through E-009; all manual logs passed, but the aggregate execution remained `Running`.
 - Open-risk validation updates:
-  - Data Fabric record persistence is validated for the E-004 audit record through CSV import using the Data-Fabric-safe wire format; direct JSON insert remains unvalidated.
+  - Data Fabric CSV import is validated for E-004 row creation/count/readback by ID, but CLI readback did not expose the domain payload fields; direct JSON insert remains unvalidated.
   - A fresh package `1.0.6` Case Instance reached `LatestRunStatus: Completed`; do not generalize that terminal-completion claim to older E-002/E-004 jobs.
 - Demo-safe proof path:
   - Action Center = lifecycle, assignment, reviewer action/comment, structured return.
   - Custom evidence packet = judge-readable proof surface.
-  - Data Fabric CSV import or Orchestrator bucket audit bundle = durable UiPath-hosted audit proof.
+  - Orchestrator bucket audit bundle = durable full-payload UiPath-hosted audit proof; Data Fabric currently proves row persistence, not payload reconstruction.
   - Do not rely on the generated Action Center page as the final evidence-packet UI unless repaired and revalidated.
 - Repeatable local proof commands:
   - `scripts/run_demo.sh` regenerates/verifies E-002/E-004 proof artifacts without starting live UiPath work by default.

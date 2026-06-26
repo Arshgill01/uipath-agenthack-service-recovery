@@ -30,6 +30,42 @@ Next:
 
 - ...
 
+### 2026-06-26 17:18 IST - Agent / Live Open-Risk Readback Verification
+
+What changed:
+
+- Independently re-read the live Data Fabric and Maestro Case claims after the open-risk merge.
+- Downgraded Data Fabric from full audit persistence to partial row persistence: record `DA42769C-33B7-4701-A266-019F032AF376` exists and queries by ID, but `records get/list/query` did not expose custom payload fields.
+- Confirmed package `1.0.6` Case Instance `9fc6fece-55ed-4fb2-b11a-6c96f7a3314e` still reads back as `LatestRunStatus: Completed`.
+- Updated validation, architecture, submission, risk, demo, and product-feedback docs so future agents do not overclaim Data Fabric.
+
+Commands run:
+
+- `git status --short --branch`
+- `uip login status --output json`
+- `uip --version`
+- `uip df records get 328ef8b6-ab70-f111-ac9a-002248a16d28 DA42769C-33B7-4701-A266-019F032AF376 --output json`
+- `uip df entities get 328ef8b6-ab70-f111-ac9a-002248a16d28 --output json`
+- `uip df records list 328ef8b6-ab70-f111-ac9a-002248a16d28 --limit 20 --output json`
+- `uip df records query 328ef8b6-ab70-f111-ac9a-002248a16d28 --body '{"filterGroup":{"logicalOperator":0,"queryFilters":[{"fieldName":"Id","operator":"=","value":"DA42769C-33B7-4701-A266-019F032AF376"}]}}' --limit 5 --output json`
+- `uip df records query 328ef8b6-ab70-f111-ac9a-002248a16d28 --body '{"selectedFields":["Id","case_id","scenario_id","service_id","business_state","derived_evidence_state","closure_block_reason","interpretation_policy_version","decision_policy_version","package_version","source_case_instance_key","source_task_id"]}' --limit 40 --output json`
+- `uip maestro case instance get 9fc6fece-55ed-4fb2-b11a-6c96f7a3314e --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+
+Validation:
+
+- PASS: UiPath CLI auth is live for org `keepingitlowkey`, tenant `DefaultTenant`.
+- PASS: Case Instance readback proves package `1.0.6`, `LatestRunStatus: Completed`, `CompletedTimeUtc: 2026-06-26T09:06:42.1482079Z`.
+- PARTIAL: Data Fabric proves row creation/readback by ID and entity schema readback, but not full domain payload reconstruction through CLI readback.
+
+Product feedback:
+
+- PF-019 strengthened from insert-only diagnostics to insert/import/readback diagnostics. This is a better award-quality finding because the observed gap directly affects audit reconstruction.
+
+Open risks:
+
+- Data Fabric cannot be presented as the full G-001 audit proof until custom payload fields can be read back from the stored row.
+- Orchestrator bucket remains the validated full-payload UiPath-hosted audit proof.
+
 ### 2026-06-26 16:55 IST - Agent / Post-Merge Status Refresh
 
 What changed:
@@ -37,7 +73,7 @@ What changed:
 - Updated `AGENTS.md`, `docs/submission/READINESS_CHECKLIST.md`, and `docs/validation/OBJECTIVE_COMPLETION_AUDIT.md` after merging the open-risk mitigations.
 - Refreshed the current validation baseline from 39 to 42 unit tests.
 - Recorded current pushed checkpoints through `43d0181`.
-- Kept the current caveats precise: Data Fabric persistence is validated for the E-004 CSV import path, direct JSON insert remains unvalidated, and terminal Case Instance completion is claimed only for the fresh package `1.0.6` run.
+- Kept the then-current caveats precise: Data Fabric was later downgraded to partial row persistence after live readback did not expose custom payload fields; direct JSON insert remains unvalidated, and terminal Case Instance completion is claimed only for the fresh package `1.0.6` run.
 
 Commands run:
 

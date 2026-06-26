@@ -4,7 +4,7 @@ UiPath Labs hard gate validation has answered G-001 through G-004 with implement
 
 Use [VALIDATION_GATES.md](VALIDATION_GATES.md) for pass/fail criteria.
 
-The data model and integration map are now grounded in observed platform facts. Remaining partials are explicit: native Case does not provide the full domain audit alone, generated Action Center UI is not demo-legible, direct Data Fabric JSON insert remains unvalidated while CSV import is validated for E-004, and Test Manager automation is not claimed.
+The data model and integration map are now grounded in observed platform facts. Remaining partials are explicit: native Case does not provide the full domain audit alone, generated Action Center UI is not demo-legible, direct Data Fabric JSON insert remains unvalidated while CSV import is verified only for E-004 row creation/readback by ID, and Test Manager automation is not claimed.
 
 ## 2026-06-18 - Local Provisional Core Baseline
 
@@ -1375,7 +1375,7 @@ Product feedback:
 
 - PF-022 added for CLI/live-run lifecycle clarity: some command flag patterns differ across process subcommands, and completed human tasks do not make case-job completion status self-evident from the job readback.
 
-## 2026-06-26 16:00 IST - Open Risks Resolution (Data Fabric & Case Completion)
+## 2026-06-26 16:00 IST - Open Risks Resolution Attempt (Data Fabric & Case Completion)
 
 Environment:
 
@@ -1404,17 +1404,62 @@ Steps:
 5. Uploaded version `1.0.6` to Orchestrator solution feed and updated the case process.
 6. Ran a fresh Case Instance `9fc6fece-55ed-4fb2-b11a-6c96f7a3314e`, completed review task `4328396` via CLI, and queried instance status.
 
-Observed:
+Observed in the original branch run:
 
-- Data Fabric record import succeeded and the record count successfully increased from 28 to 30. Single-quote serialized fields bypass the double-quote CSV parser parsing error completely.
+- Data Fabric record import reported success and the record count successfully increased from 28 to 30. Single-quote serialized fields appeared to bypass the double-quote CSV parser parsing error.
 - Case Instance terminal status read back as `LatestRunStatus: Completed` and `CompletedTimeUtc: 2026-06-26T09:06:42.148Z`.
 
 Result:
 
-- PASS: Data Fabric record persistence is validated for the E-004 audit record through CSV import using the Data-Fabric-safe wire format.
+- PARTIAL: Data Fabric row persistence is validated for the E-004 CSV import path, but domain payload persistence is not yet proven by live readback.
 - PASS: Fresh package `1.0.6` Case Instance terminal lifecycle completion is verified.
 
 Decision impact:
 
-- Claim Data Fabric record persistence for the validated E-004 CSV import path; keep Orchestrator bucket as the simpler fallback.
+- Claim Data Fabric row creation/readback by ID for the E-004 CSV import path; keep Orchestrator bucket as the full-payload audit fallback.
 - Claim terminal Case Instance completion for the fresh package `1.0.6` run; do not generalize that claim to older E-002/E-004 jobs.
+
+## 2026-06-26 16:38 IST - Codex Live Readback of Open-Risk Fix Claims
+
+Environment:
+
+- UiPath org `keepingitlowkey`, tenant `DefaultTenant`.
+- `uip login status --output json` returned `Status: Logged in` for user context `arshgill6120@gmail.com`.
+- `uip --version` returned `1.195.1`.
+
+Gate/wave:
+
+- G-001 Data Fabric custom audit persistence readback.
+- PF-019 Data Fabric insert/import diagnostics.
+- PF-022 Case Instance lifecycle completion readback.
+
+Assumption tested:
+
+- The E-004 Data Fabric import should be queryable enough to prove the persisted audit payload, not only the existence of a row.
+- The fresh package `1.0.6` Case Instance should still read back as completed.
+
+Steps:
+
+1. Queried record `DA42769C-33B7-4701-A266-019F032AF376` via `uip df records get 328ef8b6-ab70-f111-ac9a-002248a16d28 DA42769C-33B7-4701-A266-019F032AF376 --output json`.
+2. Queried the Data Fabric schema via `uip df entities get 328ef8b6-ab70-f111-ac9a-002248a16d28 --output json`.
+3. Listed and queried records with `uip df records list` and `uip df records query`, including a filter on the record `Id`.
+4. Queried Case Instance `9fc6fece-55ed-4fb2-b11a-6c96f7a3314e` via `uip maestro case instance get ... --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`.
+
+Observed:
+
+- Data Fabric schema readback still contains the expected custom fields, including `case_id`, `scenario_id`, `interpretation_policy_version`, `decision_policy_version`, and nested payload text fields.
+- Data Fabric record `DA42769C-33B7-4701-A266-019F032AF376` exists and readback by `Id` succeeds with `CreateTime` / `UpdateTime` `2026-06-26T09:02:54.3218278+00:00`.
+- `uip df records list ... --limit 20` returned `TotalCount: 30` and `HasNextPage: true`; `uip df records query` filtered by the target `Id` returned `TotalCount: 1`.
+- However, `records get`, `records list`, and `records query` returned only system fields (`Id`, owner, create/update metadata) for the imported records. Even a query with `selectedFields` for `case_id`, `scenario_id`, policy-version fields, and package fields returned only `Id`.
+- `uip maestro case instance get` returned `PackageKey: Solution.caseManagement.Maestro.Case:1.0.6`, `PackageVersion: 1.0.6`, `LatestRunStatus: Completed`, and `CompletedTimeUtc: 2026-06-26T09:06:42.1482079Z`.
+
+Result:
+
+- PARTIAL/REVISED: Data Fabric CSV import is verified for row creation, count increase, and record readback by ID. It is not yet verified as a full domain audit reconstruction path because the CLI readback did not expose the imported custom payload fields.
+- PASS: Fresh package `1.0.6` Case Instance terminal lifecycle completion is independently verified by Codex live readback.
+
+Decision impact:
+
+- Keep Orchestrator bucket artifact as the validated full-payload UiPath-hosted audit proof for G-001.
+- Treat Data Fabric as a promising but still partial storage path until a readback method proves `case_id`, policy versions, raw AIE, PDE, and audit bundle payload values from the stored row.
+- Strengthen PF-019: the successful-looking CSV import/count increase is not enough if subsequent CLI readback cannot expose custom fields for audit reconstruction.
