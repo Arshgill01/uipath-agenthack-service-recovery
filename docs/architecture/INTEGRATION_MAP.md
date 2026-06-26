@@ -13,7 +13,7 @@ Implementation readiness slices are tracked in [IMPLEMENTATION_SLICES.md](IMPLEM
 | Case App / custom UI | Primary final evidence packet/demo surface because generated Action Center UI is not demo-legible. | G-003, G-004, G-006 |
 | Data Fabric/Data Service | Validated full-payload audit storage with `ServiceRecoveryAuditBundleV2` PascalCase fields and E-004 record readback by `CaseId`. Legacy snake_case entity remains product-feedback evidence. | G-001, G-002; PF-019, PF-023 |
 | Orchestrator storage buckets | Validated alternate fallback for storing one-object `service-recovery-audit-v1` audit artifacts when native Case audit is insufficient. | G-001, G-002, G-004, G-008 |
-| Test Cloud / Test Manager | Eval/regression representation. Live project `SREV`, test set `SREV:9`, and manual execution logs represent E-001 through E-009; automated execution not claimed. | G-007 PASS/PARTIAL |
+| Test Cloud / Test Manager | Eval/regression representation. Live project `SREV`, test set `SREV:9`, and terminal manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` represent E-001 through E-009; automated execution is not claimed because no ready automation target was found. | G-007 PASS/PARTIAL; PF-024 |
 | UiPath CLI + skills | Coding-agent bonus proof and lifecycle automation, including explicit process creation with pinned package versions. | G-008; current CLI readback `1.195.1`, logged into org `keepingitlowkey`, tenant `DefaultTenant` |
 | Orchestrator | Assets, packages, jobs, logs, deployment, secrets if needed. | Wave 01 and stack selection |
 
@@ -39,7 +39,7 @@ Observed on 2026-06-24 20:30 IST rerun:
 - `Add to solution` includes `Maestro Case`, and a `Maestro Case` project can be added to the Studio solution.
 - Case App opens and shows active-case columns for Case ID, Case type, Last modified, Stage, Case SLA, SLA status, and Case state.
 - Actions / Action Center was initially disabled for `DefaultTenant`, then enabled from Admin `DefaultTenant > Services > Add services` after user approval. Action Center now opens as `Inbox - Action Center`.
-- Test Manager is validated through project `SREV`, test set `SREV:9`, and manual execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad`.
+- Test Manager is validated through project `SREV`, test set `SREV:9`, and terminal manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11`; the earlier execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad` remains a negative lifecycle/control run.
 - Hard gates are answered with documented partials and implementation choices. Proceed with the demo-safe proof path instead of reopening broad validation.
 
 Observed live validation facts to carry into implementation:

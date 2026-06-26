@@ -21,7 +21,7 @@ Implementation should follow the validated demo-safe path: Action Center for hum
 | `policy_decision` / Policy Decision Event | Separate linked policy event, stage route, closure block reason, and case field update. | G-001, G-002, G-004, G-005 | Must link to `agent_event_id`; must not overwrite the raw recommendation. |
 | `apply_policy_decision` transition | Maestro Case stage transition and task routing. | G-001, G-005 | Local policy stages map through `POLICY_STAGE_TO_CASE_STAGE`; UiPath mapper should not invent new routing semantics. |
 | Human Review Event | Action Center human action result or Case App/custom evidence-packet result. | G-003 | Required outcomes: approve remediation, reject, request evidence, close after confirmation, and comment. |
-| Eval result | Test Manager/Test Cloud artifact if feasible; otherwise a UiPath-compatible eval export attached to policy-improvement evidence. | G-007 | Live Test Manager project `SREV`, test set `SREV:9`, and manual execution logs represent E-001 through E-009. Do not claim automated Test Cloud execution. |
+| Eval result | Test Manager/Test Cloud artifact if feasible; otherwise a UiPath-compatible eval export attached to policy-improvement evidence. | G-007 | Live Test Manager project `SREV`, test set `SREV:9`, and terminal manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` represent E-001 through E-009. Automated execution was probed but no ready automation target was found; do not claim automated Test Cloud execution. |
 
 ## Safe Now
 

@@ -1633,3 +1633,46 @@ Evidence:
 Product feedback:
 
 - PF-013 updated with local package/model inspection evidence.
+
+## 2026-06-26 16:33 UTC - G-007 Automated Test Cloud Execution Probe
+
+Gate:
+
+- G-007: Test Cloud / Test Manager eval crossover.
+
+Assumption tested:
+
+- The remaining automated Test Cloud blocker might be resolvable if Test Manager can discover or link an existing Orchestrator test automation target in the tenant.
+
+Steps:
+
+1. Confirmed `uip` auth with `uip login status --output json`.
+2. Probed Test Manager CLI automation surfaces with `uip tm testcases link-automation --help --output json` and `uip tm testcases run --help --output json`.
+3. Listed folders with `uip or folders list --output json`.
+4. Listed processes in the Solution folder and Shared folder.
+5. Searched the default package feed for `Test` and `Solution`.
+6. Ran `uip tm testcases list-automations` against Shared and Solution folders, including package-name filters.
+
+Observed:
+
+- Auth remained valid for org `keepingitlowkey`, tenant `DefaultTenant`.
+- CLI supports `link-automation` and `testcases run --execution-type automated`.
+- Shared folder had no processes and returned an empty automation list.
+- Solution folder had Case/BPMN/WebApp processes but no obvious test automation process.
+- Default package-feed searches returned no `Test` or `Solution` packages.
+- Solution-folder automation discovery returned HTTP 400 `Internal Server Error` both unfiltered and filtered by `Solution`/`Test`.
+
+Result:
+
+- G-007 remains PASS for terminal manual Test Manager representation/execution/report/JUnit export.
+- G-007 remains PARTIAL for automated Test Cloud execution. This pass actively worked the blocker but found no ready automation target to link/run, and one discovery path returns an opaque server error.
+- No automated Test Cloud execution is claimed.
+
+Decision impact:
+
+- Keep `scripts/run_test_manager_manual_eval.sh` and the terminal manual execution/JUnit export as the validated UiPath-native eval story.
+- Do not spend more submission-critical cycles on automated Test Cloud unless a real test automation package/runtime is created or appears in `list-automations`.
+
+Product feedback:
+
+- PF-024 added for Test Manager automation discovery diagnostics.

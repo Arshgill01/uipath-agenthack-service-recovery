@@ -111,3 +111,40 @@ Result:
 - G-007: PASS for manual Test Manager representation and terminal manual execution/report/export.
 - G-007: PARTIAL only for automated Test Cloud crossover because no automated Test Manager execution or Orchestrator test automation link has been created.
 - PF-021 remains useful feedback because direct `finish` calls can create passed child logs while leaving the aggregate execution `Running`; the verified workaround is to call `testcaselog start` before `testcaselog finish` for each manual case.
+
+## 2026-06-26 16:33 UTC - Automated Execution Feasibility Probe
+
+Purpose:
+
+- Work the remaining automated Test Cloud/Test Manager blocker instead of leaving it as an untried caveat.
+
+Commands used:
+
+- `uip login status --output json`
+- `uip tm testcases --help --output json`
+- `uip tm testcases link-automation --help --output json`
+- `uip tm testcases run --help --output json`
+- `uip or folders list --output json`
+- `uip or processes list --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip or processes list --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --output json`
+- `uip or packages list --search Test --output json`
+- `uip or packages list --search Solution --output json`
+- `uip tm testcases list-automations --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --output json`
+- `uip tm testcases list-automations --project-key SREV --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip tm testcases list-automations --project-key SREV --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --package-name Solution --output json`
+- `uip tm testcases list-automations --project-key SREV --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --package-name Test --output json`
+
+Observed:
+
+- CLI auth remained valid for org `keepingitlowkey`, tenant `DefaultTenant`.
+- `uip tm testcases link-automation` and `uip tm testcases run --execution-type automated` are supported CLI surfaces.
+- Shared folder `555d3f16-a106-4946-a934-4bede4789be7` had no processes and `list-automations` returned an empty list.
+- Solution folder `9d7ae568-d60e-4395-94d7-db115bfb25de` had Case/BPMN/WebApp processes, but no obvious test automation process.
+- Default package-feed searches for `Test` and `Solution` returned zero packages.
+- `list-automations` against the Solution folder returned HTTP 400 with `Internal Server Error` both unfiltered and filtered by `Solution`/`Test`.
+
+Result:
+
+- G-007 remains PASS for terminal manual Test Manager representation/execution/report/JUnit export.
+- G-007 remains PARTIAL for automated Test Cloud execution. This was actively probed, not ignored: the tenant/folder evidence does not expose a ready test automation target to link and run.
+- Product feedback PF-024 was added for opaque automation discovery failure in a Solution folder.

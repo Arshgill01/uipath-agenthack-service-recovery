@@ -54,12 +54,12 @@ Specific challenges:
 - The generated reviewer page hid or mislabeled a proof-critical field: `PolicyDecisionJson` persisted correctly in task/API data but rendered as `Unnamed String 1`.
 - Package/feed/process diagnostics required extra work. A package could be read with `--feed-id`, while default lookup and direct process creation could not bind the same version.
 - Native Case history and task APIs can reconstruct operational flow, but a clean domain audit for evidence state, raw agent recommendation, policy decision, policy versions, block reason, and human action still required explicit custom audit artifacts.
-- Data Fabric entity create/readback worked, but record insert/import could not map the required `case_id` field despite multiple valid-looking JSON shapes.
-- Test Manager could represent the eval suite as manual cases and passed logs, but it was not a one-step import from the local eval result and the aggregate execution stayed `Running`.
+- Data Fabric entity create/readback worked, but the first snake_case entity could not map the required `case_id` field despite multiple valid-looking JSON shapes. A PascalCase V2 schema later solved the full-payload audit storage/readback path and sharpened the product feedback around field-name lifecycle consistency.
+- Test Manager could represent the eval suite as manual cases and passed logs, but it was not a one-step import from the local eval result. A first direct-finish execution stayed `Running`; the corrected start-then-finish lifecycle produced terminal manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` with 9/9 passed logs and JUnit export. Automated Test Cloud execution still needs a real automation target.
 
 Evidence:
 
-- PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-019, PF-020, PF-021, PF-022.
+- PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-019, PF-020, PF-021, PF-022, PF-023, PF-024.
 
 ## Q11 - One Thing To Change
 

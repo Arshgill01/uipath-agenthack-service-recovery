@@ -35,7 +35,7 @@ Architecture thesis:
   - G-004: PASS for persisted raw Agent Interpretation Event and linked Policy Decision Event; PARTIAL only for generated Action Center display.
 - Soft gates now have evidence:
   - G-005: live E-002/E-004 runs prove distinct missing/stale versus contradiction routes.
-  - G-007: Test Manager project `SREV`, test set `SREV:9`, and terminal manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` represent E-001 through E-009 with 9/9 passed logs, `Status: Finished`, and exported JUnit evidence. Automated Test Cloud execution is not claimed.
+  - G-007: Test Manager project `SREV`, test set `SREV:9`, and terminal manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` represent E-001 through E-009 with 9/9 passed logs, `Status: Finished`, and exported JUnit evidence. Automated Test Cloud execution was probed through CLI discovery but is not claimed because no test automation target is available in the tenant/folder evidence so far.
 - Open-risk validation updates:
   - Data Fabric snake_case fields did not populate through JSON insert/update and CSV-imported rows read back only system fields. The repaired `ServiceRecoveryAuditBundleV2` PascalCase schema validated JSON insert/query/readback for the E-004 domain payload.
   - A fresh package `1.0.6` Case Instance reached `LatestRunStatus: Completed`; do not generalize that terminal-completion claim to older E-002/E-004 jobs.

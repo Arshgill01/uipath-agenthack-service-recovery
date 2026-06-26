@@ -2691,3 +2691,42 @@ Product feedback:
 Open risks:
 
 - Generated Action Center UI should still not be used as the judge-facing proof surface unless repaired in Studio/UI and revalidated with a fresh live task.
+
+### 2026-06-26 16:33 UTC - Agent / Automated Test Cloud Blocker Pass
+
+What changed:
+
+- Worked the remaining automated Test Cloud/Test Manager blocker with read-only CLI probes instead of leaving it as an untried caveat.
+- Updated Test Manager mapping, validation results, readiness docs, integration map, objective audit, and feedback survey material.
+- Added PF-024 for opaque Test Manager automation discovery diagnostics.
+
+Commands run:
+
+- `uip login status --output json`
+- `uip tm testcases --help --output json`
+- `uip tm testcases link-automation --help --output json`
+- `uip tm testcases run --help --output json`
+- `uip or folders list --output json`
+- `uip or processes list --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip or processes list --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --output json`
+- `uip or packages list --search Test --output json`
+- `uip or packages list --search Solution --output json`
+- `uip tm testcases list-automations --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --output json`
+- `uip tm testcases list-automations --project-key SREV --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip tm testcases list-automations --project-key SREV --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --package-name Solution --output json`
+- `uip tm testcases list-automations --project-key SREV --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --package-name Test --output json`
+
+Validation:
+
+- PASS: CLI auth is valid for `keepingitlowkey` / `DefaultTenant`.
+- PASS: Test Manager CLI exposes `link-automation` and automated execution flags.
+- PASS: Shared folder automation discovery returned a clean empty list.
+- PARTIAL/BLOCKED: Solution-folder automation discovery returned HTTP 400 `Internal Server Error`, and no test automation target was found in current folder/package inventory.
+
+Product feedback:
+
+- PF-024 added. The feedback is not that automated Test Cloud is impossible; it is that discovery should clearly say whether the folder has no automations, lacks a test automation runtime/package, uses an unsupported folder type, or hit a server-side failure with correlation details.
+
+Open risks:
+
+- Automated Test Cloud execution remains unvalidated and must not be claimed until a real test automation target is available and linkable.
