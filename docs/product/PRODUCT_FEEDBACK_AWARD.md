@@ -70,6 +70,7 @@ This matrix groups the current evidence into issue classes. Add new observations
 | Case job/task lifecycle CLI clarity | PF-022 | UX / integration / diagnostics | medium | Process, job, task, and Case Instance readbacks should make a fresh Case run's package, human-task completion, and terminal case state easy to reconstruct with consistent flags. | `processes get` rejected `--folder-key` while `version-history` accepted it; completed E-002/E-004 AppTasks returned reviewer actions/comments, but their older Case jobs still read as `Running` with only Pending/Running history. A fresh package `1.0.6` Case Instance later reached `LatestRunStatus: Completed` after an unbound required placeholder task was made optional. | Use corrected `processes get <key>` command, read `version-history`, rely on task readback plus audit bundle for reviewer proof on older runs, and cite terminal Case Instance completion only for the fresh package `1.0.6` run. | Harmonize folder option support or document per-subcommand differences; show whether a Case job is waiting for human task, post-task continuation, optional placeholder task, terminal completion, or blocked state. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-26 00:36 IST and 2026-06-26 16:00 IST; `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`; PF-022. |
 | Maestro Case process diagnostic readiness | PF-026 | product defect candidate / diagnostics / integration | high for human-review preflight | A Case process diagnostic command should summarize healthy/faulted process readiness and connect AppTask failures to required fields, Action app bindings, package versions, and incidents. | `uip maestro case processes diagnose` failed for both a current process and an older faulted process with `summaries.find is not a function`; `processes incidents` returned `Data: []` for the faulted process while `error-codes` only returned `170000 / Failure in the AppTasks request`. | Use `processes list`, Orchestrator process readback, task readback, and committed validation notes; keep runtime failures documented manually. | Make Case diagnostics reliable and preflight-aware: report Actions availability, required Action task fields such as Title, app binding/version, package/feed version, recent incidents, and field-specific repair links before runtime. | `docs/validation/artifacts/2026-06-27/product_feedback_readiness_probe.md`; PF-026. |
 | Human-review service and reviewer readiness discovery | PF-027 | UX / integration / diagnostics | medium/high | Builders should be able to verify Actions service availability, reviewer permissions, and task CLI usage with consistent folder arguments before starting a human-review Case. | `uip platform tenants --help` exposed tenant licensing but not service readiness; `uip tools list` showed `tasks-tool`; corrected `uip tasks users 7978263` confirmed reviewer visibility, but `uip tasks users --folder-id 7978263` failed because this subcommand uses positional folder ID while `tasks list/get` use `--folder-id`. | Use `uip tasks users <folder-id>` and existing Admin/UI knowledge; manually stitch service readiness, reviewer availability, and task readback. | Add a single readiness command or checklist for Maestro Case human review that checks Actions/Action Center service enablement, reviewer permissions, required task fields, task app binding, and uses consistent folder flags across task commands. | `docs/validation/artifacts/2026-06-27/product_feedback_readiness_probe.md`; PF-027. |
+| Scratch Case human-review authoring preflight consistency | PF-028 | UX / diagnostics / integration / product defect candidate | high for new-builder human-review workflow | A scratch Case authoring path should scaffold a complete minimal case or guide the builder to create missing content, name required Action task fields precisely, and block/flag invalid Case definitions consistently in solution dry-run/upload. | `case init` created project metadata whose entry point referenced absent `content/caseplan.json`; after creating a scratch case/stage, `tasks add` allowed an Action task without `--task-title`; `case validate` caught a generic empty required field but did not name `Title`; `tasks update` exposed no title repair flag; `solution pack --dry-run` returned `Status: Valid`; and `solution upload` created scratch Studio Web solution `PFPROBE-20260627-human-review` with `ErrorList: []`. | Use `tasks describe --id <action-app-id>` to inspect schema, run `uip maestro case validate` manually, and treat solution dry-run/upload success as insufficient for Case human-review readiness. Do not modify existing submission assets. | Make Case validate, solution dry-run, and Studio Web upload/import share the same readiness checks for Case rules, Action task required fields, Action app binding/version, and repair commands; name missing fields such as `Title` and expose an update path or Studio deep link. | `docs/validation/artifacts/2026-06-27/product_feedback_phase2_scratch_case_probe.md`; PF-028. |
 | Test Manager automation discovery diagnostics | PF-024 | UX / integration / diagnostics | medium/high | If automated execution is supported, Test Manager should list available automations, return an empty list, or explain missing runtime/package prerequisites per folder. Automated test-set runs should identify whether the blocker is folder binding, unlinked manual cases, missing package, runtime type, package metadata, or permissions. | CLI supports `link-automation` and `run --execution-type automated`; Shared folder automation discovery returned an empty list, while Solution/personal folder `list-automations` returned HTTP 400 `Internal Server Error`. Automated `SREV:9` first failed because no folder was assigned, setting project default to Solution failed HTTP 500, setting default to Shared succeeded, then automated execution failed with `No Automatic package selection could be done for test set to execute.` Follow-up probe built and uploaded package `ServiceRecoveryEvalProcessProbe:0.0.2/0.0.3`; Orchestrator listed an entry point, but Test Manager discovery still returned `Data: []`, and direct `link-automation` failed with `Test ... not found in package`. | Keep G-007 as terminal manual Test Manager validation only; do not claim automated Test Cloud execution until a supported UiPath test automation project can publish a Test Manager-visible test entry point. The project default folder is currently set to Standard `Shared` because that was the only CLI folder assignment path that succeeded. | Return structured diagnostics: package has no Test Manager-visible test cases, package is process-only, test metadata was stripped/ignored during pack, no automations in folder, unsupported folder type, missing Test Automation runtime, package feed mismatch, unlinked test cases, invalid folder type, or internal correlation ID; provide a CLI command that validates whether a package will appear in `list-automations` before upload/link attempts. | `docs/validation/TEST_MANAGER_MAPPING.md` 2026-06-26 16:33 UTC; `docs/validation/VALIDATION_RESULTS.md` 2026-06-26 14:55 UTC and 2026-06-26 15:04 UTC; PF-024. |
 | Automation Cloud home recent execution recency | PF-025 | UX / integration / dashboard | low/medium | Home dashboard recent executions should surface the latest execution or make sort/filter rules clear. | Safari Automation Cloud home showed the older `Service Recovery E-001 through E-009 Baseline - 20260625.1833` execution as `Running`, while CLI `testsets list --include-last-execution` reported latest execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` as `Finished` at `2026-06-26T10:19:58.490Z`. | Use Test Manager CLI/report/JUnit evidence and the Test Manager project/test-set view rather than the Automation Cloud home widget for submission proof. | Make home recent-execution widgets sort by latest execution/update, show when the displayed row is not the latest for a test set, or link directly to all executions with status filters. | Computer Use Safari state on 2026-06-26; `uip tm executions list`; `uip tm testsets list --include-last-execution`; PF-025. |
 
@@ -87,6 +88,7 @@ This matrix groups the current evidence into issue classes. Add new observations
 - PF-018 is a smaller but useful CLI-discovery feedback item: Data Fabric was available through `uip df`, but the general tool listing did not reveal it. This matters because first-time builders use discovery commands to decide which platform surfaces are actually accessible.
 - PF-019 is now a high-impact Data Fabric integration finding: entity create/readback worked, but record insert could not map documented JSON payloads to required fields. This directly affects regulated audit storage and is a strong product-feedback candidate if the CSV/API workaround also fails.
 - PF-022 is a practical live-run feedback item: the CLI exposes the needed process/job/task primitives, but a first-time builder needs clearer lifecycle state and per-command flag consistency to know whether a Case job is waiting, completed, or still running after a human task is completed.
+- PF-028 turns the readiness recommendation into a stronger product-management ask: the same invalid scratch human-review Case was caught by `uip maestro case validate` but passed `uip solution pack --dry-run` and uploaded into Studio Web with no errors. The final feedback should ask for one shared preflight contract across Case authoring, solution packaging, and Studio Web import.
 - The Orchestrator bucket lifecycle is a useful positive counterpoint: create/upload/list/download worked cleanly for a JSON audit artifact and gave the build a real UiPath-hosted fallback before the Data Fabric V2 path was repaired. This should be cited under "what worked well" rather than turned into a complaint.
 - The CLI/package recovery path is valuable feedback because it shows a second integration surface: downloaded Studio Web assets, local pack/upload, package metadata, app bindings, and Orchestrator process versioning. Keep those entries separate from Action Center rendering claims.
 
@@ -98,8 +100,8 @@ Draft only. Evidence-backed but not final submission prose.
 | --- | --- | --- |
 | Q10 - What UiPath products did you use? | Automation Cloud, Maestro, Maestro Case / Case app, Studio Web, Actions / Action Center, Orchestrator service listing, Integration Service listing, Data Fabric listing, Test Manager listing, UiPath CLI. Note that deep validation has so far centered on Automation Cloud, Maestro, Studio Web, Maestro Case, and Actions. | Wave 01 validation results; product launcher screenshot; CLI help output in `docs/validation/VALIDATION_RESULTS.md`. |
 | Q11 - What worked well? | Automation Cloud eventually landed in org `keepingitlowkey` / tenant `DefaultTenant`; Maestro opened and exposed case/process surfaces; Studio Web created a real `Maestro Case` project; Case designer exposed stages, rules, Case app metadata, task types, and JSON/code view; Action Center opened after Actions was enabled; JSON editor guarded against saving malformed accidental input; Action app schema exposed typed inputs, outcomes, and generated a mostly usable evidence review page; Orchestrator bucket operations worked cleanly for a JSON audit artifact through CLI create/upload/list/download/readback verification. | PF-002, PF-003, PF-004, PF-006; `wave01-studio-maestro-bpmn-created.png`; `g001-maestro-case-project-created.png`; `g001-maestro-case-json-code-view.png`; `actions-enabled-inbox.png`; 2026-06-25 G-003 validation results; `docs/validation/artifacts/2026-06-25/orchestrator_bucket_audit_artifact_E004_manifest.json`. |
-| Q12 - What challenges did you encounter? | Group by issue class: account/tenant routing ambiguity, Maestro recent-projects generic fetch error, Action Center dependency not enabled with insufficient disabled-service guidance, Human action picker/configuration ambiguity, Studio Web local Assistant migration uncertainty, schema-to-page generation failure for a proof-critical evidence field, deployment validation passing even though the live Action task was missing a required Title, CLI/package round trip failure, generic upload diagnostics, app binding drift, process auto-update/readback ambiguity, runtime task label legibility, solution-feed package/process binding mismatch, Data Fabric CLI discovery mismatch, Data Fabric record insert payload mapping failure/field-naming ambiguity, Test Manager manual lifecycle ambiguity, Test Manager automation discovery/folder-binding diagnostics, Automation Cloud dashboard recency ambiguity, Case job/task lifecycle state ambiguity, Case diagnostic command failure, human-review service/reviewer readiness discovery gaps, and generated image placeholder quality. Keep access confusion, product limitations, UX/docs friction, and product defect candidates separate. | Feedback Evidence Matrix rows PF-001 through PF-027. |
-| Q13 - What should UiPath improve? | Recommended top answer: add a Maestro Case readiness and human-review setup path that checks tenant services/roles, links directly to enable Actions when permitted, scaffolds a human evidence-packet task, shows exact input/output mapping steps, validates generated Action page controls per schema property, runs a preflight for required Action task fields before deployment, and provides reliable Case process diagnostics before/after runtime. Secondary improvements: native case audit/event inspector, schema-aware Data Fabric insert diagnostics, feed-aware CLI process creation, consistent CLI discovery for built-in product command surfaces such as Data Fabric, clearer Case job/task lifecycle readback, better package/upload diagnostics, app binding validation, process version readback, Test Manager automation discovery diagnostics, dashboard recency/status clarity, `missingaccount` diagnostics, recent-projects error diagnostics, accessible task-picker rows, and Studio Web/local Assistant transition guidance. | PF-003 as highest-impact setup blocker; PF-006/PF-007/PF-013/PF-026/PF-027 as proof-critical G-003 build blockers and readiness findings; PF-015 as native audit insight; PF-019/PF-023 as Data Fabric storage findings; PF-017 as feed/process CLI integration issue; PF-018/PF-022/PF-024/PF-025 as CLI/lifecycle/dashboard clarity issues; PF-009 through PF-012 as CLI/package recovery blockers; PF-004 as core human-task workflow friction. |
+| Q12 - What challenges did you encounter? | Group by issue class: account/tenant routing ambiguity, Maestro recent-projects generic fetch error, Action Center dependency not enabled with insufficient disabled-service guidance, Human action picker/configuration ambiguity, Studio Web local Assistant migration uncertainty, schema-to-page generation failure for a proof-critical evidence field, deployment validation passing even though the live Action task was missing a required Title, scratch Case authoring/import preflight inconsistency, CLI/package round trip failure, generic upload diagnostics, app binding drift, process auto-update/readback ambiguity, runtime task label legibility, solution-feed package/process binding mismatch, Data Fabric CLI discovery mismatch, Data Fabric record insert payload mapping failure/field-naming ambiguity, Test Manager manual lifecycle ambiguity, Test Manager automation discovery/folder-binding diagnostics, Automation Cloud dashboard recency ambiguity, Case job/task lifecycle state ambiguity, Case diagnostic command failure, human-review service/reviewer readiness discovery gaps, and generated image placeholder quality. Keep access confusion, product limitations, UX/docs friction, and product defect candidates separate. | Feedback Evidence Matrix rows PF-001 through PF-028. |
+| Q13 - What should UiPath improve? | Recommended top answer: add a Maestro Case readiness and human-review setup path that checks tenant services/roles, links directly to enable Actions when permitted, scaffolds a human evidence-packet task, shows exact input/output mapping steps, validates generated Action page controls per schema property, runs a shared preflight for required Action task fields and Case rules before deployment/upload, and provides reliable Case process diagnostics before/after runtime. Secondary improvements: native case audit/event inspector, schema-aware Data Fabric insert diagnostics, feed-aware CLI process creation, consistent CLI discovery for built-in product command surfaces such as Data Fabric, clearer Case job/task lifecycle readback, better package/upload diagnostics, app binding validation, process version readback, Test Manager automation discovery diagnostics, dashboard recency/status clarity, `missingaccount` diagnostics, recent-projects error diagnostics, accessible task-picker rows, and Studio Web/local Assistant transition guidance. | PF-003 as highest-impact setup blocker; PF-006/PF-007/PF-013/PF-026/PF-027/PF-028 as proof-critical G-003 build blockers and readiness findings; PF-015 as native audit insight; PF-019/PF-023 as Data Fabric storage findings; PF-017 as feed/process CLI integration issue; PF-018/PF-022/PF-024/PF-025 as CLI/lifecycle/dashboard clarity issues; PF-009 through PF-012 as CLI/package recovery blockers; PF-004 as core human-task workflow friction. |
 
 ## Scoring Rubric For Future Feedback
 
@@ -160,6 +162,7 @@ Use accumulated entries to answer the final feedback survey.
 | PF-025 | 2026-06-26 | Automation Cloud home / Test Manager | Recent execution widget recency | G-007 | UX / integration / dashboard | low/medium | observed | `docs/validation/VALIDATION_RESULTS.md` |
 | PF-026 | 2026-06-27 | Maestro Case / UiPath CLI | Case process diagnostics for human-review readiness | Product feedback sprint / G-003 | product defect candidate / diagnostics / integration | high | observed | `docs/validation/artifacts/2026-06-27/product_feedback_readiness_probe.md` |
 | PF-027 | 2026-06-27 | Platform / Action Center / UiPath CLI | Human-review service and reviewer readiness discovery | Product feedback sprint / G-003 | UX / integration / diagnostics | medium/high | observed | `docs/validation/artifacts/2026-06-27/product_feedback_readiness_probe.md` |
+| PF-028 | 2026-06-27 | Maestro Case / Solution / Studio Web | Scratch Case human-review authoring preflight consistency | Product feedback sprint phase 2 / G-003 | UX / diagnostics / integration / product defect candidate | high | observed with scratch artifact | `docs/validation/artifacts/2026-06-27/product_feedback_phase2_scratch_case_probe.md` |
 
 ## Entry Template
 
@@ -272,6 +275,90 @@ Evidence:
 Classification:
 
 - access / UX / docs
+
+Survey tags:
+
+- product-used
+- pain-point
+- workaround
+- improvement
+- evidence
+
+### PF-028 - 2026-06-27 - Maestro Case / Scratch Human-Review Authoring Preflight
+
+Context:
+
+- ID: PF-028.
+- Status: observed with scratch artifact.
+- Goal: attempt one real scratch builder workflow end-to-end enough to expose authoring, readiness, and diagnostic behavior without modifying submission assets.
+- Product surface: Maestro Case CLI authoring, Action task metadata, Solution dry-run packaging, and Studio Web solution upload/import.
+- Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `arshgill6120@gmail.com`.
+- Wave/gate: Product feedback sprint phase 2 / G-003.
+
+What worked:
+
+- `uip solution init PFPROBE-20260627-human-review` and `uip maestro case init PFPROBE-20260627-human-review-case` created a scratch local solution and Case project.
+- `uip maestro case cases add` and `uip maestro case stages add` created a minimal scratch Case definition and required stage after the missing content file was discovered.
+- `uip maestro case registry pull` and `uip maestro case tasks describe --type action --id 9eeb93b2-11d3-4bfb-b7d6-29879226f242 --output json` exposed the existing `SimpleApprovalApp` schema, including `EvidencePacketJson`, `RawAgentRecommendation`, and `PolicyDecisionJson`.
+- `uip solution upload tmp/product-feedback-probes/PFPROBE-20260627-human-review --output json` created a clearly prefixed scratch Studio Web solution: `PFPROBE-20260627-human-review`, solution ID `d897e886-da98-4e73-6caf-08ded37985a5`.
+
+What failed or confused us:
+
+- `uip maestro case init` created project metadata and an entry point that referenced `/content/caseplan.json.bpmn#trigger_1`, but the local project did not include `content/caseplan.json`. `uip maestro case validate` and `tasks add` therefore failed with file-not-found until `cases add` was discovered and run manually.
+- `uip maestro case tasks describe --type action --output json` required `--id <id>`, so the generic Action task shape was not discoverable without first finding a concrete Action app ID.
+- `uip maestro case registry search SimpleApprovalApp --output json` returned zero results even though `action-apps-index.json` contained matching `SimpleApprovalApp` entries after `registry pull`.
+- `uip maestro case tasks add ... --type action ... --task-type-id 9eeb93b2-11d3-4bfb-b7d6-29879226f242 --recipient arshgill6120@gmail.com --output json` succeeded without `--task-title`.
+- `uip maestro case validate .../content/caseplan.json --output json` caught the invalid task, but the error was generic: `A required field is empty in 'PFPROBE Human Review Missing Title'`. It did not name the missing `Title` field or point to the `--task-title` creation flag.
+- `uip maestro case tasks update --help` did not expose a `--task-title` repair flag for the task after creation.
+- `uip solution pack tmp/product-feedback-probes/PFPROBE-20260627-human-review --dry-run --output json` returned `Status: Valid`.
+- `uip solution upload tmp/product-feedback-probes/PFPROBE-20260627-human-review --output json` succeeded with `ErrorList: []` and opened a Studio Web designer URL even though the same Case definition failed Case-level validation.
+
+Expected:
+
+- A scratch Case authoring path should either scaffold a complete minimal Case definition or guide the builder directly from `case init` to the missing content creation step.
+- Required Action task fields such as `Title` should be validated at creation time or reported with exact field names, repair commands, and Studio deep links.
+- Case-level validation, solution dry-run packaging, and Studio Web upload/import should share the same readiness checks for invalid Case rules and Action task configuration.
+
+Observed:
+
+- The most useful validation lived in `uip maestro case validate`, but it was field-generic.
+- Solution-level dry-run and upload reported success for the invalid scratch Case.
+- Studio Web accepted the scratch solution import, producing solution ID `d897e886-da98-4e73-6caf-08ded37985a5` and project ID `c577c2db-ec94-4ec6-86b0-2c65c6b15393`, without surfacing the missing-title or missing-rule problems in the CLI upload response.
+
+Impact:
+
+- Build impact: high for new builders creating a Maestro Case human-review workflow. The product has the right primitives, but the preflight checks are split across commands and can disagree at the moment a builder believes the solution is ready.
+- Demo/submission impact: medium/high for product feedback only. This strengthens the Best Product Feedback recommendation but does not change validated demo claims.
+- Severity: high.
+
+Workaround:
+
+- Run `uip maestro case validate` manually before treating `uip solution pack --dry-run` or `uip solution upload` as readiness evidence.
+- Use `tasks describe --id <action-app-id>` to inspect concrete Action app schema.
+- Keep scratch resources clearly prefixed and separate from submission assets.
+
+Suggested improvement:
+
+- Add a shared Maestro Case readiness/preflight contract used by Case authoring, solution dry-run, and Studio Web import. It should check Case entry/completion rules, Action task required fields, Action app binding/version, reviewer visibility where possible, and package/feed selection before runtime.
+- When a required Action task field is missing, name the exact field, show the creation/update flag or Studio property path, and include a link to repair the task.
+
+Evidence:
+
+- Screenshot/path/link: `docs/validation/artifacts/2026-06-27/product_feedback_phase2_scratch_case_probe.md`.
+- Scratch cloud artifact: Studio Web solution `PFPROBE-20260627-human-review`, solution ID `d897e886-da98-4e73-6caf-08ded37985a5`; project ID `c577c2db-ec94-4ec6-86b0-2c65c6b15393`.
+- Local scratch path: `tmp/product-feedback-probes/PFPROBE-20260627-human-review`.
+
+Classification:
+
+- UX / diagnostics / integration / product defect candidate
+
+Confidence:
+
+- high, because the commands were run live against the authenticated Labs tenant and produced a scratch Studio Web solution with no changes to submission resources.
+
+Follow-up validation needed:
+
+- Optional UI inspection of the imported scratch solution could show whether Studio Web surfaces the same missing-title/missing-rule issues visually. Phase 2 stopped after one deeper probe per request.
 
 Survey tags:
 

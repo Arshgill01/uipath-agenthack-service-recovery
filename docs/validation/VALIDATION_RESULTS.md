@@ -2025,3 +2025,78 @@ Product feedback:
 Evidence:
 
 - `docs/validation/artifacts/2026-06-27/product_feedback_readiness_probe.md`
+
+## 2026-06-27 - Product Feedback Evidence Sprint Phase 2 Scratch Case Probe
+
+Scope:
+
+- Run one deeper scratch UiPath product probe instead of another read-only discovery pass.
+- Attempt a real scratch Maestro Case / human-review authoring path far enough to observe readiness and diagnostics.
+- Preserve all existing submission resources.
+
+Environment:
+
+- UiPath CLI `1.195.1`.
+- Org `keepingitlowkey`.
+- Tenant `DefaultTenant`.
+- User `arshgill6120@gmail.com`.
+
+Scratch resources:
+
+- Local solution: `tmp/product-feedback-probes/PFPROBE-20260627-human-review`.
+- Local Case project: `tmp/product-feedback-probes/PFPROBE-20260627-human-review/PFPROBE-20260627-human-review-case`.
+- Studio Web solution: `PFPROBE-20260627-human-review`.
+- Solution ID: `d897e886-da98-4e73-6caf-08ded37985a5`.
+- Project ID: `c577c2db-ec94-4ec6-86b0-2c65c6b15393`.
+
+Commands/actions:
+
+1. `uip login status --output json`
+2. `uip maestro case registry pull --output json`
+3. `uip maestro case registry search PFPROBE --output json`
+4. `uip maestro case registry search SimpleApprovalApp --output json`
+5. `uip solution init PFPROBE-20260627-human-review --output json`
+6. `uip maestro case init PFPROBE-20260627-human-review-case --output json`
+7. `uip maestro case validate tmp/product-feedback-probes/PFPROBE-20260627-human-review/PFPROBE-20260627-human-review-case/content/caseplan.json --output json`
+8. `uip maestro case tasks add tmp/product-feedback-probes/PFPROBE-20260627-human-review/PFPROBE-20260627-human-review-case/content/caseplan.json Stage_1 --type action --display-name "PFPROBE Human Review Missing Title" --task-type-id 9eeb93b2-11d3-4bfb-b7d6-29879226f242 --recipient arshgill6120@gmail.com --output json`
+9. `uip maestro case cases add --name "PFPROBE-20260627 Human Review Case" --file tmp/product-feedback-probes/PFPROBE-20260627-human-review/PFPROBE-20260627-human-review-case/content/caseplan.json --case-app-enabled --description "Scratch human-review readiness probe" --output json`
+10. `uip maestro case stages add tmp/product-feedback-probes/PFPROBE-20260627-human-review/PFPROBE-20260627-human-review-case/content/caseplan.json --label "Human Review" --is-required --output json`
+11. `uip maestro case tasks add tmp/product-feedback-probes/PFPROBE-20260627-human-review/PFPROBE-20260627-human-review-case/content/caseplan.json Stage_PxZpVH --type action --display-name "PFPROBE Human Review Missing Title" --task-type-id 9eeb93b2-11d3-4bfb-b7d6-29879226f242 --recipient arshgill6120@gmail.com --output json`
+12. `uip maestro case tasks describe --type action --id 9eeb93b2-11d3-4bfb-b7d6-29879226f242 --output json`
+13. `uip maestro case validate tmp/product-feedback-probes/PFPROBE-20260627-human-review/PFPROBE-20260627-human-review-case/content/caseplan.json --output json`
+14. `uip maestro case tasks get tmp/product-feedback-probes/PFPROBE-20260627-human-review/PFPROBE-20260627-human-review-case/content/caseplan.json Stage_PxZpVH tDE6A9MfL --output json`
+15. `uip maestro case tasks update --help`
+16. `uip solution resource refresh --solution-folder tmp/product-feedback-probes/PFPROBE-20260627-human-review --output json`
+17. `uip solution pack tmp/product-feedback-probes/PFPROBE-20260627-human-review --dry-run --output json`
+18. `uip solution upload tmp/product-feedback-probes/PFPROBE-20260627-human-review --output json`
+
+Observed:
+
+- `registry pull` loaded Action app metadata, but `registry search SimpleApprovalApp` returned zero results even though `action-apps-index.json` contained `SimpleApprovalApp`.
+- `case init` created a Case project whose `entry-points.json` referenced `/content/caseplan.json.bpmn#trigger_1`, but the local content file did not exist until `cases add` was run manually.
+- `tasks add` accepted a scratch Action task without `--task-title`.
+- `tasks describe --type action --id 9eeb93b2-11d3-4bfb-b7d6-29879226f242` exposed proof-critical fields: `EvidencePacketJson`, `RawAgentRecommendation`, and `PolicyDecisionJson`.
+- `case validate` failed with a useful but generic required-field error: `A required field is empty in 'PFPROBE Human Review Missing Title'`. It did not identify `Title`.
+- `tasks update --help` did not expose a `--task-title` repair flag.
+- `solution pack --dry-run` returned `Status: Valid` for the same scratch solution whose Case definition failed `uip maestro case validate`.
+- `solution upload` succeeded and returned `ErrorList: []`, creating scratch Studio Web solution `PFPROBE-20260627-human-review`.
+
+Result:
+
+- PASS for deeper scratch product-feedback evidence collection.
+- A scratch local Case solution and scratch Studio Web solution were created with the required `PFPROBE-20260627-` prefix.
+- No existing submission resources/processes/packages/cases/tasks/Data Fabric entities were modified.
+- The scratch cloud solution was not deleted because the safety rule required stopping before deletion.
+
+Decision impact:
+
+- Strengthens the final product-feedback recommendation: Maestro Case needs a shared human-review readiness/preflight path that runs consistently across Case authoring, solution dry-run/pack, and Studio Web upload/import.
+- Does not weaken current validated submission claims. No automated Test Cloud execution is claimed; generated Action Center UI remains unsuitable as the final judge proof surface; native Case history alone remains insufficient for G-001.
+
+Product feedback:
+
+- PF-028 added for scratch Case human-review authoring preflight consistency: field-specific Action task validation, repair affordances, scaffold guidance, and solution-level readiness checks.
+
+Evidence:
+
+- `docs/validation/artifacts/2026-06-27/product_feedback_phase2_scratch_case_probe.md`
