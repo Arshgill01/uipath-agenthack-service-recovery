@@ -2148,6 +2148,7 @@ Commands/actions:
 22. `uip solution download 74018a7a-e09c-43b3-6d15-08ded37985a5 -d tmp/product-feedback-probes-repair-export --extract -n PFPROBE-20260627-human-review-repair-export --output json`
 23. `uip maestro case validate tmp/product-feedback-probes-repair-export/PFPROBE-20260627-human-review-repair-export/PFPROBE-20260627-human-review-repair-case/caseplan.json --output json`
 24. Safari/Computer Use opened the repaired scratch Studio Web designer and `screencapture` saved the canvas screenshot.
+25. Safari/Computer Use opened the existing invalid scratch Studio Web designer and `screencapture` saved the canvas screenshot.
 
 Observed:
 
@@ -2159,12 +2160,13 @@ Observed:
 - `uip solution upload` created the repaired scratch Studio Web solution with `ErrorList: []`.
 - Downloading the repaired Studio Web solution and revalidating the exported `caseplan.json` still returned `Status: Valid`.
 - Safari loaded the repaired Studio Web designer and showed Trigger 1, the Human Review stage, and the repaired human-review task on the Case plan canvas.
+- Safari loaded the existing invalid Studio Web designer and showed validation markers before runtime. Accessibility text reported Case plan validation errors, stage validation warnings, and task validation errors; the visual canvas showed red/yellow markers on the Rules area, Human Review stage, human-review task, and Completion rules panel.
 
 Result:
 
 - PASS for assigned Workstream A evidence gathering.
 - PASS for new scratch repair path and readiness comparison.
-- PARTIAL for Studio Web readiness diagnostics: the repaired scratch opened successfully, but no separate Studio Web preflight/readiness surface was observed; CLI upload/import success alone accepted both the earlier invalid scratch and the repaired scratch.
+- PARTIAL for Studio Web readiness diagnostics: Studio Web designer did visually mark the invalid scratch after import, but CLI upload/import success alone accepted both the earlier invalid scratch and the repaired scratch.
 
 Decision impact:
 
@@ -2174,8 +2176,10 @@ Decision impact:
 Product feedback:
 
 - PF-028 strengthened with existing-scratch export evidence, new scratch repair comparison, Studio Web upload/download round trip, and Safari screenshot.
+- Additional nuance: Studio Web visual validation exists after import, but it is not shared as a blocking result by `uip solution pack --dry-run` or `uip solution upload`.
 
 Evidence:
 
 - `docs/validation/artifacts/2026-06-27/product_feedback_workstream_a_maestro_authoring_repair_probe.md`
+- `docs/validation/artifacts/2026-06-27/pfprobe-human-review-existing-invalid-studio-safari.png`
 - `docs/validation/artifacts/2026-06-27/pfprobe-human-review-repair-studio-safari.png`

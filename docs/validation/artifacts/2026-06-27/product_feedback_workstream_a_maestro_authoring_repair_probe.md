@@ -15,7 +15,9 @@ Environment:
 - Org: `keepingitlowkey`.
 - Tenant: `DefaultTenant`.
 - User: `arshgill6120@gmail.com`.
-- Browser screenshot: Safari was logged into the UiPath Labs account and loaded the repaired scratch Studio Web designer. After Computer Use system access was enabled, the first-run Case Management modal was dismissed and the unobstructed Case plan canvas was captured. Screenshot artifact: `docs/validation/artifacts/2026-06-27/pfprobe-human-review-repair-studio-safari.png`.
+- Browser screenshots: Safari was logged into the UiPath Labs account and loaded both scratch Studio Web designers. The existing invalid scratch showed visual validation markers before runtime. The repaired scratch showed an unobstructed Case plan canvas with no comparable visible error marker. Screenshot artifacts:
+  - `docs/validation/artifacts/2026-06-27/pfprobe-human-review-existing-invalid-studio-safari.png`
+  - `docs/validation/artifacts/2026-06-27/pfprobe-human-review-repair-studio-safari.png`
 
 ## Existing Scratch Inspection
 
@@ -62,6 +64,11 @@ Observed:
 - `tasks get` for `tDE6A9MfL` showed `EvidencePacketJson`, `RawAgentRecommendation`, and `PolicyDecisionJson` inputs, but did not show a `TaskTitle` value.
 - Missing case/stage/task rules are visible before runtime through `uip maestro case validate`.
 - Missing Action task Title is only visible before runtime as a generic required-field validation error; the message does not name `Title`.
+- Safari Studio Web loaded the existing invalid scratch and showed visible validation markers before runtime:
+  - Case plan accessibility text: `The case plan has validation errors. Review the case plan properties panel for details.`
+  - Stage accessibility text: `This stage has validation warnings. Review the properties panel for details.`
+  - Task accessibility text: `This task has validation errors. Review the properties panel for details.`
+  - The canvas showed red/yellow validation badges on the Rules area, Human Review stage, human-review task, and Completion rules panel.
 
 ## New Scratch Repair Path
 
@@ -182,6 +189,7 @@ Result:
 - PASS for creating a separate scratch repair solution with `PFPROBE-20260627-` prefix.
 - PASS for a local repair path that makes the scratch Case pass `uip maestro case validate`.
 - PARTIAL for Studio Web designer validation/readiness: CLI upload/import accepted both invalid and valid scratch definitions. Safari loaded the repaired scratch designer and the screenshot shows the repaired Case plan canvas with Trigger 1, the Human Review stage, and the repaired human-review task. This proves Studio Web could open the repaired scratch, but no separate Studio Web readiness/preflight warning surface was observed.
+- Studio Web nuance: the invalid scratch designer does show visual validation markers after import, but `uip solution upload` still returned success and `ErrorList: []`. The product gap is the lack of shared blocking/readiness semantics across upload/dry-run and designer validation, not the total absence of designer-side warnings.
 
 Decision impact:
 

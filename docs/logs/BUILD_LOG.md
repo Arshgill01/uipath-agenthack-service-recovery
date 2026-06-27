@@ -10,7 +10,7 @@ What changed:
 - Created separate scratch repair solution `PFPROBE-20260627-human-review-repair`.
 - Reproduced the missing Action task title/rules validation failure, then repaired the scratch Case with `--task-title`, requiredness, and minimal case/stage/task rules.
 - Uploaded and downloaded the repaired scratch solution, then validated the exported Case definition.
-- Captured Safari screenshot evidence for the repaired scratch Studio Web Case designer.
+- Captured Safari screenshot evidence for both the existing invalid scratch and repaired scratch Studio Web Case designers.
 - Strengthened PF-028, validation results, and artifact notes.
 
 Commands run:
@@ -39,6 +39,7 @@ Commands run:
 - `uip maestro case validate tmp/product-feedback-probes-repair-export/PFPROBE-20260627-human-review-repair-export/PFPROBE-20260627-human-review-repair-case/caseplan.json --output json`
 - Safari/Computer Use read-only designer inspection.
 - `screencapture -x docs/validation/artifacts/2026-06-27/pfprobe-human-review-repair-studio-safari.png`
+- `screencapture -x docs/validation/artifacts/2026-06-27/pfprobe-human-review-existing-invalid-studio-safari.png`
 - `git diff --check`
 - `scripts/run_submission_check.sh`
 
@@ -48,9 +49,10 @@ Validation:
 - PASS: repaired scratch `caseplan.json` validated as `Status: Valid`.
 - PASS: `uip solution pack --dry-run` returned `Status: Valid` for the repaired scratch.
 - PASS: repaired Studio Web upload/download round trip still validated as `Status: Valid`.
+- PASS: Safari opened the invalid scratch designer and showed visual Case plan/stage/task validation markers before runtime.
 - PASS: `git diff --check`.
 - PASS: `scripts/run_submission_check.sh` ran 46 unit tests and verified demo artifacts.
-- PARTIAL: Studio Web opened the repaired scratch designer, but no separate readiness/preflight surface was observed.
+- PARTIAL: Studio Web designer validation exists after import, but `uip solution pack --dry-run` and `uip solution upload` did not share the same blocking readiness result for the invalid scratch.
 
 Product feedback:
 
