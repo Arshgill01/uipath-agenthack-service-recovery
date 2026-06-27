@@ -2100,3 +2100,82 @@ Product feedback:
 Evidence:
 
 - `docs/validation/artifacts/2026-06-27/product_feedback_phase2_scratch_case_probe.md`
+
+## 2026-06-27 19:54 IST - Product Feedback Evidence Workstream A Maestro Authoring Repair Probe
+
+Scope:
+
+- Continue Product Feedback Evidence Workstream A for Maestro Case human-review authoring/readiness.
+- Inspect existing scratch solution `PFPROBE-20260627-human-review` without mutating it.
+- Create a separate scratch repair solution and compare readiness signals across Case validate, solution dry-run, Studio Web upload/import, and export round trip.
+
+Environment:
+
+- UiPath CLI `1.195.1`.
+- Org `keepingitlowkey`.
+- Tenant `DefaultTenant`.
+- User `arshgill6120@gmail.com`.
+- Safari authenticated to UiPath Labs for Studio Web read-only screenshot.
+
+Scratch resources:
+
+- Existing scratch inspected by download/export only: `PFPROBE-20260627-human-review`, solution ID `d897e886-da98-4e73-6caf-08ded37985a5`.
+- New repaired scratch: `PFPROBE-20260627-human-review-repair`, solution ID `74018a7a-e09c-43b3-6d15-08ded37985a5`, project ID `79f8d37b-f33e-42ba-b777-eabde556bc5e`.
+
+Commands/actions:
+
+1. `uip login status --output json`
+2. `uip solution download d897e886-da98-4e73-6caf-08ded37985a5 -d tmp/product-feedback-probes-existing --extract -n PFPROBE-20260627-human-review-existing --output json`
+3. `uip maestro case validate tmp/product-feedback-probes-existing/PFPROBE-20260627-human-review-existing/PFPROBE-20260627-human-review-case/caseplan.json --output json`
+4. `uip maestro case tasks get tmp/product-feedback-probes-existing/PFPROBE-20260627-human-review-existing/PFPROBE-20260627-human-review-case/caseplan.json Stage_PxZpVH tDE6A9MfL --output json`
+5. `uip solution init PFPROBE-20260627-human-review-repair --output json`
+6. `uip maestro case init PFPROBE-20260627-human-review-repair-case --output json`
+7. `uip maestro case cases add --name "PFPROBE-20260627 Human Review Repair Case" --file PFPROBE-20260627-human-review-repair-case/content/caseplan.json --case-app-enabled --description "Scratch human-review repair probe" --output json`
+8. `uip maestro case stages add PFPROBE-20260627-human-review-repair-case/content/caseplan.json --label "Human Review" --is-required --output json`
+9. `uip maestro case tasks add ... --display-name "PFPROBE Human Review Missing Title" ... --recipient arshgill6120@gmail.com --output json`
+10. `uip maestro case validate PFPROBE-20260627-human-review-repair-case/content/caseplan.json --output json`
+11. `uip maestro case stage-entry-conditions add ... --rule-type case-entered --output json`
+12. `uip maestro case tasks remove ... tvWLIAj8L --output json`
+13. `uip maestro case tasks add ... --display-name "PFPROBE Human Review With Title" ... --task-title "PFPROBE Human Review Evidence" --output json`
+14. `uip maestro case task-entry-conditions add ... --rule-type current-stage-entered --output json`
+15. `uip maestro case stage-exit-conditions add ... --marks-stage-complete true --rule-type required-tasks-completed --output json`
+16. `uip maestro case case-exit-conditions add ... --marks-case-complete true --rule-type required-stages-completed --output json`
+17. `uip maestro case tasks update ... --is-required --output json`
+18. `uip maestro case validate PFPROBE-20260627-human-review-repair-case/content/caseplan.json --output json`
+19. `uip solution resource refresh --solution-folder tmp/product-feedback-probes/PFPROBE-20260627-human-review-repair --output json`
+20. `uip solution pack tmp/product-feedback-probes/PFPROBE-20260627-human-review-repair --dry-run --output json`
+21. `uip solution upload tmp/product-feedback-probes/PFPROBE-20260627-human-review-repair --output json`
+22. `uip solution download 74018a7a-e09c-43b3-6d15-08ded37985a5 -d tmp/product-feedback-probes-repair-export --extract -n PFPROBE-20260627-human-review-repair-export --output json`
+23. `uip maestro case validate tmp/product-feedback-probes-repair-export/PFPROBE-20260627-human-review-repair-export/PFPROBE-20260627-human-review-repair-case/caseplan.json --output json`
+24. Safari/Computer Use opened the repaired scratch Studio Web designer and `screencapture` saved the canvas screenshot.
+
+Observed:
+
+- The existing scratch export still failed `uip maestro case validate` with four errors and two warnings before runtime, including the generic required-field error for the missing Action task title and missing case/stage/task rules.
+- The repaired scratch initially reproduced the same invalid no-title/no-rules state.
+- `tasks update --help` did not expose a title repair path; the working CLI repair was remove/re-add with `--task-title`.
+- After adding the title, stage entry rule, task entry rule, stage completion rule, case completion rule, and required task flag, `uip maestro case validate` returned `Status: Valid`.
+- `uip solution pack --dry-run` returned `Status: Valid` for the repaired scratch.
+- `uip solution upload` created the repaired scratch Studio Web solution with `ErrorList: []`.
+- Downloading the repaired Studio Web solution and revalidating the exported `caseplan.json` still returned `Status: Valid`.
+- Safari loaded the repaired Studio Web designer and showed Trigger 1, the Human Review stage, and the repaired human-review task on the Case plan canvas.
+
+Result:
+
+- PASS for assigned Workstream A evidence gathering.
+- PASS for new scratch repair path and readiness comparison.
+- PARTIAL for Studio Web readiness diagnostics: the repaired scratch opened successfully, but no separate Studio Web preflight/readiness surface was observed; CLI upload/import success alone accepted both the earlier invalid scratch and the repaired scratch.
+
+Decision impact:
+
+- Strengthens PF-028. The strongest recommendation remains a shared Maestro Case human-review readiness/preflight path across Case validate, solution dry-run, and Studio Web upload/import, with field-specific Action task repair guidance.
+- Does not change submission claims: generated Action Center UI is still not final-demo ready, automated Test Cloud execution remains unclaimed, native Case history alone remains insufficient for G-001, and no submission process/package/case/task/Data Fabric/Test Manager baseline object was mutated.
+
+Product feedback:
+
+- PF-028 strengthened with existing-scratch export evidence, new scratch repair comparison, Studio Web upload/download round trip, and Safari screenshot.
+
+Evidence:
+
+- `docs/validation/artifacts/2026-06-27/product_feedback_workstream_a_maestro_authoring_repair_probe.md`
+- `docs/validation/artifacts/2026-06-27/pfprobe-human-review-repair-studio-safari.png`
