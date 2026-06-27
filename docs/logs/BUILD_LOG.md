@@ -3160,3 +3160,46 @@ Open risks:
 
 - No new platform proof claims were added.
 - PF-026 is a product defect candidate based on CLI behavior; a formal UiPath bug report may need a correlation ID if requested.
+
+### 2026-06-27 - Agent / Product Feedback Evidence Sprint Phase 2
+
+What changed:
+
+- Ran one deeper scratch Maestro Case human-review authoring probe using the required `PFPROBE-20260627-` prefix.
+- Created local scratch solution `tmp/product-feedback-probes/PFPROBE-20260627-human-review`.
+- Uploaded scratch Studio Web solution `PFPROBE-20260627-human-review`, solution ID `d897e886-da98-4e73-6caf-08ded37985a5`, project ID `c577c2db-ec94-4ec6-86b0-2c65c6b15393`.
+- Added evidence artifact `docs/validation/artifacts/2026-06-27/product_feedback_phase2_scratch_case_probe.md`.
+- Added PF-028 for scratch Case human-review authoring preflight inconsistency: `uip maestro case validate` caught missing rules/required field, but `uip solution pack --dry-run` returned `Status: Valid` and `uip solution upload` returned `ErrorList: []`.
+- Updated `docs/validation/VALIDATION_RESULTS.md` with exact actions and observed product behavior.
+
+Commands/actions:
+
+- `uip login status --output json`
+- `uip maestro case registry pull --output json`
+- `uip maestro case registry search PFPROBE --output json`
+- `uip maestro case registry search SimpleApprovalApp --output json`
+- `uip solution init PFPROBE-20260627-human-review --output json`
+- `uip maestro case init PFPROBE-20260627-human-review-case --output json`
+- `uip maestro case validate tmp/product-feedback-probes/PFPROBE-20260627-human-review/PFPROBE-20260627-human-review-case/content/caseplan.json --output json`
+- `uip maestro case tasks add tmp/product-feedback-probes/PFPROBE-20260627-human-review/PFPROBE-20260627-human-review-case/content/caseplan.json Stage_1 --type action --display-name "PFPROBE Human Review Missing Title" --task-type-id 9eeb93b2-11d3-4bfb-b7d6-29879226f242 --recipient arshgill6120@gmail.com --output json`
+- `uip maestro case cases add --name "PFPROBE-20260627 Human Review Case" --file tmp/product-feedback-probes/PFPROBE-20260627-human-review/PFPROBE-20260627-human-review-case/content/caseplan.json --case-app-enabled --description "Scratch human-review readiness probe" --output json`
+- `uip maestro case stages add tmp/product-feedback-probes/PFPROBE-20260627-human-review/PFPROBE-20260627-human-review-case/content/caseplan.json --label "Human Review" --is-required --output json`
+- `uip maestro case tasks add tmp/product-feedback-probes/PFPROBE-20260627-human-review/PFPROBE-20260627-human-review-case/content/caseplan.json Stage_PxZpVH --type action --display-name "PFPROBE Human Review Missing Title" --task-type-id 9eeb93b2-11d3-4bfb-b7d6-29879226f242 --recipient arshgill6120@gmail.com --output json`
+- `uip maestro case tasks describe --type action --id 9eeb93b2-11d3-4bfb-b7d6-29879226f242 --output json`
+- `uip maestro case validate tmp/product-feedback-probes/PFPROBE-20260627-human-review/PFPROBE-20260627-human-review-case/content/caseplan.json --output json`
+- `uip maestro case tasks get tmp/product-feedback-probes/PFPROBE-20260627-human-review/PFPROBE-20260627-human-review-case/content/caseplan.json Stage_PxZpVH tDE6A9MfL --output json`
+- `uip maestro case tasks update --help`
+- `uip solution resource refresh --solution-folder tmp/product-feedback-probes/PFPROBE-20260627-human-review --output json`
+- `uip solution pack tmp/product-feedback-probes/PFPROBE-20260627-human-review --dry-run --output json`
+- `uip solution upload tmp/product-feedback-probes/PFPROBE-20260627-human-review --output json`
+
+Validation:
+
+- PASS: one scratch product artifact was attempted and created using the `PFPROBE-20260627-` prefix.
+- PASS: saved CLI evidence artifact created under `docs/validation/artifacts/2026-06-27/`.
+- PASS: no existing submission resources were modified.
+
+Open risks:
+
+- The scratch Studio Web solution remains in the tenant because deletion was explicitly out of scope without approval.
+- UI inspection of the uploaded scratch solution was not run; CLI upload response already provides enough evidence for PF-028.
