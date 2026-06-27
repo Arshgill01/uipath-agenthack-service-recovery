@@ -303,7 +303,7 @@ What worked:
 - `uip solution upload tmp/product-feedback-probes/PFPROBE-20260627-human-review --output json` created a clearly prefixed scratch Studio Web solution: `PFPROBE-20260627-human-review`, solution ID `d897e886-da98-4e73-6caf-08ded37985a5`.
 - Follow-up Workstream A inspection exported the existing scratch solution, and `uip maestro case validate` still surfaced the missing case/stage/task rules before runtime.
 - A separate scratch repair solution `PFPROBE-20260627-human-review-repair` passed `uip maestro case validate` after adding `TaskTitle`, requiredness, and minimal case/stage/task rules. `uip solution upload` created solution ID `74018a7a-e09c-43b3-6d15-08ded37985a5`, and a download/export round trip still validated as `Status: Valid`.
-- Safari loaded the repaired scratch Studio Web designer, and the captured canvas showed Trigger 1, the Human Review stage, and the repaired human-review task.
+- Safari loaded both scratch Studio Web designers. The invalid scratch showed visible validation markers on the Case plan, Human Review stage, human-review task, Rules, and Completion rules surfaces; the repaired scratch showed Trigger 1, the Human Review stage, and the repaired human-review task without comparable visible error markers.
 
 What failed or confused us:
 
@@ -316,7 +316,7 @@ What failed or confused us:
 - `uip solution pack tmp/product-feedback-probes/PFPROBE-20260627-human-review --dry-run --output json` returned `Status: Valid`.
 - `uip solution upload tmp/product-feedback-probes/PFPROBE-20260627-human-review --output json` succeeded with `ErrorList: []` and opened a Studio Web designer URL even though the same Case definition failed Case-level validation.
 - The follow-up repair probe found no in-place CLI title update path; the working repair was to remove/re-add the Action task with `--task-title`.
-- The in-app browser reached UiPath login rather than the Studio Web designer. Safari access resolved that gap, but no separate Studio Web readiness/preflight warning surface was observed beyond the Case designer opening the repaired canvas.
+- The in-app browser reached UiPath login rather than the Studio Web designer. Safari access resolved that gap. Studio Web showed visual validation markers on the invalid scratch after import, while the repaired scratch opened without comparable visible error markers. The gap is that upload/dry-run did not share the same blocking/readiness semantics as designer validation.
 
 Expected:
 
@@ -331,6 +331,7 @@ Observed:
 - Studio Web accepted the scratch solution import, producing solution ID `d897e886-da98-4e73-6caf-08ded37985a5` and project ID `c577c2db-ec94-4ec6-86b0-2c65c6b15393`, without surfacing the missing-title or missing-rule problems in the CLI upload response.
 - The repaired scratch narrowed validation from six findings to one requiredness error, then passed after `uip maestro case tasks update ... --is-required`.
 - `uip solution upload` returned success and `ErrorList: []` for both the invalid scratch and the repaired scratch, so upload/import success alone is not a readiness discriminator.
+- Studio Web designer did show the imported invalid scratch was not ready: accessibility text reported Case plan validation errors, stage validation warnings, and task validation errors; the screenshot shows red/yellow markers on the stage, task, Rules, and Completion rules surfaces.
 
 Impact:
 
@@ -354,7 +355,7 @@ Evidence:
 
 - Screenshot/path/link: `docs/validation/artifacts/2026-06-27/product_feedback_phase2_scratch_case_probe.md`.
 - Follow-up artifact: `docs/validation/artifacts/2026-06-27/product_feedback_workstream_a_maestro_authoring_repair_probe.md`.
-- Safari screenshot: `docs/validation/artifacts/2026-06-27/pfprobe-human-review-repair-studio-safari.png`.
+- Safari screenshots: `docs/validation/artifacts/2026-06-27/pfprobe-human-review-existing-invalid-studio-safari.png`; `docs/validation/artifacts/2026-06-27/pfprobe-human-review-repair-studio-safari.png`.
 - Scratch cloud artifact: Studio Web solution `PFPROBE-20260627-human-review`, solution ID `d897e886-da98-4e73-6caf-08ded37985a5`; project ID `c577c2db-ec94-4ec6-86b0-2c65c6b15393`.
 - Repaired scratch cloud artifact: Studio Web solution `PFPROBE-20260627-human-review-repair`, solution ID `74018a7a-e09c-43b3-6d15-08ded37985a5`; project ID `79f8d37b-f33e-42ba-b777-eabde556bc5e`.
 - Local scratch path: `tmp/product-feedback-probes/PFPROBE-20260627-human-review`.
@@ -370,7 +371,7 @@ Confidence:
 
 Follow-up validation needed:
 
-- Optional UI inspection of the invalid imported scratch solution could show whether Studio Web surfaces the same missing-title/missing-rule issues visually. The repaired scratch opened cleanly in Safari, but this run did not mutate or force-upload the invalid scratch for visual comparison.
+- None required for this issue class. A future probe could click into each Studio Web validation marker to compare field-level wording against CLI `validate`, but the current evidence already proves the cross-surface inconsistency.
 
 Survey tags:
 
