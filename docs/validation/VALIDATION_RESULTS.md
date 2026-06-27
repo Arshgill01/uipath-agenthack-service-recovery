@@ -2100,3 +2100,80 @@ Product feedback:
 Evidence:
 
 - `docs/validation/artifacts/2026-06-27/product_feedback_phase2_scratch_case_probe.md`
+
+## 2026-06-27 - Product Feedback Evidence Workstream D Data Fabric Readback Diagnostics
+
+Scope:
+
+- Run the assigned Data Fabric / audit storage readback diagnostic queue.
+- Preserve the validated `ServiceRecoveryAuditBundleV2` proof path and existing audit records.
+- Reinspect the legacy snake_case/CSV failure evidence and current CLI metadata/readback behavior.
+
+Environment:
+
+- UiPath CLI `1.195.1`.
+- Org `keepingitlowkey`.
+- Tenant `DefaultTenant`.
+- User `arshgill6120@gmail.com`.
+
+Scratch mutation decision:
+
+- No scratch Data Fabric entity or record was created.
+- Data Fabric entity system names must use letters/digits/underscores and cannot start with the required scratch cloud prefix `PFPROBE-20260627-`.
+- Mutating the validated V2 entity or legacy audit records would violate the guardrails; deleting scratch cloud resources is out of scope.
+- Continued with read-only CLI/schema/readback probes.
+
+Commands:
+
+1. `uip --version`
+2. `uip login status --output json`
+3. `uip tools list --output json`
+4. `uip df --help`
+5. `uip df entities --help`
+6. `uip df entities get --help`
+7. `uip df records insert --help`
+8. `uip df records update --help`
+9. `uip df records query --help`
+10. `uip df records get --help`
+11. `uip df entities list --native-only --output json`
+12. `uip df entities get 328ef8b6-ab70-f111-ac9a-002248a16d28 --output json`
+13. `uip df entities get 35e8f6c7-4671-f111-ac9a-002248a16d28 --output json`
+14. `uip df records get 328ef8b6-ab70-f111-ac9a-002248a16d28 DA42769C-33B7-4701-A266-019F032AF376 --output json`
+15. `uip df records query 328ef8b6-ab70-f111-ac9a-002248a16d28 --body '{"selectedFields":["Id","case_id","scenario_id","service_id","business_state","derived_evidence_state","closure_block_reason","interpretation_policy_version","decision_policy_version","source_case_instance_key","source_task_id","package_version"]}' --limit 5 --output json`
+16. `uip df records get 35e8f6c7-4671-f111-ac9a-002248a16d28 F9D838CE-4671-F111-AC9A-0022489A9A06 --output json`
+17. `uip df records query 35e8f6c7-4671-f111-ac9a-002248a16d28 --body '{"selectedFields":["Id","CaseId","ScenarioId","ServiceId","BusinessState","DerivedEvidenceState","ClosureBlockReason","InterpretationPolicyVersion","DecisionPolicyVersion","SourceCaseInstanceKey","SourceTaskId","PackageVersion"],"filterGroup":{"logicalOperator":0,"queryFilters":[{"fieldName":"CaseId","operator":"=","value":"CASE-BG-CONTRA"}]}}' --limit 5 --output json`
+18. `uip df records query 35e8f6c7-4671-f111-ac9a-002248a16d28 --body '{"selectedFields":["Id","case_id","CaseId"],"filterGroup":{"logicalOperator":0,"queryFilters":[{"fieldName":"case_id","operator":"=","value":"CASE-BG-CONTRA"}]}}' --limit 5 --output json`
+
+Observed:
+
+- `uip tools list --output json` now lists `data-fabric-tool` with command prefix `df`; the older PF-018 discovery mismatch appears improved in CLI `1.195.1`.
+- `entities get` exposes schema/field metadata clearly by entity ID, including custom field names, required flags, types, and system fields.
+- `records insert`/`records update` help explains JSON object/file body shapes, and `records query` help explains `selectedFields` and filters, but the help does not explain why schema-valid snake_case fields failed record write/readback while PascalCase fields worked.
+- Legacy `ServiceRecoveryAuditBundle` record `DA42769C-33B7-4701-A266-019F032AF376` still reads back only system fields.
+- Legacy selected-field query for `case_id`, policy versions, source references, and package fields returned only `Id` rows, with `TotalCount: 30`.
+- Validated `ServiceRecoveryAuditBundleV2` record `F9D838CE-4671-F111-AC9A-0022489A9A06` still reads back first-class fields plus parseable `RawAgentEventJson`, `PolicyDecisionEventJson`, `ReviewerPacketJson`, and `AuditBundleJson`.
+- V2 query by `CaseId = CASE-BG-CONTRA` returned exactly one row with `InterpretationPolicyVersion = ip-v1`, `DecisionPolicyVersion = dp-v1`, `ClosureBlockReason = source_contradiction`, source Case Instance `9fc6fece-55ed-4fb2-b11a-6c96f7a3314e`, task `4328396`, and package `1.0.6`.
+- A wrong-case V2 query using `case_id` failed clearly: `Filter field case_id does not exist or is deleted in entity ServiceRecoveryAuditBundleV2/35e8f6c7-4671-f111-ac9a-002248a16d28.`
+
+Result:
+
+- PASS for read-only Workstream D evidence collection.
+- PASS for preserving the validated Data Fabric V2 proof path and existing audit records.
+- PASS reconfirmed: Data Fabric V2 remains a full-payload G-001 custom audit storage/readback path.
+- PARTIAL/OPEN product feedback remains: legacy snake_case/CSV/imported-row behavior still does not expose custom fields, and CLI help/metadata do not explain the accepted write/read naming boundary before trial-and-error.
+
+Decision impact:
+
+- Do not weaken G-001: native Case remains PARTIAL; Data Fabric V2 and Orchestrator bucket remain validated custom audit proof paths.
+- Keep `ServiceRecoveryAuditBundleV2` as the final Data Fabric audit entity.
+- Keep legacy `ServiceRecoveryAuditBundle` as product-feedback evidence only.
+
+Product feedback:
+
+- PF-018 updated as improved/resolved for current CLI discovery because `data-fabric-tool` now appears in `uip tools list`.
+- PF-019 strengthened with 2026-06-27 readback evidence that legacy rows still expose only system fields.
+- PF-023 strengthened with the useful wrong-case query diagnostic and remaining write/update lifecycle diagnostics gap.
+
+Evidence:
+
+- `docs/validation/artifacts/2026-06-27/data_fabric_readback_diagnostics_probe.md`
