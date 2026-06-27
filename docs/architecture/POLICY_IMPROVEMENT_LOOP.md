@@ -54,3 +54,17 @@ The demo should show a real produced artifact, not necessarily execute this enti
 - eval result,
 - approval status,
 - new policy version.
+
+Current artifact:
+
+- `docs/demo/artifacts/policy_improvement_E008.json`
+
+It is generated from E-008 by:
+
+```sh
+python -m service_recovery_core.evals \
+  --policy-improvement-artifact-scenario E-008 \
+  --output docs/demo/artifacts/policy_improvement_E008.json
+```
+
+The artifact is proposal-only. It records `approval_status: pending_human_approval`, `promotion_status: not_promoted`, the current `ip-v1` / `dp-v1` policy versions, proposed next `ip-v2-proposed` interpretation policy, and `active_cases_remain_pinned_until_explicit_migration_event`.

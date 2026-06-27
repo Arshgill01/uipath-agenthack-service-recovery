@@ -15,6 +15,7 @@ Runs the non-mutating local submission sanity check:
   - local eval suite
   - existing E-002/E-004 demo proof artifact verification
   - LLM/adversarial proof artifact presence and key-string checks
+  - governed learning-loop artifact presence and key-string checks
   - shell syntax checks for demo wrappers
 
 This command does not start live UiPath cases, complete Action Center tasks, or
@@ -49,6 +50,7 @@ test -f "$ARTIFACT_DIR/llm_interpreter_E003_adversarial_live.json"
 test -f "$ARTIFACT_DIR/evidence_packet_E003_adversarial_live.html"
 test -f "$ARTIFACT_DIR/evidence_packet_E003_adversarial_desktop.png"
 test -f "$ARTIFACT_DIR/evidence_packet_E003_adversarial_mobile.png"
+test -f "$ARTIFACT_DIR/policy_improvement_E008.json"
 
 rg "closure_candidate -> verify_telemetry|missing_authoritative_signal|Raw agent interpretation|Final policy decision" \
   "$ARTIFACT_DIR/evidence_packet_E002.html" >/dev/null
@@ -56,6 +58,8 @@ rg "closure_candidate -> human_review|source_contradiction|Raw agent interpretat
   "$ARTIFACT_DIR/evidence_packet_E004.html" >/dev/null
 rg "Adversarial dual interpretation|Resolution advocate|Closure skeptic|closure_candidate -> human_review|high_interpretation_disagreement" \
   "$ARTIFACT_DIR/evidence_packet_E003_adversarial_live.html" >/dev/null
+rg "policy_improvement_case|pending_human_approval|not_promoted|active_cases_remain_pinned_until_explicit_migration_event|ip-v2-proposed" \
+  "$ARTIFACT_DIR/policy_improvement_E008.json" >/dev/null
 
 cat <<EOF
 Submission check passed.

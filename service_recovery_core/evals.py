@@ -56,6 +56,11 @@ def run_eval_suite() -> dict[str, Any]:
                 "policy_decision": policy_decision,
                 "policy_event": transition["policy_event"],
                 "usefulness_incident": _usefulness_incident(scenario, policy_decision),
+                "policy_improvement_artifact": build_policy_improvement_artifact(
+                    scenario,
+                    policy_decision,
+                    passed,
+                ),
             }
         )
 
@@ -107,6 +112,11 @@ def main() -> int:
         "--llm-result-evidence-packet",
         default=None,
         help="Optional governed LLM demo result JSON to export as a static reviewer evidence-packet HTML file.",
+    )
+    parser.add_argument(
+        "--policy-improvement-artifact-scenario",
+        default=None,
+        help="Optional scenario ID to export as a governed policy-improvement artifact JSON file.",
     )
     args = parser.parse_args()
     if args.uipath_payload_scenario:
@@ -172,6 +182,15 @@ def main() -> int:
             output_path.write_text(html, encoding="utf-8")
         print(html)
         return 0
+    if args.policy_improvement_artifact_scenario:
+        artifact = build_policy_improvement_artifact_for_scenario(args.policy_improvement_artifact_scenario)
+        rendered_artifact = json.dumps(artifact, indent=2, sort_keys=True)
+        if args.output:
+            output_path = Path(args.output)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_text(rendered_artifact + "\n", encoding="utf-8")
+        print(rendered_artifact)
+        return 0
 
     results = run_eval_suite()
     rendered = json.dumps(results, indent=2, sort_keys=True)
@@ -230,6 +249,74 @@ def build_llm_result_evidence_packet_html(result_path: Path) -> str:
         event_id=f"PDE-LLM-{scenario_id}",
     )
     return render_evidence_packet_html(build_case_audit_bundle(scenario["case"], scenario["evidence"], transition))
+
+
+def build_policy_improvement_artifact_for_scenario(scenario_id: str) -> dict[str, Any]:
+    scenarios = load_scenarios()
+    if scenario_id not in scenarios:
+        raise KeyError(f"unknown scenario_id: {scenario_id}")
+    scenario = scenarios[scenario_id]
+    policy_decision = decide_policy(
+        scenario["case"],
+        scenario["evidence"],
+        scenario["agent_interpretation"],
+    )
+    expected = scenario["expected"]
+    passed = (
+        policy_decision["decision"] == expected["policy_decision"]
+        and policy_decision["to_stage"] == expected["target_stage"]
+        and set(expected["reason_codes"]).issubset(set(policy_decision["reason_codes"]))
+    )
+    return build_policy_improvement_artifact(scenario, policy_decision, passed)
+
+
+def build_policy_improvement_artifact(
+    scenario: dict[str, Any],
+    policy_decision: dict[str, Any],
+    eval_passed: bool,
+) -> dict[str, Any] | None:
+    incident = _usefulness_incident(scenario, policy_decision)
+    if incident is None:
+        return None
+
+    current_decision_version = scenario["case"]["decision_policy_version"]
+    current_interpretation_version = scenario["case"]["interpretation_policy_version"]
+    return {
+        "artifact_type": "policy_improvement_case",
+        "artifact_id": f"PIC-{scenario['scenario_id']}",
+        "source_scenario_id": scenario["scenario_id"],
+        "trigger": incident["trigger"],
+        "sample_case_ids": incident["sample_case_ids"],
+        "proposed_change_type": "new_eval_scenario_and_interpretation_policy_review",
+        "proposed_diff_summary": [
+            "Add an eval guard for low-confidence unclassified output when authoritative evidence is otherwise sufficient.",
+            "Review interpretation prompts or classification hints so the agent does not stay unclassified on fully aligned service recovery evidence.",
+            "Keep deterministic closure policy unchanged until human approval and regression validation.",
+        ],
+        "eval_result": {
+            "scenario_id": scenario["scenario_id"],
+            "passed": eval_passed,
+            "policy_decision": policy_decision["decision"],
+            "final_route": policy_decision["to_stage"],
+            "reason_codes": policy_decision["reason_codes"],
+        },
+        "approval_status": "pending_human_approval",
+        "promotion_status": "not_promoted",
+        "current_policy_version": {
+            "interpretation_policy_version": current_interpretation_version,
+            "decision_policy_version": current_decision_version,
+        },
+        "proposed_next_version": {
+            "interpretation_policy_version": "ip-v2-proposed",
+            "decision_policy_version": current_decision_version,
+        },
+        "active_case_policy_version_action": "active_cases_remain_pinned_until_explicit_migration_event",
+        "forbidden_actions": [
+            "auto_promote_policy",
+            "weaken_closure_requirements_without_approval",
+            "let_agent_override_authoritative_evidence",
+        ],
+    }
 
 
 def _scenario_transition(scenario_id: str) -> tuple[dict[str, Any], dict[str, Any]]:

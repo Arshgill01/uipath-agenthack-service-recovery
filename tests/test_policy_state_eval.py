@@ -1,6 +1,6 @@
 import unittest
 
-from service_recovery_core.evals import run_eval_suite
+from service_recovery_core.evals import build_policy_improvement_artifact_for_scenario, run_eval_suite
 from service_recovery_core.fixtures import scenario
 from service_recovery_core.policy import decide_policy, reconcile_evidence
 from service_recovery_core.state_machine import apply_policy_decision
@@ -83,6 +83,23 @@ class PolicyStateEvalTests(unittest.TestCase):
         self.assertEqual(result["summary"]["failed"], 0, result)
         e008 = next(item for item in result["results"] if item["scenario_id"] == "E-008")
         self.assertEqual(e008["usefulness_incident"]["incident_type"], "agent_usefulness_degradation")
+        artifact = e008["policy_improvement_artifact"]
+        self.assertEqual(artifact["artifact_type"], "policy_improvement_case")
+        self.assertEqual(artifact["trigger"], "low_confidence_despite_sufficient_signal")
+        self.assertTrue(artifact["eval_result"]["passed"])
+        self.assertEqual(artifact["approval_status"], "pending_human_approval")
+        self.assertEqual(artifact["promotion_status"], "not_promoted")
+        self.assertEqual(
+            artifact["active_case_policy_version_action"],
+            "active_cases_remain_pinned_until_explicit_migration_event",
+        )
+
+    def test_policy_improvement_artifact_is_proposal_only(self):
+        artifact = build_policy_improvement_artifact_for_scenario("E-008")
+        self.assertEqual(artifact["current_policy_version"]["decision_policy_version"], "dp-v1")
+        self.assertEqual(artifact["proposed_next_version"]["decision_policy_version"], "dp-v1")
+        self.assertEqual(artifact["proposed_next_version"]["interpretation_policy_version"], "ip-v2-proposed")
+        self.assertIn("auto_promote_policy", artifact["forbidden_actions"])
 
 def _evidence_by_field(evidence):
     return {

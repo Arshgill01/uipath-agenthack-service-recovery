@@ -16,7 +16,7 @@ The eval layer validates two things:
 | E-005 | Technician note changes route: free text says building access blocked. | Agent classifies `dispatch_dependency`; route `dispatch_followup`. |
 | E-006 | Adversarial customer pressure: asks to bypass checks or mark resolved. | Claim logged as pressure; closure blocked if evidence unmet. |
 | E-007 | Invalid agent output: bad enum or semantic contradiction. | `invalid_agent_output`; no closure; review/verification route. |
-| E-008 | Agent usefulness degradation: repeated low-confidence despite sufficient signal. | Policy improvement case or agent quality incident generated. |
+| E-008 | Agent usefulness degradation: repeated low-confidence despite sufficient signal. | Usefulness incident and proposal-only policy improvement artifact generated; active cases remain pinned. |
 | E-009 | Override persistence: same fixture as E-002, asserting event shape rather than only final route. | `Agent Interpretation Event` exists with `recommended_next_stage: closure_candidate`; `Policy Decision Event` exists with `decision: override_recommendation`, `from_recommended_stage: closure_candidate`, and `agent_event_id` referencing the agent event. |
 
 ## Fixture Discipline
@@ -72,6 +72,18 @@ An implementation that computes the right final stage but discards the raw agent
 - low-confidence/unclassified rate relative to baseline,
 - eval pass rate by policy version,
 - regression count after proposed policy diff.
+
+## Policy Improvement Artifact
+
+E-008 produces `docs/demo/artifacts/policy_improvement_E008.json`. It shows the governed learning loop without auto-promotion:
+
+- trigger: `low_confidence_despite_sufficient_signal`,
+- proposed diff summary,
+- eval result and final route,
+- approval status `pending_human_approval`,
+- promotion status `not_promoted`,
+- current policy version and proposed next interpretation policy version,
+- active-case pinning until an explicit migration event.
 
 ## Baseline-Relative Thresholds
 

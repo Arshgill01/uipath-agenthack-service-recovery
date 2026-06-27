@@ -62,6 +62,7 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 | Live adversarial LLM proof artifact | Ready | `docs/demo/artifacts/llm_interpreter_E003_adversarial_live.json` |
 | Live adversarial LLM evidence packet | Ready | `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html` |
 | Live adversarial packet screenshots | Ready | `docs/demo/artifacts/evidence_packet_E003_adversarial_desktop.png`; `docs/demo/artifacts/evidence_packet_E003_adversarial_mobile.png` |
+| Governed learning-loop artifact | Ready | `docs/demo/artifacts/policy_improvement_E008.json` |
 | Action Center UI repair assessment | Ready | `docs/validation/ACTION_CENTER_UI_REPAIR_ASSESSMENT.md` |
 
 ## Do Not Claim

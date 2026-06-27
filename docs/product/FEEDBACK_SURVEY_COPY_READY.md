@@ -80,7 +80,8 @@ This would have shortened our slowest loops: enabling Actions, diagnosing genera
 
 Evidence:
 
-- PF-003, PF-006, PF-007, PF-013, PF-017.
+- PF-003, PF-006, PF-007, PF-013, PF-015, PF-017.
+- Secondary audit-storage support: PF-019 and PF-023.
 
 ## Q12 - What Surprised You / Advice To Another Developer
 

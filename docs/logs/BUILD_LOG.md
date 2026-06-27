@@ -3038,3 +3038,41 @@ Validation:
 Open risks:
 
 - No new platform risk. Automated Test Cloud remains unvalidated and must not be claimed.
+
+### 2026-06-27 18:54 IST - Agent / Feedback Award Finalization
+
+What changed:
+
+- Tightened the product-feedback appendix, copy-ready survey bank, and final survey draft around the primary Maestro Case human-review readiness/preflight recommendation.
+- Made the evidence chain explicit: PF-003, PF-006, PF-007, PF-013, PF-015, and PF-017 as primary support, with PF-019/PF-023 as secondary audit-storage support.
+- Preserved positive platform findings and existing guardrails against unsupported claims.
+
+Validation:
+
+- PASS: `rg -n "automated Test Cloud|generated Action Center UI is final|native Case history alone|generic governance" docs/product docs/submission` only matched explicit guardrails and honest manual-Test-Manager language; no new overclaim was introduced.
+- PASS: `scripts/run_submission_check.sh` completed successfully with 43 unit tests and artifact verification.
+
+Open risks:
+
+- Team name and story-sharing preference remain user-owned final survey fields.
+
+### 2026-06-27 19:00 IST - Agent / Governed Learning-Loop Artifact
+
+What changed:
+
+- Extended E-008 eval output with a proposal-only `policy_improvement_case` artifact.
+- Added `docs/demo/artifacts/policy_improvement_E008.json` with trigger, sample case, proposed diff summary, eval result, approval status, promotion status, current policy version, proposed next interpretation policy version, and active-case pinning.
+- Documented the artifact in `docs/architecture/POLICY_IMPROVEMENT_LOOP.md`, `docs/validation/EVAL_PLAN.md`, and `docs/submission/READINESS_CHECKLIST.md`.
+- Added `scripts/run_submission_check.sh` checks for the learning-loop artifact and key guardrail strings.
+
+Validation:
+
+- PASS: `python -m unittest tests.test_policy_state_eval` ran 8 tests.
+- PASS: `python -m unittest discover -s tests` ran 44 tests.
+- PASS: `python -m service_recovery_core.evals --output eval_results/local_baseline.json` passed E-001 through E-009 with 9/9 passing.
+- PASS: `python -m service_recovery_core.evals --policy-improvement-artifact-scenario E-008 --output docs/demo/artifacts/policy_improvement_E008.json` generated the artifact.
+- PASS: `scripts/run_submission_check.sh` completed successfully with 44 unit tests and artifact verification.
+
+Open risks:
+
+- The artifact is local/demo evidence only; no live UiPath policy case or policy promotion was created.

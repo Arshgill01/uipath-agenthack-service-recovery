@@ -1,0 +1,41 @@
+{
+  "active_case_policy_version_action": "active_cases_remain_pinned_until_explicit_migration_event",
+  "approval_status": "pending_human_approval",
+  "artifact_id": "PIC-E-008",
+  "artifact_type": "policy_improvement_case",
+  "current_policy_version": {
+    "decision_policy_version": "dp-v1",
+    "interpretation_policy_version": "ip-v1"
+  },
+  "eval_result": {
+    "final_route": "verify_telemetry",
+    "passed": true,
+    "policy_decision": "block_closure",
+    "reason_codes": [
+      "low_category_confidence",
+      "low_recommendation_confidence"
+    ],
+    "scenario_id": "E-008"
+  },
+  "forbidden_actions": [
+    "auto_promote_policy",
+    "weaken_closure_requirements_without_approval",
+    "let_agent_override_authoritative_evidence"
+  ],
+  "promotion_status": "not_promoted",
+  "proposed_change_type": "new_eval_scenario_and_interpretation_policy_review",
+  "proposed_diff_summary": [
+    "Add an eval guard for low-confidence unclassified output when authoritative evidence is otherwise sufficient.",
+    "Review interpretation prompts or classification hints so the agent does not stay unclassified on fully aligned service recovery evidence.",
+    "Keep deterministic closure policy unchanged until human approval and regression validation."
+  ],
+  "proposed_next_version": {
+    "decision_policy_version": "dp-v1",
+    "interpretation_policy_version": "ip-v2-proposed"
+  },
+  "sample_case_ids": [
+    "CASE-E008"
+  ],
+  "source_scenario_id": "E-008",
+  "trigger": "low_confidence_despite_sufficient_signal"
+}
