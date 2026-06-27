@@ -1,0 +1,9 @@
+# command: uip tm requirements --help
+
+{
+  "Result": "ValidationError",
+  "Message": "error: unknown command 'requirements'",
+  "Instructions": "Check command arguments and options. Run 'uip tm --help' for available subcommands."
+}
+
+# exit_status: 3

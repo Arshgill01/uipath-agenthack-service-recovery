@@ -1,0 +1,15 @@
+# command: uip or packages list --search Test
+
+{
+  "Result": "Success",
+  "Code": "PackageList",
+  "Pagination": {
+    "Returned": 0,
+    "Limit": 50,
+    "Offset": 0,
+    "HasMore": false
+  },
+  "Data": []
+}
+
+# exit_status: 0

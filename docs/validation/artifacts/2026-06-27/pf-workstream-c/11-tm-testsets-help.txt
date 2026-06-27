@@ -1,0 +1,67 @@
+# command: uip tm testsets --help
+
+{
+  "Result": "Success",
+  "Code": "Help",
+  "Data": {
+    "Command": "testsets",
+    "Description": "Manage Test Manager test sets",
+    "Usage": "uip tm testsets [options] [command]",
+    "Arguments": [],
+    "Options": [
+      {
+        "Flags": "-h, --help",
+        "Description": "display help for command"
+      }
+    ],
+    "Subcommands": [
+      {
+        "Name": "create [options]",
+        "Description": "Create a new test set in a Test Manager project."
+      },
+      {
+        "Name": "delete [options]",
+        "Description": "Delete a test set by its key."
+      },
+      {
+        "Name": "update [options]",
+        "Description": "Update a test set name or description."
+      },
+      {
+        "Name": "list-testcases [options]",
+        "Description": "List test cases assigned to a test set."
+      },
+      {
+        "Name": "run [options]",
+        "Description": "Run a test set and return the execution ID."
+      },
+      {
+        "Name": "list [options]",
+        "Description": "List test sets in a Test Manager project."
+      },
+      {
+        "Name": "help [command]",
+        "Description": "display help for command"
+      }
+    ],
+    "GlobalOptions": [
+      {
+        "Flags": "--output <table|json|yaml|plain>",
+        "Description": "Output format (default: json)"
+      },
+      {
+        "Flags": "--output-filter <expression>",
+        "Description": "JMESPath expression applied to the Data field of the response envelope"
+      },
+      {
+        "Flags": "--log-level <debug|info|warn|error>",
+        "Description": "Log level threshold (default: info)"
+      },
+      {
+        "Flags": "--log-file <path>",
+        "Description": "Write logs to file instead of stderr"
+      }
+    ]
+  }
+}
+# exit_status: 0

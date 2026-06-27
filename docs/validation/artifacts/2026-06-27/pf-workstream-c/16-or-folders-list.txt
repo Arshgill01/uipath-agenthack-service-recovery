@@ -1,0 +1,26 @@
+# command: uip or folders list --all
+
+{
+  "Result": "Success",
+  "Code": "FolderList",
+  "Pagination": {
+    "Returned": 1,
+    "Limit": 50,
+    "Offset": 0,
+    "HasMore": false
+  },
+  "Data": [
+    {
+      "Key": "555d3f16-a106-4946-a934-4bede4789be7",
+      "Name": "Shared",
+      "Path": "Shared",
+      "Description": "",
+      "Type": "Standard",
+      "ParentKey": "",
+      "FeedType": "Processes",
+      "PermissionModel": "FineGrained"
+    }
+  ]
+}
+
+# exit_status: 0

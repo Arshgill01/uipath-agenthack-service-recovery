@@ -1,0 +1,9 @@
+# command: uip or processes list --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --search ServiceRecoveryEvalProcessProbe
+
+{
+  "Result": "ValidationError",
+  "Message": "error: unknown option '--search'",
+  "Instructions": "Check command arguments and options. Use --help for usage information."
+}
+
+# exit_status: 3

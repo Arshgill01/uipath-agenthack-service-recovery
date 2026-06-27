@@ -1,0 +1,71 @@
+# command: uip tm project --help
+
+{
+  "Result": "Success",
+  "Code": "Help",
+  "Data": {
+    "Command": "project",
+    "Description": "Manage Test Manager projects",
+    "Usage": "uip tm project [options] [command]",
+    "Arguments": [],
+    "Options": [
+      {
+        "Flags": "-h, --help",
+        "Description": "display help for command"
+      }
+    ],
+    "Subcommands": [
+      {
+        "Name": "list [options]",
+        "Description": "List Test Manager projects."
+      },
+      {
+        "Name": "create [options]",
+        "Description": "Create a new Test Manager project."
+      },
+      {
+        "Name": "update [options]",
+        "Description": "Update a Test Manager project name or description."
+      },
+      {
+        "Name": "delete [options]",
+        "Description": "Delete a Test Manager project by its key."
+      },
+      {
+        "Name": "set-default-folder [options]",
+        "Description": "Set the default Orchestrator folder for a project."
+      },
+      {
+        "Name": "clear-default-folder [options]",
+        "Description": "Clear the default Orchestrator folder from a project."
+      },
+      {
+        "Name": "owners",
+        "Description": "Manage Test Manager project owners"
+      },
+      {
+        "Name": "help [command]",
+        "Description": "display help for command"
+      }
+    ],
+    "GlobalOptions": [
+      {
+        "Flags": "--output <table|json|yaml|plain>",
+        "Description": "Output format (default: json)"
+      },
+      {
+        "Flags": "--output-filter <expression>",
+        "Description": "JMESPath expression applied to the Data field of the response envelope"
+      },
+      {
+        "Flags": "--log-level <debug|info|warn|error>",
+        "Description": "Log level threshold (default: info)"
+      },
+      {
+        "Flags": "--log-file <path>",
+        "Description": "Write logs to file instead of stderr"
+      }
+    ]
+  }
+}
+# exit_status: 0

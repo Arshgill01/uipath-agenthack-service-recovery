@@ -1,0 +1,67 @@
+# command: uip tm executions --help
+
+{
+  "Result": "Success",
+  "Code": "Help",
+  "Data": {
+    "Command": "executions",
+    "Description": "Manage Test Manager test executions",
+    "Usage": "uip tm executions [options] [command]",
+    "Arguments": [],
+    "Options": [
+      {
+        "Flags": "-h, --help",
+        "Description": "display help for command"
+      }
+    ],
+    "Subcommands": [
+      {
+        "Name": "get-stats [options]",
+        "Description": "Get a test execution by ID with aggregated pass/fail/none stats."
+      },
+      {
+        "Name": "run [options]",
+        "Description": "Run a test execution. Optionally run only specific test case logs."
+      },
+      {
+        "Name": "retry [options]",
+        "Description": "Retry only the failed test cases of a finished execution."
+      },
+      {
+        "Name": "list [options]",
+        "Description": "List top n executions for a project or test set."
+      },
+      {
+        "Name": "list-filtered [options]",
+        "Description": "List test executions for a project using the full filtered API (no test set required)."
+      },
+      {
+        "Name": "testcaselogs",
+        "Description": "Inspect test case logs produced by a test execution."
+      },
+      {
+        "Name": "help [command]",
+        "Description": "display help for command"
+      }
+    ],
+    "GlobalOptions": [
+      {
+        "Flags": "--output <table|json|yaml|plain>",
+        "Description": "Output format (default: json)"
+      },
+      {
+        "Flags": "--output-filter <expression>",
+        "Description": "JMESPath expression applied to the Data field of the response envelope"
+      },
+      {
+        "Flags": "--log-level <debug|info|warn|error>",
+        "Description": "Log level threshold (default: info)"
+      },
+      {
+        "Flags": "--log-file <path>",
+        "Description": "Write logs to file instead of stderr"
+      }
+    ]
+  }
+}
+# exit_status: 0

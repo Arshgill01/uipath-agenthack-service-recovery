@@ -1,0 +1,29 @@
+# command: uip or packages list --search ServiceRecoveryEvalProcessProbe
+
+{
+  "Result": "Success",
+  "Code": "PackageList",
+  "Pagination": {
+    "Returned": 1,
+    "Limit": 50,
+    "Offset": 0,
+    "HasMore": false
+  },
+  "Data": [
+    {
+      "Key": "ServiceRecoveryEvalProcessProbe:0.0.3",
+      "Title": "ServiceRecoveryEvalProcessProbe",
+      "Version": "0.0.3",
+      "Description": "Project",
+      "IsLatestVersion": true,
+      "IsActive": false,
+      "PackageType": "Process",
+      "TargetFramework": "Portable",
+      "Authors": "arshdeepsingh",
+      "Published": "2026-06-26T15:06:09.187Z",
+      "Id": "ServiceRecoveryEvalProcessProbe"
+    }
+  ]
+}
+
+# exit_status: 0

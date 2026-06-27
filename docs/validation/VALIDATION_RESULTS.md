@@ -2257,3 +2257,88 @@ Product feedback:
 Evidence:
 
 - `docs/validation/artifacts/2026-06-27/product_feedback_action_binding_probe.md`
+
+## 2026-06-27 - Product Feedback Evidence Workstream C Test Manager Probe
+
+Scope:
+
+- Run the assigned Test Manager / Test Cloud eval-import and automation-discovery diagnostics queue.
+- Keep existing `SREV` project/test set/cases read-only.
+- Avoid scratch Test Manager creation unless the read-only probes cannot answer the queue.
+
+Environment:
+
+- UiPath CLI `1.195.1`.
+- Org `keepingitlowkey`.
+- Tenant `DefaultTenant`.
+- User `arshgill6120@gmail.com`.
+
+Commands/actions:
+
+1. `uip login status --output json`
+2. `uip tm testcases --help --output json`
+3. `uip tm project list --filter SREV --output json`
+4. `uip tm testsets list --project-key SREV --include-last-execution --output json`
+5. `uip tm testsets list-testcases --project-key SREV --test-set-key SREV:9 --output json`
+6. `uip tm executions list --project-key SREV --limit 5 --output json`
+7. `uip tm executions get-stats --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --output json`
+8. `uip tm executions testcaselogs list --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --output json`
+9. `uip tm --help --output json`
+10. `uip tm project --help --output json`
+11. `uip tm testsets --help --output json`
+12. `uip tm executions --help --output json`
+13. `uip tm result --help --output json`
+14. `uip tm requirements --help --output json`
+15. `uip tm attachment --help --output json`
+16. `uip or folders list --all --output json`
+17. `uip or packages list --search ServiceRecoveryEvalProcessProbe --output json`
+18. `uip or packages list --search Test --output json`
+19. `uip tm testcases list-automations --help --output json`
+20. `uip tm testcases link-automation --help --output json`
+21. `uip tm testsets run --help --output json`
+22. `uip tm testcases list-automations --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --output json`
+23. `uip tm testcases list-automations --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --package-name ServiceRecoveryEvalProcessProbe --output json`
+24. `uip or processes list --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --output json`
+25. `uip or processes list --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --search ServiceRecoveryEvalProcessProbe --output json`
+26. `uip or processes list --help --output json`
+27. `uip tm testcases list-automations --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --package-name ServiceRecoveryEvalProcessProbe --log-level debug --output json`
+28. `uip or packages get ServiceRecoveryEvalProcessProbe 0.0.3 --output json`
+29. `uip or packages get --help --output json`
+30. `uip or processes list --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --name ServiceRecoveryEvalProcessProbe --output json`
+
+Observed:
+
+- Auth remained live for org `keepingitlowkey`, tenant `DefaultTenant`.
+- `SREV` read back as project `1281f516-2c82-0000-9e76-0b49cf9a9990`.
+- `SREV:9` read back with `LastExecutionStatus: Finished` and `LastExecutionAt: 2026-06-26T10:19:58.490Z`.
+- `uip tm executions list` still shows historical execution `d50a7be6-35ed-1100-95aa-0b49cf9b8cad` as `Running` with `Passed: 9`, while terminal execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` is `Finished` with `Passed: 9`.
+- Test Manager CLI help exposes project/case/test-set/execution creation and readback, requirements export, result download, attachment download, and automation discovery/linking, but no local eval JSON/JUnit import command for creating/updating Test Manager cases/test sets.
+- Official Test Manager documentation found during the probe describes UI import flows for manual test cases from Excel and Orchestrator test sets from Orchestrator, but no direct import path was found for the repo's local eval JSON/JUnit output into Test Manager cases/test sets.
+- Orchestrator folder readback returned only Standard folder `Shared` in this session.
+- `uip or packages list --search ServiceRecoveryEvalProcessProbe` returned package `ServiceRecoveryEvalProcessProbe:0.0.3`, latest, `PackageType: Process`, `IsActive: false`.
+- `uip tm testcases list-automations` in `Shared` returned `Data: []`, including when filtered to `ServiceRecoveryEvalProcessProbe`.
+- Debug logging for `list-automations` showed CLI/tool loading and project resolution, but no diagnostic reason for the empty automation list.
+- `uip or processes list --folder-key Shared` returned no processes. A guessed `--search` flag failed; help shows the correct process filter is `--name`.
+
+Result:
+
+- PASS for read-only SREV/Test Manager state inspection.
+- PASS for eval-import surface inspection: no CLI path was found for importing local eval JSON/JUnit into Test Manager cases/test sets.
+- PASS for automation-discovery diagnostics: the uploaded probe package is package-visible but not Test Manager automation-visible through `list-automations`; automated Test Cloud execution remains unclaimed.
+- NOT RUN for scratch Test Manager object creation because read-only probes answered the assigned queue without requiring mutation.
+
+Decision impact:
+
+- Keep G-007 as PASS for terminal manual Test Manager representation/report/JUnit and PARTIAL for automated Test Cloud execution.
+- Strengthen PF-020, PF-021, and PF-024 as repeat evidence instead of adding a new PF ID.
+- Do not claim automated Test Cloud execution.
+
+Product feedback:
+
+- PF-020 strengthened: CLI/UI import support still does not cover direct local eval JSON/JUnit-to-Test Manager case/set onboarding.
+- PF-021 strengthened: readback still shows the older direct-finish execution as `Running` while the explicit start/finish execution is terminal.
+- PF-024 strengthened: package visibility and automation visibility remain disconnected, with empty-list diagnostics rather than an actionable reason.
+
+Evidence:
+
+- `docs/validation/artifacts/2026-06-27/pf-workstream-c/README.md`

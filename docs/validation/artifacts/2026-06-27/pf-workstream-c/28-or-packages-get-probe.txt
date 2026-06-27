@@ -1,0 +1,9 @@
+# command: uip or packages get ServiceRecoveryEvalProcessProbe 0.0.3
+
+{
+  "Result": "ValidationError",
+  "Message": "error: too many arguments for 'get'. Expected 1 argument but got 2.",
+  "Instructions": "Check command arguments and options. Use --help for usage information."
+}
+
+# exit_status: 3

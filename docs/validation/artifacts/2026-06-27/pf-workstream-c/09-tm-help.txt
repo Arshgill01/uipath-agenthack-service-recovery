@@ -1,0 +1,95 @@
+# command: uip tm --help
+
+{
+  "Result": "Success",
+  "Code": "Help",
+  "Data": {
+    "Command": "tm",
+    "Description": "Manage test cases, test sets, executions, and results.",
+    "Usage": "uip tm [options] [command]",
+    "Arguments": [],
+    "Options": [
+      {
+        "Flags": "-h, --help",
+        "Description": "display help for command"
+      }
+    ],
+    "Subcommands": [
+      {
+        "Name": "attachment",
+        "Description": "Manage Test Manager test case attachments"
+      },
+      {
+        "Name": "customfield",
+        "Description": "Manage Test Manager custom fields. Top-level verbs operate on definitions (the schema); nested `label` and `value` subcommands operate on the per-object rows."
+      },
+      {
+        "Name": "executions",
+        "Description": "Manage Test Manager test executions"
+      },
+      {
+        "Name": "objectlabel",
+        "Description": "Manage Test Manager object labels (tags applied to requirements, test cases, test sets, executions, and case logs)."
+      },
+      {
+        "Name": "project",
+        "Description": "Manage Test Manager projects"
+      },
+      {
+        "Name": "report",
+        "Description": "Manage Test Manager execution reports"
+      },
+      {
+        "Name": "result",
+        "Description": "Manage Test Manager execution results"
+      },
+      {
+        "Name": "testcases",
+        "Description": "Manage Test Manager test cases"
+      },
+      {
+        "Name": "testcaselog",
+        "Description": "Manage Test Manager test case logs"
+      },
+      {
+        "Name": "teststeplog",
+        "Description": "Manage Test Manager test step logs"
+      },
+      {
+        "Name": "testsets",
+        "Description": "Manage Test Manager test sets"
+      },
+      {
+        "Name": "user",
+        "Description": "Manage Test Manager user data"
+      },
+      {
+        "Name": "wait [options]",
+        "Description": "Wait for a test execution to reach a terminal state."
+      },
+      {
+        "Name": "help [command]",
+        "Description": "display help for command"
+      }
+    ],
+    "GlobalOptions": [
+      {
+        "Flags": "--output <table|json|yaml|plain>",
+        "Description": "Output format (default: json)"
+      },
+      {
+        "Flags": "--output-filter <expression>",
+        "Description": "JMESPath expression applied to the Data field of the response envelope"
+      },
+      {
+        "Flags": "--log-level <debug|info|warn|error>",
+        "Description": "Log level threshold (default: info)"
+      },
+      {
+        "Flags": "--log-file <path>",
+        "Description": "Write logs to file instead of stderr"
+      }
+    ]
+  }
+}
+# exit_status: 0
