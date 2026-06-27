@@ -21,7 +21,7 @@ The UiPath implementation uses Maestro Case and Action Center for lifecycle and 
 - Local engine with deterministic policy, structured agent validation, state transitions, audit bundles, UiPath payload generation, and evidence-packet rendering.
 - Optional Gemini-backed LLM interpreter validated through live Vertex runs; it reads unstructured notes/messages and emits the same schema-validated Agent Interpretation Event plus urgency, customer impact, evidence gaps, recommended actions, reviewer questions, and operator note.
 - Optional adversarial Gemini interpretation path validated through a live Vertex run: resolution advocate recommended `closure_candidate`, closure skeptic recommended `verify_telemetry`, disagreement reached `0.712`, and deterministic policy routed to `human_review` with `high_interpretation_disagreement`.
-- 39 unit tests passing.
+- 43 unit tests passing.
 - E-001 through E-009 eval suite passing 9/9.
 - Live UiPath Labs validation in org `keepingitlowkey`, tenant `DefaultTenant`.
 - Live Action Center tasks for E-002 and E-004.
