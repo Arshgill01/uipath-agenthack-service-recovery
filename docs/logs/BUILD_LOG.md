@@ -3076,3 +3076,43 @@ Validation:
 Open risks:
 
 - The artifact is local/demo evidence only; no live UiPath policy case or policy promotion was created.
+
+### 2026-06-27 19:08 IST - Agent / Demo Proof Tightening
+
+What changed:
+
+- Updated `docs/submission/SUBMISSION_BRIEF.md` from 43 to 44 passing unit tests after the new learning-loop artifact test.
+- Added the governed learning-loop artifact to submission evidence links.
+- Tightened `docs/demo/DEMO_STORYBOARD.md` so the five-minute flow explicitly names UiPath surface responsibilities: Maestro Case lifecycle/routing, Action Center reviewer accountability, Orchestrator/Data Fabric audit/version proof, Test Manager eval representation, and the custom packet as judge-readable surface.
+- Added `policy_improvement_E008.json` generation and proof fields to `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`.
+
+Validation:
+
+- PASS: `python -m service_recovery_core.demo_proof --output-dir docs/demo/artifacts --verify-only` verified E-002 and E-004.
+- PASS: `scripts/run_submission_check.sh` completed successfully with 44 unit tests and artifact verification.
+- PASS: `rg -n "43 unit tests|automated Test Cloud execution|generated Action Center UI is final|native Case history alone passes|generic agent governance platform" docs/demo docs/submission docs/product` only matched guardrails and honest manual-Test-Manager caveats.
+
+Open risks:
+
+- No new platform evidence was created; this was a narrative/runbook tightening pass.
+
+### 2026-06-27 19:15 IST - Agent / Targeted Eval Hardening
+
+What changed:
+
+- Added two local unit-level hardening checks without adding new formal eval scenario IDs, preserving the validated Test Manager `SREV:9` mapping.
+- Verified that customer pressure does not override fresh authoritative telemetry contradiction; E-004 plus pressure still routes to `human_review`.
+- Verified that stale authoritative telemetry blocks even very high-confidence `closure_candidate`; E-003 still routes to `verify_telemetry`.
+- Updated current status docs to 46 passing unit tests while keeping E-001 through E-009 at 9/9.
+
+Validation:
+
+- PASS: `python -m unittest tests.test_policy_state_eval` ran 10 tests.
+- PASS: `python -m unittest discover -s tests` ran 46 tests.
+- PASS: `python -m service_recovery_core.evals --output eval_results/local_baseline.json` passed E-001 through E-009 with 9/9 passing.
+- PASS: `scripts/run_submission_check.sh` completed successfully with 46 unit tests and artifact verification.
+- PASS: `rg -n "43 unit tests|44 unit tests|Current local validation baseline is 43|passed 43 tests|passed 44 tests" AGENTS.md docs/submission docs/validation docs/demo docs/product -S` returned no current-facing stale test-count references.
+
+Open risks:
+
+- These are local hardening tests, not new live Test Manager cases; final claims should keep Test Manager coverage scoped to E-001 through E-009.

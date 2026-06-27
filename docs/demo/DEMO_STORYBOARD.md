@@ -16,6 +16,14 @@ Show:
 
 Show stages.
 
+Make the UiPath role explicit:
+
+- Maestro Case owns long-running stage movement and routing.
+- Action Center owns reviewer assignment, completion, comments, and structured return.
+- Orchestrator/Data Fabric own package/version and audit proof.
+- Test Manager owns the eval representation.
+- The custom evidence packet is the judge-readable surface for the same case data.
+
 ### 1:15-2:15 Missing/Stale Evidence + Policy Override
 
 Show:
@@ -68,9 +76,11 @@ Show:
 - contradiction,
 - adversarial pressure,
 - invalid schema,
-- policy improvement case with proposed diff,
+- `docs/demo/artifacts/policy_improvement_E008.json` as the policy improvement case with proposed diff,
 - eval result,
-- approval/version state.
+- approval/version state,
+- `promotion_status: not_promoted`,
+- active cases remain pinned until explicit migration.
 
 ### 4:35-5:00 Business Impact
 

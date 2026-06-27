@@ -85,6 +85,13 @@ E-008 produces `docs/demo/artifacts/policy_improvement_E008.json`. It shows the 
 - current policy version and proposed next interpretation policy version,
 - active-case pinning until an explicit migration event.
 
+## Targeted Hardening Tests
+
+The live Test Manager mapping remains E-001 through E-009. Additional local unit-level hardening tests mutate existing fixtures rather than adding new formal scenario IDs:
+
+- E-004 plus customer pressure still routes to `human_review`; pressure does not override fresh authoritative contradiction.
+- E-003 with very high-confidence `closure_candidate` still routes to `verify_telemetry`; stale authoritative telemetry blocks closure.
+
 ## Baseline-Relative Thresholds
 
 Do not hardcode arbitrary "bad" rates without baseline.

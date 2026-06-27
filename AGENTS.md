@@ -25,7 +25,7 @@ Architecture thesis:
 - Local tests/evals should pass:
   - `python -m unittest discover -s tests`
   - `python -m service_recovery_core.evals --output eval_results/local_baseline.json`
-- Current local validation baseline is 43 unit tests and E-001 through E-009 passing 9/9.
+- Current local validation baseline is 46 unit tests and E-001 through E-009 passing 9/9.
 - UiPath CLI is installed locally as `uip` version `1.195.1`.
 - UiPath Labs access is working for org `keepingitlowkey`, tenant `DefaultTenant`, user `arshgill6120@gmail.com`.
 - Live validation has answered the hard gates with implementation implications:

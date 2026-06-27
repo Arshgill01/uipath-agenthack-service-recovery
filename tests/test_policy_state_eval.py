@@ -52,6 +52,41 @@ class PolicyStateEvalTests(unittest.TestCase):
         self.assertEqual(contradiction_decision["to_stage"], "human_review")
         self.assertEqual(contradiction_decision["severity"], "elevated")
 
+    def test_customer_pressure_never_overrides_fresh_telemetry_contradiction(self):
+        fixture = scenario("E-004")
+        fixture["agent_interpretation"]["input_refs"].append("customer_pressure")
+        fixture["agent_interpretation"]["extracted_claims"].append(
+            {
+                "claim_type": "pressure_to_bypass",
+                "value": "Customer asks support to close the case and handle credits later.",
+                "source": "customer_message",
+                "timestamp": "2026-06-18T10:06:00Z",
+            }
+        )
+
+        decision = decide_policy(fixture["case"], fixture["evidence"], fixture["agent_interpretation"])
+
+        self.assertFalse(decision["closure_allowed"])
+        self.assertEqual(decision["decision"], "require_human_review")
+        self.assertEqual(decision["to_stage"], "human_review")
+        self.assertIn("source_contradiction", decision["reason_codes"])
+
+    def test_stale_telemetry_blocks_high_confidence_closure(self):
+        fixture = scenario("E-003")
+        fixture["agent_interpretation"]["category_confidence"] = 0.96
+        fixture["agent_interpretation"]["recommendation_confidence"] = 0.99
+        fixture["agent_interpretation"]["interpretation_rationale_codes"] = [
+            "mentions_signal_absent",
+            "mentions_customer_pressure",
+        ]
+
+        decision = decide_policy(fixture["case"], fixture["evidence"], fixture["agent_interpretation"])
+
+        self.assertFalse(decision["closure_allowed"])
+        self.assertEqual(decision["decision"], "override_recommendation")
+        self.assertEqual(decision["to_stage"], "verify_telemetry")
+        self.assertIn("stale_authoritative_signal", decision["reason_codes"])
+
     def test_non_closure_agent_route_does_not_allow_closure(self):
         fixture = scenario("E-005")
         decision = decide_policy(fixture["case"], fixture["evidence"], fixture["agent_interpretation"])

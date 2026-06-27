@@ -118,6 +118,16 @@ The demo proof helper generates and verifies:
 - `docs/demo/artifacts/evidence_packet_E004.html`
 - `docs/demo/artifacts/demo_proof_manifest.json`
 
+Generate the governed learning-loop artifact:
+
+```sh
+python -m service_recovery_core.evals \
+  --policy-improvement-artifact-scenario E-008 \
+  --output docs/demo/artifacts/policy_improvement_E008.json
+```
+
+Show `policy_improvement_E008.json` during the eval/learning-loop beat to prove the system proposes a diff, records eval results, keeps `approval_status: pending_human_approval`, keeps `promotion_status: not_promoted`, proposes `ip-v2-proposed`, and leaves active cases pinned until an explicit migration event.
+
 It fails if the raw agent recommendation, policy decision, route, block reason, or AIE/PDE linkage drifts from the proof-beat contract.
 
 ## Optional Live LLM Interpretation
