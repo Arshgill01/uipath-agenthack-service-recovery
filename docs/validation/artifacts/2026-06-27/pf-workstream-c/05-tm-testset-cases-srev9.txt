@@ -1,0 +1,65 @@
+# command: uip tm testsets list-testcases --project-key SREV --test-set-key SREV:9
+
+Resolved project 'SREV' → 1281f516-2c82-0000-9e76-0b49cf9a9990
+{
+  "Result": "Success",
+  "Code": "TestSetTestCasesList",
+  "Data": [
+    {
+      "TestCaseKey": "SREV:1",
+      "Name": "E-002 Missing authoritative telemetry blocks closure",
+      "Version": "1.0.0",
+      "Description": "Local eval E-002. Expected: raw recommendation closure_candidate; policy override_recommendation; reason missing_authoritative_signal; route verify_telemetry."
+    },
+    {
+      "TestCaseKey": "SREV:2",
+      "Name": "E-003 Stale authoritative telemetry blocks closure",
+      "Version": "1.0.0",
+      "Description": "Local eval E-003. Expected: raw recommendation closure_candidate; policy override_recommendation; reason stale_authoritative_signal; route verify_telemetry."
+    },
+    {
+      "TestCaseKey": "SREV:3",
+      "Name": "E-001 Closure allowed with fresh aligned telemetry",
+      "Version": "1.0.0",
+      "Description": "Local eval E-001. Expected: closure_allowed=true; decision=accept_recommendation; from/to closure_candidate; policy dp-v1."
+    },
+    {
+      "TestCaseKey": "SREV:4",
+      "Name": "E-004 Contradicting authoritative signal escalates",
+      "Version": "1.0.0",
+      "Description": "Local eval E-004. Expected: raw recommendation closure_candidate; policy require_human_review; reason source_contradiction; route human_review; severity elevated."
+    },
+    {
+      "TestCaseKey": "SREV:5",
+      "Name": "E-005 High-impact exception stays out of closure",
+      "Version": "1.0.0",
+      "Description": "Local eval E-005. Expected: decision accept_recommendation to dispatch_followup; reason high_impact_exception; closure_allowed=false."
+    },
+    {
+      "TestCaseKey": "SREV:6",
+      "Name": "E-006 Verify telemetry cannot close on missing signal",
+      "Version": "1.0.0",
+      "Description": "Local eval E-006. Expected: policy block_closure; reason missing_authoritative_signal; remains verify_telemetry."
+    },
+    {
+      "TestCaseKey": "SREV:7",
+      "Name": "E-007 Invalid agent output is overridden",
+      "Version": "1.0.0",
+      "Description": "Local eval E-007. Expected: agent schema invalid; policy override_recommendation; reason invalid_agent_output; route verify_telemetry."
+    },
+    {
+      "TestCaseKey": "SREV:8",
+      "Name": "E-008 Low confidence creates usefulness incident",
+      "Version": "1.0.0",
+      "Description": "Local eval E-008. Expected: policy block_closure; low confidence reasons; route verify_telemetry; usefulness incident agent_usefulness_degradation."
+    },
+    {
+      "TestCaseKey": "SREV:10",
+      "Name": "E-009 Override persistence links raw and policy events",
+      "Version": "1.0.0",
+      "Description": "Local eval E-009. Expected: raw recommendation closure_candidate persists separately from policy override_recommendation; reason missing_authoritative_signal; route verify_telemetry."
+    }
+  ]
+}
+
+# exit_status: 0

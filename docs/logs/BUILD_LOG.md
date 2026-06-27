@@ -2,6 +2,64 @@
 
 Append one entry per substantial agent run.
 
+### 2026-06-27 23:12 IST - Agent / Product Feedback Workstream C Test Manager Probe
+
+What changed:
+
+- Ran the assigned Test Manager / Test Cloud eval-import and automation-discovery diagnostics queue read-only.
+- Added command artifacts under `docs/validation/artifacts/2026-06-27/pf-workstream-c/`.
+- Updated `docs/validation/VALIDATION_RESULTS.md` with the Workstream C findings.
+- Strengthened PF-020, PF-021, and PF-024 in `docs/product/PRODUCT_FEEDBACK_AWARD.md` from fresh observed behavior.
+
+Commands run:
+
+- `uip login status --output json`
+- `uip tm testcases --help --output json`
+- `uip tm project list --filter SREV --output json`
+- `uip tm testsets list --project-key SREV --include-last-execution --output json`
+- `uip tm testsets list-testcases --project-key SREV --test-set-key SREV:9 --output json`
+- `uip tm executions list --project-key SREV --limit 5 --output json`
+- `uip tm executions get-stats --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --output json`
+- `uip tm executions testcaselogs list --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --output json`
+- `uip tm --help --output json`
+- `uip tm project --help --output json`
+- `uip tm testsets --help --output json`
+- `uip tm executions --help --output json`
+- `uip tm result --help --output json`
+- `uip tm requirements --help --output json`
+- `uip tm attachment --help --output json`
+- `uip or folders list --all --output json`
+- `uip or packages list --search ServiceRecoveryEvalProcessProbe --output json`
+- `uip or packages list --search Test --output json`
+- `uip tm testcases list-automations --help --output json`
+- `uip tm testcases link-automation --help --output json`
+- `uip tm testsets run --help --output json`
+- `uip tm testcases list-automations --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --output json`
+- `uip tm testcases list-automations --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --package-name ServiceRecoveryEvalProcessProbe --output json`
+- `uip or processes list --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --output json`
+- `uip or processes list --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --search ServiceRecoveryEvalProcessProbe --output json`
+- `uip or processes list --help --output json`
+- `uip tm testcases list-automations --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --package-name ServiceRecoveryEvalProcessProbe --log-level debug --output json`
+- `uip or packages get ServiceRecoveryEvalProcessProbe 0.0.3 --output json`
+- `uip or packages get --help --output json`
+- `uip or processes list --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --name ServiceRecoveryEvalProcessProbe --output json`
+
+Validation:
+
+- PASS: CLI auth remained live for org `keepingitlowkey`, tenant `DefaultTenant`.
+- PASS: `SREV:9` read back with latest execution `Finished`, and terminal execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` read back with 9 passed logs.
+- PASS: read-only import surface inspection found no CLI path for importing local eval JSON/JUnit into Test Manager cases/test sets.
+- PARTIAL: automated Test Cloud execution remains unvalidated; `ServiceRecoveryEvalProcessProbe:0.0.3` is package-visible but not Test Manager automation-visible.
+
+Product feedback:
+
+- PF-020, PF-021, and PF-024 strengthened. No new PF ID added because this was repeat evidence for existing issue classes.
+
+Open risks:
+
+- Do not claim automated Test Cloud execution.
+- Scratch Test Manager objects were not created because read-only probes answered the queue.
+
 ### 2026-06-27 18:44 IST - Agent / Competition Analysis And Agentic Loop Plan
 
 What changed:

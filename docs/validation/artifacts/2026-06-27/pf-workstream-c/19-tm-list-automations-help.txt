@@ -1,0 +1,71 @@
+# command: uip tm testcases list-automations --help
+
+{
+  "Result": "Success",
+  "Code": "Help",
+  "Data": {
+    "Command": "list-automations",
+    "Description": "List test entry points available in an Orchestrator folder (use with link-automation).",
+    "Usage": "uip tm testcases list-automations [options]",
+    "Arguments": [],
+    "Options": [
+      {
+        "Flags": "--project-key <key>",
+        "Description": "Test Manager project key (e.g. DEMO)"
+      },
+      {
+        "Flags": "--folder-key <uuid>",
+        "Description": "Orchestrator folder key UUID (from 'uip or folders list')"
+      },
+      {
+        "Flags": "--package-name <name>",
+        "Description": "Filter by package name (case-insensitive substring)"
+      },
+      {
+        "Flags": "--log-level <level>",
+        "Description": "Log verbosity: debug, info, warn, error",
+        "Default": "Information"
+      },
+      {
+        "Flags": "-h, --help",
+        "Description": "display help for command"
+      }
+    ],
+    "Examples": [
+      {
+        "Description": "List available automations in an Orchestrator folder",
+        "Command": "uip tm testcases list-automations --project-key DEMO --folder-key f0f0f0f0-0000-0000-0000-000000000001",
+        "Output": {
+          "Code": "TestAutomationsList",
+          "Data": [
+            {
+              "PackageName": "InvoiceTests",
+              "TestName": "SmokeTest",
+              "PackageVersion": "1.0.2"
+            }
+          ]
+        }
+      }
+    ],
+    "Subcommands": [],
+    "GlobalOptions": [
+      {
+        "Flags": "--output <table|json|yaml|plain>",
+        "Description": "Output format (default: json)"
+      },
+      {
+        "Flags": "--output-filter <expression>",
+        "Description": "JMESPath expression applied to the Data field of the response envelope"
+      },
+      {
+        "Flags": "--log-level <debug|info|warn|error>",
+        "Description": "Log level threshold (default: info)"
+      },
+      {
+        "Flags": "--log-file <path>",
+        "Description": "Write logs to file instead of stderr"
+      }
+    ]
+  }
+}
+# exit_status: 0

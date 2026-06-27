@@ -1,0 +1,134 @@
+# command: uip or processes list --help
+
+{
+  "Result": "Success",
+  "Code": "Help",
+  "Data": {
+    "Command": "list",
+    "Description": "List processes in a folder, or use --all-folders for a tenant-wide audit. Returns process key (GUID), name, version, and type. Use the process key with 'jobs start' to execute a process.",
+    "Usage": "uip or processes list [options]",
+    "Arguments": [],
+    "Options": [
+      {
+        "Flags": "--folder-path <path>",
+        "Description": "Folder path (e.g., 'Shared')"
+      },
+      {
+        "Flags": "--folder-key <key>",
+        "Description": "Folder key (GUID)"
+      },
+      {
+        "Flags": "--all-folders",
+        "Description": "List processes across all folders in the tenant"
+      },
+      {
+        "Flags": "-n, --name <name>",
+        "Description": "Filter by process name (contains match)"
+      },
+      {
+        "Flags": "--process-type <type>",
+        "Description": "Filter by process type (Process, Agent, Flow, etc.)"
+      },
+      {
+        "Flags": "--all-fields",
+        "Description": "Return all fields from the API response instead of a curated summary"
+      },
+      {
+        "Flags": "-l, --limit <number>",
+        "Description": "Number of items to return",
+        "Default": "50"
+      },
+      {
+        "Flags": "--offset <number>",
+        "Description": "Number of items to skip",
+        "Default": "0"
+      },
+      {
+        "Flags": "--sort-by <field>",
+        "Description": "Sort results by field (e.g., 'Name asc', 'Id desc')",
+        "Default": "Id desc"
+      },
+      {
+        "Flags": "-h, --help",
+        "Description": "display help for command"
+      }
+    ],
+    "Examples": [
+      {
+        "Description": "List processes in a folder",
+        "Command": "uip or processes list --folder-path \"Shared\" --limit 2",
+        "Output": {
+          "Code": "ProcessList",
+          "Data": [
+            {
+              "Key": "c3d4e5f6-0000-0000-0000-000000000001",
+              "Name": "InvoiceProcessing",
+              "ProcessKey": "InvoiceProcessing",
+              "ProcessVersion": "1.0.2",
+              "Description": "",
+              "IsLatestVersion": true,
+              "FolderKey": "f0f0f0f0-0000-0000-0000-000000000001",
+              "FolderPath": "Shared",
+              "RetentionPeriod": 30,
+              "RetentionAction": "Delete"
+            },
+            {
+              "Key": "c3d4e5f6-0000-0000-0000-000000000002",
+              "Name": "DataMigration",
+              "ProcessKey": "DataMigration",
+              "ProcessVersion": "2.1.0",
+              "Description": "",
+              "IsLatestVersion": true,
+              "FolderKey": "f0f0f0f0-0000-0000-0000-000000000001",
+              "FolderPath": "Shared",
+              "RetentionPeriod": 30,
+              "RetentionAction": "Delete"
+            }
+          ]
+        }
+      },
+      {
+        "Description": "List processes across all folders for tenant-wide audits",
+        "Command": "uip or processes list --all-folders --name \"Invoice\"",
+        "Output": {
+          "Code": "ProcessList",
+          "Data": [
+            {
+              "Key": "c3d4e5f6-0000-0000-0000-000000000001",
+              "Name": "InvoiceProcessing",
+              "ProcessKey": "InvoiceProcessing",
+              "ProcessVersion": "1.0.2",
+              "Description": "",
+              "IsLatestVersion": true,
+              "RetentionPeriod": 30,
+              "RetentionAction": "Delete",
+              "FolderKey": "a1b2c3d4-0000-0000-0000-000000000001",
+              "FolderId": 42,
+              "FolderPath": "Shared"
+            }
+          ]
+        }
+      }
+    ],
+    "Subcommands": [],
+    "GlobalOptions": [
+      {
+        "Flags": "--output <table|json|yaml|plain>",
+        "Description": "Output format (default: json)"
+      },
+      {
+        "Flags": "--output-filter <expression>",
+        "Description": "JMESPath expression applied to the Data field of the response envelope"
+      },
+      {
+        "Flags": "--log-level <debug|info|warn|error>",
+        "Description": "Log level threshold (default: info)"
+      },
+      {
+        "Flags": "--log-file <path>",
+        "Description": "Write logs to file instead of stderr"
+      }
+    ]
+  }
+}
+# exit_status: 0

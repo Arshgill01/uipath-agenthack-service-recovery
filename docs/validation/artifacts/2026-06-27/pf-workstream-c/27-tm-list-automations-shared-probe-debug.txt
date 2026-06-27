@@ -1,0 +1,32 @@
+# command: uip tm testcases list-automations --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --package-name ServiceRecoveryEvalProcessProbe --log-level debug
+
+[DEBUG] CLI v1.195.1 starting — output=json, logLevel=debug, logFile=none
+[DEBUG] Storage initialized
+[DEBUG] [AppInsights] NodeAppInsightsTelemetryProvider initialized
+[DEBUG] Telemetry initialized
+[DEBUG] [Telemetry] auth context populated at startup
+[DEBUG] Discovered tool 'solution-tool' v1.195.0 at /Users/arshdeepsingh/.nvm/versions/node/v22.21.0/lib/node_modules/@uipath/solution-tool/dist/tool.js
+[DEBUG] Discovered tool 'codedapp-tool' v1.195.0 at /Users/arshdeepsingh/.nvm/versions/node/v22.21.0/lib/node_modules/@uipath/codedapp-tool/dist/tool.js
+[DEBUG] Discovered tool 'integrationservice-tool' v1.195.0 at /Users/arshdeepsingh/.nvm/versions/node/v22.21.0/lib/node_modules/@uipath/integrationservice-tool/dist/tool.js
+[DEBUG] Discovered tool 'orchestrator-tool' v1.195.0 at /Users/arshdeepsingh/.nvm/versions/node/v22.21.0/lib/node_modules/@uipath/orchestrator-tool/dist/tool.js
+[DEBUG] Discovered tool 'rpa-tool' v1.195.1 at /Users/arshdeepsingh/.nvm/versions/node/v22.21.0/lib/node_modules/@uipath/rpa-tool/dist/tool.js
+[DEBUG] Discovered tool 'test-manager-tool' v1.195.0 at /Users/arshdeepsingh/.nvm/versions/node/v22.21.0/lib/node_modules/@uipath/test-manager-tool/dist/tool.js
+[DEBUG] Discovered tool 'maestro-tool' v1.195.0 at /Users/arshdeepsingh/.nvm/versions/node/v22.21.0/lib/node_modules/@uipath/maestro-tool/dist/tool.js
+[DEBUG] Discovered tool 'data-fabric-tool' v1.195.0 at /Users/arshdeepsingh/.nvm/versions/node/v22.21.0/lib/node_modules/@uipath/data-fabric-tool/dist/tool.js
+[DEBUG] Discovered tool 'tasks-tool' v1.195.0 at /Users/arshdeepsingh/.nvm/versions/node/v22.21.0/lib/node_modules/@uipath/tasks-tool/dist/tool.js
+[DEBUG] Discovered tool 'platform-tool' v1.195.0 at /Users/arshdeepsingh/.nvm/versions/node/v22.21.0/lib/node_modules/@uipath/platform-tool/dist/tool.js
+[DEBUG] Discovered 10 tools: solution, codedapp, is, or, rpa, tm, maestro, df, tasks, platform
+[DEBUG] Program built successfully — ready to parse args
+[DEBUG] Node program built successfully — ready to parse args
+[DEBUG] Parsing args: tm testcases list-automations --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --package-name ServiceRecoveryEvalProcessProbe
+[DEBUG] Loading tool 'test-manager-tool'...
+[DEBUG] Loading tool 'test-manager-tool' from /Users/arshdeepsingh/.nvm/versions/node/v22.21.0/lib/node_modules/@uipath/test-manager-tool/dist/tool.js
+[DEBUG] Tool 'test-manager-tool' loaded successfully (prefix: tm, version: 1.195.0)
+Resolved project 'SREV' → 1281f516-2c82-0000-9e76-0b49cf9a9990
+{
+  "Result": "Success",
+  "Code": "TestAutomationsList",
+  "Data": []
+}
+
+# exit_status: 0

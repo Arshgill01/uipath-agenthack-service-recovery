@@ -1,0 +1,75 @@
+# command: uip or packages get --help
+
+{
+  "Result": "Success",
+  "Code": "Help",
+  "Data": {
+    "Command": "get",
+    "Description": "Get a specific package version by key. The key format is 'PackageId:Version' (e.g., 'MyProcess:1.0.0'). Returns metadata, target framework, authors, and release notes.",
+    "Usage": "uip or packages get [options] <key>",
+    "Arguments": [
+      {
+        "Name": "key",
+        "Description": "Package version key (format: 'PackageId:Version', e.g., 'MyProcess:1.0.0')",
+        "Required": true
+      }
+    ],
+    "Options": [
+      {
+        "Flags": "--feed-id <feedId>",
+        "Description": "Feed ID (optional, defaults to tenant feed)"
+      },
+      {
+        "Flags": "--all-fields",
+        "Description": "Return all fields from the API response instead of a curated summary"
+      },
+      {
+        "Flags": "-h, --help",
+        "Description": "display help for command"
+      }
+    ],
+    "Examples": [
+      {
+        "Description": "Get a specific package version",
+        "Command": "uip or packages get InvoiceProcessing:1.0.2",
+        "Output": {
+          "Code": "PackageGet",
+          "Data": {
+            "Key": "InvoiceProcessing:1.0.2",
+            "Title": "InvoiceProcessing",
+            "Version": "1.0.2",
+            "Description": "Processes vendor invoices",
+            "IsLatestVersion": true,
+            "IsActive": true,
+            "PackageType": "Process",
+            "TargetFramework": "Windows",
+            "Authors": "Finance Team",
+            "Published": "2025-04-10T08:00:00Z",
+            "ReleaseNotes": "Fix amount rounding bug",
+            "Id": "InvoiceProcessing"
+          }
+        }
+      }
+    ],
+    "Subcommands": [],
+    "GlobalOptions": [
+      {
+        "Flags": "--output <table|json|yaml|plain>",
+        "Description": "Output format (default: json)"
+      },
+      {
+        "Flags": "--output-filter <expression>",
+        "Description": "JMESPath expression applied to the Data field of the response envelope"
+      },
+      {
+        "Flags": "--log-level <debug|info|warn|error>",
+        "Description": "Log level threshold (default: info)"
+      },
+      {
+        "Flags": "--log-file <path>",
+        "Description": "Write logs to file instead of stderr"
+      }
+    ]
+  }
+}
+# exit_status: 0

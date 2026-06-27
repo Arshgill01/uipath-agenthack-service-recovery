@@ -1,0 +1,20 @@
+# command: uip tm testsets list --project-key SREV --include-last-execution
+
+Resolved project 'SREV' → 1281f516-2c82-0000-9e76-0b49cf9a9990
+Fetching test sets
+{
+  "Result": "Success",
+  "Code": "TestSetsList",
+  "Data": [
+    {
+      "TestSetKey": "SREV:9",
+      "Name": "Service Recovery E-001 through E-009 Baseline",
+      "FolderKey": "",
+      "Id": "6881c763-b871-0200-165b-0b49cf9ac490",
+      "LastExecutionStatus": "Finished",
+      "LastExecutionAt": "2026-06-26T10:19:58.490Z"
+    }
+  ]
+}
+
+# exit_status: 0

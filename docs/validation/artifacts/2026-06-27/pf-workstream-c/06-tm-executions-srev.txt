@@ -1,0 +1,67 @@
+# command: uip tm executions list --project-key SREV --limit 5
+
+Resolved project 'SREV' → 1281f516-2c82-0000-9e76-0b49cf9a9990
+Fetching executions for project 1281f516-2c82-0000-9e76-0b49cf9a9990
+{
+  "Result": "Success",
+  "Code": "ExecutionsList",
+  "Data": [
+    {
+      "Passed": 9,
+      "Failed": 0,
+      "None": 0,
+      "IsRunningAutomated": false,
+      "ProjectId": "1281f516-2c82-0000-9e76-0b49cf9a9990",
+      "TestSetId": "6881c763-b871-0200-165b-0b49cf9ac490",
+      "TestSetObjKey": "SREV:9",
+      "ExecutionStart": "2026-06-25T18:34:55.906Z",
+      "ExecutionFinished": "2026-06-25T18:34:55.906Z",
+      "Source": "TestManager",
+      "Status": "Running",
+      "HasTestsFromMultipleAutomationProjects": false,
+      "ExecutionType": "Manual",
+      "RunId": 1,
+      "EnforceExecutionOrder": false,
+      "Duration": 0,
+      "TestSetScheduleId": "00000000-0000-0000-0000-000000000000",
+      "RemoteControlAccess": "None",
+      "Id": "d50a7be6-35ed-1100-95aa-0b49cf9b8cad",
+      "Name": "Service Recovery E-001 through E-009 Baseline - 20260625.1833",
+      "Description": "Manual execution of test set Service Recovery E-001 through E-009 Baseline",
+      "Created": "2026-06-25T18:33:27.987Z",
+      "CreatedBy": "010e4620-c69c-0200-151d-0b49ce774412",
+      "Updated": "2026-06-25T18:34:55.907Z",
+      "UpdatedBy": "010e4620-c69c-0200-151d-0b49ce774412"
+    },
+    {
+      "Passed": 9,
+      "Failed": 0,
+      "None": 0,
+      "IsRunningAutomated": false,
+      "ProjectId": "1281f516-2c82-0000-9e76-0b49cf9a9990",
+      "TestSetId": "6881c763-b871-0200-165b-0b49cf9ac490",
+      "TestSetObjKey": "SREV:9",
+      "ExecutionStart": "2026-06-26T10:18:20.491Z",
+      "ExecutionFinished": "2026-06-26T10:19:58.490Z",
+      "ReportingDate": "2026-06-26T10:18:20.491Z",
+      "Source": "TestManager",
+      "Status": "Finished",
+      "HasTestsFromMultipleAutomationProjects": false,
+      "ExecutionType": "Manual",
+      "RunId": 1,
+      "EnforceExecutionOrder": false,
+      "Duration": 43481,
+      "TestSetScheduleId": "00000000-0000-0000-0000-000000000000",
+      "RemoteControlAccess": "None",
+      "Id": "40a1b334-5df8-1100-0a4b-0b49d0564f11",
+      "Name": "Service Recovery E-001 through E-009 Baseline - 20260626.1017",
+      "Description": "Manual execution of test set Service Recovery E-001 through E-009 Baseline",
+      "Created": "2026-06-26T10:17:49.350Z",
+      "CreatedBy": "010e4620-c69c-0200-151d-0b49ce774412",
+      "Updated": "2026-06-26T10:19:58.490Z",
+      "UpdatedBy": "010e4620-c69c-0200-151d-0b49ce774412"
+    }
+  ]
+}
+
+# exit_status: 0

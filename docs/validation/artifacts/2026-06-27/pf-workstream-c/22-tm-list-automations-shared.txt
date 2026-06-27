@@ -1,0 +1,10 @@
+# command: uip tm testcases list-automations --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7
+
+Resolved project 'SREV' → 1281f516-2c82-0000-9e76-0b49cf9a9990
+{
+  "Result": "Success",
+  "Code": "TestAutomationsList",
+  "Data": []
+}
+
+# exit_status: 0

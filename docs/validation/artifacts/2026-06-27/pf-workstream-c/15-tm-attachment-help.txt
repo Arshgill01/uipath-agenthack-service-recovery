@@ -1,0 +1,47 @@
+# command: uip tm attachment --help
+
+{
+  "Result": "Success",
+  "Code": "Help",
+  "Data": {
+    "Command": "attachment",
+    "Description": "Manage Test Manager test case attachments",
+    "Usage": "uip tm attachment [options] [command]",
+    "Arguments": [],
+    "Options": [
+      {
+        "Flags": "-h, --help",
+        "Description": "display help for command"
+      }
+    ],
+    "Subcommands": [
+      {
+        "Name": "download [options]",
+        "Description": "Download attachments for test cases in an execution."
+      },
+      {
+        "Name": "help [command]",
+        "Description": "display help for command"
+      }
+    ],
+    "GlobalOptions": [
+      {
+        "Flags": "--output <table|json|yaml|plain>",
+        "Description": "Output format (default: json)"
+      },
+      {
+        "Flags": "--output-filter <expression>",
+        "Description": "JMESPath expression applied to the Data field of the response envelope"
+      },
+      {
+        "Flags": "--log-level <debug|info|warn|error>",
+        "Description": "Log level threshold (default: info)"
+      },
+      {
+        "Flags": "--log-file <path>",
+        "Description": "Write logs to file instead of stderr"
+      }
+    ]
+  }
+}
+# exit_status: 0
