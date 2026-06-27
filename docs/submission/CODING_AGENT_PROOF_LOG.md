@@ -44,6 +44,10 @@ Human role:
 | 2026-06-27 | `codex/product-feedback-evidence-sprint`, commits `92868f3`, `f4ff3e6` | Gather fresh UiPath product-feedback evidence. | PF-026, PF-027, PF-028 and scratch Case evidence artifacts. |
 | 2026-06-27 | `master`, commit `c5509ed` | Correct shallow one-probe workflow and create sustained evidence workstreams. | `docs/plans/PRODUCT_FEEDBACK_EVIDENCE_WORKSTREAM_PLAN.md`, four worktree evidence threads queued. |
 | 2026-06-27 | `codex/forum-track-research` | Scrape forum/Devpost/winner evidence and lock track/coding-agent documentation. | This log, track decision memo, forum research digest, README coding-agent section. |
+| 2026-06-27 | `codex/pf-evidence-maestro-authoring`, commits `c0f1432`, `732de38` | Gather Maestro Case human-review authoring/readiness evidence. | PF-028 repair probe, Studio Web screenshots, validation/build log entries. |
+| 2026-06-27 | `codex/pf-evidence-action-binding`, commit `8a72ea1` | Gather Action Center generated-app binding/version evidence. | PF-013 binding probe showing runtime used older app deployment while newer designer version existed. |
+| 2026-06-27 | `codex/pf-evidence-test-manager`, commit `27bb351` | Gather Test Manager eval-import and automation-discovery evidence. | PF-020, PF-021, PF-024 strengthened; terminal manual execution preserved; automated Test Cloud remains unclaimed. |
+| 2026-06-27 | `codex/pf-evidence-data-fabric`, commit `d7a0a5c` | Gather Data Fabric audit-readback diagnostics. | PF-018 improved for current CLI discovery; PF-019/PF-023 strengthened; V2 audit proof path reconfirmed. |
 
 ## Demo Beat To Include
 
