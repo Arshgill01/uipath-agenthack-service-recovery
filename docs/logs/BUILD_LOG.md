@@ -3323,6 +3323,53 @@ Open risks:
 - The scratch Studio Web solution remains in the tenant because deletion was explicitly out of scope without approval.
 - UI inspection of the uploaded scratch solution was not run; CLI upload response already provides enough evidence for PF-028.
 
+### 2026-06-27 - Agent / Product Feedback Evidence Workstream D Data Fabric Diagnostics
+
+What changed:
+
+- Ran the assigned Data Fabric / audit storage readback diagnostics as a read-only probe.
+- Added `docs/validation/artifacts/2026-06-27/data_fabric_readback_diagnostics_probe.md`.
+- Updated `docs/validation/VALIDATION_RESULTS.md` with the exact read-only Data Fabric commands and observations.
+- Strengthened PF-019/PF-023 in `docs/product/PRODUCT_FEEDBACK_AWARD.md` and marked PF-018 as improved for current CLI discovery.
+
+Commands/actions:
+
+- `uip --version`
+- `uip login status --output json`
+- `uip tools list --output json`
+- `uip df --help`
+- `uip df entities --help`
+- `uip df entities get --help`
+- `uip df records insert --help`
+- `uip df records update --help`
+- `uip df records query --help`
+- `uip df records get --help`
+- `uip df entities list --native-only --output json`
+- `uip df entities get 328ef8b6-ab70-f111-ac9a-002248a16d28 --output json`
+- `uip df entities get 35e8f6c7-4671-f111-ac9a-002248a16d28 --output json`
+- `uip df records get 328ef8b6-ab70-f111-ac9a-002248a16d28 DA42769C-33B7-4701-A266-019F032AF376 --output json`
+- `uip df records query 328ef8b6-ab70-f111-ac9a-002248a16d28 --body '{"selectedFields":["Id","case_id","scenario_id","service_id","business_state","derived_evidence_state","closure_block_reason","interpretation_policy_version","decision_policy_version","source_case_instance_key","source_task_id","package_version"]}' --limit 5 --output json`
+- `uip df records get 35e8f6c7-4671-f111-ac9a-002248a16d28 F9D838CE-4671-F111-AC9A-0022489A9A06 --output json`
+- `uip df records query 35e8f6c7-4671-f111-ac9a-002248a16d28 --body '{"selectedFields":["Id","CaseId","ScenarioId","ServiceId","BusinessState","DerivedEvidenceState","ClosureBlockReason","InterpretationPolicyVersion","DecisionPolicyVersion","SourceCaseInstanceKey","SourceTaskId","PackageVersion"],"filterGroup":{"logicalOperator":0,"queryFilters":[{"fieldName":"CaseId","operator":"=","value":"CASE-BG-CONTRA"}]}}' --limit 5 --output json`
+- `uip df records query 35e8f6c7-4671-f111-ac9a-002248a16d28 --body '{"selectedFields":["Id","case_id","CaseId"],"filterGroup":{"logicalOperator":0,"queryFilters":[{"fieldName":"case_id","operator":"=","value":"CASE-BG-CONTRA"}]}}' --limit 5 --output json`
+
+Validation:
+
+- PASS: read-only Data Fabric probe completed and saved the CLI artifact.
+- PASS: no existing Data Fabric entity, record, or validated proof path was mutated.
+- PASS: Data Fabric V2 record `F9D838CE-4671-F111-AC9A-0022489A9A06` still returns first-class E-004 fields and full JSON payloads.
+- PARTIAL/OPEN: legacy `ServiceRecoveryAuditBundle` record `DA42769C-33B7-4701-A266-019F032AF376` still returns only system fields; current CLI help does not explain the snake_case/PascalCase lifecycle boundary.
+
+Product feedback:
+
+- PF-018 improved/resolved for CLI discovery because `uip tools list --output json` now includes `data-fabric-tool`.
+- PF-019/PF-023 strengthened from observed 2026-06-27 readback behavior.
+
+Open risks:
+
+- No new platform proof risk. G-001 remains native PARTIAL and PASS with Data Fabric V2 / Orchestrator bucket custom audit proof.
+- No scratch Data Fabric resource was created because Data Fabric entity names cannot use the required `PFPROBE-20260627-` prefix and deletion would require explicit approval.
+
 ### 2026-06-27 - Agent / Sustained Product Feedback Evidence Workstreams
 
 What changed:
