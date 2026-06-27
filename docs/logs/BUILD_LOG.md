@@ -3309,3 +3309,47 @@ Open risks:
 
 - Forum participant reports are supporting context only. Product-feedback claims remain based on our own reproduced PF evidence unless explicitly marked as public forum context.
 - Final video still needs to show coding-agent proof visibly; docs alone are not enough for the strongest bonus claim.
+
+### 2026-06-27 - Agent / Product Feedback Evidence Workstream B
+
+What changed:
+
+- Ran the assigned read-only Action Center / generated Action app binding probe.
+- Added evidence artifact `docs/validation/artifacts/2026-06-27/product_feedback_action_binding_probe.md`.
+- Strengthened PF-013 with observed binding/version evidence: two `SimpleApprovalApp` deployments exist, runtime task `4333536` used the older `SemVersion: 1.0.0` deployment system name, and process readback did not expose the Action app deployment/version before runtime.
+- Updated `docs/validation/VALIDATION_RESULTS.md` with exact commands, observations, result, and decision impact.
+
+Commands/actions:
+
+- `uip --version`
+- `uip login status --output json`
+- `uip maestro case tasks describe --type action --id 9eeb93b2-11d3-4bfb-b7d6-29879226f242 --output json`
+- `uip tasks get 4333536 --folder-id 7978263 --output json`
+- `uip or processes get 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --output json`
+- `uip maestro case instance variables 9eb64f9f-6613-48f7-b452-215085d8c67b --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip maestro case tasks describe --help`
+- `uip maestro case registry search 9eeb93b2-11d3-4bfb-b7d6-29879226f242 --output json`
+- `uip maestro case registry search SimpleApprovalApp --output json`
+- `uip tasks get 4300219 --folder-id 7978263 --output json`
+- `uip maestro case registry --help`
+- `uip apps --help`
+- `uip codedapp pull --help`
+- `uip maestro case registry get 9eeb93b2-11d3-4bfb-b7d6-29879226f242 --output json`
+- `uip maestro case registry get ID5c3f0a11590d4fdab3c22de72f4ff443 --output json`
+- `uip maestro case registry get IDb707cd2abbdd42178b415f7341a65f13 --output json`
+- `uip maestro case registry get eca298e8-78e8-40d2-8610-946f5145aa9a --output json`
+- `uip maestro case registry list --output json`
+- `uip maestro case registry get e08ea52f-ad42-41db-a6bc-50471bd25511 --output json`
+- `uip maestro case tasks describe --type action --id e08ea52f-ad42-41db-a6bc-50471bd25511 --output json`
+- `uip maestro case registry list --output-filter "Resources[?ResourceType=='action-apps' || Id=='e08ea52f-ad42-41db-a6bc-50471bd25511' || Id=='9eeb93b2-11d3-4bfb-b7d6-29879226f242'].{Id:Id,DeploymentTitle:DeploymentTitle,SemVersion:SemVersion,SystemName:SystemName,Folder:DeploymentFolder.FullyQualifiedName,DateDeployed:DateDeployed}" --output json`
+- `uip or processes get 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --output json --output-filter "{Key:Key,Name:Name,ProcessVersion:ProcessVersion,AutoUpdate:AutoUpdate,FolderKey:FolderKey,FolderPath:FolderPath}"`
+
+Validation:
+
+- PASS: `git diff --check` completed successfully.
+- PASS: `scripts/run_submission_check.sh` completed successfully with 46 tests and demo artifact verification.
+
+Open risks:
+
+- No new scratch resources were created for this workstream; existing scratch coverage from PF-028 was sufficient.
+- Generated Action Center UI remains not final-demo ready; this probe strengthens the product-feedback evidence rather than changing the demo-safe proof path.

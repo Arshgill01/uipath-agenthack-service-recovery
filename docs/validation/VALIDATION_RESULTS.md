@@ -2183,3 +2183,77 @@ Evidence:
 - `docs/validation/artifacts/2026-06-27/product_feedback_workstream_a_maestro_authoring_repair_probe.md`
 - `docs/validation/artifacts/2026-06-27/pfprobe-human-review-existing-invalid-studio-safari.png`
 - `docs/validation/artifacts/2026-06-27/pfprobe-human-review-repair-studio-safari.png`
+
+## 2026-06-27 - Product Feedback Evidence Workstream B Action Binding Probe
+
+Scope:
+
+- Run the assigned Action Center / generated Action app binding evidence queue.
+- Use read-only task/API/registry/process inspection.
+- Do not mutate existing submission Case processes, tasks, packages, Action apps, Data Fabric entities, Test Manager baseline objects, or tenant-wide settings.
+
+Environment:
+
+- UiPath CLI `1.195.1`.
+- Org `keepingitlowkey`.
+- Tenant `DefaultTenant`.
+- User `arshgill6120@gmail.com`.
+
+Commands/actions:
+
+1. `uip --version`
+2. `uip login status --output json`
+3. `uip maestro case tasks describe --type action --id 9eeb93b2-11d3-4bfb-b7d6-29879226f242 --output json`
+4. `uip tasks get 4333536 --folder-id 7978263 --output json`
+5. `uip or processes get 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --output json`
+6. `uip maestro case instance variables 9eb64f9f-6613-48f7-b452-215085d8c67b --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+7. `uip maestro case tasks describe --help`
+8. `uip maestro case registry search 9eeb93b2-11d3-4bfb-b7d6-29879226f242 --output json`
+9. `uip maestro case registry search SimpleApprovalApp --output json`
+10. `uip tasks get 4300219 --folder-id 7978263 --output json`
+11. `uip maestro case registry --help`
+12. `uip apps --help`
+13. `uip codedapp pull --help`
+14. `uip maestro case registry get 9eeb93b2-11d3-4bfb-b7d6-29879226f242 --output json`
+15. `uip maestro case registry get ID5c3f0a11590d4fdab3c22de72f4ff443 --output json`
+16. `uip maestro case registry get IDb707cd2abbdd42178b415f7341a65f13 --output json`
+17. `uip maestro case registry get eca298e8-78e8-40d2-8610-946f5145aa9a --output json`
+18. `uip maestro case registry list --output json`
+19. `uip maestro case registry get e08ea52f-ad42-41db-a6bc-50471bd25511 --output json`
+20. `uip maestro case tasks describe --type action --id e08ea52f-ad42-41db-a6bc-50471bd25511 --output json`
+21. `uip maestro case registry list --output-filter "Resources[?ResourceType=='action-apps' || Id=='e08ea52f-ad42-41db-a6bc-50471bd25511' || Id=='9eeb93b2-11d3-4bfb-b7d6-29879226f242'].{Id:Id,DeploymentTitle:DeploymentTitle,SemVersion:SemVersion,SystemName:SystemName,Folder:DeploymentFolder.FullyQualifiedName,DateDeployed:DateDeployed}" --output json`
+22. `uip or processes get 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --output json --output-filter "{Key:Key,Name:Name,ProcessVersion:ProcessVersion,AutoUpdate:AutoUpdate,FolderKey:FolderKey,FolderPath:FolderPath}"`
+
+Observed:
+
+- `tasks describe` for both known `SimpleApprovalApp` action-app IDs exposed expected schema inputs: `Content`, `EvidencePacketJson`, `RawAgentRecommendation`, `PolicyDecisionJson`, and `Comment`.
+- The schema input entries returned empty `ElementId` values and did not show generated page controls, labels, or binding expressions.
+- `tasks describe` exposes `AppTasksMetadata.AppVersion` in the `hitlTask` output schema, but this is a runtime task output shape.
+- Runtime task `4333536` and case instance variables exposed `AppTasksMetadata.AppId: ID5c3f0a11590d4fdab3c22de72f4ff443` and `AppVersion: 1`.
+- Process readback for `9a7eb300-7b16-4856-b14f-d6f2da3dbe61` exposed Case package/process version `1.0.6` and `AutoUpdate: false`, but did not expose the Action app deployment/version the Case would instantiate.
+- Case registry readback exposed two `SimpleApprovalApp` deployments:
+  - `9eeb93b2-11d3-4bfb-b7d6-29879226f242`, `SemVersion: 1.0.1`, system name `IDb707cd2abbdd42178b415f7341a65f13`, folder `Solution 1`.
+  - `e08ea52f-ad42-41db-a6bc-50471bd25511`, `SemVersion: 1.0.0`, system name `ID5c3f0a11590d4fdab3c22de72f4ff443`, folder `Solution`.
+- Runtime task `4333536` matched the older `SemVersion: 1.0.0` deployment system name, not the later `SemVersion: 1.0.1` deployment.
+- `registry search SimpleApprovalApp` and `registry search 9eeb93b2-11d3-4bfb-b7d6-29879226f242` returned zero results, while `registry get` by action-app resource ID and a filtered `registry list` could expose the resources.
+- `uip apps --help` returned unknown command.
+
+Result:
+
+- PASS for read-only Workstream B evidence collection.
+- PARTIAL for current CLI/API diagnostic coverage: it can expose schema fields, registry deployments, and runtime task metadata, but not one pre-runtime mapping from Case process/package to Action app deployment to generated controls to rendered task fields.
+- No new scratch resource was created because the read-only probes answered the binding/version questions and a prior `PFPROBE-20260627-` scratch authoring probe had already covered scratch Case behavior.
+
+Decision impact:
+
+- PF-013 is strengthened: the product gap is both generated field rendering and pre-runtime binding/version diagnosability.
+- The final demo posture remains unchanged. Action Center is validated for lifecycle and structured return, but the custom evidence packet/Data Fabric/bucket audit surfaces remain the judge-readable proof path.
+- Do not claim generated Action Center UI final-demo readiness.
+
+Product feedback:
+
+- PF-013 updated with the read-only binding/version evidence.
+
+Evidence:
+
+- `docs/validation/artifacts/2026-06-27/product_feedback_action_binding_probe.md`
