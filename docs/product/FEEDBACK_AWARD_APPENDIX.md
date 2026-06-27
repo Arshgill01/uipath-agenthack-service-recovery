@@ -26,7 +26,7 @@ Reason:
 Evidence:
 
 - Positive: PF-013, PF-015, PF-017, PF-020.
-- Friction: PF-003, PF-006, PF-007, PF-017, PF-019, PF-022.
+- Friction: PF-003, PF-006, PF-007, PF-017, PF-019, PF-022, PF-026, PF-027, PF-028.
 
 ### Ease Of Build
 
@@ -35,20 +35,20 @@ Recommended answer: `Somewhat difficult`.
 Reason:
 
 - The architecture mapped well to UiPath products.
-- The time cost came from discovering platform readiness issues and proving runtime behavior: Actions enablement, generated Action app field rendering, required Action task title, package/feed binding, Data Fabric insert shape, and Case job/task readback.
+- The time cost came from discovering platform readiness issues and proving runtime behavior: Actions enablement, generated Action app field rendering, required Action task title, package/feed binding, Data Fabric insert shape, Case job/task readback, and inconsistent readiness signals across Case validation, solution dry-run, and upload/import.
 
 Evidence:
 
-- PF-003, PF-006, PF-007, PF-013, PF-017, PF-019, PF-022.
+- PF-003, PF-006, PF-007, PF-013, PF-017, PF-019, PF-022, PF-026, PF-027, PF-028.
 
 ## Ranked Feedback Claims
 
 | Rank | Claim | Why It Can Win | Evidence | Keep / Cut |
 | --- | --- | --- | --- | --- |
-| 1 | Add a Maestro Case readiness + human-review preflight. | It is high-impact, product-specific, actionable, and backed by live blockers across setup, design, deploy, runtime, package binding, and proof visibility. | PF-003, PF-006, PF-007, PF-013, PF-015, PF-017. | Keep as the primary answer to "one thing to change." |
+| 1 | Add a Maestro Case readiness + human-review preflight. | It is high-impact, product-specific, actionable, and backed by live blockers across setup, design, deploy, runtime, package binding, proof visibility, process diagnostics, reviewer readiness discovery, and scratch authoring preflight inconsistency. | PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-026, PF-027, PF-028. | Keep as the primary answer to "one thing to change." |
 | 2 | Add native Case domain audit/event reconstruction for agent + policy + human workflows. | It ties directly to Maestro's value proposition and our hard gate G-001. It is strategic, not just a bug report. | PF-015, G-001 validation, audit bundle artifacts. | Keep as the strongest product-design insight. |
 | 3 | Improve generated Action app field binding inspection/repair. | The platform persisted proof-critical data but the generated UI hid it, which is precise and fair. | PF-006, PF-013. | Keep as the concrete G-003 example. |
-| 4 | Make package/feed/process binding diagnostics consistent. | It shows deep usage beyond UI clicks and supports the coding-agent/CLI story. | PF-017, PF-010, PF-011, PF-012. | Keep as integration/CLI feedback. |
+| 4 | Make package/feed/process binding diagnostics consistent. | It shows deep usage beyond UI clicks and supports the coding-agent/CLI story. | PF-017, PF-010, PF-011, PF-012, PF-026. | Keep as integration/CLI feedback. |
 | 5 | Add schema-aware Data Fabric record insert/import diagnostics. | Strong for regulated audit storage: direct JSON insert and false-success-style updates were confusing until the PascalCase V2 schema was validated. | PF-018, PF-019, PF-023. | Keep as a secondary storage/audit point. |
 | 6 | Support eval-suite import into Test Manager and make automation discovery/package metadata diagnostics explicit. | Good cross-platform feedback and useful for agent evals, but less central than Maestro Case. It now includes both manual lifecycle feedback and a concrete failed package-discovery probe. | PF-020, PF-021, PF-024. | Keep if selecting Test Cloud/Test Manager category. |
 | 7 | Clarify Case job/task lifecycle readback. | Practical CLI/operator feedback; helps repeatability and demo honesty. | PF-022. | Keep as supporting detail, not headline. |
@@ -89,7 +89,7 @@ It should check:
 
 Why:
 
-- It would have prevented or shortened PF-003, PF-006, PF-007, PF-008, PF-013, and PF-017.
+- It would have prevented or shortened PF-003, PF-006, PF-007, PF-008, PF-013, PF-017, PF-026, PF-027, and PF-028.
 - It should surface when native Case history is not enough for the required domain audit, then guide builders toward validated custom audit storage/readback patterns; PF-015, PF-019, and PF-023 show why this matters for governed human-review workflows.
 - It aligns with Maestro Case's target use: end-to-end orchestration across agents, APIs, RPA, and people.
 
@@ -101,6 +101,7 @@ Why:
 - Add schema-aware Data Fabric insert/import diagnostics.
 - Add Test Manager eval import from JSON/JUnit/agent-eval outputs, plus a package preflight that explains whether an uploaded Orchestrator package contains Test Manager-visible automations.
 - Add CaseManagement-aware job state explanations for human-task workflows.
+- Make Case validation, solution dry-run, and Studio Web upload/import share the same readiness contract for human-review cases.
 
 ## Final Survey Building Blocks
 
@@ -112,11 +113,11 @@ The optional live Gemini/Vertex path deepens the same thesis without weakening t
 
 ### Challenges
 
-The hardest part was not the local policy model. It was turning a first-time Maestro Case build into a repeatable, observable runtime proof. We had to validate tenant service readiness, generated Action app bindings, required Action task fields, package/feed resolution, process version pinning, Action Center task return, Test Manager mapping, and audit storage. The strongest pattern is that UiPath exposed the needed primitives, but the product needs more preflight and diagnostic guidance for a new builder doing agent + policy + human orchestration.
+The hardest part was not the local policy model. It was turning a first-time Maestro Case build into a repeatable, observable runtime proof. We had to validate tenant service readiness, generated Action app bindings, required Action task fields, package/feed resolution, process version pinning, Action Center task return, Test Manager mapping, audit storage, and whether Case validation agreed with solution dry-run/upload. The strongest pattern is that UiPath exposed the needed primitives, but the product needs more preflight and diagnostic guidance for a new builder doing agent + policy + human orchestration.
 
 ### One Thing To Change
 
-Add a Maestro Case human-review readiness/preflight wizard. It should verify services, roles, task required fields, Action app schema binding, input/output mappings, package/feed binding, package version pinning, and audit-readiness before the builder starts a live case. This would turn hours of runtime recovery into a short checklist.
+Add a Maestro Case human-review readiness/preflight wizard. It should verify services, roles, task required fields, Action app schema binding, input/output mappings, package/feed binding, package version pinning, audit-readiness, and agreement between Case validation, solution dry-run, and Studio Web upload/import before the builder starts a live case. This would turn hours of runtime recovery into a short checklist.
 
 ### What Surprised Us
 

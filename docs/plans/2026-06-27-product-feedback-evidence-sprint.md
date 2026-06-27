@@ -10,7 +10,7 @@ Objective: gather fresh, scoped UiPath product-feedback evidence that strengthen
 - Prefer read-only CLI/UI inspection before creating any scratch resource.
 - If creation is needed, use names prefixed `PFPROBE-20260627-`.
 - Do not modify existing submission processes, packages, cases, tasks, Data Fabric entities, or tenant-wide settings.
-- Stop after at most two small live probes unless there is a clear blocker and user approval.
+- Historical note: this sprint was intentionally bounded to two small probes. Use `docs/plans/PRODUCT_FEEDBACK_EVIDENCE_WORKSTREAM_PLAN.md` for the next sustained, multi-thread evidence run.
 
 ## Current Assumption
 

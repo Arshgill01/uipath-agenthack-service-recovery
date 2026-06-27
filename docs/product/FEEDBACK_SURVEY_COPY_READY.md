@@ -51,6 +51,7 @@ Specific challenges:
 - Actions/Action Center was required for human review but was not enabled for the tenant at first. The disabled-service page did not show the exact admin enablement path we later used.
 - Human-review authoring exposed the right primitives, but the generated Action app flow did not make schema-to-page binding, required task fields, or structured return mapping obvious.
 - A required Action task `Title` field passed deployment but failed at live runtime, so the missing field was discovered only after starting a case.
+- A later scratch Case probe showed the same class of readiness issue earlier in the authoring path: `uip maestro case validate` caught missing rules and a required field, while `uip solution pack --dry-run` still returned `Status: Valid` and `uip solution upload` accepted the scratch solution with `ErrorList: []`.
 - The generated reviewer page hid or mislabeled a proof-critical field: `PolicyDecisionJson` persisted correctly in task/API data but rendered as `Unnamed String 1`.
 - Package/feed/process diagnostics required extra work. A package could be read with `--feed-id`, while default lookup and direct process creation could not bind the same version.
 - Native Case history and task APIs can reconstruct operational flow, but a clean domain audit for evidence state, raw agent recommendation, policy decision, policy versions, block reason, and human action still required explicit custom audit artifacts.
@@ -59,7 +60,7 @@ Specific challenges:
 
 Evidence:
 
-- PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-019, PF-020, PF-021, PF-022, PF-023, PF-024, PF-025.
+- PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-019, PF-020, PF-021, PF-022, PF-023, PF-024, PF-025, PF-026, PF-027, PF-028.
 
 ## Q11 - One Thing To Change
 
@@ -74,13 +75,14 @@ Before a builder publishes or runs a Case with a human review step, UiPath shoul
 - Action output to Case variable mapping,
 - package/feed binding and the package version the next process run will use,
 - process `AutoUpdate` and package-version readback,
+- agreement between Case validation, solution dry-run packaging, and Studio Web upload/import,
 - native audit coverage versus required custom audit events.
 
-This would have shortened our slowest loops: enabling Actions, diagnosing generated Action page binding, fixing runtime-only task field failures, proving package version pinning, and deciding where to store audit evidence. Maestro Case is strongest when it coordinates agents, systems, and people; those workflows need a preflight that proves the reviewer will see the right evidence before a live case starts.
+This would have shortened our slowest loops: enabling Actions, diagnosing generated Action page binding, fixing runtime-only task field failures, proving package version pinning, reconciling Case validation versus solution dry-run/upload, and deciding where to store audit evidence. Maestro Case is strongest when it coordinates agents, systems, and people; those workflows need a preflight that proves the reviewer will see the right evidence before a live case starts.
 
 Evidence:
 
-- PF-003, PF-006, PF-007, PF-013, PF-015, PF-017.
+- PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-026, PF-027, PF-028.
 - Secondary audit-storage support: PF-019 and PF-023.
 
 ## Q12 - What Surprised You / Advice To Another Developer

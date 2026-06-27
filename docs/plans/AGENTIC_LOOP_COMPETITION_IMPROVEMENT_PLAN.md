@@ -29,7 +29,7 @@ This is a strong fit for Track 1, UiPath Maestro Case. The public Devpost framin
    E-002/E-003/E-004 use the same green business fixture and differ on authoritative telemetry. Missing/stale evidence routes to verification; contradiction routes to human review.
 
 3. Product feedback is unusually evidence-backed.
-   PF-001 through PF-025 separate access friction, UX/docs issues, product defect candidates, platform limitations, workarounds, and proof impact. The strongest award claim is the Maestro Case human-review readiness/preflight recommendation.
+   PF-001 through PF-028 separate access friction, UX/docs issues, product defect candidates, platform limitations, workarounds, and proof impact. The strongest award claim is the Maestro Case human-review readiness/preflight recommendation, now strengthened by fresh process-diagnostic, reviewer-readiness, and scratch Case preflight evidence.
 
 4. The live UiPath story is honest.
    The repo does not overclaim native Case audit, generated Action Center UI, or automated Test Cloud. That restraint is a competitive advantage because the feedback is credible.

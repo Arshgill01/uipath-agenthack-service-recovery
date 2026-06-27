@@ -31,7 +31,7 @@ Recommended choice: Somewhat satisfied.
 
 Reasoning: UiPath gave us enough real platform surface to validate a governed Maestro Case workflow end to end: Maestro Case, Action Center lifecycle, Orchestrator package/process/bucket operations, Test Manager manual eval representation, and CLI readback. We are not choosing "Very satisfied" because first-time tenant readiness, generated Action app binding, runtime validation, package/feed diagnostics, and native audit reconstruction all required workarounds.
 
-Evidence: PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-019, PF-022.
+Evidence: PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-019, PF-022, PF-026, PF-027, PF-028.
 
 ## 6. Which categories did you compete in AgentHack?
 
@@ -64,7 +64,7 @@ Recommended choice: Somewhat difficult.
 
 The local policy/eval layer was straightforward. The difficult part was proving the platform behavior live and repeatably: enabling Actions, mapping human-review evidence fields, finding a runtime-only missing Action task Title, resolving package/feed/version behavior, proving task return shape, keeping Case job claims honest, and iterating from a blocked legacy Data Fabric entity to a validated PascalCase V2 audit record.
 
-Evidence: PF-003, PF-006, PF-007, PF-013, PF-017, PF-019, PF-022, PF-023.
+Evidence: PF-003, PF-006, PF-007, PF-013, PF-017, PF-019, PF-022, PF-023, PF-026, PF-027, PF-028.
 
 ## 10. What challenges did you encounter while building the solution?
 
@@ -76,22 +76,23 @@ The major challenge classes were:
 - Human-review authoring: Studio Web exposed the right Case and Action primitives, but the Human action flow did not clearly guide evidence-packet input mapping, output mapping, or reviewer return.
 - Generated reviewer UI: `PolicyDecisionJson` persisted correctly through task/API data, but the generated Action Center page rendered that proof-critical field as `Unnamed String 1` and repeated blank/unreadable fields in a completed E-004 task.
 - Runtime validation: deployment succeeded even when a required Action task `Title` was missing. The first actionable error appeared only after a live case faulted at runtime.
+- Scratch authoring preflight consistency: a fresh PFPROBE Case showed `uip maestro case validate` catching missing rules and a required field while `uip solution pack --dry-run` returned `Status: Valid` and `uip solution upload` accepted the same invalid scratch solution with `ErrorList: []`.
 - Package/feed/process diagnostics: a package uploaded to the solution feed and could be read with `--feed-id`, while default lookup and direct process creation could not bind the same version.
 - Audit reconstruction: native Case/task history plus APIs can reconstruct operational flow, but a clean domain audit for evidence state, policy versions, raw recommendation, policy decision, block reason, human action, and timestamps still required explicit custom audit artifacts.
 - Data Fabric persistence: entity create/readback worked, snake_case JSON insert/update could not map required custom fields despite valid-looking payloads, and the later CSV-created row could not expose custom payload fields through CLI readback. A PascalCase V2 schema then solved the full-payload storage/readback path and gave us a useful product-feedback insight: field names accepted at schema creation should work consistently across insert/update/query/get or be rejected up front.
 - Test Manager eval mapping: project, cases, test set, and manual pass logs worked, but E-001 through E-009 had to be represented manually. A first execution stayed `Running` after direct child-log finishes; a later explicit start-then-finish lifecycle reached terminal `Status: Finished` with 9/9 passed logs and JUnit export. Automated Test Cloud execution remained unclaimable after a concrete package probe: Orchestrator accepted `ServiceRecoveryEvalProcessProbe:0.0.2/0.0.3` and exposed an entry point, but Test Manager discovery returned no automations and direct linking failed with `Test ... not found in package`.
 
-Evidence: PF-003, PF-004, PF-006, PF-007, PF-013, PF-015, PF-017, PF-019, PF-020, PF-021, PF-022, PF-023, PF-024, PF-025.
+Evidence: PF-003, PF-004, PF-006, PF-007, PF-013, PF-015, PF-017, PF-019, PF-020, PF-021, PF-022, PF-023, PF-024, PF-025, PF-026, PF-027, PF-028.
 
 ## 11. If you had to change one thing about the UiPath Platform experience, what would it be and why?
 
 Add a Maestro Case human-review readiness and preflight path.
 
-Before a builder publishes or starts a Case with a human review step, UiPath should verify tenant services and roles, Actions/Action Center availability, required Action task fields such as Title, schema-to-page binding for every input/output property, Case variable to Action input mapping, Action output to Case variable mapping, package/feed binding, package version readback, and audit readiness.
+Before a builder publishes or starts a Case with a human review step, UiPath should verify tenant services and roles, Actions/Action Center availability, required Action task fields such as Title, schema-to-page binding for every input/output property, Case variable to Action input mapping, Action output to Case variable mapping, package/feed binding, package version readback, audit readiness, and agreement between Case validation, solution dry-run packaging, and Studio Web upload/import.
 
-This one improvement would have shortened our slowest loops: enabling Actions, diagnosing generated Action page binding, fixing runtime-only required-field failures, proving package version pinning, and deciding where to store audit evidence. Maestro Case is most valuable when it coordinates agents, systems, and people; those workflows need a preflight that proves the reviewer will see the right evidence before a live case starts.
+This one improvement would have shortened our slowest loops: enabling Actions, diagnosing generated Action page binding, fixing runtime-only required-field failures, proving package version pinning, reconciling inconsistent readiness signals, and deciding where to store audit evidence. Maestro Case is most valuable when it coordinates agents, systems, and people; those workflows need a preflight that proves the reviewer will see the right evidence before a live case starts.
 
-Evidence: PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, with PF-019/PF-023 as secondary audit-storage support.
+Evidence: PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-026, PF-027, PF-028, with PF-019/PF-023 as secondary audit-storage support.
 
 ## 12. What surprised you the most? What would you tell another developer?
 

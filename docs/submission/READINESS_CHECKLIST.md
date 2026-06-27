@@ -39,7 +39,7 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 
 | Requirement | Status | Evidence | Remaining caution |
 | --- | --- | --- | --- |
-| Product feedback captured during UiPath interactions. | PASS | PF-001 through PF-025 in `docs/product/PRODUCT_FEEDBACK_AWARD.md`. | Add new PF entries only for newly observed UiPath behavior. |
+| Product feedback captured during UiPath interactions. | PASS | PF-001 through PF-028 in `docs/product/PRODUCT_FEEDBACK_AWARD.md`. | Add new PF entries only for newly observed UiPath behavior. |
 | Feedback is curated into final answer material. | PASS | `docs/product/FEEDBACK_AWARD_APPENDIX.md`; `docs/product/FEEDBACK_SURVEY_COPY_READY.md`. | Team name and story-sharing preference still need user confirmation. |
 | Feedback separates user/access/docs/product defects. | PASS | Feedback matrix classifications and confidence fields. | Keep fair language; do not turn workarounds into unsupported defect claims. |
 

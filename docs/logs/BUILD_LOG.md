@@ -3203,3 +3203,27 @@ Open risks:
 
 - The scratch Studio Web solution remains in the tenant because deletion was explicitly out of scope without approval.
 - UI inspection of the uploaded scratch solution was not run; CLI upload response already provides enough evidence for PF-028.
+
+### 2026-06-27 - Agent / Sustained Product Feedback Evidence Workstreams
+
+What changed:
+
+- Promoted the useful product-feedback evidence sprint commits onto `master`: PF-026, PF-027, PF-028, validation log entries, and saved evidence artifacts.
+- Added `docs/plans/PRODUCT_FEEDBACK_EVIDENCE_WORKSTREAM_PLAN.md` to prevent one-probe early completion. The plan defines stop conditions, evidence bars, and four sustained workstreams: Maestro Case authoring, Action binding, Test Manager, and Data Fabric.
+- Updated the historical sprint plan to point future agents at the sustained workstream plan instead of repeating the two-probe limit.
+- Updated award-facing feedback docs so PF-026 through PF-028 strengthen the primary Maestro Case human-review readiness/preflight recommendation.
+- Queued four separate Codex worktree threads for deeper product-feedback evidence:
+  - Maestro Case authoring/readiness: pending worktree `local:7b0f503e-0e5e-420e-9642-d269071de86d`.
+  - Action Center/generated Action binding: pending worktree `local:f6a20b73-76ab-4ed4-be0a-bf788e216417`.
+  - Test Manager/Test Cloud eval import and automation diagnostics: pending worktree `local:d2ed12d3-074c-4b0d-8335-4af145eaa918`.
+  - Data Fabric/audit storage readback diagnostics: pending worktree `local:c36b35d0-2d46-4fe9-9146-f9da9205201f`.
+
+Validation:
+
+- PASS: `git diff --check`.
+- PASS: `scripts/run_submission_check.sh` ran 46 tests and verified demo artifacts.
+
+Open risks:
+
+- Background worktree threads can still stop early if they hit tool/runtime limits, but their prompts now require full probe queues, three-repeat blocker criteria, and evidence artifacts before completion.
+- Scratch cloud resources must remain clearly prefixed and should not be deleted without explicit approval.
