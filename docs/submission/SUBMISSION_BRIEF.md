@@ -4,6 +4,10 @@ Status: concise, evidence-backed source for Devpost-style project copy. This is 
 
 Readiness checklist: [READINESS_CHECKLIST.md](READINESS_CHECKLIST.md).
 
+Track decision: [TRACK_SELECTION_DECISION.md](TRACK_SELECTION_DECISION.md).
+
+Coding-agent proof: [CODING_AGENT_PROOF_LOG.md](CODING_AGENT_PROOF_LOG.md).
+
 ## One-Line Pitch
 
 UiPath Maestro Case for telecom service recovery: agents interpret messy evidence, deterministic policy decides whether closure is safe, and human reviewers handle high-impact exceptions with an auditable evidence packet.
@@ -45,6 +49,13 @@ The UiPath implementation uses Maestro Case and Action Center for lifecycle and 
 - Test Manager: eval-suite representation through manual test cases, set, terminal manual execution, report, and JUnit export.
 - UiPath CLI: repeatable readback and validation operations.
 
+## Track And Bonus Positioning
+
+- Primary track: UiPath Maestro Case.
+- Reason: the solution is dynamic, exception-heavy casework where routes emerge from evidence freshness and contradiction state, not a predictable BPMN sequence.
+- Supporting surfaces: Test Manager for eval representation, Data Fabric/Orchestrator for audit proof, Action Center for human review lifecycle.
+- Coding-agent bonus: Codex was used to build and validate the repo; proof is documented in `README.md` and `docs/submission/CODING_AGENT_PROOF_LOG.md`.
+
 ## Evidence Links
 
 - Repeatable local proof: `scripts/run_demo.sh`
@@ -60,6 +71,9 @@ The UiPath implementation uses Maestro Case and Action Center for lifecycle and 
 - Governed learning-loop artifact: `docs/demo/artifacts/policy_improvement_E008.json`
 - Validation results: `docs/validation/VALIDATION_RESULTS.md`
 - Product feedback answer bank: `docs/product/FEEDBACK_SURVEY_COPY_READY.md`
+- Track decision: `docs/submission/TRACK_SELECTION_DECISION.md`
+- Coding-agent proof log: `docs/submission/CODING_AGENT_PROOF_LOG.md`
+- Forum/Devpost research digest: `docs/research/AGENTHACK_FORUM_RESEARCH.md`
 
 ## Honest Boundaries
 
@@ -69,3 +83,4 @@ The UiPath implementation uses Maestro Case and Action Center for lifecycle and 
 - Data Fabric V2 full-payload persistence is validated for E-004 through JSON insert/query/readback using PascalCase fields. The legacy snake_case `ServiceRecoveryAuditBundle` entity remains a product-feedback finding because its custom fields did not populate or read back correctly.
 - Test Manager validation is manual execution/report/export, not automated Test Cloud execution.
 - A fresh Case Instance on package `1.0.6` reached terminal lifecycle completion (`LatestRunStatus: Completed`) after the unbound placeholder task was made optional. Do not generalize this to older E-002/E-004 jobs.
+- Coding-agent usage is build-time assistance and documentation/validation support, not runtime case authority.

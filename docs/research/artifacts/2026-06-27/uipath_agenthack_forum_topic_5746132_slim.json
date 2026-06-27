@@ -1,0 +1,285 @@
+{
+  "title": "UiPath AgentHack is live! $50,000 in prizes, three tracks, and 7 weeks to build 🚀",
+  "posts_count": 104,
+  "highest_post_number": 114,
+  "created_at": "2026-05-15T03:30:33.347Z",
+  "last_posted_at": "2026-06-27T15:41:18.779Z",
+  "views": 3126,
+  "like_count": 30,
+  "tags": [],
+  "category_id": 275,
+  "post_stream": {
+    "posts": [
+      {
+        "post_number": 1,
+        "username": "loredana_ifrim",
+        "name": "Loredana Ifrim",
+        "created_at": "2026-05-15T03:30:33.347Z",
+        "reply_to_post_number": null,
+        "cooked": "<p>Are you ready to build the future of agentic automation on a global stage? UiPath AgentHack is here, and $50,000 in prizes is waiting for you! <img src=\"https://emoji.discourse-cdn.com/twitter/money_bag.png?v=15\" title=\":money_bag:\" class=\"emoji\" alt=\":money_bag:\" loading=\"lazy\" width=\"20\" height=\"20\"></p>\n<p>The UiPath Community is inviting developers, automation engineers, data scientists, AI/ML specialists, industry professionals, and students worldwide to compete in our biggest hackathon yet. Over 7 weeks, you’ll design and ship a real, working agentic solution on the UiPath Platform, not a concept, not a slide deck, but a solution that handles complexity, survives interruptions, keeps humans in the loop, and solves something that matters.</p>\n<h4><a name=\"p-2188999-whats-the-challenge-1\" class=\"anchor\" href=\"#p-2188999-whats-the-challenge-1\" aria-label=\"Heading link\"></a><strong><img src=\"https://emoji.discourse-cdn.com/twitter/fire.png?v=15\" title=\":fire:\" class=\"emoji\" alt=\":fire:\" loading=\"lazy\" width=\"20\" height=\"20\"> What’s the challenge?</strong></h4>\n<p>Choose a real-world business problem and build a working agentic solution on the UiPath Platform that addresses it. Your solution must fall under one of three challenge tracks, use UiPath as the orchestration and governance layer, and run on UiPath Automation Cloud. External frameworks like LangChain, CrewAI, and AutoGen are welcome, in fact, we encourage it.</p>\n<h4><a name=\"p-2188999-how-to-join-2\" class=\"anchor\" href=\"#p-2188999-how-to-join-2\" aria-label=\"Heading link\"></a><strong><img src=\"https://emoji.discourse-cdn.com/twitter/light_bulb.png?v=15\" title=\":light_bulb:\" class=\"emoji\" alt=\":light_bulb:\" loading=\"lazy\" width=\"20\" height=\"20\"> How to join?</strong></h4>\n<p>Go solo or form a team of up to 4 people. Register on Devpost, apply for your UiPath Labs sandbox environment, and start building. UiPath Labs comes fully equipped with agentic and AI units so you can build without constraints.</p>\n<h3><a name=\"p-2188999-backhand_index_pointing_right-register-on-devposthttpsuipath-agenthackdevpostcomutm_sourceuipathutm_mediumautomation_cloudutm_campaignagenthack2026utm_contentagenthack2026_forum_postutm_teamcmtutm_team_geoglobal-3\" class=\"anchor\" href=\"#p-2188999-backhand_index_pointing_right-register-on-devposthttpsuipath-agenthackdevpostcomutm_sourceuipathutm_mediumautomation_cloudutm_campaignagenthack2026utm_contentagenthack2026_forum_postutm_teamcmtutm_team_geoglobal-3\" aria-label=\"Heading link\"></a><img src=\"https://emoji.discourse-cdn.com/twitter/backhand_index_pointing_right.png?v=15\" title=\":backhand_index_pointing_right:\" class=\"emoji\" alt=\":backhand_index_pointing_right:\" loading=\"lazy\" width=\"20\" height=\"20\"> <a href=\"https://uipath-agenthack.devpost.com/?utm_source=uipath&amp;utm_medium=automation_cloud&amp;utm_campaign=agenthack2026&amp;utm_content=agenthack2026_forum_post&amp;utm_team=cmt&amp;utm_team_geo=global\">Register on Devpost</a></h3>\n<h3><a name=\"p-2188999-backhand_index_pointing_right-apply-for-uipath-labs-accesshttpsformsofficecomeuzbc5tezxa-4\" class=\"anchor\" href=\"#p-2188999-backhand_index_pointing_right-apply-for-uipath-labs-accesshttpsformsofficecomeuzbc5tezxa-4\" aria-label=\"Heading link\"></a><img src=\"https://emoji.discourse-cdn.com/twitter/backhand_index_pointing_right.png?v=15\" title=\":backhand_index_pointing_right:\" class=\"emoji\" alt=\":backhand_index_pointing_right:\" loading=\"lazy\" width=\"20\" height=\"20\"> <a href=\"https://forms.office.com/e/uZBc5TezXA\">Apply for UiPath Labs access</a></h3>\n<br>\n<h2><a name=\"p-2188999-the-three-challenge-tracks-5\" class=\"anchor\" href=\"#p-2188999-the-three-challenge-tracks-5\" aria-label=\"Heading link\"></a><strong><img src=\"https://emoji.discourse-cdn.com/twitter/bullseye.png?v=15\" title=\":bullseye:\" class=\"emoji\" alt=\":bullseye:\" loading=\"lazy\" width=\"20\" height=\"20\"> The three challenge tracks:</strong></h2>\n<h4><a name=\"p-2188999-track-1-uipath-maestro-case-build-a-solution-that-orchestrates-dynamic-exception-heavy-business-processes-using-uipath-case-management-capabilities-your-solution-should-move-work-through-stages-involve-handoffs-between-agents-robots-and-people-and-keep-humans-in-charge-at-key-decision-points-6\" class=\"anchor\" href=\"#p-2188999-track-1-uipath-maestro-case-build-a-solution-that-orchestrates-dynamic-exception-heavy-business-processes-using-uipath-case-management-capabilities-your-solution-should-move-work-through-stages-involve-handoffs-between-agents-robots-and-people-and-keep-humans-in-charge-at-key-decision-points-6\" aria-label=\"Heading link\"></a><img src=\"https://emoji.discourse-cdn.com/twitter/trophy.png?v=15\" title=\":trophy:\" class=\"emoji\" alt=\":trophy:\" loading=\"lazy\" width=\"20\" height=\"20\"> Track 1: UiPath Maestro Case. Build a solution that orchestrates dynamic, exception-heavy business processes using UiPath case management capabilities. Your solution should move work through stages, involve handoffs between agents, robots, and people, and keep humans in charge at key decision points.</h4>\n<p>Think about scenarios like: insurance claims processing where cases move through intake, investigation, and settlement stages; patient care coordination where agents manage referrals, scheduling, and follow-ups across providers; or loan processing where agents collect documents, run compliance checks, and route exceptions to underwriters for human review.</p>\n<h4><a name=\"p-2188999-track-2-uipath-maestro-bpmn-build-a-solution-that-models-and-runs-an-end-to-end-business-process-using-bpmn-20-in-uipath-maestro-your-process-should-orchestrate-humans-robots-agents-and-apis-through-a-defined-flow-with-clear-tasks-decisions-and-handoffs-7\" class=\"anchor\" href=\"#p-2188999-track-2-uipath-maestro-bpmn-build-a-solution-that-models-and-runs-an-end-to-end-business-process-using-bpmn-20-in-uipath-maestro-your-process-should-orchestrate-humans-robots-agents-and-apis-through-a-defined-flow-with-clear-tasks-decisions-and-handoffs-7\" aria-label=\"Heading link\"></a><img src=\"https://emoji.discourse-cdn.com/twitter/trophy.png?v=15\" title=\":trophy:\" class=\"emoji\" alt=\":trophy:\" loading=\"lazy\" width=\"20\" height=\"20\"> Track 2: UiPath Maestro BPMN. Build a solution that models and runs an end-to-end business process using BPMN 2.0 in UiPath Maestro. Your process should orchestrate humans, robots, agents, and APIs through a defined flow with clear tasks, decisions, and handoffs.</h4>\n<p>Think about scenarios like: an invoice approval workflow where extraction agents process invoices, validation agents check compliance, robots post entries to ERP, and finance teams review exceptions; or a procure-to-pay process where agents parse requisition intent, route approvals based on budget rules, and an invoice agent reconciles discrepancies before escalating true exceptions to AP.</p>\n<h4><a name=\"p-2188999-track-3-uipath-test-cloud-create-agents-that-use-uipath-test-cloud-to-reimagine-how-software-testing-is-designed-automated-executed-and-managed-across-modern-enterprise-environments-build-agents-that-evaluate-requirements-and-turn-them-into-meaningful-test-scenarios-identify-fragile-or-outdated-tests-before-they-slow-down-a-release-recommend-fixes-when-automation-breaks-or-orchestrate-the-right-tests-at-the-right-time-based-on-risk-coverage-and-change-impact-8\" class=\"anchor\" href=\"#p-2188999-track-3-uipath-test-cloud-create-agents-that-use-uipath-test-cloud-to-reimagine-how-software-testing-is-designed-automated-executed-and-managed-across-modern-enterprise-environments-build-agents-that-evaluate-requirements-and-turn-them-into-meaningful-test-scenarios-identify-fragile-or-outdated-tests-before-they-slow-down-a-release-recommend-fixes-when-automation-breaks-or-orchestrate-the-right-tests-at-the-right-time-based-on-risk-coverage-and-change-impact-8\" aria-label=\"Heading link\"></a><img src=\"https://emoji.discourse-cdn.com/twitter/trophy.png?v=15\" title=\":trophy:\" class=\"emoji\" alt=\":trophy:\" loading=\"lazy\" width=\"20\" height=\"20\"> Track 3: UiPath Test Cloud. Create agents that use UiPath Test Cloud to reimagine how software testing is designed, automated, executed, and managed across modern enterprise environments. Build agents that evaluate requirements and turn them into meaningful test scenarios, identify fragile or outdated tests before they slow down a release, recommend fixes when automation breaks, or orchestrate the right tests at the right time based on risk, coverage, and change impact.</h4>\n<p>Think about: an agent, or broader agentic workflow, that analyzes results from large sets of automated test runs; groups failed tests into assertion errors (pointing to actual defects in the software under test), automation issues, and environment issues; and then handles those findings accordingly, such as escalating environment issues, suggesting and/or applying fixes for automation issues, or filing defects in Jira for assertion errors.</p>\n<h5><a name=\"p-2188999-bonus-points-solutions-that-use-coding-agents-through-uipath-for-coding-agents-claude-code-codex-cursor-or-gemini-cli-will-receive-additional-points-during-judging-were-especially-interested-in-seeing-how-participants-combine-coding-agents-with-low-code-components-or-blend-uipath-native-agents-with-external-agents-to-solve-complex-problems-9\" class=\"anchor\" href=\"#p-2188999-bonus-points-solutions-that-use-coding-agents-through-uipath-for-coding-agents-claude-code-codex-cursor-or-gemini-cli-will-receive-additional-points-during-judging-were-especially-interested-in-seeing-how-participants-combine-coding-agents-with-low-code-components-or-blend-uipath-native-agents-with-external-agents-to-solve-complex-problems-9\" aria-label=\"Heading link\"></a><img src=\"https://emoji.discourse-cdn.com/twitter/star.png?v=15\" title=\":star:\" class=\"emoji\" alt=\":star:\" loading=\"lazy\" width=\"20\" height=\"20\"> Bonus points Solutions that use coding agents through UiPath for Coding Agents, Claude Code, Codex, Cursor, or Gemini CLI, will receive additional points during judging. We’re especially interested in seeing how participants combine coding agents with low-code components, or blend UiPath-native agents with external agents, to solve complex problems.</h5>\n<h3><a name=\"p-2188999-prizes-50000-in-cash-10\" class=\"anchor\" href=\"#p-2188999-prizes-50000-in-cash-10\" aria-label=\"Heading link\"></a><img src=\"https://emoji.discourse-cdn.com/twitter/sports_medal.png?v=15\" title=\":sports_medal:\" class=\"emoji\" alt=\":sports_medal:\" loading=\"lazy\" width=\"20\" height=\"20\"> Prizes: $50,000 in cash</h3>\n<br>\n<p><img src=\"https://emoji.discourse-cdn.com/twitter/warning.png?v=15\" title=\":warning:\" class=\"emoji\" alt=\":warning:\" loading=\"lazy\" width=\"20\" height=\"20\"> Important dates</p>\n<p><strong><img src=\"https://emoji.discourse-cdn.com/twitter/date.png?v=15\" title=\":date:\" class=\"emoji\" alt=\":date:\" loading=\"lazy\" width=\"20\" height=\"20\"> May 15, 2026 — Registration &amp; submissions open</strong></p>\n<p><strong><img src=\"https://emoji.discourse-cdn.com/twitter/date.png?v=15\" title=\":date:\" class=\"emoji\" alt=\":date:\" loading=\"lazy\" width=\"20\" height=\"20\"> June 29, 2026 — Submission deadline</strong></p>\n<p><strong><img src=\"https://emoji.discourse-cdn.com/twitter/date.png?v=15\" title=\":date:\" class=\"emoji\" alt=\":date:\" loading=\"lazy\" width=\"20\" height=\"20\"> July 15, 2026 — Finalists announced</strong></p>\n<p><strong><img src=\"https://emoji.discourse-cdn.com/twitter/date.png?v=15\" title=\":date:\" class=\"emoji\" alt=\":date:\" loading=\"lazy\" width=\"20\" height=\"20\"> July 23, 2026 — Live finale</strong></p>\n<p><strong><img src=\"https://emoji.discourse-cdn.com/twitter/date.png?v=15\" title=\":date:\" class=\"emoji\" alt=\":date:\" loading=\"lazy\" width=\"20\" height=\"20\"> August 4, 2026 — Winners announced</strong></p>\n<br>\n<h4><a name=\"p-2188999-support-throughout-the-hackathon-11\" class=\"anchor\" href=\"#p-2188999-support-throughout-the-hackathon-11\" aria-label=\"Heading link\"></a><strong><img src=\"https://emoji.discourse-cdn.com/twitter/handshake.png?v=15\" title=\":handshake:\" class=\"emoji\" alt=\":handshake:\" loading=\"lazy\" width=\"20\" height=\"20\"> Support throughout the hackathon</strong></h4>\n<p>Throughout the hacking period, UiPath will host office hours with engineers and product experts, community meetups, and enablement sessions to help you get up to speed and refine your solution.</p>\n<h4><a name=\"p-2188999-who-can-participate-12\" class=\"anchor\" href=\"#p-2188999-who-can-participate-12\" aria-label=\"Heading link\"></a><strong><img src=\"https://emoji.discourse-cdn.com/twitter/globe_showing_europe_africa.png?v=15\" title=\":globe_showing_europe_africa:\" class=\"emoji\" alt=\":globe_showing_europe_africa:\" loading=\"lazy\" width=\"20\" height=\"20\"> Who can participate?</strong></h4>\n<p>Anyone with a passion for agentic automation and AI, automation professionals, data scientists, AI/ML specialists, business analysts, solution architects, enterprise customers, partners, students, software developers, and engineers. Individuals and teams of up to 4 are welcome.</p>\n<p>This is your chance to help shape the next generation of enterprise agentic automation. Build something real. Solve something that matters. See you at UiPath AgentHack! <img src=\"https://emoji.discourse-cdn.com/twitter/robot.png?v=15\" title=\":robot:\" class=\"emoji\" alt=\":robot:\" loading=\"lazy\" width=\"20\" height=\"20\"></p>\n<p><img src=\"https://emoji.discourse-cdn.com/twitter/backhand_index_pointing_down.png?v=15\" title=\":backhand_index_pointing_down:\" class=\"emoji\" alt=\":backhand_index_pointing_down:\" loading=\"lazy\" width=\"20\" height=\"20\"> Help us spread the word, share this post and tag someone who should be building with us!<br>\n<a href=\"https://uipath-agenthack.devpost.com/?utm_source=uipath&amp;utm_medium=automation_cloud&amp;utm_campaign=agenthack2026&amp;utm_content=agenthack2026_forum_post&amp;utm_team=cmt&amp;utm_team_geo=global\"><img src=\"https://global.discourse-cdn.com/uipath/original/4X/2/6/b/26bbd4f5d2df1ea775db337423f130c99beb89be.jpeg\" alt=\"SHow us\" data-base62-sha1=\"5wEzs3BQdlhgA3afNeU3FcFSSjI\" width=\"690\" height=\"298\"></a></p>",
+        "link_counts": [
+          {
+            "url": "https://uipath-agenthack.devpost.com/?utm_source=uipath&utm_medium=automation_cloud&utm_campaign=agenthack2026&utm_content=agenthack2026_forum_post&utm_team=cmt&utm_team_geo=global",
+            "internal": false,
+            "reflection": false,
+            "clicks": 196
+          },
+          {
+            "url": "https://forms.office.com/e/uZBc5TezXA",
+            "internal": false,
+            "reflection": false,
+            "title": "Microsoft Forms",
+            "clicks": 32
+          }
+        ],
+        "reads": 324,
+        "readers_count": 323
+      },
+      {
+        "post_number": 2,
+        "username": "loredana_ifrim",
+        "name": "Loredana Ifrim",
+        "created_at": "2026-05-14T11:07:53.671Z",
+        "reply_to_post_number": null,
+        "cooked": "",
+        "link_counts": null,
+        "reads": 219,
+        "readers_count": 218
+      },
+      {
+        "post_number": 3,
+        "username": "loredana_ifrim",
+        "name": "Loredana Ifrim",
+        "created_at": "2026-05-17T08:05:53.605Z",
+        "reply_to_post_number": null,
+        "cooked": "",
+        "link_counts": null,
+        "reads": 213,
+        "readers_count": 212
+      },
+      {
+        "post_number": 4,
+        "username": "loredana_ifrim",
+        "name": "Loredana Ifrim",
+        "created_at": "2026-05-17T08:06:18.083Z",
+        "reply_to_post_number": null,
+        "cooked": "",
+        "link_counts": null,
+        "reads": 216,
+        "readers_count": 215
+      },
+      {
+        "post_number": 5,
+        "username": "DeaTo",
+        "name": "Andreea Tomescu",
+        "created_at": "2026-05-26T16:22:44.344Z",
+        "reply_to_post_number": null,
+        "cooked": "<p><strong>AgentHack 2026 — Enablement Session</strong> <span class=\"hashtag-raw\">#1:</span> <strong>Q&amp;A Summary</strong></p>\n<p>Thank you to everyone who joined our first AgentHack enablement session! <img src=\"https://emoji.discourse-cdn.com/twitter/raising_hands.png?v=15\" title=\":raising_hands:\" class=\"emoji\" alt=\":raising_hands:\" loading=\"lazy\" width=\"20\" height=\"20\"> The recording and presentation deck will be available <a href=\"https://community.uipath.com/events/details/uipath-new-york-presents-uipath-agenthack-general-overview-and-logistic-guideline-review-2026/cohost-americas-virtual-events/\">here</a>.</p>\n<p>Below is a summary of all questions raised during the session, grouped by topic. We’ll keep this thread updated as more answers come in.</p>\n<p><img src=\"https://emoji.discourse-cdn.com/twitter/date.png?v=15\" title=\":date:\" class=\"emoji\" alt=\":date:\" loading=\"lazy\" width=\"20\" height=\"20\"> Two more sessions are coming up in the AMER timezone and more for EMEA/APJ timezones as well, don’t miss them:</p>\n<ul>\n<li><strong>June 9</strong> — <a href=\"https://community.uipath.com/e/myur5e/\">Winner Overview and Best Practices</a></li>\n<li><strong>June 15</strong> — <a href=\"https://community.uipath.com/e/mv8wmh/\">Office Hours for Questions and Support</a></li>\n</ul>\n<h2><a name=\"p-2192676-we-will-put-the-links-for-the-other-enablements-sessions-in-this-thread-whenever-we-have-them-live-1\" class=\"anchor\" href=\"#p-2192676-we-will-put-the-links-for-the-other-enablements-sessions-in-this-thread-whenever-we-have-them-live-1\" aria-label=\"Heading link\"></a>We will put the links for the other enablements sessions in this thread whenever we have them live.</h2>\n<p><strong><img src=\"https://emoji.discourse-cdn.com/twitter/card_index_dividers.png?v=15\" title=\":card_index_dividers:\" class=\"emoji\" alt=\":card_index_dividers:\" loading=\"lazy\" width=\"20\" height=\"20\"> Track Selection</strong></p>\n<p><strong>Q: For a solution that includes both structured BPMN automation and Maestro Case escalation — should it be submitted under Track 1 (Maestro Case) or Track 2 (Maestro BPMN)?</strong> → You can choose the track that covers best your solution.</p>\n<hr>\n<p><strong><img src=\"https://emoji.discourse-cdn.com/twitter/clipboard.png?v=15\" title=\":clipboard:\" class=\"emoji\" alt=\":clipboard:\" loading=\"lazy\" width=\"20\" height=\"20\"> Submission &amp; Judging</strong></p>\n<p><strong>Q: What does the finale consist of, do you rebuild your solution live in front of judges, or present it?</strong> Finalists present their working solution live on Zoom to a judging panel and take questions. You are not expected to rebuild anything, it’s a presentation and demo of what you’ve already built. Finalists can make changes in their solutions between 15th of June and 22nd of July.</p>\n<p><strong>Q: Who retains the IP rights to submitted code, the developer or UiPath?</strong> You retain full IP rights to your submission. UiPath receives only a non-exclusive license to use it for judging and promotional purposes. One thing to keep in mind: submissions require a public GitHub repo with an open-source license (MIT or Apache 2.0), so the version you submit will be publicly visible. Nothing in the rules prevents you from deploying a separate proprietary version in a real-world context after the hackathon.</p>\n<p><strong>Q: How do coding agents (e.g. Claude Code) need to be demonstrated to qualify for bonus points, in the demo video, the GitHub repo, or both?</strong> To qualify for bonus points, you need to document in your Devpost project description or GitHub README: (a) which coding agent tool was used, (b) how it contributed to the solution, and (c) at least one form of verifiable evidence — such as a prompt log, screenshots of the interaction, or a dedicated README section. The more thorough your documentation, the better your chances of receiving the full 2-point bonus.</p>\n<p><strong><img src=\"https://emoji.discourse-cdn.com/twitter/hammer_and_wrench.png?v=15\" title=\":hammer_and_wrench:\" class=\"emoji\" alt=\":hammer_and_wrench:\" loading=\"lazy\" width=\"20\" height=\"20\"> Technical — Maestro</strong></p>\n<p><strong>Q: Is there a recommended way to handle retry logic for failed steps within a Maestro BPMN flow?</strong> The execution trail will show a “Retried” badge, so screenshots and video will help document this. You can also configure retries directly, see the <a href=\"https://docs.uipath.com/maestro/automation-cloud/latest/user-guide/properties-panel#element-level-retries\">element-level retries section in the Maestro properties panel docs</a>.</p>\n<p><strong>Q: I want to use a Gmail event trigger to start a Maestro Case process, but only for emails related to a specific use case (e.g. loan applications) — how do I avoid unnecessary instances being created?</strong> You can add filters to Maestro triggers directly from the properties panel — this should handle most filtering without needing a separate RPA step. If the subject line is unpredictable but the content is contextually relevant, one option is to use an RPA step upstream to evaluate the email semantically before invoking Maestro.</p>\n<p><strong>Q: Where can we find documentation for Maestro Case and Coded Apps?</strong> Coded Apps is now GA. Here are the relevant docs:</p>\n<ul>\n<li><a href=\"https://docs.uipath.com\">Release Notes</a></li>\n<li><a href=\"https://docs.uipath.com\">User Guide</a></li>\n<li><a href=\"https://docs.uipath.com\">TypeScript SDK</a></li>\n<li><a href=\"https://docs.uipath.com\">Case Management docs</a> *(Tyler shared the direct link during the session, you can also see it here)<br>\n<a class=\"attachment\" href=\"/uploads/short-url/oelmHASSXACtmc46CGMXIpqxUrU.pdf\">Maestro Case Management Private Preview Guide-2026052615145726 (1).pdf</a> (2.2 MB)</li>\n</ul>\n<p><span lang=\"RO-RO\"><strong>Q: We already use Copilot / Claude Code to automate things. Why do we need UiPath?</strong></span> <span lang=\"RO-RO\">Coding agents are good at generating code, but what they can’t do is manage what happens in production: retries when an API fails, audit trails for compliance, orchestration across SAP, Salesforce, and a legacy desktop app simultaneously. That’s what UiPath provides. The coding agent writes the script and UiPath makes it run at enterprise scale.</span></p>\n<hr>\n<p><strong><img src=\"https://emoji.discourse-cdn.com/twitter/wrench.png?v=15\" title=\":wrench:\" class=\"emoji\" alt=\":wrench:\" loading=\"lazy\" width=\"20\" height=\"20\"> Platform &amp; Tools</strong></p>\n<p><strong>Q: Can external observability tools (e.g. Arize Phoenix) be used alongside UiPath Agent Builder, or should everything stay within the UiPath ecosystem?</strong> → As long as the solution uses UiPath as the execution and orchestration layer, yes.</p>\n<p><strong>Q: For RPA browser automation against SaaS tools — is UiPath Studio Web sufficient, or is Studio Desktop needed?</strong> → UiPath Studio Web is sufficient.</p>\n<p><strong>Q: Do we need to access the Coding Agents API independently, or is there a form or process through UiPath to get access?</strong> → You can access and use them independently.</p>\n<p>We also shared the following resources in the chat:</p>\n<p><div class=\"lightbox-wrapper\"><a class=\"lightbox\" href=\"https://global.discourse-cdn.com/uipath/original/4X/1/4/7/147bda99d84bb95d5994e949d1418de655d4cda0.jpeg\" data-download-href=\"/uploads/short-url/2VcU7xtZkCFE7o6pgbVXp8vZ53a.jpeg?dl=1\" title=\"Screenshot 2026-05-26 at 10.54.33 AM\" rel=\"noopener nofollow ugc\"><img src=\"https://global.discourse-cdn.com/uipath/optimized/4X/1/4/7/147bda99d84bb95d5994e949d1418de655d4cda0_2_690x378.jpeg\" alt=\"Screenshot 2026-05-26 at 10.54.33 AM\" data-base62-sha1=\"2VcU7xtZkCFE7o6pgbVXp8vZ53a\" width=\"690\" height=\"378\" srcset=\"https://global.discourse-cdn.com/uipath/optimized/4X/1/4/7/147bda99d84bb95d5994e949d1418de655d4cda0_2_690x378.jpeg, https://global.discourse-cdn.com/uipath/optimized/4X/1/4/7/147bda99d84bb95d5994e949d1418de655d4cda0_2_1035x567.jpeg 1.5x, https://global.discourse-cdn.com/uipath/optimized/4X/1/4/7/147bda99d84bb95d5994e949d1418de655d4cda0_2_1380x756.jpeg 2x\" data-dominant-color=\"323A3C\"><div class=\"meta\"><svg class=\"fa d-icon d-icon-far-image svg-icon\" aria-hidden=\"true\"><use href=\"#far-image\"></use></svg><span class=\"filename\">Screenshot 2026-05-26 at 10.54.33 AM</span><span class=\"informations\">1920×1053 345 KB</span><svg class=\"fa d-icon d-icon-discourse-expand svg-icon\" aria-hidden=\"true\"><use href=\"#discourse-expand\"></use></svg></div></a></div></p>\n<p><div class=\"lightbox-wrapper\"><a class=\"lightbox\" href=\"https://global.discourse-cdn.com/uipath/original/4X/4/0/0/40085e7680e845032e788e1f55b96791b8bd6950.png\" data-download-href=\"/uploads/short-url/98suiaUyedwwdRysuhBzKa6GLYY.png?dl=1\" title=\"Image20260526174620\" rel=\"noopener nofollow ugc\"><img src=\"https://global.discourse-cdn.com/uipath/optimized/4X/4/0/0/40085e7680e845032e788e1f55b96791b8bd6950_2_690x384.png\" alt=\"Image20260526174620\" data-base62-sha1=\"98suiaUyedwwdRysuhBzKa6GLYY\" width=\"690\" height=\"384\" srcset=\"https://global.discourse-cdn.com/uipath/optimized/4X/4/0/0/40085e7680e845032e788e1f55b96791b8bd6950_2_690x384.png, https://global.discourse-cdn.com/uipath/optimized/4X/4/0/0/40085e7680e845032e788e1f55b96791b8bd6950_2_1035x576.png 1.5x, https://global.discourse-cdn.com/uipath/optimized/4X/4/0/0/40085e7680e845032e788e1f55b96791b8bd6950_2_1380x768.png 2x\" data-dominant-color=\"293034\"><div class=\"meta\"><svg class=\"fa d-icon d-icon-far-image svg-icon\" aria-hidden=\"true\"><use href=\"#far-image\"></use></svg><span class=\"filename\">Image20260526174620</span><span class=\"informations\">1954×1090 207 KB</span><svg class=\"fa d-icon d-icon-discourse-expand svg-icon\" aria-hidden=\"true\"><use href=\"#discourse-expand\"></use></svg></div></a></div></p>\n<hr>\n<p><strong><img src=\"https://emoji.discourse-cdn.com/twitter/sos_button.png?v=15\" title=\":sos_button:\" class=\"emoji\" alt=\":sos_button:\" loading=\"lazy\" width=\"20\" height=\"20\"> Support &amp; Access</strong></p>\n<p>If you are experiencing issues accessing the UiPath Labs environment, please reach out directly to the team via the forum thread or email (<a href=\"mailto:andreea.tomescu@uipath.com\">andreea.tomescu@uipath.com</a>). Individual access issues are being handled case by case.</p>\n<hr>\n<p><em>Have more questions? Drop them in this thread and we’ll answer them here so everyone can benefit.</em> <img src=\"https://emoji.discourse-cdn.com/twitter/backhand_index_pointing_down.png?v=15\" title=\":backhand_index_pointing_down:\" class=\"emoji\" alt=\":backhand_index_pointing_down:\" loading=\"lazy\" width=\"20\" height=\"20\"></p>",
+        "link_counts": [
+          {
+            "url": "https://community.uipath.com/events/details/uipath-new-york-presents-uipath-agenthack-general-overview-and-logistic-guideline-review-2026/cohost-americas-virtual-events/",
+            "internal": false,
+            "reflection": false,
+            "title": "UiPath AgentHack General Overview and Logistic Guideline Review - 2026",
+            "clicks": 30
+          },
+          {
+            "url": "https://community.uipath.com/e/myur5e/",
+            "internal": false,
+            "reflection": false,
+            "title": "UiPath AgentHack Winner Overview and Best Practices - 2026",
+            "clicks": 29
+          },
+          {
+            "url": "https://docs.uipath.com",
+            "internal": false,
+            "reflection": false,
+            "title": "UiPath Documentation",
+            "clicks": 16
+          },
+          {
+            "url": "https://community.uipath.com/e/mv8wmh/",
+            "internal": false,
+            "reflection": false,
+            "title": "UiPath AgentHack Office Hour for Questions and Support - 2026",
+            "clicks": 9
+          },
+          {
+            "url": "https://docs.uipath.com/maestro/automation-cloud/latest/user-guide/properties-panel#element-level-retries",
+            "internal": false,
+            "reflection": false,
+            "title": "Maestro - Configuring properties and data",
+            "clicks": 4
+          }
+        ],
+        "reads": 180,
+        "readers_count": 179
+      },
+      {
+        "post_number": 7,
+        "username": "Pranav_Kende",
+        "name": "Pranav Kende",
+        "created_at": "2026-05-29T04:18:33.420Z",
+        "reply_to_post_number": 5,
+        "cooked": "<p>Hi,</p>\n<p>I am am already on my toes to get started. It’s just that the Labs haven’t been setup yet.</p>\n<p>Email - <a href=\"mailto:pranav.kende7@gmail.com\">pranav.kende7@gmail.com</a><br>\nTeam Name - Agent Zero</p>\n<p>Had submitted form on 25th May.</p>\n<p>Thanks in advance.</p>",
+        "link_counts": null,
+        "reads": 124,
+        "readers_count": 123
+      },
+      {
+        "post_number": 8,
+        "username": "DeaTo",
+        "name": "Andreea Tomescu",
+        "created_at": "2026-05-29T08:33:03.896Z",
+        "reply_to_post_number": 7,
+        "cooked": "<p>Hello, I checked and it appears you received access to org</p>\n<div class=\"md-table\">\n<table>\n<thead>\n<tr>\n<th>hackathon26_298<br><br>Could you please check your email again and look for that?</th>\n</tr>\n</thead>\n</table>\n</div><p>Let me know if you could not find it.</p>",
+        "link_counts": null,
+        "reads": 116,
+        "readers_count": 115
+      },
+      {
+        "post_number": 9,
+        "username": "surya_kumar1",
+        "name": "surya kumar",
+        "created_at": "2026-05-30T09:44:08.113Z",
+        "reply_to_post_number": null,
+        "cooked": "<p>hackathon26_285 created but failing when launched with error</p>\n<p>Could not find unattended robot for user key 5643a613-7305-44b4-a276-7d2b252390ff.</p>",
+        "link_counts": null,
+        "reads": 108,
+        "readers_count": 107
+      },
+      {
+        "post_number": 10,
+        "username": "Bavian_Kipkorir",
+        "name": "Bavian Kipkorir",
+        "created_at": "2026-05-31T06:16:54.177Z",
+        "reply_to_post_number": null,
+        "cooked": "<p>I would like to be part of your team</p>",
+        "link_counts": null,
+        "reads": 105,
+        "readers_count": 104
+      },
+      {
+        "post_number": 11,
+        "username": "Bavian_Kipkorir",
+        "name": "Bavian Kipkorir",
+        "created_at": "2026-05-31T06:18:13.382Z",
+        "reply_to_post_number": null,
+        "cooked": "<p>I am also ready,on a bit of a finish</p>",
+        "link_counts": null,
+        "reads": 104,
+        "readers_count": 103
+      },
+      {
+        "post_number": 12,
+        "username": "surya_kumar1",
+        "name": "surya kumar",
+        "created_at": "2026-06-02T07:08:55.827Z",
+        "reply_to_post_number": 9,
+        "cooked": "<p>Hi UiPath team, I’m getting this error when trying to open Studio Web on my hackathon tenant:</p>\n<p><em>“Could not find unattended robot for user key 5643a613-7305-44b4-a276-7d2b252390ff”</em></p>\n<p>Tenant: <code>hackathon26_285</code> URL: <code>staging.uipath.com/hackathon26_285/studio_/projects</code></p>\n<p>Default Serverless machine is assigned to Shared folder. Robots page shows Default Robot (Unattended) and surya kumar (Attended). Still getting the error.</p>\n<p>Can you help configure the tenant? Thank you!</p>",
+        "link_counts": null,
+        "reads": 95,
+        "readers_count": 94
+      },
+      {
+        "post_number": 13,
+        "username": "DeaTo",
+        "name": "Andreea Tomescu",
+        "created_at": "2026-06-03T14:42:32.923Z",
+        "reply_to_post_number": 12,
+        "cooked": "<p>Hello, our team has looked into this, is it working as expected now? Thanks and happy hacking!</p>",
+        "link_counts": null,
+        "reads": 89,
+        "readers_count": 88
+      },
+      {
+        "post_number": 14,
+        "username": "ForsakenFiji",
+        "name": "Nick Sudh",
+        "created_at": "2026-06-05T02:31:39.632Z",
+        "reply_to_post_number": null,
+        "cooked": "<p>Could you add Action Center for the lab environment? Action Center is missing in my Lab environment. Does it appear for anyone?</p>",
+        "link_counts": null,
+        "reads": 90,
+        "readers_count": 89
+      },
+      {
+        "post_number": 15,
+        "username": "ravindra.reddy33",
+        "name": "Ravindra Reddy Madireddy",
+        "created_at": "2026-06-05T04:07:53.112Z",
+        "reply_to_post_number": 14,
+        "cooked": "<p><a class=\"mention\" href=\"/u/forsakenfiji\">@ForsakenFiji</a> you can add your self</p>\n<p>Got to Admin-&gt;your tenant-&gt; Services-&gt;Add Service</p>",
+        "link_counts": null,
+        "reads": 87,
+        "readers_count": 86
+      },
+      {
+        "post_number": 16,
+        "username": "Akash_Javalekar1",
+        "name": "Akash Javalekar",
+        "created_at": "2026-06-05T14:26:59.140Z",
+        "reply_to_post_number": null,
+        "cooked": "<p>Hi <a class=\"mention\" href=\"/u/deato\">@DeaTo</a><br>\nI am not able to see unattended license in labs also not able to use IXP could you please check<br>\nmail id: <a href=\"mailto:akashjavalekar02@gmail.com\">akashjavalekar02@gmail.com</a></p>\n<p>Thanks</p>",
+        "link_counts": null,
+        "reads": 86,
+        "readers_count": 85
+      },
+      {
+        "post_number": 17,
+        "username": "ForsakenFiji",
+        "name": "Nick Sudh",
+        "created_at": "2026-06-05T16:46:33.554Z",
+        "reply_to_post_number": 15,
+        "cooked": "<p>That’s fine. What I meant was that we lack licenses for Action Center. And HITL is one of the judging criteria. I can build HITL outside of AC, but would be nice if it’s within the UiPath stack.</p>",
+        "link_counts": null,
+        "reads": 83,
+        "readers_count": 82
+      },
+      {
+        "post_number": 18,
+        "username": "ForsakenFiji",
+        "name": "Nick Sudh",
+        "created_at": "2026-06-07T00:39:38.871Z",
+        "reply_to_post_number": 17,
+        "cooked": "<p>nvm, had to just assign a named user license to myself.</p>",
+        "link_counts": null,
+        "reads": 79,
+        "readers_count": 78
+      },
+      {
+        "post_number": 19,
+        "username": "Abbas_Bhanpura_Wala",
+        "name": "Abbas Bhanpura Wala",
+        "created_at": "2026-06-08T08:15:13.876Z",
+        "reply_to_post_number": null,
+        "cooked": "<p>Hello,</p>\n<p>Its been around more than 5 days,<br>\nI have not got access of UiPath. My email is <a href=\"mailto:abbasbhp787@gmail.com\">abbasbhp787@gmail.com</a>. I am participating solo so my team name is Abbas Bhanpura wala.</p>",
+        "link_counts": null,
+        "reads": 78,
+        "readers_count": 77
+      },
+      {
+        "post_number": 20,
+        "username": "DeaTo",
+        "name": "Andreea Tomescu",
+        "created_at": "2026-06-09T16:38:09.894Z",
+        "reply_to_post_number": 19,
+        "cooked": "<p>Hello,</p>\n<p>Checking with the Labs team, we usually offer access on Monday, Wednesday and Friday morning. I will look into it and see if there is any blocker. But as a rule, we announced 3 business days in the rules, which gives us time until Wednesday the next week to manage your access since you applied 5th of June end of day.</p>\n<p>Thanks,<br>\nAndreea</p>",
+        "link_counts": null,
+        "reads": 71,
+        "readers_count": 70
+      },
+      {
+        "post_number": 21,
+        "username": "DeaTo",
+        "name": "Andreea Tomescu",
+        "created_at": "2026-06-09T16:39:11.872Z",
+        "reply_to_post_number": 16,
+        "cooked": "<aside class=\"quote group-advanced\" data-username=\"Akash_Javalekar1\" data-post=\"16\" data-topic=\"5746132\">\n<div class=\"title\">\n<div class=\"quote-controls\"></div>\n<img alt=\"\" width=\"24\" height=\"24\" src=\"https://sea2.discourse-cdn.com/uipath/user_avatar/forum.uipath.com/akash_javalekar1/48/540225_2.png\" class=\"avatar\"> Akash_Javalekar1:</div>\n<blockquote>\n<p>Hi <a class=\"mention\" href=\"/u/deato\">@DeaTo</a><br>\nI am not able to see unattended license in labs also not able to use IXP could you please check</p>\n</blockquote>\n</aside>\n<p>Hi! Since you have org admin access, you should be able to sort both of these yourself:</p>\n<p>For the unattended license:</p>\n<ol>\n<li>Go to your org and open the Admin panel</li>\n<li>Navigate to Licenses</li>\n<li>Check if Unattended Robot units are available at the org level and allocate them to your folder</li>\n</ol>\n<p>For IXP:</p>\n<ol>\n<li>In the Admin panel, go to External Applications or Integration settings</li>\n<li>Make sure IXP is enabled at the tenant level</li>\n</ol>\n<p>If you see 0 units or the options aren’t there at all, ping us back and we’ll look into getting them provisioned for your tenant.</p>\n<p>Let us know how it goes! <img src=\"https://emoji.discourse-cdn.com/twitter/rocket.png?v=15\" title=\":rocket:\" class=\"emoji\" alt=\":rocket:\" loading=\"lazy\" width=\"20\" height=\"20\"></p>",
+        "link_counts": null,
+        "reads": 72,
+        "readers_count": 71
+      }
+    ]
+  }
+}

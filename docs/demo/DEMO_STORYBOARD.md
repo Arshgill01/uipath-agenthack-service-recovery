@@ -82,7 +82,17 @@ Show:
 - `promotion_status: not_promoted`,
 - active cases remain pinned until explicit migration.
 
-### 4:35-5:00 Business Impact
+### 4:35-4:50 Coding-Agent Proof
+
+Show:
+
+- README section naming Codex as the coding agent used to build this solution.
+- `docs/submission/CODING_AGENT_PROOF_LOG.md`.
+- one terminal proof command such as `scripts/run_submission_check.sh`.
+
+State the boundary clearly: Codex helped build, test, validate, and document the solution; UiPath remains the runtime orchestration and governance layer, and deterministic policy owns closure decisions.
+
+### 4:50-5:00 Business Impact
 
 Close with:
 
@@ -100,3 +110,4 @@ Close with:
 - Do not rely on narration for the override. Show it.
 - Do not hide behind dashboards; show case movement and evidence.
 - Do not author 2A and 2B as unrelated examples. They must be fixture variants.
+- Do not hide coding-agent usage; the submission needs visible proof for the bonus.

@@ -34,6 +34,19 @@ python -m service_recovery_core.evals --output eval_results/local_baseline.json
 
 The local core is intentionally portable and keeps deterministic policy independent from LLM output. It implements fixtures, schema validation, deterministic policy reconciliation, closure blocking, local case state transitions, and baseline eval scenarios E-001 through E-009. Optional Gemini/Vertex paths can produce live Agent Interpretation Events, including an adversarial advocate/skeptic interpretation, but policy remains the final routing authority.
 
+Coding-agent use:
+
+This project was built primarily with Codex as the coding agent, alongside UiPath CLI and repo-local validation scripts. Codex helped design and implement the local recovery core, evals, evidence-packet renderer, UiPath validation runbooks, product-feedback evidence logs, and submission readiness checks. The detailed coding-agent proof log is maintained in [docs/submission/CODING_AGENT_PROOF_LOG.md](docs/submission/CODING_AGENT_PROOF_LOG.md).
+
+UiPath component summary:
+
+- Maestro Case: primary track and orchestration boundary for dynamic exception-heavy casework.
+- Action Center: human task lifecycle, reviewer action/comment, and structured return.
+- Orchestrator: package/process/job readback and bucket-backed audit artifact storage.
+- Data Fabric: validated full-payload audit readback path for E-004.
+- Test Manager: manual representation and terminal execution evidence for E-001 through E-009.
+- UiPath CLI: repeatable packaging, readback, validation, task, Test Manager, and Data Fabric evidence collection.
+
 Validation status:
 
 - UiPath Labs access and Maestro Case validation have run against org `keepingitlowkey`, tenant `DefaultTenant`.

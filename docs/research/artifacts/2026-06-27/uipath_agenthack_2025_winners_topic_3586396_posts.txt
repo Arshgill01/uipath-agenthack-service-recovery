@@ -1,0 +1,105 @@
+--- POST 1 @DeaTo 2025-08-08T14:29:06.416Z ---
+UiPath AgentHack 2025 champions are crowned!
+ UiPath AgentHack champions_1200x627 1200×628 89.7 KB 
+ Out of 400+ bold, creative, and wildly inventive submissions from more than 50 countries all over the world, the very best have risen to the top, and we’re beyond excited to share about who’s taking some awards home! 
+ After three adrenaline-packed months of ideation, building, and live demos, UiPath AgentHack 2025 has its winners and below you’ll find the full honours list.
+ Why this matters:
+ Real-world impact: Every winning agent solves a production-grade problem, grab the use-cases and spin them up today.
+ Career rocket fuel: From $10K cash to UiPath certification vouchers, winners walk away with both funding and credibility.
+ Community momentum: Even if you didn’t win a prize, you now have a global network of agentic-automation builders ready to collaborate.
+ 
+ Winners:
+ Agent of the future prize: TrialIQ Agents 
+ Enterprise Agents category prize winners: 
+• 1st Place: AIdMe 
+• 2nd Place: Rakshak AI 
+• 3rd Place: Accenture Agentic Squad 
+ Agentic Testing category prize winners: 
+• 1st Place: Avalon 
+• 2nd Place: SoloPath 
+• 3rd Place: AI Controls 
+ Special prize prize winners: 
+ Best Cross-Platform Integration: LUMA - Turkish Airlines Technology 
+ Impactful Agent: WelfareWise. ai WelfareWise.ai : Transforming European Welfare Narratives into Actionable Insights for Impact 
+ Most useful feedback: DeepPrompt
+ Business ready agent: SoloPath 
+ Best use of Agent Builder: OTOT Technologies 
+ Innovative agentic workflow: Maestro Agentic Support Management 
+ Community favorite: [Hackaholics] QuickAssist : TicketResolution_Agent - Agentic Automation / AgentHack - UiPath Community Forum 
+ Rising star: [Rahul Dasari]( [ #uipathcommunity #agenticautomation #newcomer #agenthack2025 #futureofwork #automation #innovation #hackathonjourney #rpa #digitaltransformation | Rahul Dasari | 505 comments ]
+ Prize breakdown:
+ Agent of the future: Grand Prize , $10,000 , Top overall build
+ Category 1st , $6,000 , Best solution in each main track
+ Category 2nd , $4,000 , Runner-up per track
+ Category 3rd , $2,500 , Third place per track
+ Special awards , $2,000 each, Business-Ready, Innovative Workflow, Impactful, Advanced
+ Cross-category Bonuses , $1,500 each, Community Favorite, Rising Star, Best Agent Builder use, Best Cross-Platform Integration, Best Product Feedback
+ That’s over $50,000 in total rewards , not counting the UiPath certification vouchers each winning team takes home.
+ 
+ Dive into the use-cases:
+ Watch the teams present their projects here:
+ Enterprise Agents category 
+ Agentic Testing category 
+ All projects, winners and finalists, are now live in the AgentHack Use-case Repository . Save the ones that inspire you, and keep the conversation going in the dedicated forum thread.
+ Next step for every team (and supporter):
+Turn your project into a community tutorial, a reusable Marketplace component, or a deep-dive blog post. Let’s maximise its value together; share it forward so others can build faster.
+ 
+ One last round of applause to every participant, voter, supporter, evaluator, and judge: you made this hackathon the epic showcase it is. The bar for agentic automation just got higher, and we can’t wait to see what you build next.
+ Happy automating, and see you at the next UiPath hackathon!
+
+--- POST 2 @erkanceylan 2025-08-11T14:42:03.304Z ---
+Congratulations to all the winners and applicants
+
+--- POST 3 @neonova 2025-08-11T15:45:22.030Z ---
+A big congratulations to all the winners and participants !!
+ Kudos to your effort and hardwork!
+
+--- POST 4 @ashokkarale 2025-08-11T17:59:58.190Z ---
+Congratulations all the winners and cheers to every idea💡
+
+--- POST 5 @Akhil_Padgilwar_qbotica 2025-08-11T18:26:49.406Z ---
+Congratulation to all the winners
+
+--- POST 6 @DeaTo 2025-08-11T18:30:05.614Z ---
+Important mention regarding the Community Favourite prize, we found a lot of votes from temporary email accounts. This is not okay and we did not count them.
+
+--- POST 7 @ruchirmahajan 2025-08-11T20:52:02.158Z ---
+Congratulations to everyone
+
+--- POST 8 @lrtetala 2025-08-12T02:01:39.266Z ---
+Congratulations to all the winners
+
+--- POST 9 @lakshman 2025-08-12T03:59:03.974Z ---
+Congratulations to all the winners
+
+--- POST 10 @martin.parovski 2025-08-12T07:33:41.440Z ---
+Congratulations to all the winners, and also to everyone who participated! Your ideas will help many companies struggling to identify Agentic cases.
+
+--- POST 11 @Quenton_Wayne_Rebello 2025-08-12T08:06:11.938Z ---
+Congratulations to everyone
+
+--- POST 12 @DeaTo 2025-08-12T08:28:41.037Z ---
+During the initial announcement of the AgentHack 2025 Rising Star Award for newcomers, an incorrect LinkedIn post was referenced when determining the winner.
+A subsequent review confirms that this 
+newcomer story post,currently at +557 likes and 492 comments , is the top-engagement entry and therefore the rightful winner.
+
+--- POST 13 @Furkan_Cosan 2025-08-12T09:52:38.321Z ---
+Congratulations to all the winners
+
+--- POST 14 @loginerror 2025-08-12T13:27:43.960Z ---
+
+
+--- POST 15 @manish.r.kuma 2025-08-12T14:59:36.342Z ---
+Congratulation Winners!!
+
+--- POST 16 @SorenB 2025-08-13T07:55:54.864Z ---
+Congratulations to all
+
+--- POST 17 @wusiyangjia 2025-08-13T08:34:41.027Z ---
+Congratulations to all the winners!
+
+--- POST 18 @pikorpa 2025-08-13T10:37:38.770Z ---
+Congratulations to all the winners and participants
+
+--- POST 19 @edevries 2025-08-15T13:09:20.723Z ---
+Hehehe friggin’ sweet

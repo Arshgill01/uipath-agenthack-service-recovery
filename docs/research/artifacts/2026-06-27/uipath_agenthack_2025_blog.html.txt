@@ -1,0 +1,365 @@
+AgentHack: UiPath Community annual global hackathon | Community bloig 
+ FUSION is coming. 
+ FUSION is coming. days hours minutes 
+ Register now 
+ Solutions 
+ Solutions 
+ Solutions 
+ Agentic use cases 
+ Watch agentic automation use case videos and demos 
+ Webinars 
+ Learn best practices from industry experts. 
+ Customer stories 
+ Gather insight, read success stories, and more. 
+ By industry 
+ Banking & financial services 
+ Healthcare 
+ Insurance 
+ Public sector 
+ Manufacturing 
+ All industries 
+ By department 
+ Supply chain 
+ Finance & accounting 
+ HR 
+ QA / Testing 
+ Contact center 
+ All departments 
+ By technology 
+ Peak.ai 
+ Coded agents 
+ Microsoft 
+ SAP 
+ Agentic testing 
+ Technology solutions overview 
+ Prebuilt Solutions for the agentic enterprise 
+ Agentic workflows that connect AI agents, robots, and teams across your business. 
+ Explore prebuilt solutions 
+ Platform 
+ Platform 
+ Agentic Automation 
+ Discover the place where agents think, robots do, and people lead. 
+ Agentic Testing 
+ Explore agentic testing for the enterprise 
+ Explore the Platform 
+ View all products 
+ Pricing 
+ Support 
+ Agentic Automation 
+ Agentic Automation 
+ Discover the place where agents think, robots do, and people lead. 
+ Build 
+ Agentic AI 
+ RPA 
+ API 
+ Intelligent document processing 
+ Orchestrate 
+ Business orchestration 
+ AI ecosystem 
+ Featured 
+ Studio 
+ Maestro 
+ Test Cloud 
+ ScreenPlay 
+ UiPath for Coding Agents NEW 
+ Foundation: Orchestrate with security, governance, and trust 
+ UiPath named a Leader in The Forrester Wave™: Document Mining And Analytics Platforms, Q2 2026. 
+ In this report, Forrester evaluates the eight providers that matter most in document mining and analytics platforms, assessing agentic AI capabilities, governance, orchestration, and HITL workflows. 
+ Access the report 
+ Agentic Testing 
+ Agentic Testing 
+ Explore agentic testing for the enterprise 
+ Topics 
+ Unlock comprehensive testing for enterprises 
+ Enterprise applications 
+ Integrations 
+ Performance testing NEW 
+ SAP testing 
+ Test automation 
+ Products 
+ Take your testing to the next level with agentic testing 
+ Test Cloud 
+ Agent Builder for testers 
+ Autopilot™ for testers 
+ Explore agentic testing solutions for your enterprise 
+ Gartner® Magic Quadrant™ for AI-Augmented Software Testing Tools Report 
+ See why UiPath was named a Leader and how your team can test faster, safer, smarter. 
+ Read report 
+ Why agentic 
+ Why agentic 
+ Why agentic 
+ Customer stories 
+ Gather insight, read success stories, and more. 
+ Blog 
+ Get up close and personal with our people and products. 
+ Get started 
+ Agentic AI 
+ Agentic automation 
+ Agentic testing 
+ AI agents 
+ AI automation 
+ AI Orchestration 
+ What is RPA 
+ See all topics 
+ Deep dive 
+ Events and webinars 
+ Customer stories 
+ Demos and videos 
+ White papers 
+ Analyst reports 
+ Blog 
+ See all resources 
+ Our partners 
+ UiPath Partner Network 
+ Find a partner 
+ Become a partner 
+ Business partner portal 
+ Technology partner portal 
+ Professional services 
+ See all partners 
+ UiPath Agentic AI Summit 
+ Catch up on the new portfolio of industry solutions unveiled at the UiPath Agentic AI Summit. 
+ Register now 
+ Developers 
+ Developers 
+ Developers 
+ Developer home 
+ Start here to explore all the ways you can build and deploy agents. 
+ Academy 
+ Learn the skills of the future with free online automation training. 
+ Documentation 
+ Explore product documentation and guides. 
+ Learn 
+ Academy 
+ Certifications 
+ Digital credentials 
+ UiPath DevCon 
+ UiPath.ai 
+ Support 
+ Community 
+ Customer portal 
+ Customer support 
+ Documentation 
+ Forum 
+ Marketplace 
+ Latest 
+ Tech blog 
+ AI research 
+ Community blog 
+ DevCon Best Bits 
+ Build at Agent Speed. Orchestrate at Enterprise Scale. 
+ Catch up on the action from DevCon on demand 
+ Register now 
+ Search 
+ All 
+ uipath.com 
+ Forum 
+ Docs 
+ Close 
+ Contact us 
+ Sign in 
+ Try UiPath Free 
+ UiPath Blog 
+ UiPath Community blog 
+ Tutorials 
+ Community news 
+ Developer Interviews 
+ More 
+ Community events 
+ Academy 
+ Forum 
+ Subscribe 
+ Share 
+ Community Blogs 
+ Community News 
+ AgentHack: UiPath Community annual global hackathon 2025 
+ November 13, 2025 
+ AgentHack: UiPath Community annual global hackathon 
+ Authored by: 
+ Ana-Maria Bulhac 
+ Summarize: 
+ Celebrating the winners 
+ Over the past few months, the UiPath Community came together once again for the annual global hackathon. This year’s edition, AgentHack 2025, focused entirely on agentic automation, inviting developers from around the world to experiment with the newest UiPath technologies: Agent Builder, Maestro, and Coded Agents. 
+ The response was remarkable. With 400+ submissions from over 50 countries, the hackathon showcased how diverse and creative the community can be when tackling real-world challenges with automation and AI. Participants used one or multiple agents to bring the best results and solve problems from a wide variety of industries and areas, such as healthcare, public sector, manufacturing, banking, customer service, IT, finance, insurance. 
+ About AgentHack 
+ The hackathon officially launched on April 30, 2025, with idea submissions closing on July 7, 2025. After a round of evaluations, the finalists were announced on July 25, leading to the grand finale on August 5, 2025. The winners were announced on August 11, nowhere else than on the UiPath Forum . 
+ Participants could compete individually or in teams, building projects across three main categories: 
+ Enterprise Agents – agents designed to operate across multiple systems and support business operations. 
+ Agentic Testing – testing-focused agents that improve reliability, coverage, and automation in QA. 
+ UI Agent (bonus) – agentic solutions for UI automation. 
+ Submissions were evaluated based on innovation, business impact, technical feasibility, completeness, presentation, and community voting. The prize pool totaled over $50,000 in cash and certifications. 
+ Play the finale 
+ The grand finale on August 5 brought together the finalists, judges, and community members for live demos and discussions. If you missed it, check out our YouTube channel: 
+ The grand finale on August 5 brought together the finalists, judges, and community members for live demos and discussions. If you missed it, check out our YouTube channel: 
+ UiPath AgentHack Finale - Agentic Testing category 
+ UiPath AgentHack Finale - Enterprise Agents category 
+ Meet the winners
+ TrialIQ – Accelerating drug approvals with multi-agent clinical and regulatory intelligence 
+TrialIQ developed a system of collaborating agents that hehelpslp pharmaceutical organizations analyze regulatory guidelines, clinical documentation, and approval workflows. By reducing the time and effort required in compliance-heavy processes, their approach shows how agentic automation can support faster delivery of critical healthcare innovations. 
+ 👏 Team members: Mukesh Kala, Deepak Sreeram, Preethi Murali, Avala Parameswara Reddy. 
+ Enterprise Agents Category 
+ 1st place – AIdMe: Intelligent Safety Coordinator 
+AIdMe is a workplace safety agent that monitors conditions, detects hazards, and generates reports in real time. Its goal is to reduce workplace risks while easing the reporting burden on employees and compliance officers. 
+ 👏 Team members: Ebru Sarikaya, Onur Wildirim. 
+ 2nd place – ClaimGuardian 360 
+An insurance claims assistant that applies AI and agentic workflows to detect fraud, validate claims, and guide the resolution process, improving efficiency and trust throughout the insurance lifecycle. 
+👏 Team members: Deepak Kumar, Pranjal Dureja, Aditya Pratap Singh, Prachi Chaturvedi. 
+ 3rd place – Smart Health Claim Assistant 
+An agent that automates the verification and reconciliation of medical claims. It reduces processing errors and helps both providers and insurers achieve faster, more accurate outcomes. 
+👏 Team members: Mansi Bhatnagar, Usharani Ravichandran, Harsha Purushothama, Yoginee Pingale. 
+ Agentic Testing Category 
+ 1st place – Avalon 
+Avalon integrates with UiPath Test Data Orchestrator to generate synthetic test data using an agent. This enables test teams to scale testing, maintain compliance, and improve coverage with minimal manual. 
+👏 Team members: Johannes Reitermayer, Daniel Good, Benjamin Tan, Serge Wolf. 
+ 2nd place – Anomaly Detection Agent 
+A testing assistant that identifies redundancies and “flaky” tests, offering insights to improve reliability and reduce maintenance. 
+👏 Team members: Dhruba Jyoti Kalita. 
+ 3rd place – AI Controls 
+A governance and compliance solution for testing environments, designed to keep automated testing pipelines both effective and auditable. 
+👏 Team members: Manoj Batra, Shishir Chandrol, Parul Gangwar. 
+ Special prizes 
+ Best cross-platform integration – LUMA (Turkish Airlines Tech) 
+ Impactful Agent – WelfareWise.ai 
+ Most useful feedback – DeepPrompt 
+ Business-ready agent – SoloPath 
+ Best use of Agent Builder – OTOT Technologies 
+ Innovative agentic workflow – Maestro agentic support management 
+ And of course, the community also had its say: 
+ Community favorite – QuickAssist (Hackaholics) 
+ Rising star – Rahul Dasari 
+ The impact of AgentHack for those behind the scenes 
+ Behind each submission was a story of late nights, collaboration across time zones, and the determination to push the boundaries of automation. Whether it was making workplaces safer, healthcare more efficient, or testing more reliable, the projects at AgentHack 2025 reflected the collective creativity of our developer community. 
+ Being part of Agent Hack reminded me just how much energy and innovation lives in our community. I'm amazed by the vibrant mix of agents we saw. This hackathon highlighted just how colorful, complex, and ever evolving the world of software testing is. We had agents tackling compliance testing, optimizing tests, identifying reusable automations to reduce maintenance, and even reducing runtime and CO2 emission without sacrificing test coverage. It was impressive to see the creativity of our community come together with the flexibility of our tools. When you put those things together, amazing things happen—and Agent Hack was proof of that. Huge thanks to all the participants for their incredible work! 
+ Ingo Philipp , Senior Product Management Director @ UiPath 
+ It was a great showcase of unique use cases that got my team excited about potential use cases we had not thought of before! 
+ Andrea Simpson , IT Manager, Automation @ USI Insurance Services 
+ Each team that participated in AgentHack chose real opportunities to improve, poured a ton of passion into their solution in ensuring it solves the problem significantly. Some of them are already adopted with their first customer opportunity. It was a truly humbling experience to see the innovation that UiPath agentic automation platform powers. 
+ I mainly joined the final judging session. I could see a lot of effort went into organizing, curating the proposals, doing the initial filtering for final nominations. Final session was quite powerful. I had three close contenders for 1st place. 
+ Vikram Kakumani , SVP, Software Engineering @ UiPath 
+ It is really great to see the different ways in which the community members think about bringing in the business impact in various verticals when they are given the right tools. As expected, Maestro and Agents ruled the roost this time around. But it was also unique in the way the entire UiPath product eco system could come together to help them realize their own goals. This leaves product and engineering folks like me more energized to come up with more path breaking solutions and also to course correct based on what the market needs. 
+ Amol Awate , Senior Director, Software Engineering @ UiPath 
+ Looking ahead 
+ AgentHack 2025 was more than a competition. It was a showcase of what becomes possible when automation developers, AI enthusiasts, and problem-solvers collaborate. Many of these projects will go on to become tutorials, Marketplace components, or even enterprise solutions. 
+ A warm congratulations to all participants and winners. Thank you for your dedication, creativity, and willingness to share your ideas with the UiPath Community. 
+ We look forward to seeing you at our next hackathon. In the meantime, check out community.uipath.com for more events and special programs! 
+ Ana-Maria Bulhac 
+ Marketing Community Associate , UiPath 
+ Related articles 
+ Community News 
+ 2025: A community in motion 
+ Read the article 
+ Community News 
+ UiPath Community HyperHack 2024 winners 
+ Read the article 
+ Community News 
+ UiPath Community: Reflecting on 2024's milestones 
+ Read the article 
+ Get articles from automation experts in your inbox 
+ Sign up today and we'll email you the newest articles every week. 
+ Thank you for subscribing! 
+ Thank you for subscribing! Each week, we'll send the best automation blog posts straight to your inbox. 
+ Get articles from automation experts in your inbox 
+ Sign up today and we'll email you the newest articles every week. 
+ Thank you for subscribing! 
+ Thank you for subscribing! Each week, we'll send the best automation blog posts straight to your inbox. 
+ Contact Us 
+ Sign In 
+ English 
+ English 
+ Deutsch 
+ Français 
+ Português 
+ Español 
+ 简体中文 
+ 日本語 
+ 대한민국 
+ 繁體中文 
+ Platform 
+ Explore the Platform 
+ Plans and Pricing 
+ Customer support 
+ All products 
+ Action Center 
+ Agent Builder 
+ AI Center 
+ Apps 
+ Assistant 
+ Automation Hub 
+ Automation Ops 
+ Autopilot 
+ Data Service 
+ Insights 
+ Integration Service 
+ IXP 
+ Marketplace 
+ Maestro 
+ Orchestrator 
+ Process Mining 
+ Robots 
+ Studio 
+ Task Mining 
+ Test Cloud 
+ Solutions & Resources 
+ Solutions 
+ By industry 
+ By process 
+ Technology solutions overview 
+ Learning 
+ Academy 
+ Academic Alliance 
+ Certifications 
+ What is RPA 
+ Support & Community 
+ Customer support 
+ Customer Portal 
+ Documentation 
+ Forum 
+ Community Blog 
+ Community events 
+ Service status 
+ Resource Center 
+ UiPath Blog 
+ Analyst reports 
+ Case studies 
+ White papers 
+ Webinars 
+ Brochures 
+ Demos and videos 
+ Events 
+ UiPath FUSION 
+ UiPath FUSION (multi-city) 
+ UiPath on Tour 
+ UiPath DevCon 
+ UiPath Live 
+ See all events 
+ Partners 
+ UiPath Partner Network 
+ Find a partner 
+ Become a partner 
+ Grow as a partner 
+ Business partner portal 
+ Technology partner portal 
+ Company 
+ About us 
+ UiPath.ai 
+ Careers 
+ Careers Blog 
+ Newsroom 
+ Investor Relations 
+ Trust & security 
+ UiPath using UiPath 
+ Our Impact 
+ UiPath Gift Shop 
+ UiPath Foundation 
+ Code of Conduct 
+ Report Ethical Concerns 
+ Employment Scams 
+ Let's connect 
+ Trust & security 
+ Terms of Use 
+ Privacy Policy 
+ Cookies Policy 
+ Your Privacy Choices 
+ The UiPath word mark, logos, and robots are registered trademarks owned by UiPath, Inc. and its affiliates. UiPath® is a registered trademark in the United States and several countries across the globe. See TMEP 906. 
+ © 2005-2026 UiPath. All rights reserved. 
+ Ask AI about... Ask AI...

@@ -36,3 +36,26 @@ Accessed June 18, 2026.
 - Do not treat forum posts as product truth unless confirmed by official UiPath response.
 - When a source is unavailable, log the failure rather than inferring.
 - If a source changes prior assumptions, update [docs/decisions/DECISIONS.md](../decisions/DECISIONS.md).
+
+## 2026-06-27 - AgentHack Forum / Devpost / Winner Research
+
+Sources:
+
+| Source | What it contributed | Confidence |
+| --- | --- | --- |
+| https://forum.uipath.com/t/uipath-agenthack-is-live-50-000-in-prizes-three-tracks-and-7-weeks-to-build/5746132 | Full public forum thread with launch post, Q&A, track guidance, coding-agent bonus clarification, Labs/Action Center/Maestro blocker reports, and product-feedback context. | official/community |
+| https://uipath-agenthack.devpost.com/ | Official rules, track definitions, submission requirements, judging criteria, coding-agent bonus wording, prizes, and Best Product Feedback description. | official |
+| https://forum.uipath.com/t/here-are-the-uipath-agenthack-2025-winners/3586396 | 2025 winner list and special-award pattern. | official/community |
+| https://www.uipath.com/community-blog/community-news/uipath-community-annual-global-hackathon-2025 | 2025 winner/project summaries, evaluation themes, and prior winner patterns. | official |
+
+Local digest:
+
+- `docs/research/AGENTHACK_FORUM_RESEARCH.md`
+- `docs/research/artifacts/2026-06-27/`
+
+Decision impact:
+
+- Confirmed primary track remains UiPath Maestro Case.
+- Added `docs/submission/TRACK_SELECTION_DECISION.md`.
+- Added README and `docs/submission/CODING_AGENT_PROOF_LOG.md` for coding-agent bonus proof.
+- Added demo beat to show coding-agent usage without weakening the runtime governance boundary.

@@ -130,6 +130,23 @@ Show `policy_improvement_E008.json` during the eval/learning-loop beat to prove 
 
 It fails if the raw agent recommendation, policy decision, route, block reason, or AIE/PDE linkage drifts from the proof-beat contract.
 
+## Coding-Agent Proof Beat
+
+The AgentHack rules and forum Q&A require coding-agent use to be documented and visible for bonus points.
+
+Show these during the demo:
+
+- `README.md` coding-agent section.
+- `docs/submission/CODING_AGENT_PROOF_LOG.md`.
+- `git log --oneline --max-count=5`.
+- `scripts/run_submission_check.sh` passing, or the most recent saved output from the recording run.
+
+Suggested narration:
+
+> Codex was used as the coding agent to build the core, evals, UiPath validation runbooks, and product-feedback evidence. UiPath remains the orchestration and governance layer; Codex is build-time assistance, not runtime closure authority.
+
+Do not imply that Codex, Gemini, or any LLM makes final closure decisions.
+
 ## Optional Live LLM Interpretation
 
 The default proof artifacts are deterministic so tests and evals are repeatable. For the strongest demo beat, run the optional Gemini-backed interpreter to create the raw Agent Interpretation Event from unstructured notes, then let deterministic policy accept or override it.

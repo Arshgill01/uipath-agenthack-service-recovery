@@ -50,6 +50,9 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 | Project brief | Ready | `PROJECT_BRIEF.md` |
 | Submission brief | Ready | `docs/submission/SUBMISSION_BRIEF.md` |
 | Feedback answer bank | Ready except user fields | `docs/product/FEEDBACK_SURVEY_COPY_READY.md` |
+| Track selection decision | Ready | `docs/submission/TRACK_SELECTION_DECISION.md` |
+| Coding-agent proof log | Ready | `docs/submission/CODING_AGENT_PROOF_LOG.md` |
+| Forum/Devpost research digest | Ready | `docs/research/AGENTHACK_FORUM_RESEARCH.md` |
 | Demo-safe runbook | Ready | `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md` |
 | Repeatable proof wrapper | Ready | `scripts/run_demo.sh` |
 | Repeatable Test Manager manual eval wrapper | Ready | `scripts/run_test_manager_manual_eval.sh` |
@@ -81,3 +84,4 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 - Story-sharing preference.
 - Any fresh live E-002/E-004 case/task IDs if rerun after this checklist.
 - Google Cloud project ID or Gemini API key environment setup if rerunning the optional live LLM interpreter.
+- Final demo recording should include the coding-agent proof beat from `docs/demo/DEMO_STORYBOARD.md`.

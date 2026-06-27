@@ -3227,3 +3227,24 @@ Open risks:
 
 - Background worktree threads can still stop early if they hit tool/runtime limits, but their prompts now require full probe queues, three-repeat blocker criteria, and evidence artifacts before completion.
 - Scratch cloud resources must remain clearly prefixed and should not be deleted without explicit approval.
+
+### 2026-06-27 - Agent / Forum Research, Track Lock, Coding-Agent Proof
+
+What changed:
+
+- Scraped the full UiPath AgentHack forum topic, official Devpost page, 2025 winners forum topic, and 2025 UiPath Community blog into `docs/research/artifacts/2026-06-27/`.
+- Added `docs/research/AGENTHACK_FORUM_RESEARCH.md` with high-signal findings from the forum, Devpost, and winner research.
+- Added `docs/submission/TRACK_SELECTION_DECISION.md`, locking the submission to UiPath Maestro Case and documenting why BPMN/Test Cloud are supporting or non-fit tracks.
+- Added `docs/submission/CODING_AGENT_PROOF_LOG.md` and updated `README.md` so coding-agent use is clearly documented for the bonus requirement.
+- Updated `docs/demo/DEMO_STORYBOARD.md` and `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md` with a coding-agent proof beat.
+- Updated `docs/submission/SUBMISSION_BRIEF.md`, `docs/submission/READINESS_CHECKLIST.md`, and `docs/research/RESEARCH_LOG.md` to reference the new evidence.
+
+Validation:
+
+- PASS: `git diff --check`.
+- PASS: `scripts/run_submission_check.sh` ran 46 tests and verified demo artifacts.
+
+Open risks:
+
+- Forum participant reports are supporting context only. Product-feedback claims remain based on our own reproduced PF evidence unless explicitly marked as public forum context.
+- Final video still needs to show coding-agent proof visibly; docs alone are not enough for the strongest bonus claim.
