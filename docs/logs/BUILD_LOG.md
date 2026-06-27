@@ -2,6 +2,65 @@
 
 Append one entry per substantial agent run.
 
+### 2026-06-27 19:54 IST - Agent / Product Feedback Workstream A Maestro Authoring Evidence
+
+What changed:
+
+- Inspected existing scratch Studio Web solution `PFPROBE-20260627-human-review` by download/export without mutating it.
+- Created separate scratch repair solution `PFPROBE-20260627-human-review-repair`.
+- Reproduced the missing Action task title/rules validation failure, then repaired the scratch Case with `--task-title`, requiredness, and minimal case/stage/task rules.
+- Uploaded and downloaded the repaired scratch solution, then validated the exported Case definition.
+- Captured Safari screenshot evidence for the repaired scratch Studio Web Case designer.
+- Strengthened PF-028, validation results, and artifact notes.
+
+Commands run:
+
+- `uip login status --output json`
+- `uip solution download d897e886-da98-4e73-6caf-08ded37985a5 -d tmp/product-feedback-probes-existing --extract -n PFPROBE-20260627-human-review-existing --output json`
+- `uip maestro case validate tmp/product-feedback-probes-existing/PFPROBE-20260627-human-review-existing/PFPROBE-20260627-human-review-case/caseplan.json --output json`
+- `uip solution init PFPROBE-20260627-human-review-repair --output json`
+- `uip maestro case init PFPROBE-20260627-human-review-repair-case --output json`
+- `uip maestro case cases add --name "PFPROBE-20260627 Human Review Repair Case" --file PFPROBE-20260627-human-review-repair-case/content/caseplan.json --case-app-enabled --description "Scratch human-review repair probe" --output json`
+- `uip maestro case stages add PFPROBE-20260627-human-review-repair-case/content/caseplan.json --label "Human Review" --is-required --output json`
+- `uip maestro case tasks add ... --display-name "PFPROBE Human Review Missing Title" ... --recipient arshgill6120@gmail.com --output json`
+- `uip maestro case validate PFPROBE-20260627-human-review-repair-case/content/caseplan.json --output json`
+- `uip maestro case tasks remove PFPROBE-20260627-human-review-repair-case/content/caseplan.json Stage_SCER4c tvWLIAj8L --output json`
+- `uip maestro case tasks add ... --display-name "PFPROBE Human Review With Title" ... --task-title "PFPROBE Human Review Evidence" --output json`
+- `uip maestro case stage-entry-conditions add ... --rule-type case-entered --output json`
+- `uip maestro case task-entry-conditions add ... --rule-type current-stage-entered --output json`
+- `uip maestro case stage-exit-conditions add ... --marks-stage-complete true --rule-type required-tasks-completed --output json`
+- `uip maestro case case-exit-conditions add ... --marks-case-complete true --rule-type required-stages-completed --output json`
+- `uip maestro case tasks update ... --is-required --output json`
+- `uip maestro case validate PFPROBE-20260627-human-review-repair-case/content/caseplan.json --output json`
+- `uip solution resource refresh --solution-folder tmp/product-feedback-probes/PFPROBE-20260627-human-review-repair --output json`
+- `uip solution pack tmp/product-feedback-probes/PFPROBE-20260627-human-review-repair --dry-run --output json`
+- `uip solution upload tmp/product-feedback-probes/PFPROBE-20260627-human-review-repair --output json`
+- `uip solution download 74018a7a-e09c-43b3-6d15-08ded37985a5 -d tmp/product-feedback-probes-repair-export --extract -n PFPROBE-20260627-human-review-repair-export --output json`
+- `uip maestro case validate tmp/product-feedback-probes-repair-export/PFPROBE-20260627-human-review-repair-export/PFPROBE-20260627-human-review-repair-case/caseplan.json --output json`
+- Safari/Computer Use read-only designer inspection.
+- `screencapture -x docs/validation/artifacts/2026-06-27/pfprobe-human-review-repair-studio-safari.png`
+- `git diff --check`
+- `scripts/run_submission_check.sh`
+
+Validation:
+
+- PASS: existing scratch export reproduced the invalid Case-level findings before runtime.
+- PASS: repaired scratch `caseplan.json` validated as `Status: Valid`.
+- PASS: `uip solution pack --dry-run` returned `Status: Valid` for the repaired scratch.
+- PASS: repaired Studio Web upload/download round trip still validated as `Status: Valid`.
+- PASS: `git diff --check`.
+- PASS: `scripts/run_submission_check.sh` ran 46 unit tests and verified demo artifacts.
+- PARTIAL: Studio Web opened the repaired scratch designer, but no separate readiness/preflight surface was observed.
+
+Product feedback:
+
+- PF-028 strengthened.
+
+Open risks:
+
+- Scratch cloud solutions `PFPROBE-20260627-human-review` and `PFPROBE-20260627-human-review-repair` remain in the tenant by instruction; do not delete without explicit approval.
+- Studio Web visual comparison of the invalid scratch remains optional; avoiding force-upload/delete preserved scratch and submission assets.
+
 ### 2026-06-27 18:44 IST - Agent / Competition Analysis And Agentic Loop Plan
 
 What changed:
