@@ -1957,3 +1957,71 @@ Decision impact:
 Product feedback:
 
 - PF-024 strengthened with the distinction between Orchestrator-visible process entry points and Test Manager-visible test automations. The product should expose a preflight diagnostic explaining why a package does not appear in `list-automations`.
+
+## 2026-06-27 - Product Feedback Evidence Sprint Readiness Probe
+
+Scope:
+
+- Gather fresh, scoped product-feedback evidence for the Best Product Feedback submission.
+- Test whether the primary recommendation, a Maestro Case human-review readiness/preflight path, is still supported by current UiPath Labs behavior.
+- Read-only probe only; no scratch resources were created and no existing submission resources were modified.
+
+Environment:
+
+- UiPath CLI `1.195.1`.
+- Org `keepingitlowkey`.
+- Tenant `DefaultTenant`.
+- User `arshgill6120@gmail.com`.
+
+Commands:
+
+1. `uip login status --output json`
+2. `uip login tenant list --output json`
+3. `uip or folders list --output json`
+4. `uip maestro case --help`
+5. `uip maestro case validate --help`
+6. `uip maestro case tasks describe --help`
+7. `uip maestro case processes list --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+8. `uip maestro case process list --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json --log-level debug`
+9. `uip maestro case processes diagnose 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+10. `uip maestro case processes diagnose 320c067a-27b9-4c2f-8b26-f6ee38ad97cc --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+11. `uip maestro case processes incidents 320c067a-27b9-4c2f-8b26-f6ee38ad97cc --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+12. `uip maestro case processes error-codes 320c067a-27b9-4c2f-8b26-f6ee38ad97cc --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+13. `uip tasks users --folder-id 7978263 --output json`
+14. `uip tasks users 7978263 --output json`
+15. `uip tasks list --folder-id 7978263 --limit 10 --output json`
+16. `uip platform tenants --help`
+17. `uip tools list --output json`
+
+Observed:
+
+- CLI auth remained valid for org `keepingitlowkey`, tenant `DefaultTenant`.
+- `uip maestro case processes list` returned existing Case process summaries and package versions, including `Maestro Case G004 1.0.3 Evidence Validation` with versions `1.0.3`, `1.0.4`, `1.0.5`, and `1.0.6`.
+- Singular `uip maestro case process list` failed with generic `Response returned an error code` / `Request was rejected - check flag values and inputs`, while plural `uip maestro case processes list` succeeded.
+- `uip maestro case processes diagnose` failed for both a current process and an older faulted process with `UnknownError`, `Error diagnosing process`, and `summaries.find is not a function`.
+- `uip maestro case processes incidents` returned `Data: []` for the older process even though `processes list` showed a fault and `error-codes` returned `170000 / Failure in the AppTasks request`.
+- `uip platform tenants --help` exposed tenant licensing but not a tenant-service readiness list for Actions/Action Center.
+- `uip tools list --output json` showed `tasks-tool`.
+- `uip tasks users --folder-id 7978263` failed because `tasks users` expects positional `<folder-id>`, while corrected `uip tasks users 7978263` succeeded and returned reviewer user `Arshdeep Singh`, ID `14338019`.
+- `uip tasks list --folder-id 7978263 --limit 10 --output json` returned existing completed AppTasks and showed that task/reviewer readback is available once the correct command shape is known.
+
+Result:
+
+- PASS for fresh read-only evidence collection.
+- No new live Case/job/task/package was created.
+- No existing submission resource was modified.
+
+Decision impact:
+
+- The final feedback answer should keep the Maestro Case human-review readiness/preflight recommendation as the primary product improvement.
+- PF-026 and PF-027 add fresh support that the readiness path should include reliable process diagnostics, Actions service readiness, reviewer visibility, required Action task fields, Action app binding/version, package/feed version, and consistent CLI folder targeting.
+- This does not change validated submission claims: generated Action Center UI remains not final-demo ready; automated Test Cloud execution remains unclaimed; native Case history alone remains insufficient for G-001.
+
+Product feedback:
+
+- PF-026 added for Case process diagnostic failure/insufficient AppTask repair detail.
+- PF-027 added for human-review service/reviewer readiness discovery and task CLI consistency.
+
+Evidence:
+
+- `docs/validation/artifacts/2026-06-27/product_feedback_readiness_probe.md`

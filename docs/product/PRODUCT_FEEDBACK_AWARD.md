@@ -68,6 +68,8 @@ This matrix groups the current evidence into issue classes. Add new observations
 | Test Manager eval-suite onboarding | PF-020 | UX / integration | medium | A local eval output can be imported or mapped into Test Manager without bespoke object creation. | CLI project/case/test-set lifecycle worked, but E-001 through E-009 had to be manually represented as Test Manager objects. | Created project `SREV`, nine manual cases, test set `SREV:9`, and mapping doc. | Add eval/JUnit/JSON import flow with scenario preview and field mapping for AI evals. | `docs/validation/TEST_MANAGER_MAPPING.md`; PF-020. |
 | Test Manager manual execution aggregate status | PF-021 | UX / product defect candidate | medium | Manual execution aggregate becomes terminal or explains the required close action when all child logs pass. | The first run marked all nine child logs passed through direct `finish` calls, but the aggregate stayed `Running`; a later explicit `start` then `finish` lifecycle reached terminal `Status: Finished`. | Use `testcaselog start` before `testcaselog finish`; cite the terminal execution and keep the first run as lifecycle ambiguity evidence. | Add explicit finish/close manual execution action, warn when finishing a never-started manual log, or surface the remaining blocker in execution readback. | `docs/validation/TEST_MANAGER_MAPPING.md`; terminal execution `40a1b334-5df8-1100-0a4b-0b49d0564f11`; PF-021. |
 | Case job/task lifecycle CLI clarity | PF-022 | UX / integration / diagnostics | medium | Process, job, task, and Case Instance readbacks should make a fresh Case run's package, human-task completion, and terminal case state easy to reconstruct with consistent flags. | `processes get` rejected `--folder-key` while `version-history` accepted it; completed E-002/E-004 AppTasks returned reviewer actions/comments, but their older Case jobs still read as `Running` with only Pending/Running history. A fresh package `1.0.6` Case Instance later reached `LatestRunStatus: Completed` after an unbound required placeholder task was made optional. | Use corrected `processes get <key>` command, read `version-history`, rely on task readback plus audit bundle for reviewer proof on older runs, and cite terminal Case Instance completion only for the fresh package `1.0.6` run. | Harmonize folder option support or document per-subcommand differences; show whether a Case job is waiting for human task, post-task continuation, optional placeholder task, terminal completion, or blocked state. | `docs/validation/VALIDATION_RESULTS.md` 2026-06-26 00:36 IST and 2026-06-26 16:00 IST; `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`; PF-022. |
+| Maestro Case process diagnostic readiness | PF-026 | product defect candidate / diagnostics / integration | high for human-review preflight | A Case process diagnostic command should summarize healthy/faulted process readiness and connect AppTask failures to required fields, Action app bindings, package versions, and incidents. | `uip maestro case processes diagnose` failed for both a current process and an older faulted process with `summaries.find is not a function`; `processes incidents` returned `Data: []` for the faulted process while `error-codes` only returned `170000 / Failure in the AppTasks request`. | Use `processes list`, Orchestrator process readback, task readback, and committed validation notes; keep runtime failures documented manually. | Make Case diagnostics reliable and preflight-aware: report Actions availability, required Action task fields such as Title, app binding/version, package/feed version, recent incidents, and field-specific repair links before runtime. | `docs/validation/artifacts/2026-06-27/product_feedback_readiness_probe.md`; PF-026. |
+| Human-review service and reviewer readiness discovery | PF-027 | UX / integration / diagnostics | medium/high | Builders should be able to verify Actions service availability, reviewer permissions, and task CLI usage with consistent folder arguments before starting a human-review Case. | `uip platform tenants --help` exposed tenant licensing but not service readiness; `uip tools list` showed `tasks-tool`; corrected `uip tasks users 7978263` confirmed reviewer visibility, but `uip tasks users --folder-id 7978263` failed because this subcommand uses positional folder ID while `tasks list/get` use `--folder-id`. | Use `uip tasks users <folder-id>` and existing Admin/UI knowledge; manually stitch service readiness, reviewer availability, and task readback. | Add a single readiness command or checklist for Maestro Case human review that checks Actions/Action Center service enablement, reviewer permissions, required task fields, task app binding, and uses consistent folder flags across task commands. | `docs/validation/artifacts/2026-06-27/product_feedback_readiness_probe.md`; PF-027. |
 | Test Manager automation discovery diagnostics | PF-024 | UX / integration / diagnostics | medium/high | If automated execution is supported, Test Manager should list available automations, return an empty list, or explain missing runtime/package prerequisites per folder. Automated test-set runs should identify whether the blocker is folder binding, unlinked manual cases, missing package, runtime type, package metadata, or permissions. | CLI supports `link-automation` and `run --execution-type automated`; Shared folder automation discovery returned an empty list, while Solution/personal folder `list-automations` returned HTTP 400 `Internal Server Error`. Automated `SREV:9` first failed because no folder was assigned, setting project default to Solution failed HTTP 500, setting default to Shared succeeded, then automated execution failed with `No Automatic package selection could be done for test set to execute.` Follow-up probe built and uploaded package `ServiceRecoveryEvalProcessProbe:0.0.2/0.0.3`; Orchestrator listed an entry point, but Test Manager discovery still returned `Data: []`, and direct `link-automation` failed with `Test ... not found in package`. | Keep G-007 as terminal manual Test Manager validation only; do not claim automated Test Cloud execution until a supported UiPath test automation project can publish a Test Manager-visible test entry point. The project default folder is currently set to Standard `Shared` because that was the only CLI folder assignment path that succeeded. | Return structured diagnostics: package has no Test Manager-visible test cases, package is process-only, test metadata was stripped/ignored during pack, no automations in folder, unsupported folder type, missing Test Automation runtime, package feed mismatch, unlinked test cases, invalid folder type, or internal correlation ID; provide a CLI command that validates whether a package will appear in `list-automations` before upload/link attempts. | `docs/validation/TEST_MANAGER_MAPPING.md` 2026-06-26 16:33 UTC; `docs/validation/VALIDATION_RESULTS.md` 2026-06-26 14:55 UTC and 2026-06-26 15:04 UTC; PF-024. |
 | Automation Cloud home recent execution recency | PF-025 | UX / integration / dashboard | low/medium | Home dashboard recent executions should surface the latest execution or make sort/filter rules clear. | Safari Automation Cloud home showed the older `Service Recovery E-001 through E-009 Baseline - 20260625.1833` execution as `Running`, while CLI `testsets list --include-last-execution` reported latest execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` as `Finished` at `2026-06-26T10:19:58.490Z`. | Use Test Manager CLI/report/JUnit evidence and the Test Manager project/test-set view rather than the Automation Cloud home widget for submission proof. | Make home recent-execution widgets sort by latest execution/update, show when the displayed row is not the latest for a test set, or link directly to all executions with status filters. | Computer Use Safari state on 2026-06-26; `uip tm executions list`; `uip tm testsets list --include-last-execution`; PF-025. |
 
@@ -96,8 +98,8 @@ Draft only. Evidence-backed but not final submission prose.
 | --- | --- | --- |
 | Q10 - What UiPath products did you use? | Automation Cloud, Maestro, Maestro Case / Case app, Studio Web, Actions / Action Center, Orchestrator service listing, Integration Service listing, Data Fabric listing, Test Manager listing, UiPath CLI. Note that deep validation has so far centered on Automation Cloud, Maestro, Studio Web, Maestro Case, and Actions. | Wave 01 validation results; product launcher screenshot; CLI help output in `docs/validation/VALIDATION_RESULTS.md`. |
 | Q11 - What worked well? | Automation Cloud eventually landed in org `keepingitlowkey` / tenant `DefaultTenant`; Maestro opened and exposed case/process surfaces; Studio Web created a real `Maestro Case` project; Case designer exposed stages, rules, Case app metadata, task types, and JSON/code view; Action Center opened after Actions was enabled; JSON editor guarded against saving malformed accidental input; Action app schema exposed typed inputs, outcomes, and generated a mostly usable evidence review page; Orchestrator bucket operations worked cleanly for a JSON audit artifact through CLI create/upload/list/download/readback verification. | PF-002, PF-003, PF-004, PF-006; `wave01-studio-maestro-bpmn-created.png`; `g001-maestro-case-project-created.png`; `g001-maestro-case-json-code-view.png`; `actions-enabled-inbox.png`; 2026-06-25 G-003 validation results; `docs/validation/artifacts/2026-06-25/orchestrator_bucket_audit_artifact_E004_manifest.json`. |
-| Q12 - What challenges did you encounter? | Group by issue class: account/tenant routing ambiguity, Maestro recent-projects generic fetch error, Action Center dependency not enabled with insufficient disabled-service guidance, Human action picker/configuration ambiguity, Studio Web local Assistant migration uncertainty, schema-to-page generation failure for a proof-critical evidence field, deployment validation passing even though the live Action task was missing a required Title, CLI/package round trip failure, generic upload diagnostics, app binding drift, process auto-update/readback ambiguity, runtime task label legibility, solution-feed package/process binding mismatch, Data Fabric CLI discovery mismatch, Data Fabric record insert payload mapping failure/field-naming ambiguity, Test Manager manual lifecycle ambiguity, Test Manager automation discovery/folder-binding diagnostics, Automation Cloud dashboard recency ambiguity, Case job/task lifecycle state ambiguity, and generated image placeholder quality. Keep access confusion, product limitations, UX/docs friction, and product defect candidates separate. | Feedback Evidence Matrix rows PF-001 through PF-025. |
-| Q13 - What should UiPath improve? | Recommended top answer: add a Maestro Case readiness and human-review setup path that checks tenant services/roles, links directly to enable Actions when permitted, scaffolds a human evidence-packet task, shows exact input/output mapping steps, validates generated Action page controls per schema property, and runs a preflight for required Action task fields before deployment. Secondary improvements: native case audit/event inspector, schema-aware Data Fabric insert diagnostics, feed-aware CLI process creation, consistent CLI discovery for built-in product command surfaces such as Data Fabric, clearer Case job/task lifecycle readback, better package/upload diagnostics, app binding validation, process version readback, Test Manager automation discovery diagnostics, dashboard recency/status clarity, `missingaccount` diagnostics, recent-projects error diagnostics, accessible task-picker rows, and Studio Web/local Assistant transition guidance. | PF-003 as highest-impact setup blocker; PF-006/PF-007/PF-013 as proof-critical G-003 build blockers; PF-015 as native audit insight; PF-019/PF-023 as Data Fabric storage findings; PF-017 as feed/process CLI integration issue; PF-018/PF-022/PF-024/PF-025 as CLI/lifecycle/dashboard clarity issues; PF-009 through PF-012 as CLI/package recovery blockers; PF-004 as core human-task workflow friction. |
+| Q12 - What challenges did you encounter? | Group by issue class: account/tenant routing ambiguity, Maestro recent-projects generic fetch error, Action Center dependency not enabled with insufficient disabled-service guidance, Human action picker/configuration ambiguity, Studio Web local Assistant migration uncertainty, schema-to-page generation failure for a proof-critical evidence field, deployment validation passing even though the live Action task was missing a required Title, CLI/package round trip failure, generic upload diagnostics, app binding drift, process auto-update/readback ambiguity, runtime task label legibility, solution-feed package/process binding mismatch, Data Fabric CLI discovery mismatch, Data Fabric record insert payload mapping failure/field-naming ambiguity, Test Manager manual lifecycle ambiguity, Test Manager automation discovery/folder-binding diagnostics, Automation Cloud dashboard recency ambiguity, Case job/task lifecycle state ambiguity, Case diagnostic command failure, human-review service/reviewer readiness discovery gaps, and generated image placeholder quality. Keep access confusion, product limitations, UX/docs friction, and product defect candidates separate. | Feedback Evidence Matrix rows PF-001 through PF-027. |
+| Q13 - What should UiPath improve? | Recommended top answer: add a Maestro Case readiness and human-review setup path that checks tenant services/roles, links directly to enable Actions when permitted, scaffolds a human evidence-packet task, shows exact input/output mapping steps, validates generated Action page controls per schema property, runs a preflight for required Action task fields before deployment, and provides reliable Case process diagnostics before/after runtime. Secondary improvements: native case audit/event inspector, schema-aware Data Fabric insert diagnostics, feed-aware CLI process creation, consistent CLI discovery for built-in product command surfaces such as Data Fabric, clearer Case job/task lifecycle readback, better package/upload diagnostics, app binding validation, process version readback, Test Manager automation discovery diagnostics, dashboard recency/status clarity, `missingaccount` diagnostics, recent-projects error diagnostics, accessible task-picker rows, and Studio Web/local Assistant transition guidance. | PF-003 as highest-impact setup blocker; PF-006/PF-007/PF-013/PF-026/PF-027 as proof-critical G-003 build blockers and readiness findings; PF-015 as native audit insight; PF-019/PF-023 as Data Fabric storage findings; PF-017 as feed/process CLI integration issue; PF-018/PF-022/PF-024/PF-025 as CLI/lifecycle/dashboard clarity issues; PF-009 through PF-012 as CLI/package recovery blockers; PF-004 as core human-task workflow friction. |
 
 ## Scoring Rubric For Future Feedback
 
@@ -156,6 +158,8 @@ Use accumulated entries to answer the final feedback survey.
 | PF-023 | 2026-06-26 | Data Fabric / UiPath CLI | Custom-field naming and update readback | G-001 / G-008 | product defect candidate / integration / diagnostics | high | mitigated with PascalCase V2 | `docs/validation/VALIDATION_RESULTS.md` |
 | PF-024 | 2026-06-26 | Test Manager / Test Cloud CLI | Automation discovery and automated test-set run | G-007 | UX / integration / diagnostics | medium/high | automated execution not claimed | `docs/validation/VALIDATION_RESULTS.md` |
 | PF-025 | 2026-06-26 | Automation Cloud home / Test Manager | Recent execution widget recency | G-007 | UX / integration / dashboard | low/medium | observed | `docs/validation/VALIDATION_RESULTS.md` |
+| PF-026 | 2026-06-27 | Maestro Case / UiPath CLI | Case process diagnostics for human-review readiness | Product feedback sprint / G-003 | product defect candidate / diagnostics / integration | high | observed | `docs/validation/artifacts/2026-06-27/product_feedback_readiness_probe.md` |
+| PF-027 | 2026-06-27 | Platform / Action Center / UiPath CLI | Human-review service and reviewer readiness discovery | Product feedback sprint / G-003 | UX / integration / diagnostics | medium/high | observed | `docs/validation/artifacts/2026-06-27/product_feedback_readiness_probe.md` |
 
 ## Entry Template
 
@@ -1433,6 +1437,154 @@ Evidence:
 Classification:
 
 - UX / accessibility / integration
+
+Survey tags:
+
+- product-used
+- pain-point
+- workaround
+- improvement
+- evidence
+
+### PF-026 - 2026-06-27 - Maestro Case / Process Diagnostics For Human Review
+
+Context:
+
+- ID: PF-026.
+- Status: observed.
+- Goal: test whether current Maestro Case diagnostics make the existing human-review readiness/preflight recommendation product-manager-ready.
+- Product surface: Maestro Case CLI process summaries, diagnostics, incidents, and error-code readback.
+- Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `arshgill6120@gmail.com`.
+- Wave/gate: Product feedback sprint / G-003.
+
+What worked:
+
+- `uip maestro case processes list --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json` returned existing Case process summaries, package versions, and run counts.
+- `uip maestro case processes error-codes 320c067a-27b9-4c2f-8b26-f6ee38ad97cc --folder-key ... --output json` returned the AppTasks error family: `170000 / Failure in the AppTasks request`.
+
+What failed or confused us:
+
+- `uip maestro case processes diagnose` failed for both an active/current process and an older faulted process.
+- The failure was a tool/runtime error, not a Case readiness answer: `UnknownError`, `Error diagnosing process`, `summaries.find is not a function`.
+- The adjacent `processes incidents` command returned `Data: []` for the older process even though `processes list` counted one fault and `error-codes` reported the AppTasks error family.
+- The diagnostic path did not connect the AppTasks failure back to likely human-review causes such as missing Action task `Title`, Action app binding, generated app version, reviewer visibility, or package/feed version.
+
+Expected:
+
+- A Case process diagnostic command should summarize process readiness and known failures, then connect AppTask errors to the exact missing field, binding, service, package version, or incident needed for repair.
+
+Observed:
+
+- `processes diagnose` failed with `summaries.find is not a function`.
+- `processes incidents` returned no rows for the older faulted process.
+- `processes error-codes` returned only the generic AppTasks code/message.
+
+Impact:
+
+- Build impact: high for a first-time human-review Case workflow. This is the exact stage where builders need preflight and repair guidance before starting or rerunning live cases.
+- Demo/submission impact: medium/high. It strengthens the final product-feedback recommendation but does not weaken validated submission claims because no new case was run.
+- Severity: high.
+
+Workaround:
+
+- Use `processes list`, Orchestrator process readback, task readback, validation logs, and custom audit artifacts.
+- Keep human-review readiness documented manually instead of relying on `processes diagnose`.
+
+Suggested improvement:
+
+- Make `processes diagnose` reliable and preflight-aware. It should report Actions service availability, reviewer/task permissions, required Action task fields such as Title, Action app binding/version, package/feed version, recent incidents, and field-specific repair links.
+
+Evidence:
+
+- Screenshot/path/link: none; read-only CLI evidence.
+- Commands/logs: `docs/validation/artifacts/2026-06-27/product_feedback_readiness_probe.md`.
+
+Classification:
+
+- product defect candidate / diagnostics / integration
+
+Confidence:
+
+- high, because the commands were run live against the authenticated Labs tenant and existing Case processes.
+
+Follow-up validation needed:
+
+- None for survey use. A product bug report would benefit from a CLI correlation ID if UiPath support requests it.
+
+Survey tags:
+
+- product-used
+- pain-point
+- workaround
+- improvement
+- evidence
+
+### PF-027 - 2026-06-27 - Platform / Action Center Human-Review Readiness Discovery
+
+Context:
+
+- ID: PF-027.
+- Status: observed.
+- Goal: test whether a builder can verify human-review readiness without starting a live Case.
+- Product surface: Platform CLI, Action Center tasks CLI, and tool discovery.
+- Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `arshgill6120@gmail.com`.
+- Wave/gate: Product feedback sprint / G-003.
+
+What worked:
+
+- `uip login status --output json` confirmed the active org/tenant.
+- `uip tools list --output json` showed `tasks-tool`.
+- `uip tasks users 7978263 --output json` confirmed reviewer visibility for `Arshdeep Singh`, user ID `14338019`.
+- `uip tasks list --folder-id 7978263 --limit 10 --output json` returned existing completed AppTasks and their task titles/actions.
+
+What failed or confused us:
+
+- `uip platform tenants --help` exposed tenant licensing, but not a service-readiness list for Actions/Action Center, even though human-review Case workflows depend on that service.
+- There was no single read-only command that answered: Actions service enabled, reviewer can see tasks, Action app binding exists, required Action task fields are mapped, and the process package version will instantiate the expected app.
+- `uip tasks users --folder-id 7978263 --output json` failed because `tasks users` expects positional `<folder-id>`, while `tasks list` and `tasks get` use `--folder-id`.
+
+Expected:
+
+- A builder should be able to run one readiness command or follow one checklist to verify Actions service availability, reviewer permissions, Action app/schema binding, required task fields, and package version before runtime.
+- Folder targeting should be consistent across closely related `uip tasks` subcommands.
+
+Observed:
+
+- Reviewer visibility can be checked, but only after knowing the positional folder argument shape.
+- Service readiness and human-review mapping readiness still require manual stitching across Admin/UI knowledge, Case process readback, task readback, and prior validation notes.
+
+Impact:
+
+- Build impact: medium/high. It does not block the current submission because the workaround is known, but it is exactly the first-time builder gap behind the primary readiness/preflight recommendation.
+- Demo/submission impact: medium. It strengthens the final product-feedback answer with fresh read-only evidence and does not mutate tenant state.
+- Severity: medium/high.
+
+Workaround:
+
+- Use `uip tasks users <folder-id>`, `uip tasks list --folder-id`, existing Admin service knowledge, and validation notes.
+- Continue using the custom evidence packet/Data Fabric/bucket proof path for demo legibility.
+
+Suggested improvement:
+
+- Add a Maestro Case human-review readiness command or guided checklist that checks tenant services, task reviewer permissions, required task fields, Action app binding/version, package/feed binding, and process package version.
+- Harmonize folder arguments across `uip tasks` commands or add aliases so `--folder-id` works consistently.
+
+Evidence:
+
+- Screenshot/path/link: none; read-only CLI evidence.
+- Commands/logs: `docs/validation/artifacts/2026-06-27/product_feedback_readiness_probe.md`.
+
+Classification:
+
+- UX / integration / diagnostics
+
+Confidence:
+
+- high for the command behavior; medium for product-design scope because a UI-only readiness surface may exist outside the CLI path tested here.
+
+Follow-up validation needed:
+
+- Optional UI check for whether Studio Web now exposes an equivalent human-review readiness/preflight panel. Not needed before final survey because the CLI/read-only path already supports the recommendation.
 
 Survey tags:
 

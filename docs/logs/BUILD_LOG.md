@@ -3116,3 +3116,47 @@ Validation:
 Open risks:
 
 - These are local hardening tests, not new live Test Manager cases; final claims should keep Test Manager coverage scoped to E-001 through E-009.
+
+### 2026-06-27 - Agent / Product Feedback Evidence Sprint
+
+What changed:
+
+- Created `docs/plans/2026-06-27-product-feedback-evidence-sprint.md` to scope the live/read-only sprint.
+- Ran a read-only UiPath CLI probe against org `keepingitlowkey`, tenant `DefaultTenant`, focused on Maestro Case human-review readiness and diagnostics.
+- Added evidence artifact `docs/validation/artifacts/2026-06-27/product_feedback_readiness_probe.md`.
+- Added PF-026 for `uip maestro case processes diagnose` failing with `summaries.find is not a function` and adjacent AppTasks diagnostics stopping at generic `170000 / Failure in the AppTasks request`.
+- Added PF-027 for human-review readiness discovery gaps: no tenant-service readiness list in `uip platform tenants`, reviewer visibility available through `uip tasks users`, and inconsistent folder argument shape across task commands.
+- Updated `docs/validation/VALIDATION_RESULTS.md` with the exact commands and read-only result.
+
+Commands/actions:
+
+- `uip login status --output json`
+- `uip login tenant list --output json`
+- `uip or folders list --output json`
+- `uip maestro case --help`
+- `uip maestro case validate --help`
+- `uip maestro case tasks describe --help`
+- `uip maestro case processes list --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip maestro case process list --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json --log-level debug`
+- `uip maestro case processes diagnose 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip maestro case processes diagnose 320c067a-27b9-4c2f-8b26-f6ee38ad97cc --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip maestro case processes incidents 320c067a-27b9-4c2f-8b26-f6ee38ad97cc --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip maestro case processes error-codes 320c067a-27b9-4c2f-8b26-f6ee38ad97cc --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip tasks users --folder-id 7978263 --output json`
+- `uip tasks users 7978263 --output json`
+- `uip tasks list --folder-id 7978263 --limit 10 --output json`
+- `uip platform tenants --help`
+- `uip tools list --output json`
+
+Validation:
+
+- PASS: fresh read-only product-feedback evidence captured.
+- PASS: no scratch resources were created.
+- PASS: no existing submission resources were modified.
+- PASS: `git diff --check`.
+- PASS: `scripts/run_submission_check.sh` ran 46 tests and verified demo artifacts.
+
+Open risks:
+
+- No new platform proof claims were added.
+- PF-026 is a product defect candidate based on CLI behavior; a formal UiPath bug report may need a correlation ID if requested.
