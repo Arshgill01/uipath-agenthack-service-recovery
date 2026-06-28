@@ -3795,3 +3795,19 @@ Open risks:
 - Team name and story-sharing preference still need user confirmation before final Devpost/product-feedback submission.
 - Final video still needs a live or logged-in UiPath platform surface on screen; local evidence packets alone are not enough for the strongest Devpost video claim.
 - Do not claim automated Test Cloud execution, generated Action Center UI final-demo readiness, native Case history alone passing G-001, real telecom integrations, or LLM final closure authority.
+
+### 2026-06-29 - Feedback Survey Copy Evidence Cleanup
+
+What changed:
+
+- Updated `docs/product/FEEDBACK_SURVEY_COPY_READY.md` and `docs/product/FEEDBACK_SURVEY_FINAL_DRAFT.md` so Microsoft Form answers stand alone for reviewers and do not expose internal PF evidence IDs in copy-paste prose.
+- Moved PF labels into explicit "Internal Traceability - Do Not Paste Into The Form" sections.
+- Replaced evidence-ID lists with reviewer-facing summaries of the reproduced platform issues: Actions enablement, runtime Action task `Title`, generated Action Center binding/labeling, package/feed version binding, Data Fabric field-name/readback behavior, and manual-only Test Manager eval mapping.
+
+Validation:
+
+- PASS: `git diff --check`.
+
+Open risks:
+
+- Team name and story-sharing preference still need user confirmation before the final feedback form is submitted.

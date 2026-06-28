@@ -2,6 +2,8 @@
 
 Status: near-final answer draft. User-owned identity fields still need confirmation before submission.
 
+This is the cleaner one-form draft for the Microsoft Form. It should be copied as prose, not as an evidence index. Internal PF labels are kept only in the traceability section at the bottom and should not be pasted into the form unless UiPath asks for proof references.
+
 Source of truth:
 
 - `docs/product/PRODUCT_FEEDBACK_AWARD.md`
@@ -9,7 +11,7 @@ Source of truth:
 - `docs/product/FEEDBACK_SURVEY_COPY_READY.md`
 - `docs/validation/VALIDATION_RESULTS.md`
 
-Use `FEEDBACK_AWARD_APPENDIX.md` as the ranked evidence source when filling the final form. The survey should lead with the Maestro Case human-review readiness/preflight recommendation, then use Action Center binding, native audit, package/feed, Data Fabric, and Test Manager evidence as supporting proof.
+Use `FEEDBACK_AWARD_APPENDIX.md` as the ranked internal evidence source when checking the final form. The submitted survey should lead with the Maestro Case human-review readiness/preflight recommendation, then explain Action Center binding, native audit, package/feed, Data Fabric, and Test Manager examples in plain language.
 
 ## 1. What's your first name?
 
@@ -33,7 +35,7 @@ Recommended choice: Somewhat satisfied.
 
 Reasoning: UiPath gave us enough real platform surface to validate a governed Maestro Case workflow end to end: Maestro Case, Action Center lifecycle, Orchestrator package/process/bucket operations, Data Fabric V2 audit readback, Test Manager manual eval representation, and CLI diagnostics. We are not choosing "Very satisfied" because a first-time human-review Case build still required workarounds across tenant readiness, generated Action app binding, runtime validation, package/feed diagnostics, Data Fabric field-name behavior, and native audit reconstruction.
 
-Evidence: PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-019, PF-022, PF-026, PF-027, PF-028.
+This rating reflects a real working proof, but also the time spent discovering tenant readiness, generated Action app binding, runtime validation, package/feed diagnostics, Data Fabric field-name behavior, and native audit reconstruction issues.
 
 ## 6. Which categories did you compete in AgentHack?
 
@@ -52,7 +54,7 @@ Our agent reads messy technician notes, customer messages, and support context i
 
 The proof preserves the raw agent recommendation separately from the final Policy Decision Event, so the demo can show exactly where AI interpretation ends and governed closure control begins. We also validated an optional live Gemini/Vertex interpretation path, including an adversarial advocate/skeptic interpretation where the advocate recommended closure, the skeptic found unresolved risk, and deterministic policy escalated because the structured disagreement score crossed threshold.
 
-Evidence: `docs/demo/artifacts/evidence_packet_E002.html`, `docs/demo/artifacts/evidence_packet_E004.html`, `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html`, `docs/demo/artifacts/demo_proof_manifest.json`, PF-015.
+The build produced separate evidence packets for the missing-telemetry path, the contradiction/human-review path, and the optional adversarial Gemini/Vertex interpretation path.
 
 ## 8. Please indicate your overall satisfaction with the UiPath Platform.
 
@@ -66,7 +68,7 @@ Recommended choice: Somewhat difficult.
 
 The local policy/eval layer was straightforward. The difficult part was proving the platform behavior live and repeatably: enabling Actions, mapping human-review evidence fields, finding a runtime-only missing Action task Title, resolving package/feed/version behavior, proving task return shape, keeping Case job claims honest, and iterating from a blocked legacy Data Fabric entity to a validated PascalCase V2 audit record.
 
-Evidence: PF-003, PF-006, PF-007, PF-013, PF-017, PF-019, PF-022, PF-023, PF-026, PF-027, PF-028.
+The difficulty came from live platform proof work rather than the local policy model.
 
 ## 10. What challenges did you encounter while building the solution?
 
@@ -85,7 +87,7 @@ The major challenge classes were:
 - Data Fabric persistence: entity create/readback worked, snake_case JSON insert/update could not map required custom fields despite valid-looking payloads, and the later CSV-created row could not expose custom payload fields through CLI readback. A PascalCase V2 schema then solved the full-payload storage/readback path and gave us a useful product-feedback insight: field names accepted at schema creation should work consistently across insert/update/query/get or be rejected up front.
 - Test Manager eval mapping: project, cases, test set, and manual pass logs worked, but E-001 through E-009 had to be represented manually. A first execution stayed `Running` after direct child-log finishes; a later explicit start-then-finish lifecycle reached terminal `Status: Finished` with 9/9 passed logs and JUnit export. Automated Test Cloud execution remained unclaimable after a concrete package probe: Orchestrator accepted `ServiceRecoveryEvalProcessProbe:0.0.2/0.0.3` and exposed an entry point, but Test Manager discovery returned no automations and direct linking failed with `Test ... not found in package`.
 
-Evidence: PF-003, PF-004, PF-006, PF-007, PF-013, PF-015, PF-017, PF-019, PF-020, PF-021, PF-022, PF-023, PF-024, PF-025, PF-026, PF-027, PF-028.
+These were reproduced during the actual build across Maestro Case, Action Center, Orchestrator, Data Fabric, Test Manager, and the UiPath CLI. The strongest examples were not abstract: Actions tenant enablement blocked human review at first, a required task `Title` failed only at runtime, a proof-critical generated Action Center field rendered as `Unnamed String 1`, a package version was visible only with the feed specified, Data Fabric field naming/readback behavior required a V2 schema, and Test Manager could represent our evals manually but not as a discoverable automated Test Cloud execution.
 
 ## 11. If you had to change one thing about the UiPath Platform experience, what would it be and why?
 
@@ -95,7 +97,7 @@ Before a builder publishes or starts a Case with a human review step, UiPath sho
 
 This one improvement would have shortened our slowest loops: enabling Actions, diagnosing generated Action page binding, fixing runtime-only required-field failures, proving package version pinning, reconciling inconsistent readiness signals, and deciding where to store audit evidence. Maestro Case is most valuable when it coordinates agents, systems, and people; those workflows need a preflight that proves the reviewer will see the right evidence and that the Case package will instantiate the intended app version before a live case starts.
 
-Evidence: PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-026, PF-027, PF-028, with PF-019/PF-023 as secondary audit-storage support.
+This recommendation comes from multiple reproduced loops, not a single bug: service enablement, Action field requirements, generated page binding, package version binding, validation/package/upload agreement, and audit-readiness proof all needed separate investigation.
 
 ## 12. What surprised you the most? What would you tell another developer?
 
@@ -103,7 +105,7 @@ The positive surprise was that the UiPath primitives were closer to our target a
 
 The advice to another developer is to validate hard gates early with API readback and committed proof artifacts, not only with the designer or generated UI. Confirm tenant services, Action Center rendering, task return shape, package version readback, audit reconstruction, and any live LLM proof path before polishing the app. In our build, the backend task data preserved the policy payload correctly even when the generated reviewer UI hid it, so API readback and repeatable local checks were essential.
 
-Evidence: `scripts/run_submission_check.sh`, PF-013, PF-015, PF-016, PF-017, PF-022.
+In practice, the best developer habit was to keep a repeatable local submission check and then confirm the important boundaries with live API readback.
 
 ## 13. What did you build with Maestro that would have been a mess to stitch together without it?
 
@@ -113,7 +115,21 @@ In our validated proof beats, the raw agent event recommended `closure_candidate
 
 The product improvement request is to make that domain audit timeline native: linked agent interpretation, policy decision, evidence state, block reason, human action, timestamps, and policy/package versions in one Case view or query.
 
-Evidence: live E-002 task `4300080`, live E-004 task `4300219`, Orchestrator bucket audit artifact `audit/service_recovery_audit_bundle_E004.json`, PF-015, PF-022.
+The strongest live proof examples were the two Action Center human-review tasks for the missing-telemetry and contradiction paths, plus the E-004 audit bundle stored as an Orchestrator artifact.
+
+## Internal Traceability - Do Not Paste Into The Form
+
+These labels map the final-form prose back to the detailed evidence log in `docs/product/FEEDBACK_AWARD_APPENDIX.md`.
+
+| Form area | Internal evidence labels |
+| --- | --- |
+| Satisfaction rating | PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-019, PF-022, PF-026, PF-027, PF-028 |
+| Use case | PF-015 plus demo evidence packets and live E-002/E-004 tasks |
+| Ease of build | PF-003, PF-006, PF-007, PF-013, PF-017, PF-019, PF-022, PF-023, PF-026, PF-027, PF-028 |
+| Challenges | PF-003, PF-004, PF-006, PF-007, PF-013, PF-015, PF-017, PF-019, PF-020, PF-021, PF-022, PF-023, PF-024, PF-025, PF-026, PF-027, PF-028 |
+| One change | PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-026, PF-027, PF-028; secondary support from PF-019 and PF-023 |
+| Surprise/advice | PF-013, PF-015, PF-016, PF-017, PF-022 plus `scripts/run_submission_check.sh` |
+| Maestro value | PF-015, PF-022 plus live E-002/E-004 task and audit-bundle artifacts |
 
 ## 14. Can we share your story?
 
