@@ -70,8 +70,8 @@ def load_external_source_file(path: Path, *, source_ref: str | None = None) -> d
 
 def build_external_evidence_artifacts(source_payload: dict[str, Any], output_dir: Path) -> dict[str, Any]:
     output_dir.mkdir(parents=True, exist_ok=True)
-    evidence = parse_external_evidence(source_payload)
     fixture = scenario(DEFAULT_SCENARIO_ID)
+    evidence = parse_external_evidence(source_payload, case_id=fixture["case"]["case_id"])
     fixture["evidence"] = evidence
     fixture["agent_interpretation"]["input_refs"] = sorted(
         set(fixture["agent_interpretation"].get("input_refs", []) + ["external_evidence_source_simulator"])
@@ -141,14 +141,19 @@ def verify_external_evidence_artifacts(output_dir: Path) -> list[str]:
     return [f"external evidence proof failed check {name}" for name, passed in checks.items() if not passed]
 
 
-def parse_external_evidence(source_payload: dict[str, Any]) -> list[dict[str, Any]]:
+def parse_external_evidence(source_payload: dict[str, Any], *, case_id: str | None = None) -> list[dict[str, Any]]:
     raw = source_payload["raw"]
     content_type = source_payload["content_type"]
     if "json" in content_type or raw.lstrip().startswith("[") or raw.lstrip().startswith("{"):
         rows = _json_rows(raw)
     else:
         rows = list(csv.DictReader(raw.splitlines()))
-    evidence = [_normalize_row(row) for row in rows if not _is_blank_template_row(row)]
+    selected_rows = [
+        row
+        for row in rows
+        if not _is_blank_template_row(row) and (case_id is None or str(row.get("case_id", "")) == case_id)
+    ]
+    evidence = [_normalize_row(row) for row in selected_rows]
     for signal in evidence:
         validate_evidence_signal(signal)
     return evidence

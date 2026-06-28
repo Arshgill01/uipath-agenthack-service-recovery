@@ -54,6 +54,22 @@ class ExternalEvidenceTests(unittest.TestCase):
 
             self.assertEqual(len(evidence), 5)
 
+    def test_parser_can_select_one_case_from_richer_external_sheet(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            path = Path(temp_dir) / "sheet.csv"
+            path.write_text(
+                DEFAULT_SAMPLE_PATH.read_text(encoding="utf-8")
+                + "olt,CASE-BG-RESTORED-001,olt_port_state,up,true,fresh,300,2026-06-18T10:13:05Z\n"
+                + "network_telemetry,CASE-BG-RESTORED-001,packet_loss_pct,18.4,true,fresh,300,2026-06-18T10:13:10Z\n",
+                encoding="utf-8",
+            )
+            source_payload = load_external_source_file(path)
+
+            evidence = parse_external_evidence(source_payload, case_id="CASE-BG-CONTRA")
+
+            self.assertEqual(len(evidence), 5)
+            self.assertEqual({signal["case_id"] for signal in evidence}, {"CASE-BG-CONTRA"})
+
 
 if __name__ == "__main__":
     unittest.main()

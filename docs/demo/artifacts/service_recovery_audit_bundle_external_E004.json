@@ -133,11 +133,11 @@
       "CASE-BG-CONTRA"
     ],
     "content_type": "text/csv",
-    "fetched_at": "2026-06-28T20:59:02Z",
+    "fetched_at": "2026-06-28T21:17:13Z",
     "proof_role": "live-style external systems-of-record simulator",
-    "sha256": "14cfd74f4373892072a448837b190f29a7d7a51130ded524359058aa0bf62df2",
+    "sha256": "c1c3b5db6965168330191822895ac7abb7e57cb9989b181078149036d54947b5",
     "signal_count": 5,
-    "source_ref": "fixtures/external_evidence_CASE_BG_CONTRA.csv",
+    "source_ref": "https://docs.google.com/spreadsheets/d/e/2PACX-1vQH7jA_IoW32S59iJe3o18unqO8UgYxXSm6GNMZvgNevWHCH80DBHSAxAKG4uwCbjn0Sn6fs6kHBoOS/pub?gid=1370051719&single=true&output=csv",
     "sources": [
       "billing",
       "crm",
