@@ -61,6 +61,8 @@ def build_case_audit_bundle(
             "policy_decision": policy_event,
             "block_reason": evidence_packet["closure_block_reason"],
             "recommended_options": evidence_packet["recommended_options"],
+            "closure_readiness_checklist": evidence_packet["closure_readiness_checklist"],
+            "reviewer_questions": evidence_packet["reviewer_questions"],
             "rendering_status": "structured_packet_ready",
         },
         "events": sorted(events, key=lambda event: event["sort_order"]),

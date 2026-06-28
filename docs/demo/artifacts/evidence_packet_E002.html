@@ -375,6 +375,48 @@ th {
   padding-left: 18px;
 }
 
+.closure-checklist {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.closure-checklist li {
+  border: 1px solid var(--line-soft);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.closure-checklist li.blocked {
+  border-color: rgba(180, 35, 24, 0.22);
+  background: rgba(180, 35, 24, 0.05);
+}
+
+.closure-checklist li.satisfied {
+  border-color: rgba(34, 114, 104, 0.22);
+  background: rgba(34, 114, 104, 0.05);
+}
+
+.closure-checklist strong,
+.closure-checklist span {
+  display: block;
+}
+
+.closure-checklist span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+.closure-checklist p {
+  margin: 6px 0 0;
+}
+
 .guardrail {
   margin: 16px 0 0;
   color: var(--danger);
@@ -632,6 +674,35 @@ code {
   <ul class="actions"><li>retry_telemetry</li>
 <li>request_evidence</li>
 <li>human_review</li></ul>
+  <h3>Closure readiness checklist</h3>
+  <ol class="closure-checklist">
+
+        <li class="blocked">
+          <strong>Fresh authoritative telemetry confirms service is live</strong>
+          <span>blocked</span>
+          <p>No authoritative network telemetry signal is present.</p>
+        </li>
+
+        <li class="satisfied">
+          <strong>No unresolved source contradiction remains</strong>
+          <span>satisfied</span>
+          <p>No fresh authoritative contradiction was derived.</p>
+        </li>
+
+        <li class="satisfied">
+          <strong>Billing has no active hold</strong>
+          <span>satisfied</span>
+          <p>billing billing_status=clear freshness=fresh observed_at=2026-06-18T10:01:00Z</p>
+        </li>
+
+        <li class="satisfied">
+          <strong>Inventory assignment matches the order</strong>
+          <span>satisfied</span>
+          <p>inventory inventory_assignment=assigned_match freshness=fresh observed_at=2026-06-18T10:02:00Z</p>
+        </li>
+  </ol>
+  <article><h3>Reviewer questions</h3><ul class="actions"><li>Which authoritative telemetry retry or source will produce service_live_status before closure?</li>
+<li>Which blocked closure criteria now have fresh authoritative evidence?</li></ul></article>
   <p class="guardrail">Closure is not available until fresh authoritative service evidence confirms recovery.</p>
 </section>
 <section class="panel">

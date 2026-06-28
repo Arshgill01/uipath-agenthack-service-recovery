@@ -224,6 +224,9 @@ class LlmInterpreterTests(unittest.TestCase):
         self.assertIn("Resolution advocate", html)
         self.assertIn("Closure skeptic", html)
         self.assertIn("high_interpretation_disagreement", html)
+        self.assertIn("Closure readiness checklist", html)
+        self.assertIn("Advocate/skeptic interpretation disagreement is resolved", html)
+        self.assertIn("Resolve skeptic-only gap before closure", html)
 
     def test_live_adversarial_artifact_renders_packet(self):
         artifact_path = Path("docs/demo/artifacts/llm_interpreter_E003_adversarial_live.json")
@@ -236,6 +239,8 @@ class LlmInterpreterTests(unittest.TestCase):
         self.assertIn("Disagreement score", html)
         self.assertIn("closure_candidate -> human_review", html)
         self.assertIn("high_interpretation_disagreement", html)
+        self.assertIn("Closure readiness checklist", html)
+        self.assertIn("Which interpretation is supported by authoritative evidence", html)
 
 
 def _valid_llm_payload():

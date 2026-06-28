@@ -66,3 +66,16 @@ Example signals:
 - `customer_premises_issue`: node signal present but CPE offline.
 
 Policy still decides whether the recommended route is allowed.
+
+## Reviewer Closure Readiness
+
+For blocked closure and human-review routes, the packet now shows a deterministic closure-readiness checklist before the reviewer can treat the case as closable:
+
+- fresh authoritative telemetry confirms `service_live_status=live`,
+- no unresolved source contradiction remains,
+- billing is clear,
+- inventory assignment matches the order,
+- required human review is complete when the case is in `human_review`,
+- advocate/skeptic interpretation disagreement is resolved when policy raised `high_interpretation_disagreement`.
+
+This is the judge-visible handoff: Maestro routes the case, policy explains the blocked closure criteria, and the human owns unresolved exception questions. The LLM may contribute reviewer questions and skeptic-only gaps, but policy still owns the checklist and closure gate.

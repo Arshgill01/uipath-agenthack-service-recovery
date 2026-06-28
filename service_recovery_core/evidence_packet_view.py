@@ -294,8 +294,28 @@ def _reviewer_actions(packet: dict[str, Any]) -> str:
   </dl>
   <h3>Recommended options</h3>
   <ul class="actions">{options}</ul>
+{_closure_readiness(packet.get("closure_readiness_checklist", []))}
+  {_list_block("Reviewer questions", packet.get("reviewer_questions", []))}
   <p class="guardrail">Closure is not available until fresh authoritative service evidence confirms recovery.</p>
 </section>""".strip()
+
+
+def _closure_readiness(checklist: list[dict[str, Any]]) -> str:
+    if not checklist:
+        return ""
+    items = "\n".join(
+        f"""
+        <li class="{escape(str(item["status"]))}">
+          <strong>{escape(str(item["criterion"]))}</strong>
+          <span>{escape(str(item["status"]))}</span>
+          <p>{escape(str(item["evidence"]))}</p>
+        </li>""".rstrip()
+        for item in checklist
+    )
+    return f"""  <h3>Closure readiness checklist</h3>
+  <ol class="closure-checklist">
+{items}
+  </ol>""".rstrip()
 
 
 def _timeline(events: list[dict[str, Any]]) -> str:
@@ -698,6 +718,48 @@ th {
 .actions {
   margin: 0;
   padding-left: 18px;
+}
+
+.closure-checklist {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.closure-checklist li {
+  border: 1px solid var(--line-soft);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.closure-checklist li.blocked {
+  border-color: rgba(180, 35, 24, 0.22);
+  background: rgba(180, 35, 24, 0.05);
+}
+
+.closure-checklist li.satisfied {
+  border-color: rgba(34, 114, 104, 0.22);
+  background: rgba(34, 114, 104, 0.05);
+}
+
+.closure-checklist strong,
+.closure-checklist span {
+  display: block;
+}
+
+.closure-checklist span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+.closure-checklist p {
+  margin: 6px 0 0;
 }
 
 .guardrail {

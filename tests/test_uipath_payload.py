@@ -38,6 +38,16 @@ class UiPathPayloadTests(unittest.TestCase):
         self.assertEqual(evidence_packet["business_state"], "green")
         self.assertEqual(evidence_packet["closure_block_reason"], "missing_authoritative_signal")
         self.assertIn("retry_telemetry", evidence_packet["recommended_options"])
+        self.assertIn("closure_readiness_checklist", evidence_packet)
+        self.assertIn("reviewer_questions", evidence_packet)
+        self.assertIn(
+            "Which authoritative telemetry retry or source will produce service_live_status before closure?",
+            evidence_packet["reviewer_questions"],
+        )
+        network_check = evidence_packet["closure_readiness_checklist"][0]
+        self.assertEqual(network_check["criterion"], "Fresh authoritative telemetry confirms service is live")
+        self.assertEqual(network_check["status"], "blocked")
+        self.assertIn("No authoritative network telemetry signal", network_check["evidence"])
         self.assertIn("closure is blocked by missing_authoritative_signal", payload["Content"])
 
     def test_contradiction_payload_routes_to_human_review(self):
@@ -57,6 +67,13 @@ class UiPathPayloadTests(unittest.TestCase):
         self.assertEqual(policy_decision["to_stage"], "human_review")
         self.assertEqual(policy_decision["block_reason"], "source_contradiction")
         self.assertIn("open_investigation", policy_decision["allowed_actions"])
+        self.assertIn(
+            "Why do business systems show active while fresh authoritative service evidence disagrees?",
+            policy_decision["reviewer_questions"],
+        )
+        self.assertIn("Required human review has resolved the exception", [
+            item["criterion"] for item in policy_decision["closure_readiness_checklist"]
+        ])
         self.assertIn("fresh authoritative telemetry contradicts", payload["Content"])
 
     def test_eval_helper_exports_named_scenario_payload(self):

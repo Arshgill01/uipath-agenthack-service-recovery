@@ -63,6 +63,32 @@
       ],
       "block_reason": "missing_authoritative_signal",
       "case_id": "CASE-BG-MISSING",
+      "closure_readiness_checklist": [
+        {
+          "criterion": "Fresh authoritative telemetry confirms service is live",
+          "evidence": "No authoritative network telemetry signal is present.",
+          "required_to_close": true,
+          "status": "blocked"
+        },
+        {
+          "criterion": "No unresolved source contradiction remains",
+          "evidence": "No fresh authoritative contradiction was derived.",
+          "required_to_close": true,
+          "status": "satisfied"
+        },
+        {
+          "criterion": "Billing has no active hold",
+          "evidence": "billing billing_status=clear freshness=fresh observed_at=2026-06-18T10:01:00Z",
+          "required_to_close": true,
+          "status": "satisfied"
+        },
+        {
+          "criterion": "Inventory assignment matches the order",
+          "evidence": "inventory inventory_assignment=assigned_match freshness=fresh observed_at=2026-06-18T10:02:00Z",
+          "required_to_close": true,
+          "status": "satisfied"
+        }
+      ],
       "decision": "override_recommendation",
       "decision_policy_version": "dp-v1",
       "event_id": "PDE-E-002",
@@ -71,6 +97,10 @@
       "links_to": "AIE-E002",
       "reason_codes": [
         "missing_authoritative_signal"
+      ],
+      "reviewer_questions": [
+        "Which authoritative telemetry retry or source will produce service_live_status before closure?",
+        "Which blocked closure criteria now have fresh authoritative evidence?"
       ],
       "sort_order": 30,
       "to_stage": "verify_telemetry"
@@ -108,6 +138,32 @@
     ],
     "block_reason": "missing_authoritative_signal",
     "case_id": "CASE-BG-MISSING",
+    "closure_readiness_checklist": [
+      {
+        "criterion": "Fresh authoritative telemetry confirms service is live",
+        "evidence": "No authoritative network telemetry signal is present.",
+        "required_to_close": true,
+        "status": "blocked"
+      },
+      {
+        "criterion": "No unresolved source contradiction remains",
+        "evidence": "No fresh authoritative contradiction was derived.",
+        "required_to_close": true,
+        "status": "satisfied"
+      },
+      {
+        "criterion": "Billing has no active hold",
+        "evidence": "billing billing_status=clear freshness=fresh observed_at=2026-06-18T10:01:00Z",
+        "required_to_close": true,
+        "status": "satisfied"
+      },
+      {
+        "criterion": "Inventory assignment matches the order",
+        "evidence": "inventory inventory_assignment=assigned_match freshness=fresh observed_at=2026-06-18T10:02:00Z",
+        "required_to_close": true,
+        "status": "satisfied"
+      }
+    ],
     "decision": "override_recommendation",
     "decision_policy_version": "dp-v1",
     "event_id": "PDE-E-002",
@@ -117,6 +173,10 @@
     "reason_codes": [
       "missing_authoritative_signal"
     ],
+    "reviewer_questions": [
+      "Which authoritative telemetry retry or source will produce service_live_status before closure?",
+      "Which blocked closure criteria now have fresh authoritative evidence?"
+    ],
     "to_stage": "verify_telemetry"
   },
   "policy_versions": {
@@ -125,6 +185,32 @@
   },
   "reviewer_packet": {
     "block_reason": "missing_authoritative_signal",
+    "closure_readiness_checklist": [
+      {
+        "criterion": "Fresh authoritative telemetry confirms service is live",
+        "evidence": "No authoritative network telemetry signal is present.",
+        "required_to_close": true,
+        "status": "blocked"
+      },
+      {
+        "criterion": "No unresolved source contradiction remains",
+        "evidence": "No fresh authoritative contradiction was derived.",
+        "required_to_close": true,
+        "status": "satisfied"
+      },
+      {
+        "criterion": "Billing has no active hold",
+        "evidence": "billing billing_status=clear freshness=fresh observed_at=2026-06-18T10:01:00Z",
+        "required_to_close": true,
+        "status": "satisfied"
+      },
+      {
+        "criterion": "Inventory assignment matches the order",
+        "evidence": "inventory inventory_assignment=assigned_match freshness=fresh observed_at=2026-06-18T10:02:00Z",
+        "required_to_close": true,
+        "status": "satisfied"
+      }
+    ],
     "content": "Service recovery verification required: CRM/order/billing/support notes are green, but closure is blocked by missing_authoritative_signal. Do not close until authoritative evidence satisfies policy.",
     "evidence_table": [
       {
@@ -186,6 +272,32 @@
       ],
       "block_reason": "missing_authoritative_signal",
       "case_id": "CASE-BG-MISSING",
+      "closure_readiness_checklist": [
+        {
+          "criterion": "Fresh authoritative telemetry confirms service is live",
+          "evidence": "No authoritative network telemetry signal is present.",
+          "required_to_close": true,
+          "status": "blocked"
+        },
+        {
+          "criterion": "No unresolved source contradiction remains",
+          "evidence": "No fresh authoritative contradiction was derived.",
+          "required_to_close": true,
+          "status": "satisfied"
+        },
+        {
+          "criterion": "Billing has no active hold",
+          "evidence": "billing billing_status=clear freshness=fresh observed_at=2026-06-18T10:01:00Z",
+          "required_to_close": true,
+          "status": "satisfied"
+        },
+        {
+          "criterion": "Inventory assignment matches the order",
+          "evidence": "inventory inventory_assignment=assigned_match freshness=fresh observed_at=2026-06-18T10:02:00Z",
+          "required_to_close": true,
+          "status": "satisfied"
+        }
+      ],
       "decision": "override_recommendation",
       "decision_policy_version": "dp-v1",
       "event_id": "PDE-E-002",
@@ -194,6 +306,10 @@
       "links_to": "AIE-E002",
       "reason_codes": [
         "missing_authoritative_signal"
+      ],
+      "reviewer_questions": [
+        "Which authoritative telemetry retry or source will produce service_live_status before closure?",
+        "Which blocked closure criteria now have fresh authoritative evidence?"
       ],
       "to_stage": "verify_telemetry"
     },
@@ -219,7 +335,11 @@
       "request_evidence",
       "human_review"
     ],
-    "rendering_status": "structured_packet_ready"
+    "rendering_status": "structured_packet_ready",
+    "reviewer_questions": [
+      "Which authoritative telemetry retry or source will produce service_live_status before closure?",
+      "Which blocked closure criteria now have fresh authoritative evidence?"
+    ]
   },
   "service_id": "SVC-BG-1"
 }

@@ -22,6 +22,10 @@ class AuditBundleTests(unittest.TestCase):
         self.assertEqual(bundle["policy_decision_event"]["to_stage"], "verify_telemetry")
         self.assertEqual(bundle["reviewer_packet"]["block_reason"], "missing_authoritative_signal")
         self.assertIn("retry_telemetry", bundle["reviewer_packet"]["recommended_options"])
+        self.assertIn("closure_readiness_checklist", bundle["reviewer_packet"])
+        self.assertIn("reviewer_questions", bundle["reviewer_packet"])
+        self.assertEqual(bundle["reviewer_packet"]["closure_readiness_checklist"][0]["status"], "blocked")
+        self.assertIn("authoritative telemetry retry", bundle["reviewer_packet"]["reviewer_questions"][0])
         self.assertEqual(bundle["human_review_event"]["decision"], "pending")
         self.assertEqual(
             [event["event_type"] for event in bundle["events"]],
@@ -37,6 +41,11 @@ class AuditBundleTests(unittest.TestCase):
         self.assertEqual(bundle["policy_decision_event"]["decision"], "require_human_review")
         self.assertEqual(bundle["policy_decision_event"]["to_stage"], "human_review")
         self.assertIn("open_investigation", bundle["reviewer_packet"]["recommended_options"])
+        self.assertIn(
+            "Required human review has resolved the exception",
+            [item["criterion"] for item in bundle["reviewer_packet"]["closure_readiness_checklist"]],
+        )
+        self.assertIn("fresh authoritative service evidence disagrees", " ".join(bundle["reviewer_packet"]["reviewer_questions"]))
 
     def test_committed_e004_artifact_preserves_live_bucket_proof_fields(self):
         artifact_path = (

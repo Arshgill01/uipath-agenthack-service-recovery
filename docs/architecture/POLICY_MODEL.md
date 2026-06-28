@@ -54,6 +54,21 @@ Policy can:
 
 The demo must show at least one override.
 
+## Reviewer Handoff
+
+When closure is blocked or routed to human review, the reviewer packet carries a deterministic closure-readiness checklist. The checklist answers what must be true before closure, using structured evidence and policy reason codes rather than agent prose.
+
+Current checklist criteria:
+
+- fresh authoritative telemetry confirms service is live,
+- no unresolved source contradiction remains,
+- billing has no active hold,
+- inventory assignment matches the order,
+- required human review has resolved the exception when the route is `human_review`,
+- advocate/skeptic disagreement is resolved when `high_interpretation_disagreement` is present.
+
+Policy also emits route-specific reviewer questions. For example, missing telemetry asks which authoritative retry/source will produce `service_live_status`; contradiction asks why business systems show active while fresh authoritative service evidence disagrees; high interpretation disagreement asks which interpretation is supported by authoritative evidence and which skeptic-only gap must be resolved. These questions guide the human; they do not grant the agent closure authority.
+
 ## Interpretation Disagreement
 
 Policy can consume a structured `interpretation_disagreement` object produced by the optional advocate/skeptic LLM path. Policy does not parse either LLM's prose explanations.

@@ -141,3 +141,11 @@ Decision: Build the final proof path from the validated components:
 Rationale: Live validation answered the hard gates with partial native support. Native Case and Action Center provide the orchestration and human-review mechanics, but generated Action Center rendering hid or mislabeled proof-critical fields. The custom evidence packet and bucket-backed audit artifact preserve the architecture boundary without weakening the platform story or pretending the generated UI is demo-ready.
 
 Status: Accepted as the implementation plan for the next build wave.
+
+## D-017: Policy-Owned Closure Readiness Handoff
+
+Decision: Human-review and blocked-closure packets carry a deterministic closure-readiness checklist and route-specific reviewer questions derived from structured evidence, policy reason codes, and structured interpretation-disagreement metadata.
+
+Rationale: The reviewer should see exactly what must be true before closure without trusting LLM prose. This deepens the Maestro/policy workflow by turning missing, stale, contradictory, invalid, and high-disagreement states into concrete human questions while preserving the boundary that policy owns closure and agents only interpret evidence.
+
+Status: Accepted.

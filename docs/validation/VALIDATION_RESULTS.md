@@ -32,6 +32,50 @@ Evidence:
 - `tests/test_submission_proof.py`
 - `scripts/run_submission_check.sh`
 
+## 2026-06-29 IST - Wave 41 Closure Readiness Reviewer Handoff
+
+Environment:
+
+- Local Python 3.12 via `/Library/Frameworks/Python.framework/Versions/3.12/bin/python3`.
+- No live UiPath mutation.
+- No live Gemini/Vertex call.
+
+Gate/wave:
+
+- Wave 41 final substantive differentiation pass.
+- Supports G-003/G-004 demo-safe proof path by making the reviewer packet more explicit while preserving the agent/policy boundary.
+
+Expected:
+
+- Blocked closure packets show what must be true before closure.
+- Missing/stale evidence, contradiction, invalid output, and high interpretation disagreement produce route-specific reviewer questions.
+- Raw agent recommendation and final policy decision remain separate linked events.
+- Existing E-001 through E-009 evals and submission proof remain green.
+
+Observed:
+
+- E-002/E-004 local demo artifacts now include `closure_readiness_checklist` and `reviewer_questions` in Action Center payload JSON, audit bundle JSON, and evidence packet HTML.
+- Existing E-003 adversarial packet HTML now shows blocked stale telemetry, required human review, advocate/skeptic disagreement resolution, and skeptic-only gap questions.
+- Policy remains deterministic. The LLM contributes structured interpretation and questions, but the checklist is generated from structured evidence and policy reason codes.
+- `python3 -m unittest discover -s tests` ran 58 tests and passed.
+- `python3 -m service_recovery_core.evals --output /tmp/service_recovery_local_baseline.json` passed E-001 through E-009 with 9/9 passing.
+- `scripts/run_submission_check.sh` passed when invoked with a temporary PATH shim mapping `python` to the local Python 3.12 binary.
+
+Result:
+
+- PASS for local behavior and artifact validation.
+- NOT RUN for live UiPath/Gemini refresh because this slice only changed local packet/audit rendering and no new tenant IDs or live LLM outputs were intentionally needed.
+
+Decision impact:
+
+- D-017 records the policy-owned closure readiness handoff.
+- Demo story can now point at a concrete reviewer question/checklist section instead of relying on narrative explanation.
+- Existing hard-gate caveats remain unchanged.
+
+Product feedback:
+
+- None. This was local core/proof-surface behavior, not a new UiPath product interaction.
+
 ## 2026-06-28 - G-007 Targeted Test Manager Feasibility Spike
 
 Environment:

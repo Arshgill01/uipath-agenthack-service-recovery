@@ -23,6 +23,9 @@ class EvidencePacketViewTests(unittest.TestCase):
         self.assertIn("ip-v1 / dp-v1", html)
         self.assertIn("UiPath platform role", html)
         self.assertIn("generated Action Center page hid or mislabeled proof-critical fields", html)
+        self.assertIn("Closure readiness checklist", html)
+        self.assertIn("Fresh authoritative telemetry confirms service is live", html)
+        self.assertIn("Which authoritative telemetry retry or source will produce service_live_status before closure?", html)
         self.assertIn("Closure is not available until fresh authoritative service evidence confirms recovery", html)
         self.assertIn("retry_telemetry", html)
         self.assertIn('class="table-scroll"', html)
@@ -42,6 +45,8 @@ class EvidencePacketViewTests(unittest.TestCase):
         self.assertIn("authoritative", html)
         self.assertIn("open_investigation", html)
         self.assertIn("fresh authoritative telemetry contradicts", html)
+        self.assertIn("Why do business systems show active while fresh authoritative service evidence disagrees?", html)
+        self.assertIn("Required human review has resolved the exception", html)
         self.assertIn("background-image:", html)
 
 

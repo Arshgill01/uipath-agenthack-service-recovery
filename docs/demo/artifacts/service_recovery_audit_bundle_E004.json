@@ -63,6 +63,38 @@
       ],
       "block_reason": "source_contradiction",
       "case_id": "CASE-BG-CONTRA",
+      "closure_readiness_checklist": [
+        {
+          "criterion": "Fresh authoritative telemetry confirms service is live",
+          "evidence": "network_telemetry service_live_status=not_live freshness=fresh observed_at=2026-06-18T10:03:00Z",
+          "required_to_close": true,
+          "status": "blocked"
+        },
+        {
+          "criterion": "No unresolved source contradiction remains",
+          "evidence": "Policy reason source_contradiction is present.",
+          "required_to_close": true,
+          "status": "blocked"
+        },
+        {
+          "criterion": "Billing has no active hold",
+          "evidence": "billing billing_status=clear freshness=fresh observed_at=2026-06-18T10:01:00Z",
+          "required_to_close": true,
+          "status": "satisfied"
+        },
+        {
+          "criterion": "Inventory assignment matches the order",
+          "evidence": "inventory inventory_assignment=assigned_match freshness=fresh observed_at=2026-06-18T10:02:00Z",
+          "required_to_close": true,
+          "status": "satisfied"
+        },
+        {
+          "criterion": "Required human review has resolved the exception",
+          "evidence": "Case is routed to human_review for source_contradiction.",
+          "required_to_close": true,
+          "status": "blocked"
+        }
+      ],
       "decision": "require_human_review",
       "decision_policy_version": "dp-v1",
       "event_id": "PDE-E-004",
@@ -71,6 +103,10 @@
       "links_to": "AIE-E004",
       "reason_codes": [
         "source_contradiction"
+      ],
+      "reviewer_questions": [
+        "Why do business systems show active while fresh authoritative service evidence disagrees?",
+        "Which blocked closure criteria now have fresh authoritative evidence?"
       ],
       "sort_order": 30,
       "to_stage": "human_review"
@@ -108,6 +144,38 @@
     ],
     "block_reason": "source_contradiction",
     "case_id": "CASE-BG-CONTRA",
+    "closure_readiness_checklist": [
+      {
+        "criterion": "Fresh authoritative telemetry confirms service is live",
+        "evidence": "network_telemetry service_live_status=not_live freshness=fresh observed_at=2026-06-18T10:03:00Z",
+        "required_to_close": true,
+        "status": "blocked"
+      },
+      {
+        "criterion": "No unresolved source contradiction remains",
+        "evidence": "Policy reason source_contradiction is present.",
+        "required_to_close": true,
+        "status": "blocked"
+      },
+      {
+        "criterion": "Billing has no active hold",
+        "evidence": "billing billing_status=clear freshness=fresh observed_at=2026-06-18T10:01:00Z",
+        "required_to_close": true,
+        "status": "satisfied"
+      },
+      {
+        "criterion": "Inventory assignment matches the order",
+        "evidence": "inventory inventory_assignment=assigned_match freshness=fresh observed_at=2026-06-18T10:02:00Z",
+        "required_to_close": true,
+        "status": "satisfied"
+      },
+      {
+        "criterion": "Required human review has resolved the exception",
+        "evidence": "Case is routed to human_review for source_contradiction.",
+        "required_to_close": true,
+        "status": "blocked"
+      }
+    ],
     "decision": "require_human_review",
     "decision_policy_version": "dp-v1",
     "event_id": "PDE-E-004",
@@ -117,6 +185,10 @@
     "reason_codes": [
       "source_contradiction"
     ],
+    "reviewer_questions": [
+      "Why do business systems show active while fresh authoritative service evidence disagrees?",
+      "Which blocked closure criteria now have fresh authoritative evidence?"
+    ],
     "to_stage": "human_review"
   },
   "policy_versions": {
@@ -125,6 +197,38 @@
   },
   "reviewer_packet": {
     "block_reason": "source_contradiction",
+    "closure_readiness_checklist": [
+      {
+        "criterion": "Fresh authoritative telemetry confirms service is live",
+        "evidence": "network_telemetry service_live_status=not_live freshness=fresh observed_at=2026-06-18T10:03:00Z",
+        "required_to_close": true,
+        "status": "blocked"
+      },
+      {
+        "criterion": "No unresolved source contradiction remains",
+        "evidence": "Policy reason source_contradiction is present.",
+        "required_to_close": true,
+        "status": "blocked"
+      },
+      {
+        "criterion": "Billing has no active hold",
+        "evidence": "billing billing_status=clear freshness=fresh observed_at=2026-06-18T10:01:00Z",
+        "required_to_close": true,
+        "status": "satisfied"
+      },
+      {
+        "criterion": "Inventory assignment matches the order",
+        "evidence": "inventory inventory_assignment=assigned_match freshness=fresh observed_at=2026-06-18T10:02:00Z",
+        "required_to_close": true,
+        "status": "satisfied"
+      },
+      {
+        "criterion": "Required human review has resolved the exception",
+        "evidence": "Case is routed to human_review for source_contradiction.",
+        "required_to_close": true,
+        "status": "blocked"
+      }
+    ],
     "content": "Service recovery exception review required: CRM/order/billing/support notes are green, but fresh authoritative telemetry contradicts the business state. Do not close; open human exception review.",
     "evidence_table": [
       {
@@ -186,6 +290,38 @@
       ],
       "block_reason": "source_contradiction",
       "case_id": "CASE-BG-CONTRA",
+      "closure_readiness_checklist": [
+        {
+          "criterion": "Fresh authoritative telemetry confirms service is live",
+          "evidence": "network_telemetry service_live_status=not_live freshness=fresh observed_at=2026-06-18T10:03:00Z",
+          "required_to_close": true,
+          "status": "blocked"
+        },
+        {
+          "criterion": "No unresolved source contradiction remains",
+          "evidence": "Policy reason source_contradiction is present.",
+          "required_to_close": true,
+          "status": "blocked"
+        },
+        {
+          "criterion": "Billing has no active hold",
+          "evidence": "billing billing_status=clear freshness=fresh observed_at=2026-06-18T10:01:00Z",
+          "required_to_close": true,
+          "status": "satisfied"
+        },
+        {
+          "criterion": "Inventory assignment matches the order",
+          "evidence": "inventory inventory_assignment=assigned_match freshness=fresh observed_at=2026-06-18T10:02:00Z",
+          "required_to_close": true,
+          "status": "satisfied"
+        },
+        {
+          "criterion": "Required human review has resolved the exception",
+          "evidence": "Case is routed to human_review for source_contradiction.",
+          "required_to_close": true,
+          "status": "blocked"
+        }
+      ],
       "decision": "require_human_review",
       "decision_policy_version": "dp-v1",
       "event_id": "PDE-E-004",
@@ -194,6 +330,10 @@
       "links_to": "AIE-E004",
       "reason_codes": [
         "source_contradiction"
+      ],
+      "reviewer_questions": [
+        "Why do business systems show active while fresh authoritative service evidence disagrees?",
+        "Which blocked closure criteria now have fresh authoritative evidence?"
       ],
       "to_stage": "human_review"
     },
@@ -219,7 +359,11 @@
       "request_evidence",
       "open_investigation"
     ],
-    "rendering_status": "structured_packet_ready"
+    "rendering_status": "structured_packet_ready",
+    "reviewer_questions": [
+      "Why do business systems show active while fresh authoritative service evidence disagrees?",
+      "Which blocked closure criteria now have fresh authoritative evidence?"
+    ]
   },
   "service_id": "SVC-BG-1"
 }

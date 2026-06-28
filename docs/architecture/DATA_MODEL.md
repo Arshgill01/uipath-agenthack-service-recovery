@@ -160,6 +160,17 @@ Bundle shape:
     "policy_decision": {},
     "block_reason": "missing_authoritative_signal",
     "recommended_options": [],
+    "closure_readiness_checklist": [
+      {
+        "criterion": "Fresh authoritative telemetry confirms service is live",
+        "status": "blocked | satisfied",
+        "evidence": "source field=value freshness=...",
+        "required_to_close": true
+      }
+    ],
+    "reviewer_questions": [
+      "Which authoritative telemetry retry or source will produce service_live_status before closure?"
+    ],
     "rendering_status": "structured_packet_ready"
   },
   "events": [

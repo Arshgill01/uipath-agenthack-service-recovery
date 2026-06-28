@@ -375,6 +375,48 @@ th {
   padding-left: 18px;
 }
 
+.closure-checklist {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.closure-checklist li {
+  border: 1px solid var(--line-soft);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.closure-checklist li.blocked {
+  border-color: rgba(180, 35, 24, 0.22);
+  background: rgba(180, 35, 24, 0.05);
+}
+
+.closure-checklist li.satisfied {
+  border-color: rgba(34, 114, 104, 0.22);
+  background: rgba(34, 114, 104, 0.05);
+}
+
+.closure-checklist strong,
+.closure-checklist span {
+  display: block;
+}
+
+.closure-checklist span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+.closure-checklist p {
+  margin: 6px 0 0;
+}
+
 .guardrail {
   margin: 16px 0 0;
   color: var(--danger);
@@ -682,7 +724,7 @@ code {
 <aside class="side">
 <section class="panel">
   <h2>Reviewer packet</h2>
-  <p>Service recovery verification required: CRM/order/billing/support notes are green, but closure is blocked by stale_authoritative_signal. Do not close until authoritative evidence satisfies policy.</p>
+  <p>Service recovery ambiguity review required: two valid structured interpretations diverged on the same evidence. Resolve the disagreement and blocked closure checklist before closure.</p>
   <dl>
     <div><dt>Block reason</dt><dd>stale_authoritative_signal</dd></div>
     <div><dt>Rendering status</dt><dd>structured_packet_ready</dd></div>
@@ -691,6 +733,57 @@ code {
   <ul class="actions"><li>human_review</li>
 <li>request_evidence</li>
 <li>open_investigation</li></ul>
+  <h3>Closure readiness checklist</h3>
+  <ol class="closure-checklist">
+
+        <li class="blocked">
+          <strong>Fresh authoritative telemetry confirms service is live</strong>
+          <span>blocked</span>
+          <p>network_telemetry service_live_status=live freshness=stale observed_at=2026-06-18T09:00:00Z</p>
+        </li>
+
+        <li class="satisfied">
+          <strong>No unresolved source contradiction remains</strong>
+          <span>satisfied</span>
+          <p>No fresh authoritative contradiction was derived.</p>
+        </li>
+
+        <li class="satisfied">
+          <strong>Billing has no active hold</strong>
+          <span>satisfied</span>
+          <p>billing billing_status=clear freshness=fresh observed_at=2026-06-18T10:01:00Z</p>
+        </li>
+
+        <li class="satisfied">
+          <strong>Inventory assignment matches the order</strong>
+          <span>satisfied</span>
+          <p>inventory inventory_assignment=assigned_match freshness=fresh observed_at=2026-06-18T10:02:00Z</p>
+        </li>
+
+        <li class="blocked">
+          <strong>Required human review has resolved the exception</strong>
+          <span>blocked</span>
+          <p>Case is routed to human_review for stale_authoritative_signal.</p>
+        </li>
+
+        <li class="blocked">
+          <strong>Advocate/skeptic interpretation disagreement is resolved</strong>
+          <span>blocked</span>
+          <p>Policy received high_interpretation_disagreement as structured input.</p>
+        </li>
+  </ol>
+  <article><h3>Reviewer questions</h3><ul class="actions"><li>Has authoritative telemetry confirmed sustained service activation and stability since the technician visit?</li>
+<li>Is a customer follow-up call deemed necessary to confirm long-term satisfaction?</li>
+<li>Has the authoritative telemetry confirmed sustained service stability since the technician&#x27;s visit on 2026-06-18?</li>
+<li>What was the specific technical root cause of the prior activation failures that necessitated multiple callbacks?</li>
+<li>Is there a plan to proactively engage the customer to ensure long-term satisfaction?</li>
+<li>Why did the advocate and skeptic interpretations diverge on the same evidence?</li>
+<li>Can network operations refresh telemetry and confirm observed_at is inside the required TTL?</li>
+<li>Which interpretation is supported by authoritative evidence, and which gap must be resolved before closure?</li>
+<li>Resolve skeptic-only gap before closure: lack of authoritative, real-time telemetry confirming sustained service stability post-activation retry.</li>
+<li>Resolve skeptic-only gap before closure: no explicit root cause identified for the previous activation failures that led to multiple callbacks.</li>
+<li>Resolve skeptic-only gap before closure: the term &#x27;stable&#x27; is subjective and requires objective verification.</li>
+<li>Which blocked closure criteria now have fresh authoritative evidence?</li></ul></article>
   <p class="guardrail">Closure is not available until fresh authoritative service evidence confirms recovery.</p>
 </section>
 <section class="panel">

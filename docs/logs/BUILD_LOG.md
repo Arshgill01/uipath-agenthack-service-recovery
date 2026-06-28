@@ -88,6 +88,37 @@ Open risks:
 - The shell used for the worker run had `python3` but no `python`; the integrated wrapper now resolves `python` or `python3`.
 - Final video still needs to show the coding-agent proof beat visibly.
 
+### 2026-06-29 IST - Agent / Closure Readiness Reviewer Handoff
+
+What changed:
+
+- Added a policy-owned `closure_readiness_checklist` and route-specific `reviewer_questions` to Action Center payloads, audit bundles, and evidence packets.
+- Made blocked closure criteria judge-visible for missing telemetry, source contradiction, stale telemetry, human review, and high advocate/skeptic interpretation disagreement.
+- Updated architecture/data-model docs and recorded D-017 for the policy-owned reviewer handoff.
+- Refreshed local E-002/E-004 demo artifacts and the existing E-003 adversarial evidence packet HTML without live UiPath or Gemini mutation.
+
+Commands run:
+
+- `python -m unittest tests.test_uipath_payload tests.test_audit_bundle tests.test_evidence_packet_view tests.test_llm_interpreter` - failed because `python` was not on PATH in this worktree shell.
+- `python3 -m unittest tests.test_uipath_payload tests.test_audit_bundle tests.test_evidence_packet_view tests.test_llm_interpreter`
+- `bash -lc 'tmpbin=$(mktemp -d); ln -s /Library/Frameworks/Python.framework/Versions/3.12/bin/python3 "$tmpbin/python"; export PATH="$tmpbin:$PATH"; scripts/run_demo.sh --no-uipath-next-steps >/tmp/srev_run_demo.txt; python -m service_recovery_core.evals --llm-result-evidence-packet docs/demo/artifacts/llm_interpreter_E003_adversarial_live.json --output docs/demo/artifacts/evidence_packet_E003_adversarial_live.html >/tmp/srev_adversarial_packet_render.txt'`
+- `python3 -m unittest discover -s tests`
+- `python3 -m service_recovery_core.evals --output /tmp/service_recovery_local_baseline.json`
+- `git diff --check`
+- `bash -lc 'tmpbin=$(mktemp -d); ln -s /Library/Frameworks/Python.framework/Versions/3.12/bin/python3 "$tmpbin/python"; export PATH="$tmpbin:$PATH"; scripts/run_submission_check.sh'`
+
+Validation:
+
+- PASS: focused payload/audit/packet/adversarial tests ran 20 tests.
+- PASS: full unit suite ran 58 tests.
+- PASS: local eval suite passed E-001 through E-009 with 9/9 passing.
+- PASS: `git diff --check`.
+- PASS: `scripts/run_submission_check.sh` ran 58 tests and verified demo artifacts.
+
+Open risks:
+
+- No new live UiPath or Gemini validation was run. Existing claim boundaries remain: Action Center generated UI is still not final-demo ready, automated Test Cloud execution is still unclaimed, and LLM output still cannot close cases or override policy.
+
 ### 2026-06-28 - Agent / Final-Lap Worker Doc Reconciliation
 
 What changed:
