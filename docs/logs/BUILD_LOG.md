@@ -2,6 +2,84 @@
 
 Append one entry per substantial agent run.
 
+### 2026-06-28 16:38 IST - Agent / G-007 Test Manager Feasibility Spike
+
+What changed:
+
+- Ran a targeted, read-only G-007 feasibility spike against Test Manager/Orchestrator state.
+- Added command artifacts under `docs/validation/artifacts/2026-06-28/test-manager-feasibility-spike/`.
+- Verified the local Test Manager bridge report tying local eval results to exported JUnit/manual execution evidence.
+
+Commands run:
+
+- `uip login status --output json`
+- `uip tm project list --filter SREV --output json`
+- `uip tm testsets list --project-key SREV --include-last-execution --output json`
+- `uip tm executions get-stats --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --output json`
+- `uip or folders list --all --output json`
+- `uip or packages list --search ServiceRecoveryEvalProcessProbe --output json`
+- `uip or processes list --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --output json`
+- `uip tm testcases list-automations --project-key SREV --folder-key 555d3f16-a106-4946-a934-4bede4789be7 --output json`
+- `uip tm testcases link-automation --help --output json`
+- `uip tm testsets run --help --output json`
+- `uip or processes --help --output json`
+- `uip rpa --help --output json`
+- `python -m service_recovery_core.evals --output docs/validation/artifacts/2026-06-28/test-manager-feasibility-spike/local_baseline.json`
+- `python -m service_recovery_core.test_manager_bridge --eval-results docs/validation/artifacts/2026-06-28/test-manager-feasibility-spike/local_baseline.json --junit docs/validation/artifacts/test-manager-results/Service_Recovery_E_001_through_E_009_Baseline___20260626_1017.xml --execution-stats docs/validation/artifacts/2026-06-28/test-manager-feasibility-spike/04-tm-terminal-execution-stats.json --output docs/validation/artifacts/2026-06-28/test-manager-feasibility-spike/test_manager_bridge_report.json`
+- `python -m unittest tests/test_test_manager_bridge.py`
+
+Validation:
+
+- PASS: CLI auth remained live for org `keepingitlowkey`, tenant `DefaultTenant`.
+- PASS: `SREV:9` read back with latest status `Finished`, and terminal manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` read back as `ExecutionType: Manual`, `IsRunningAutomated: false`, `Status: Finished`, `Passed: 9`.
+- PASS: Test Manager bridge verifier reported `status: passed` with claim boundary `manual_test_manager_execution_only; automated_test_cloud_execution_unclaimed`.
+- PASS: targeted bridge tests ran 3 tests.
+- PARTIAL: automated Test Cloud execution remains unvalidated. `ServiceRecoveryEvalProcessProbe:0.0.3` is package-visible but not Test Manager automation-visible, Shared has no process binding, and `list-automations` returns `Data: []`.
+
+Open risks:
+
+- Do not claim automated Test Cloud execution unless a supported Studio/Test Manager publishing path creates a Test Manager-visible automation target and a successful automated execution/readback is performed.
+- Minimal next mutation, if approved, would be to create or publish a supported UiPath test automation target into Shared, verify it appears in `uip tm testcases list-automations`, link it to a scratch or selected SREV test case, and only then run an automated execution.
+
+### 2026-06-28 - Agent / Final-Lap Dev Eval Booster Integration
+
+What changed:
+
+- Added `docs/plans/FINAL_LAP_DEV_EVAL_BOOSTER_ORCHESTRATION.md` as the main-thread control plane for the four final-lap worker threads.
+- Integrated policy-boundary eval hardening, Test Manager manual-evidence bridge verification, Action Center/custom-packet submission proof hardening, and a generated judge-facing proof index.
+- Generated `docs/demo/artifacts/proof_index.html` from existing proof artifacts and wired it into `scripts/run_demo.sh`, `scripts/run_submission_check.sh`, and the Python submission verifier.
+- Preserved existing claim boundaries: no automated Test Cloud execution claim, no generated Action Center UI final-demo readiness claim, no native Case-history-only G-001 claim, no real telecom production integration, and no LLM/Codex closure authority.
+
+Commands run:
+
+- `python -m service_recovery_core.proof_index --artifact-dir docs/demo/artifacts`
+- `python -m unittest tests.test_policy_state_eval tests.test_test_manager_bridge tests.test_submission_proof tests.test_proof_index`
+- `python -m service_recovery_core.evals --policy-boundary-report --output /tmp/service_recovery_policy_boundary_report.json`
+- `python -m service_recovery_core.evals --output /tmp/service_recovery_local_baseline.json`
+- `python -m service_recovery_core.test_manager_bridge --eval-results /tmp/service_recovery_local_baseline.json --junit docs/validation/artifacts/test-manager-results/Service_Recovery_E_001_through_E_009_Baseline___20260626_1017.xml --execution-stats docs/validation/artifacts/2026-06-28/test-manager-feasibility-spike/04-tm-terminal-execution-stats.json --output /tmp/service_recovery_test_manager_bridge.json`
+- `python -m service_recovery_core.proof_index --artifact-dir docs/demo/artifacts --verify-only`
+- `python -m service_recovery_core.submission_proof --artifact-dir docs/demo/artifacts`
+- `git diff --check`
+- `rg -n "^(<<<<<<<|=======|>>>>>>>)" . -g '!docs/research/artifacts/**' -g '!docs/validation/artifacts/**' -g '!eval_results/local_baseline.json'`
+- `scripts/run_submission_check.sh`
+
+Validation:
+
+- PASS: targeted booster test set ran 22 tests.
+- PASS: policy-boundary report generated 11/11 passing checks.
+- PASS: Test Manager bridge verifier passed with claim boundary `manual_test_manager_execution_only; automated_test_cloud_execution_unclaimed`.
+- PASS: proof index verifier passed for `docs/demo/artifacts/proof_index.html`.
+- PASS: parsed submission proof verifier checked 16 artifacts and 8 claim docs.
+- PASS: `git diff --check`.
+- PASS: conflict-marker scan returned no markers.
+- PASS: `scripts/run_submission_check.sh` ran 58 tests and verified the local proof set.
+
+Open risks:
+
+- Automated Test Cloud execution remains unclaimed.
+- Generated Action Center UI final-demo readiness remains unclaimed.
+- Native Maestro Case history alone remains partial for G-001; Data Fabric V2 and Orchestrator bucket remain the full-payload audit paths.
+
 ### 2026-06-28 16:36 IST - Agent / Policy Boundary Eval Hardening
 
 What changed:

@@ -1,0 +1,13 @@
+{
+  "Result": "Success",
+  "Code": "LoginStatus",
+  "Data": {
+    "Status": "Logged in",
+    "BaseUrl": "https://cloud.uipath.com",
+    "Organization": "keepingitlowkey",
+    "OrganizationId": "2f5e2d22-41f9-4a73-ba72-a4142607ee72",
+    "Tenant": "DefaultTenant",
+    "TenantId": "ce9f6b89-4e70-47ee-a0b3-8bc4986b8772",
+    "ExpirationDate": "2026-06-28T12:03:55.000Z"
+  }
+}

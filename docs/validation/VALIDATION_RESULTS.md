@@ -6,6 +6,38 @@ Use [VALIDATION_GATES.md](VALIDATION_GATES.md) for pass/fail criteria.
 
 The data model and integration map are now grounded in observed platform facts. Remaining partials are explicit: native Case does not provide the full domain audit alone, generated Action Center UI is not demo-legible, legacy snake_case Data Fabric fields are not reliable for audit payloads, and automated Test Cloud execution is not claimed. Data Fabric V2 and terminal manual Test Manager execution are validated.
 
+## 2026-06-28 - Final-Lap Dev/Eval Booster Validation
+
+Scope:
+
+- Strengthen final submission proof with local code/test/verifier improvements, not new live tenant mutation.
+- Preserve explicit non-claims for automated Test Cloud execution, generated Action Center UI final-demo readiness, native Case history alone as full G-001 proof, real telecom integrations, and LLM/Codex closure authority.
+
+Observed:
+
+- Policy-boundary report now checks E-002/E-003/E-004/E-009 for shared green business fixture discipline, telemetry-only material variants, source-authority routing, raw-agent-to-policy linkage, and high-confidence stale-telemetry override behavior.
+- Test Manager bridge verifier joins local eval JSON, exported Test Manager JUnit evidence, and fresh execution stats for terminal manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11`.
+- Read-only Test Manager/Orchestrator probe artifacts under `docs/validation/artifacts/2026-06-28/test-manager-feasibility-spike/` still show no discovered automation target for the existing probe package. Automated Test Cloud execution remains unclaimed.
+- Submission proof verifier now parses E-002/E-004 Action Center payload JSON, audit bundles, and custom evidence packets for the AIE/PDE linkage and generated Action Center UI caveat.
+- Proof index generator renders `docs/demo/artifacts/proof_index.html` from existing proof artifacts and verifies E-002, E-004, E-003 adversarial LLM, and E-008 governed learning-loop proof beats.
+
+Result:
+
+- PASS for stronger local dev/eval and proof-surface validation.
+- PASS for stronger manual Test Manager evidence bridge.
+- PARTIAL remains for automated Test Cloud execution because no successful automated execution/readback was performed.
+- PARTIAL remains for generated Action Center UI final-demo readiness because no fresh runtime task proved readable proof-critical fields.
+- PARTIAL remains for native Case history alone as full G-001 proof; Data Fabric V2 and Orchestrator bucket remain the full-payload audit proof paths.
+
+Evidence:
+
+- `service_recovery_core/evals.py`
+- `service_recovery_core/test_manager_bridge.py`
+- `service_recovery_core/submission_proof.py`
+- `service_recovery_core/proof_index.py`
+- `docs/demo/artifacts/proof_index.html`
+- `docs/validation/artifacts/2026-06-28/test-manager-feasibility-spike/`
+
 ## 2026-06-18 - Local Provisional Core Baseline
 
 Environment:

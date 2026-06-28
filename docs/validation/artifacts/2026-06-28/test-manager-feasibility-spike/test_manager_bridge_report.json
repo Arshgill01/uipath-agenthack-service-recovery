@@ -1,0 +1,21 @@
+{
+  "claim_boundary": "manual_test_manager_execution_only; automated_test_cloud_execution_unclaimed",
+  "errors": [],
+  "eval_results_path": "docs/validation/artifacts/2026-06-28/test-manager-feasibility-spike/local_baseline.json",
+  "execution_stats_path": "docs/validation/artifacts/2026-06-28/test-manager-feasibility-spike/04-tm-terminal-execution-stats.json",
+  "expected_execution_id": "40a1b334-5df8-1100-0a4b-0b49d0564f11",
+  "expected_test_set_key": "SREV:9",
+  "junit_path": "docs/validation/artifacts/test-manager-results/Service_Recovery_E_001_through_E_009_Baseline___20260626_1017.xml",
+  "mapped_scenarios": [
+    "E-001",
+    "E-002",
+    "E-003",
+    "E-004",
+    "E-005",
+    "E-006",
+    "E-007",
+    "E-008",
+    "E-009"
+  ],
+  "status": "passed"
+}

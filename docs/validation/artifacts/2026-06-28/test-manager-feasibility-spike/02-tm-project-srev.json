@@ -1,0 +1,19 @@
+{
+  "Result": "Success",
+  "Code": "ProjectsList",
+  "Data": [
+    {
+      "Id": "1281f516-2c82-0000-9e76-0b49cf9a9990",
+      "ProjectKey": "SREV",
+      "Name": "Service Recovery Eval Validation",
+      "Description": "AgentHack service-recovery eval mapping for E-001 through E-009; validation-scoped project created by Codex on 2026-06-25.",
+      "Active": true,
+      "AuthorizationEnabled": true,
+      "SapConfigured": false,
+      "Created": "2026-06-25T18:26:40.117Z",
+      "CreatedBy": "010e4620-c69c-0200-151d-0b49ce774412",
+      "Updated": "2026-06-25T18:26:40.117Z",
+      "UpdatedBy": "010e4620-c69c-0200-151d-0b49ce774412"
+    }
+  ]
+}

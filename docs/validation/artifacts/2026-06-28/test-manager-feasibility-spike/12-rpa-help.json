@@ -1,0 +1,142 @@
+{
+  "Result": "Success",
+  "Code": "Help",
+  "Data": {
+    "Command": "rpa",
+    "Description": "A tool that enables creating and managing UiPath RPA projects via Studio IPC.",
+    "Usage": "uip rpa [options] [command]",
+    "Arguments": [],
+    "Options": [
+      {
+        "Flags": "--project-dir <path>",
+        "Description": "Project directory to match against running Studio instances",
+        "Default": "/Users/arshdeepsingh/Developer/uipath-agenthack-service-recovery"
+      },
+      {
+        "Flags": "--studio-dir <path>",
+        "Description": "Path to Studio installation directory"
+      },
+      {
+        "Flags": "--robot-dir <path>",
+        "Description": "Path to Robot installation directory"
+      },
+      {
+        "Flags": "--timeout <seconds>",
+        "Description": "Timeout in seconds",
+        "Default": "300"
+      },
+      {
+        "Flags": "--verbose",
+        "Description": "Enable verbose logging"
+      },
+      {
+        "Flags": "-h, --help",
+        "Description": "display help for command"
+      }
+    ],
+    "Subcommands": [
+      {
+        "Name": "instances [options]",
+        "Description": "Discover running Studio instances"
+      },
+      {
+        "Name": "studio [options]",
+        "Description": "Control the Studio process"
+      },
+      {
+        "Name": "restore [options] <project-dir> [output-path]",
+        "Description": "Restore NuGet dependencies for a UiPath project. With outputPath, additionally assembles dependencies in that directory for CI/CD and air-gapped workflows where dependencies must be shipped across an isolation boundary. When provided, outputPath must be OUTSIDE the project directory tree."
+      },
+      {
+        "Name": "analyze [options] <project-dir>",
+        "Description": "Validate and analyze a UiPath project"
+      },
+      {
+        "Name": "build [options] <project-dir>",
+        "Description": "Build (compile) a UiPath project"
+      },
+      {
+        "Name": "pack [options] <project-dir> <output-path>",
+        "Description": "Pack a UiPath project into a .nupkg (compiles, validates, and bundles)."
+      },
+      {
+        "Name": "uia [options]",
+        "Description": "UI Automation CLI commands"
+      },
+      {
+        "Name": "test-data [options]",
+        "Description": "Manage data sources for test cases"
+      },
+      {
+        "Name": "init [options]",
+        "Description": "Initialize a new UiPath project from a template"
+      },
+      {
+        "Name": "templates [options]",
+        "Description": "Discover project templates"
+      },
+      {
+        "Name": "files [options]",
+        "Description": "Operate on individual files"
+      },
+      {
+        "Name": "analyzer-rules [options]",
+        "Description": "Inspect the project's workflow analyzer rules"
+      },
+      {
+        "Name": "validate [options]",
+        "Description": "Validate a single file or the entire project and return diagnostics, filtered by severity. If filePath is omitted, scopes to the whole project. By default, runs validation before returning diagnostics; set skipValidation to true to read the cached results from the last validation. Use minSeverity 'error' for quick checks; 'warning' (default) or 'info' for thorough reviews."
+      },
+      {
+        "Name": "packages [options]",
+        "Description": "Manage NuGet packages used by the project"
+      },
+      {
+        "Name": "data-fabric-entities [options]",
+        "Description": "Manage Data Fabric entity bindings"
+      },
+      {
+        "Name": "activities [options]",
+        "Description": "Discover and inspect activities"
+      },
+      {
+        "Name": "workflow-examples [options]",
+        "Description": "Browse the curated workflow example library"
+      },
+      {
+        "Name": "run [options]",
+        "Description": "Run a workflow or coded file via Studio (no debugging). Use `debug start` to launch with breakpoints."
+      },
+      {
+        "Name": "debug [options]",
+        "Description": "Drive an active debug session — start, step, break, continue"
+      },
+      {
+        "Name": "execution [options]",
+        "Description": "Lifecycle of the active execution — cancel (and future status/list)"
+      },
+      {
+        "Name": "help [command]",
+        "Description": "display help for command"
+      }
+    ],
+    "GlobalOptions": [
+      {
+        "Flags": "--output <table|json|yaml|plain>",
+        "Description": "Output format (default: json)"
+      },
+      {
+        "Flags": "--output-filter <expression>",
+        "Description": "JMESPath expression applied to the Data field of the response envelope"
+      },
+      {
+        "Flags": "--log-level <debug|info|warn|error>",
+        "Description": "Log level threshold (default: info)"
+      },
+      {
+        "Flags": "--log-file <path>",
+        "Description": "Write logs to file instead of stderr"
+      }
+    ]
+  }
+}

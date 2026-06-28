@@ -1,0 +1,82 @@
+{
+  "Result": "Success",
+  "Code": "Help",
+  "Data": {
+    "Command": "run",
+    "Description": "Run a test set and return the execution ID.",
+    "Usage": "uip tm testsets run [options]",
+    "Arguments": [],
+    "Options": [
+      {
+        "Flags": "--test-set-key <key>",
+        "Description": "Test set object key (e.g. DEMO:42). The project key is derived from the prefix (e.g. DEMO)."
+      },
+      {
+        "Flags": "--execution-type <type>",
+        "Description": "Type of test cases to execute.\n  automated - run only automated test cases (default)\n  manual    - run only manual test cases\n  mixed     - run both automated and manual test cases\n  none      - no specific type filter",
+        "Default": "automated"
+      },
+      {
+        "Flags": "--input-path <file>",
+        "Description": "JSON file with parameter overrides: [{\"name\":\"Param\",\"type\":\"String\",\"value\":\"v\"}]"
+      },
+      {
+        "Flags": "--log-level <level>",
+        "Description": "Log verbosity: debug, info, warn, error",
+        "Default": "Information"
+      },
+      {
+        "Flags": "--wait",
+        "Description": "Block until the execution reaches a terminal state (finished, cancelled)"
+      },
+      {
+        "Flags": "--timeout <seconds>",
+        "Description": "Maximum seconds to wait (0 = no timeout). Requires --wait.",
+        "Default": "1800"
+      },
+      {
+        "Flags": "--poll-interval <seconds>",
+        "Description": "Seconds between status checks. Requires --wait.",
+        "Default": "60"
+      },
+      {
+        "Flags": "-h, --help",
+        "Description": "display help for command"
+      }
+    ],
+    "Examples": [
+      {
+        "Description": "Run a test set",
+        "Command": "uip tm testsets run --test-set-key DEMO:10",
+        "Output": {
+          "Code": "TestSetRun",
+          "Data": {
+            "ExecutionId": "a1b2c3d4-0000-0000-0000-000000000001",
+            "TestSetKey": "DEMO:10",
+            "Status": "Running",
+            "StartTime": "2025-04-15T10:30:00Z"
+          }
+        }
+      }
+    ],
+    "Subcommands": [],
+    "GlobalOptions": [
+      {
+        "Flags": "--output <table|json|yaml|plain>",
+        "Description": "Output format (default: json)"
+      },
+      {
+        "Flags": "--output-filter <expression>",
+        "Description": "JMESPath expression applied to the Data field of the response envelope"
+      },
+      {
+        "Flags": "--log-level <debug|info|warn|error>",
+        "Description": "Log level threshold (default: info)"
+      },
+      {
+        "Flags": "--log-file <path>",
+        "Description": "Write logs to file instead of stderr"
+      }
+    ]
+  }
+}

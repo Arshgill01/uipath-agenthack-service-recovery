@@ -1,0 +1,380 @@
+{
+  "results": [
+    {
+      "agent_errors": [],
+      "agent_valid": true,
+      "passed": true,
+      "policy_decision": {
+        "agent_event_id": "AIE-E001",
+        "case_id": "CASE-E001",
+        "closure_allowed": true,
+        "decision": "accept_recommendation",
+        "decision_policy_version": "dp-v1",
+        "derived_evidence_state": "confirmed_aligned",
+        "from_recommended_stage": "closure_candidate",
+        "reason_codes": [],
+        "severity": "normal",
+        "to_stage": "closure_candidate"
+      },
+      "policy_event": {
+        "agent_event_id": "AIE-E001",
+        "case_id": "CASE-E001",
+        "created_at": "2026-06-28T11:04:45.128440+00:00",
+        "decision": "accept_recommendation",
+        "decision_policy_version": "dp-v1",
+        "event_id": "PDE-E-001",
+        "from_recommended_stage": "closure_candidate",
+        "reason_codes": [],
+        "to_stage": "closure_candidate"
+      },
+      "policy_improvement_artifact": null,
+      "scenario_id": "E-001",
+      "usefulness_incident": null
+    },
+    {
+      "agent_errors": [],
+      "agent_valid": true,
+      "passed": true,
+      "policy_decision": {
+        "agent_event_id": "AIE-E002",
+        "case_id": "CASE-BG-MISSING",
+        "closure_allowed": false,
+        "decision": "override_recommendation",
+        "decision_policy_version": "dp-v1",
+        "derived_evidence_state": "missing_pending",
+        "from_recommended_stage": "closure_candidate",
+        "reason_codes": [
+          "missing_authoritative_signal"
+        ],
+        "severity": "normal",
+        "to_stage": "verify_telemetry"
+      },
+      "policy_event": {
+        "agent_event_id": "AIE-E002",
+        "case_id": "CASE-BG-MISSING",
+        "created_at": "2026-06-28T11:04:45.128660+00:00",
+        "decision": "override_recommendation",
+        "decision_policy_version": "dp-v1",
+        "event_id": "PDE-E-002",
+        "from_recommended_stage": "closure_candidate",
+        "reason_codes": [
+          "missing_authoritative_signal"
+        ],
+        "to_stage": "verify_telemetry"
+      },
+      "policy_improvement_artifact": null,
+      "scenario_id": "E-002",
+      "usefulness_incident": null
+    },
+    {
+      "agent_errors": [],
+      "agent_valid": true,
+      "passed": true,
+      "policy_decision": {
+        "agent_event_id": "AIE-E003",
+        "case_id": "CASE-BG-STALE",
+        "closure_allowed": false,
+        "decision": "override_recommendation",
+        "decision_policy_version": "dp-v1",
+        "derived_evidence_state": "authoritative_unavailable_or_stale",
+        "from_recommended_stage": "closure_candidate",
+        "reason_codes": [
+          "stale_authoritative_signal"
+        ],
+        "severity": "normal",
+        "to_stage": "verify_telemetry"
+      },
+      "policy_event": {
+        "agent_event_id": "AIE-E003",
+        "case_id": "CASE-BG-STALE",
+        "created_at": "2026-06-28T11:04:45.128700+00:00",
+        "decision": "override_recommendation",
+        "decision_policy_version": "dp-v1",
+        "event_id": "PDE-E-003",
+        "from_recommended_stage": "closure_candidate",
+        "reason_codes": [
+          "stale_authoritative_signal"
+        ],
+        "to_stage": "verify_telemetry"
+      },
+      "policy_improvement_artifact": null,
+      "scenario_id": "E-003",
+      "usefulness_incident": null
+    },
+    {
+      "agent_errors": [],
+      "agent_valid": true,
+      "passed": true,
+      "policy_decision": {
+        "agent_event_id": "AIE-E004",
+        "case_id": "CASE-BG-CONTRA",
+        "closure_allowed": false,
+        "decision": "require_human_review",
+        "decision_policy_version": "dp-v1",
+        "derived_evidence_state": "contradicting",
+        "from_recommended_stage": "closure_candidate",
+        "reason_codes": [
+          "source_contradiction"
+        ],
+        "severity": "elevated",
+        "to_stage": "human_review"
+      },
+      "policy_event": {
+        "agent_event_id": "AIE-E004",
+        "case_id": "CASE-BG-CONTRA",
+        "created_at": "2026-06-28T11:04:45.128729+00:00",
+        "decision": "require_human_review",
+        "decision_policy_version": "dp-v1",
+        "event_id": "PDE-E-004",
+        "from_recommended_stage": "closure_candidate",
+        "reason_codes": [
+          "source_contradiction"
+        ],
+        "to_stage": "human_review"
+      },
+      "policy_improvement_artifact": null,
+      "scenario_id": "E-004",
+      "usefulness_incident": null
+    },
+    {
+      "agent_errors": [],
+      "agent_valid": true,
+      "passed": true,
+      "policy_decision": {
+        "agent_event_id": "AIE-E005",
+        "case_id": "CASE-E005",
+        "closure_allowed": false,
+        "decision": "accept_recommendation",
+        "decision_policy_version": "dp-v1",
+        "derived_evidence_state": "confirmed_aligned",
+        "from_recommended_stage": "dispatch_followup",
+        "reason_codes": [
+          "high_impact_exception"
+        ],
+        "severity": "normal",
+        "to_stage": "dispatch_followup"
+      },
+      "policy_event": {
+        "agent_event_id": "AIE-E005",
+        "case_id": "CASE-E005",
+        "created_at": "2026-06-28T11:04:45.128761+00:00",
+        "decision": "accept_recommendation",
+        "decision_policy_version": "dp-v1",
+        "event_id": "PDE-E-005",
+        "from_recommended_stage": "dispatch_followup",
+        "reason_codes": [
+          "high_impact_exception"
+        ],
+        "to_stage": "dispatch_followup"
+      },
+      "policy_improvement_artifact": null,
+      "scenario_id": "E-005",
+      "usefulness_incident": null
+    },
+    {
+      "agent_errors": [],
+      "agent_valid": true,
+      "passed": true,
+      "policy_decision": {
+        "agent_event_id": "AIE-E006",
+        "case_id": "CASE-E006",
+        "closure_allowed": false,
+        "decision": "block_closure",
+        "decision_policy_version": "dp-v1",
+        "derived_evidence_state": "missing_pending",
+        "from_recommended_stage": "verify_telemetry",
+        "reason_codes": [
+          "missing_authoritative_signal"
+        ],
+        "severity": "normal",
+        "to_stage": "verify_telemetry"
+      },
+      "policy_event": {
+        "agent_event_id": "AIE-E006",
+        "case_id": "CASE-E006",
+        "created_at": "2026-06-28T11:04:45.128795+00:00",
+        "decision": "block_closure",
+        "decision_policy_version": "dp-v1",
+        "event_id": "PDE-E-006",
+        "from_recommended_stage": "verify_telemetry",
+        "reason_codes": [
+          "missing_authoritative_signal"
+        ],
+        "to_stage": "verify_telemetry"
+      },
+      "policy_improvement_artifact": null,
+      "scenario_id": "E-006",
+      "usefulness_incident": null
+    },
+    {
+      "agent_errors": [
+        "unclassified requires category_confidence <= 0.40",
+        "category_confidence >= 0.75 requires non-none rationale",
+        "category_confidence >= 0.90 requires two rationale codes or one high-specificity code"
+      ],
+      "agent_valid": false,
+      "passed": true,
+      "policy_decision": {
+        "agent_event_id": "AIE-E007",
+        "case_id": "CASE-E007",
+        "closure_allowed": false,
+        "decision": "override_recommendation",
+        "decision_policy_version": "dp-v1",
+        "derived_evidence_state": "confirmed_aligned",
+        "from_recommended_stage": "closure_candidate",
+        "reason_codes": [
+          "invalid_agent_output"
+        ],
+        "severity": "normal",
+        "to_stage": "verify_telemetry"
+      },
+      "policy_event": {
+        "agent_event_id": "AIE-E007",
+        "case_id": "CASE-E007",
+        "created_at": "2026-06-28T11:04:45.128825+00:00",
+        "decision": "override_recommendation",
+        "decision_policy_version": "dp-v1",
+        "event_id": "PDE-E-007",
+        "from_recommended_stage": "closure_candidate",
+        "reason_codes": [
+          "invalid_agent_output"
+        ],
+        "to_stage": "verify_telemetry"
+      },
+      "policy_improvement_artifact": null,
+      "scenario_id": "E-007",
+      "usefulness_incident": null
+    },
+    {
+      "agent_errors": [],
+      "agent_valid": true,
+      "passed": true,
+      "policy_decision": {
+        "agent_event_id": "AIE-E008",
+        "case_id": "CASE-E008",
+        "closure_allowed": false,
+        "decision": "block_closure",
+        "decision_policy_version": "dp-v1",
+        "derived_evidence_state": "confirmed_aligned",
+        "from_recommended_stage": "verify_telemetry",
+        "reason_codes": [
+          "low_category_confidence",
+          "low_recommendation_confidence"
+        ],
+        "severity": "normal",
+        "to_stage": "verify_telemetry"
+      },
+      "policy_event": {
+        "agent_event_id": "AIE-E008",
+        "case_id": "CASE-E008",
+        "created_at": "2026-06-28T11:04:45.128892+00:00",
+        "decision": "block_closure",
+        "decision_policy_version": "dp-v1",
+        "event_id": "PDE-E-008",
+        "from_recommended_stage": "verify_telemetry",
+        "reason_codes": [
+          "low_category_confidence",
+          "low_recommendation_confidence"
+        ],
+        "to_stage": "verify_telemetry"
+      },
+      "policy_improvement_artifact": {
+        "active_case_policy_version_action": "active_cases_remain_pinned_until_explicit_migration_event",
+        "approval_status": "pending_human_approval",
+        "artifact_id": "PIC-E-008",
+        "artifact_type": "policy_improvement_case",
+        "current_policy_version": {
+          "decision_policy_version": "dp-v1",
+          "interpretation_policy_version": "ip-v1"
+        },
+        "eval_result": {
+          "final_route": "verify_telemetry",
+          "passed": true,
+          "policy_decision": "block_closure",
+          "reason_codes": [
+            "low_category_confidence",
+            "low_recommendation_confidence"
+          ],
+          "scenario_id": "E-008"
+        },
+        "forbidden_actions": [
+          "auto_promote_policy",
+          "weaken_closure_requirements_without_approval",
+          "let_agent_override_authoritative_evidence"
+        ],
+        "promotion_status": "not_promoted",
+        "proposed_change_type": "new_eval_scenario_and_interpretation_policy_review",
+        "proposed_diff_summary": [
+          "Add an eval guard for low-confidence unclassified output when authoritative evidence is otherwise sufficient.",
+          "Review interpretation prompts or classification hints so the agent does not stay unclassified on fully aligned service recovery evidence.",
+          "Keep deterministic closure policy unchanged until human approval and regression validation."
+        ],
+        "proposed_next_version": {
+          "decision_policy_version": "dp-v1",
+          "interpretation_policy_version": "ip-v2-proposed"
+        },
+        "sample_case_ids": [
+          "CASE-E008"
+        ],
+        "source_scenario_id": "E-008",
+        "trigger": "low_confidence_despite_sufficient_signal"
+      },
+      "scenario_id": "E-008",
+      "usefulness_incident": {
+        "incident_type": "agent_usefulness_degradation",
+        "reason_codes": [
+          "low_category_confidence",
+          "low_recommendation_confidence"
+        ],
+        "recommended_owner_action": "review_interpretation_policy_or_input_quality",
+        "sample_case_ids": [
+          "CASE-E008"
+        ],
+        "trigger": "low_confidence_despite_sufficient_signal"
+      }
+    },
+    {
+      "agent_errors": [],
+      "agent_valid": true,
+      "passed": true,
+      "policy_decision": {
+        "agent_event_id": "AIE-E009",
+        "case_id": "CASE-BG-OVERRIDE",
+        "closure_allowed": false,
+        "decision": "override_recommendation",
+        "decision_policy_version": "dp-v1",
+        "derived_evidence_state": "missing_pending",
+        "from_recommended_stage": "closure_candidate",
+        "reason_codes": [
+          "missing_authoritative_signal"
+        ],
+        "severity": "normal",
+        "to_stage": "verify_telemetry"
+      },
+      "policy_event": {
+        "agent_event_id": "AIE-E009",
+        "case_id": "CASE-BG-OVERRIDE",
+        "created_at": "2026-06-28T11:04:45.128934+00:00",
+        "decision": "override_recommendation",
+        "decision_policy_version": "dp-v1",
+        "event_id": "PDE-E-009",
+        "from_recommended_stage": "closure_candidate",
+        "reason_codes": [
+          "missing_authoritative_signal"
+        ],
+        "to_stage": "verify_telemetry"
+      },
+      "policy_improvement_artifact": null,
+      "scenario_id": "E-009",
+      "usefulness_incident": null
+    }
+  ],
+  "summary": {
+    "eval_pass_rate": 1.0,
+    "failed": 0,
+    "passed": 9,
+    "policy_version": "dp-v1",
+    "schema_validity_rate": 0.8888888888888888,
+    "total": 9
+  }
+}
