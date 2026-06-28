@@ -5,6 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
 ARTIFACT_DIR="${ARTIFACT_DIR:-docs/demo/artifacts}"
+PYTHON="${PYTHON_BIN:-${PYTHON:-}}"
 
 if [[ -z "${PYTHON:-}" ]]; then
   if command -v python >/dev/null 2>&1; then
@@ -28,6 +29,7 @@ Runs the non-mutating local submission sanity check:
   - Test Manager manual-evidence bridge verifier
   - existing E-002/E-004 demo proof artifact verification
   - generated proof index verification
+  - final-form claim-boundary overclaim scanning
   - parsed final proof index for track, coding-agent, feedback, LLM, and learning-loop artifacts
   - LLM/adversarial proof artifact presence and key-string checks
   - governed learning-loop artifact presence and key-string checks

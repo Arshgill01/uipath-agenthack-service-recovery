@@ -2,13 +2,91 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from pathlib import Path
 from typing import Any
 
 from service_recovery_core.proof_contract import CORE_DEMO_EXPECTED_PROOF
 
-
 CORE_EXPECTED = CORE_DEMO_EXPECTED_PROOF
+
+CLAIM_BOUNDARY_DOCS = (
+    "README.md",
+    "PROJECT_BRIEF.md",
+    "PLAN.md",
+    "docs/demo/DEMO_STORYBOARD.md",
+    "docs/submission/SUBMISSION_BRIEF.md",
+    "docs/submission/READINESS_CHECKLIST.md",
+    "docs/submission/TRACK_SELECTION_DECISION.md",
+    "docs/submission/PLATFORM_INTEGRATION_PROOF_MAP.md",
+    "docs/submission/CODING_AGENT_PROOF_LOG.md",
+    "docs/product/FEEDBACK_SURVEY_COPY_READY.md",
+    "docs/product/FEEDBACK_AWARD_APPENDIX.md",
+)
+
+FORBIDDEN_OVERCLAIM_PATTERNS = (
+    (
+        "automated_test_cloud_execution",
+        "automated Test Cloud execution must remain unclaimed unless a real automated run is validated",
+        re.compile(
+            r"\b(?:"
+            r"automated\s+Test\s+Cloud(?:/Test Manager)?\s+"
+            r"(?:execution|run|validation|coverage|crossover)\s+"
+            r"(?:passed|passes|succeeded|validated|is\s+validated|is\s+ready|exists|was\s+created|was\s+run)"
+            r"|we\s+(?:ran|validated|proved|completed)\s+automated\s+Test\s+Cloud"
+            r")\b",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        "generated_action_center_ui_ready",
+        "generated Action Center UI is not the final judge-facing proof surface",
+        re.compile(
+            r"\b(?:"
+            r"generated\s+Action\s+Center\s+UI\s+(?:is\s+)?"
+            r"(?:final-demo\s+ready|demo-ready|judge-facing|proof-critical|repaired|validated|PASS)"
+            r"|final\s+demo\s+relies\s+on\s+generated\s+Action\s+Center\s+UI"
+            r")\b",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        "native_case_history_full_audit",
+        "native Case history alone must not be claimed as full G-001/domain audit proof",
+        re.compile(
+            r"\b(?:"
+            r"native\s+(?:Maestro\s+)?Case\s+history\s+alone\s+"
+            r"(?:passes|passed|reconstructs|reconstructed|proves|proved|provides)\b"
+            r"|native\s+Case\s+State\s*/\s*Audit\s+Reconstruction\s*\|\s*PASS\b"
+            r")",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        "real_telecom_integration",
+        "real telecom production integrations are out of scope",
+        re.compile(
+            r"\b(?:"
+            r"real\s+telecom\s+(?:production\s+)?integrations?\s+"
+            r"(?:exist|exists|validated|implemented|live|connected|are\s+connected)"
+            r"|connected\s+to\s+real\s+telecom"
+            r")\b",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        "llm_or_codex_closure_authority",
+        "LLM/Codex output must not be claimed as closure or policy authority",
+        re.compile(
+            r"\b(?:LLM|Codex|Gemini|Vertex|coding-agent)\s+"
+            r"(?:owns|has|makes|decides|authorizes|approves)\s+(?:the\s+)?(?:final\s+)?closure\b"
+            r"|\b(?:LLM|Codex|Gemini|Vertex|coding-agent)\s+can\s+close\s+(?:the\s+)?case\b"
+            r"|\b(?:LLM|Codex|Gemini|Vertex|coding-agent)\s+(?:overrides|can\s+override)\s+"
+            r"(?:deterministic\s+)?policy\b",
+            re.IGNORECASE,
+        ),
+    ),
+)
 
 REQUIRED_ARTIFACTS = (
     "action_payload_E002.json",
@@ -83,6 +161,7 @@ def verify_submission_proof(repo_root: Path, artifact_dir: Path | None = None) -
     errors: list[str] = []
     errors.extend(_verify_required_files(root, artifacts))
     errors.extend(_verify_doc_claims(root))
+    errors.extend(_verify_claim_boundaries(root))
     errors.extend(_verify_demo_manifest(root, artifacts))
     errors.extend(_verify_core_demo_artifacts(artifacts))
     errors.extend(_verify_proof_index_html(artifacts / "proof_index.html"))
@@ -116,6 +195,7 @@ def main() -> int:
                 "artifact_dir": str(_resolve_path(repo_root.resolve(), artifact_dir)),
                 "checked_artifacts": len(REQUIRED_ARTIFACTS),
                 "checked_claim_docs": len(REQUIRED_DOC_CLAIMS),
+                "checked_claim_boundary_docs": len(CLAIM_BOUNDARY_DOCS),
             },
             indent=2,
             sort_keys=True,
@@ -150,6 +230,45 @@ def _verify_doc_claims(repo_root: Path) -> list[str]:
             if required not in content:
                 errors.append(f"{relative_path}: missing required claim string {required!r}")
     return errors
+
+
+def _verify_claim_boundaries(repo_root: Path) -> list[str]:
+    errors: list[str] = []
+    for relative_path in CLAIM_BOUNDARY_DOCS:
+        path = repo_root / relative_path
+        if not path.exists():
+            errors.append(f"missing required claim-boundary doc: {relative_path}")
+            continue
+        lines = path.read_text(encoding="utf-8").splitlines()
+        for index, line in enumerate(lines):
+            context = "\n".join(lines[max(0, index - 8) : index + 1])
+            if _is_nonclaim_context(context):
+                continue
+            for claim_id, description, pattern in FORBIDDEN_OVERCLAIM_PATTERNS:
+                if pattern.search(line):
+                    errors.append(
+                        f"{relative_path}:{index + 1}: forbidden overclaim {claim_id}: {description}"
+                    )
+    return errors
+
+
+def _is_nonclaim_context(context: str) -> bool:
+    normalized = context.lower()
+    return any(
+        marker in normalized
+        for marker in (
+            "do not claim",
+            "do not say",
+            "do not imply",
+            "must not claim",
+            "cannot claim",
+            "not claimed",
+            "unclaimed",
+            "unclaimable",
+            "claim boundary",
+            "claim boundaries",
+        )
+    )
 
 
 def _verify_demo_manifest(repo_root: Path, artifact_dir: Path) -> list[str]:

@@ -29,6 +29,34 @@ Open risks:
 - No live UiPath or Gemini operation was run; this was a local, non-mutating simplification pass.
 - Existing demo risks remain unchanged: generated Action Center UI is still not the judge-facing proof surface, automated Test Cloud execution remains unclaimed, and native Case history alone remains partial for G-001.
 
+### 2026-06-29 IST - Agent / Claim Boundary Proof Hardening
+
+What changed:
+
+- Added a final-form claim-boundary scanner to `service_recovery_core.submission_proof`.
+- The scanner rejects positive overclaims for automated Test Cloud execution, generated Action Center UI final-demo readiness, native Case-history-only audit proof, real telecom integration, and LLM/Codex closure authority while allowing explicit "Do Not Claim" guardrail sections.
+- Added regression tests that mutate copied proof docs to prove overclaims fail without editing live repo docs.
+- Updated `scripts/run_submission_check.sh` to use `python` or `python3` and to document the claim-boundary scan.
+
+Commands run:
+
+- `python -m unittest tests.test_submission_proof` (failed: this environment has no `python` executable on PATH)
+- `python3 -m unittest tests.test_submission_proof`
+- `python3 -m unittest discover -s tests`
+- `scripts/run_submission_check.sh`
+- `git diff --check`
+
+Validation:
+
+- PASS: `python3 -m unittest tests.test_submission_proof` ran 8 tests.
+- PASS: `python3 -m unittest discover -s tests` ran 61 tests.
+- PASS: `scripts/run_submission_check.sh` ran 61 tests and verified the local proof set.
+- PASS: `git diff --check`.
+
+Open risks:
+
+- No live UiPath or Gemini operation was run. Existing non-claims remain: no automated Test Cloud execution, no generated Action Center UI final-demo readiness, no native Case-history-only full audit proof, no real telecom integration, and no LLM/Codex closure authority.
+
 ### 2026-06-28 - Agent / Final-Lap Worker Doc Reconciliation
 
 What changed:

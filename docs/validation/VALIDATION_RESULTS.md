@@ -6,6 +6,32 @@ Use [VALIDATION_GATES.md](VALIDATION_GATES.md) for pass/fail criteria.
 
 The data model and integration map are now grounded in observed platform facts. Remaining partials are explicit: native Case does not provide the full domain audit alone, generated Action Center UI is not demo-legible, legacy snake_case Data Fabric fields are not reliable for audit payloads, and automated Test Cloud execution is not claimed. Data Fabric V2 and terminal manual Test Manager execution are validated.
 
+## 2026-06-29 IST - Final-Lap Claim Boundary Proof Hardening
+
+Scope:
+
+- Strengthen the non-mutating local submission proof path so final-form docs fail when they positively overclaim known partial or out-of-scope items.
+- Preserve explicit "Do Not Claim" guardrail sections as allowed non-claim context.
+
+Observed:
+
+- `service_recovery_core.submission_proof` now scans the README, project/plan docs, demo storyboard, submission docs, and product-feedback answer docs for narrow forbidden overclaim patterns.
+- The verifier fails positive claims for automated Test Cloud execution, generated Action Center UI final-demo readiness, native Case-history-only domain audit proof, real telecom production integration, and LLM/Codex closure authority.
+- Tests mutate copied proof docs and verify the scanner catches overclaims without altering committed docs.
+- `scripts/run_submission_check.sh` now selects `python` or `python3`; this was needed because the current shell exposes `python3` but not `python`.
+
+Result:
+
+- PASS for final-form claim-boundary proof hardening.
+- PASS for non-mutating local submission sanity check after the verifier update.
+- No live UiPath, Gemini, Test Manager, Action Center, Data Fabric, Orchestrator, or Maestro Case mutation was performed.
+
+Evidence:
+
+- `service_recovery_core/submission_proof.py`
+- `tests/test_submission_proof.py`
+- `scripts/run_submission_check.sh`
+
 ## 2026-06-28 - G-007 Targeted Test Manager Feasibility Spike
 
 Environment:
