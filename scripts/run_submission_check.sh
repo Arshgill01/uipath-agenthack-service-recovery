@@ -6,6 +6,17 @@ cd "$ROOT_DIR"
 
 ARTIFACT_DIR="${ARTIFACT_DIR:-docs/demo/artifacts}"
 
+if [[ -z "${PYTHON:-}" ]]; then
+  if command -v python >/dev/null 2>&1; then
+    PYTHON="$(command -v python)"
+  elif command -v python3 >/dev/null 2>&1; then
+    PYTHON="$(command -v python3)"
+  else
+    echo "Python executable not found. Set PYTHON=/path/to/python3 and retry." >&2
+    exit 127
+  fi
+fi
+
 usage() {
   cat <<'EOF'
 Usage: scripts/run_submission_check.sh
@@ -39,17 +50,17 @@ if [[ $# -gt 0 ]]; then
   exit 2
 fi
 
-python -m unittest discover -s tests
-python -m service_recovery_core.evals --output /tmp/service_recovery_local_baseline.json >/dev/null
-python -m service_recovery_core.evals --policy-boundary-report --output /tmp/service_recovery_policy_boundary_report.json >/dev/null
-python -m service_recovery_core.test_manager_bridge \
+"$PYTHON" -m unittest discover -s tests
+"$PYTHON" -m service_recovery_core.evals --output /tmp/service_recovery_local_baseline.json >/dev/null
+"$PYTHON" -m service_recovery_core.evals --policy-boundary-report --output /tmp/service_recovery_policy_boundary_report.json >/dev/null
+"$PYTHON" -m service_recovery_core.test_manager_bridge \
   --eval-results /tmp/service_recovery_local_baseline.json \
   --junit docs/validation/artifacts/test-manager-results/Service_Recovery_E_001_through_E_009_Baseline___20260626_1017.xml \
   --execution-stats docs/validation/artifacts/2026-06-28/test-manager-feasibility-spike/04-tm-terminal-execution-stats.json \
   --output /tmp/service_recovery_test_manager_bridge.json >/dev/null
-python -m service_recovery_core.demo_proof --output-dir "$ARTIFACT_DIR" --verify-only >/dev/null
-python -m service_recovery_core.proof_index --artifact-dir "$ARTIFACT_DIR" --verify-only >/dev/null
-python -m service_recovery_core.submission_proof --artifact-dir "$ARTIFACT_DIR" >/dev/null
+"$PYTHON" -m service_recovery_core.demo_proof --output-dir "$ARTIFACT_DIR" --verify-only >/dev/null
+"$PYTHON" -m service_recovery_core.proof_index --artifact-dir "$ARTIFACT_DIR" --verify-only >/dev/null
+"$PYTHON" -m service_recovery_core.submission_proof --artifact-dir "$ARTIFACT_DIR" >/dev/null
 
 bash -n scripts/run_demo.sh
 bash -n scripts/run_llm_demo.sh

@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from typing import Any, Protocol
 
 from service_recovery_core.agent_validator import validate_agent_interpretation
-from service_recovery_core.evals import _scenario_transition
+from service_recovery_core.evals import build_scenario_transition
 from service_recovery_core.policy import decide_policy
 
 
@@ -355,7 +355,7 @@ def run_governed_llm_demo(
     client: ContentClient | None = None,
     adversarial: bool = False,
 ) -> dict[str, Any]:
-    scenario, _ = _scenario_transition(scenario_id)
+    scenario, _ = build_scenario_transition(scenario_id)
     notes = demo_notes(scenario_id)
     business_context = demo_business_context(scenario)
     disagreement = None
