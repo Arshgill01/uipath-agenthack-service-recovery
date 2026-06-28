@@ -34,9 +34,17 @@ python -m service_recovery_core.evals --output eval_results/local_baseline.json
 
 The local core is intentionally portable and keeps deterministic policy independent from LLM output. It implements fixtures, schema validation, deterministic policy reconciliation, closure blocking, local case state transitions, and baseline eval scenarios E-001 through E-009. Optional Gemini/Vertex paths can produce live Agent Interpretation Events, including an adversarial advocate/skeptic interpretation, but policy remains the final routing authority.
 
-Coding-agent use:
+Coding-agent proof:
 
-This project was built primarily with Codex as the coding agent, alongside UiPath CLI and repo-local validation scripts. Codex helped design and implement the local recovery core, evals, evidence-packet renderer, UiPath validation runbooks, product-feedback evidence logs, and submission readiness checks. The detailed coding-agent proof log is maintained in [docs/submission/CODING_AGENT_PROOF_LOG.md](docs/submission/CODING_AGENT_PROOF_LOG.md).
+This project used Codex as the coding agent for build-time implementation, validation, UiPath CLI investigation, product-feedback evidence gathering, and submission documentation. The auditable proof package is [docs/submission/CODING_AGENT_PROOF_LOG.md](docs/submission/CODING_AGENT_PROOF_LOG.md). It maps what Codex did, what humans decided, which commits/branches/docs prove the work, and the safety boundary: Codex is not runtime closure authority; deterministic policy, UiPath Maestro Case routing, and human review remain the governance path.
+
+Fast audit commands:
+
+```sh
+git log --oneline --decorate --max-count=40
+git branch --all --verbose --no-abbrev
+scripts/run_submission_check.sh
+```
 
 UiPath component summary:
 

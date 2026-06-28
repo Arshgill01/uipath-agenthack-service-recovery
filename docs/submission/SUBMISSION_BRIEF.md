@@ -56,6 +56,10 @@ The UiPath implementation uses Maestro Case and Action Center for lifecycle and 
 - Supporting surfaces: Test Manager for eval representation, Data Fabric/Orchestrator for audit proof, Action Center for human review lifecycle.
 - Coding-agent bonus: Codex was used to build and validate the repo; proof is documented in `README.md` and `docs/submission/CODING_AGENT_PROOF_LOG.md`.
 
+Devpost-ready coding-agent paragraph:
+
+> We used Codex as the coding agent throughout the build: it helped implement the local service-recovery core, deterministic policy tests, eval harness, evidence-packet renderer, UiPath CLI validation loops, product-feedback evidence logs, and final submission docs. The proof is auditable in GitHub through the README coding-agent section, `docs/submission/CODING_AGENT_PROOF_LOG.md`, `docs/logs/BUILD_LOG.md`, Codex-prefixed branches/workstreams, and the non-mutating `scripts/run_submission_check.sh` validation wrapper. Codex was build-time assistance only; it is not part of runtime case closure authority, does not mutate production policy, and does not replace UiPath Maestro Case orchestration, Action Center accountability, deterministic policy, or human review.
+
 ## Evidence Links
 
 - Repeatable local proof: `scripts/run_demo.sh`

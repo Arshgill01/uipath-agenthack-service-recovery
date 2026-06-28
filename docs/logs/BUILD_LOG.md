@@ -2,6 +2,41 @@
 
 Append one entry per substantial agent run.
 
+### 2026-06-28 15:10 IST - Agent / Coding-Agent Bonus Proof Package
+
+What changed:
+
+- Reworked `docs/submission/CODING_AGENT_PROOF_LOG.md` into an audit-friendly bonus artifact with the Codex claim, human/Codex responsibility split, evidence inventory, representative commits/branches, Devpost/video safety boundaries, and reproduce commands.
+- Updated `README.md` so judges can find the coding-agent proof package and fast audit commands from the GitHub front door.
+- Added Devpost-ready coding-agent wording to `docs/submission/SUBMISSION_BRIEF.md`.
+- Updated `docs/submission/READINESS_CHECKLIST.md` so G-008 tracks the auditable Codex proof package plus CLI-assisted lifecycle artifacts.
+
+Commands run:
+
+- `git status --short --branch`
+- `git fetch origin master`
+- `git switch -c codex/coding-agent-bonus-proof origin/master`
+- `sed -n ...` / `tail ...` reads of required orientation docs including `AGENTS.md`, `PROJECT_BRIEF.md`, `PLAN.md`, forum research, README, coding-agent proof log, build log, product-feedback workstream plan, readiness checklist, demo storyboard, validation gates, eval plan, and Wave 39.
+- `git log --oneline --decorate --max-count=40`
+- `git branch --all --verbose --no-abbrev`
+- `git diff --check`
+- `scripts/run_submission_check.sh`
+
+Validation:
+
+- PASS: `git diff --check`.
+- PASS: `scripts/run_submission_check.sh` completed successfully, ran 46 unit tests, and verified demo artifacts in `docs/demo/artifacts`.
+
+Product feedback:
+
+- No new PF entry. This was coding-agent/submission evidence packaging, not a new UiPath product interaction.
+
+Open risks:
+
+- Final video still needs to show the coding-agent proof beat for strongest bonus visibility.
+- Git commits use the repository's configured human git identity, so the proof package intentionally ties commit history to Codex-prefixed branches, build-log entries, docs, and validation artifacts rather than relying on git author metadata alone.
+- Codex remains build-time assistance only; do not imply runtime case closure authority or production policy mutation.
+
 ### 2026-06-28 - Agent / Product Feedback Worktree Review And Merge
 
 What changed:

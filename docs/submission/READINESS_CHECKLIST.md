@@ -33,7 +33,7 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 | G-005 Distinct 2A/2B routing | PASS | E-002 route `verify_telemetry`; E-004 route `human_review`; live tasks and local artifacts | Keep both beats on same green business fixture with only authoritative signal changed. |
 | G-006 Demo surface visibility | PASS for custom packet; PARTIAL for generated Action Center UI | `evidence_packet_E002_desktop.png`; `evidence_packet_E004_desktop.png`; `evidence_packet_E003_adversarial_desktop.png`; PF-013 | Use custom packet as primary visual surface. |
 | G-007 Test Cloud/Test Manager crossover | PASS for manual Test Manager representation/execution; PARTIAL for automated Test Cloud | Project `SREV`, test set `SREV:9`, terminal manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11`, mapping doc, JUnit export `docs/validation/artifacts/test-manager-results/Service_Recovery_E_001_through_E_009_Baseline___20260626_1017.xml`; automation-discovery and package-probe evidence in `docs/validation/TEST_MANAGER_MAPPING.md` including `ServiceRecoveryEvalProcessProbe:0.0.2/0.0.3` | Do not claim automated Test Cloud execution. |
-| G-008 Coding-agent/CLI bonus | PASS for CLI-assisted lifecycle artifacts | `uip` CLI validation, package/process/task/bucket/test-manager commands in logs, `scripts/run_demo.sh` | If shown live, run readback commands deliberately and log new evidence. |
+| G-008 Coding-agent/CLI bonus | PASS for auditable Codex proof package plus CLI-assisted lifecycle artifacts | `README.md`; `docs/submission/CODING_AGENT_PROOF_LOG.md`; `docs/logs/BUILD_LOG.md`; Codex-prefixed branches/workstreams in git history; `uip` CLI validation commands in logs; `scripts/run_submission_check.sh`; `scripts/run_demo.sh` | Final video should include the 10-20 second proof beat from `docs/demo/DEMO_STORYBOARD.md`. Do not imply Codex is runtime closure authority. |
 
 ## Product Feedback Award
 
@@ -51,7 +51,8 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 | Submission brief | Ready | `docs/submission/SUBMISSION_BRIEF.md` |
 | Feedback answer bank | Ready except user fields | `docs/product/FEEDBACK_SURVEY_COPY_READY.md` |
 | Track selection decision | Ready | `docs/submission/TRACK_SELECTION_DECISION.md` |
-| Coding-agent proof log | Ready | `docs/submission/CODING_AGENT_PROOF_LOG.md` |
+| Coding-agent proof log | Ready as audit artifact | `docs/submission/CODING_AGENT_PROOF_LOG.md` |
+| Devpost-ready coding-agent paragraph | Ready | `docs/submission/SUBMISSION_BRIEF.md` |
 | Forum/Devpost research digest | Ready | `docs/research/AGENTHACK_FORUM_RESEARCH.md` |
 | Demo-safe runbook | Ready | `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md` |
 | Repeatable proof wrapper | Ready | `scripts/run_demo.sh` |
