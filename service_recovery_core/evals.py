@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 from pathlib import Path
 from typing import Any
@@ -118,6 +119,11 @@ def main() -> int:
         default=None,
         help="Optional scenario ID to export as a governed policy-improvement artifact JSON file.",
     )
+    parser.add_argument(
+        "--policy-boundary-report",
+        action="store_true",
+        help="Export a deterministic hardening report for source authority, override persistence, fixture discipline, and confidence guardrails.",
+    )
     args = parser.parse_args()
     if args.uipath_payload_scenario:
         payload = build_uipath_payload(args.uipath_payload_scenario)
@@ -191,6 +197,15 @@ def main() -> int:
             output_path.write_text(rendered_artifact + "\n", encoding="utf-8")
         print(rendered_artifact)
         return 0
+    if args.policy_boundary_report:
+        report = build_policy_boundary_report()
+        rendered_report = json.dumps(report, indent=2, sort_keys=True)
+        if args.output:
+            output_path = Path(args.output)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_text(rendered_report + "\n", encoding="utf-8")
+        print(rendered_report)
+        return 0 if report["summary"]["failed"] == 0 else 1
 
     results = run_eval_suite()
     rendered = json.dumps(results, indent=2, sort_keys=True)
@@ -316,6 +331,204 @@ def build_policy_improvement_artifact(
             "weaken_closure_requirements_without_approval",
             "let_agent_override_authoritative_evidence",
         ],
+    }
+
+
+def build_policy_boundary_report() -> dict[str, Any]:
+    scenarios = load_scenarios()
+    checks: list[dict[str, Any]] = []
+    focused_ids = ["E-002", "E-003", "E-004", "E-009"]
+
+    _add_policy_boundary_check(
+        checks,
+        "fixture_discipline.business_green_shared_fields",
+        focused_ids,
+        "E-002/E-003/E-004/E-009 keep CRM, billing, inventory, and dispatch identical.",
+        _business_green_shared_fields_match(scenarios),
+        {
+            "shared_fields": ["crm_order_status", "billing_status", "inventory_assignment", "dispatch_status"],
+            "baseline_scenario_id": "E-002",
+        },
+    )
+    _add_policy_boundary_check(
+        checks,
+        "fixture_discipline.telemetry_is_only_material_variant",
+        focused_ids,
+        "The focused business-green variants only change authoritative service telemetry shape.",
+        _business_green_telemetry_variants_match(scenarios),
+        {
+            "E-002": _service_live_signal(scenarios["E-002"]),
+            "E-003": _service_live_signal(scenarios["E-003"]),
+            "E-004": _service_live_signal(scenarios["E-004"]),
+            "E-009": _service_live_signal(scenarios["E-009"]),
+        },
+    )
+
+    source_authority_expectations = {
+        "E-002": ("missing_pending", "verify_telemetry", "missing_authoritative_signal"),
+        "E-003": ("authoritative_unavailable_or_stale", "verify_telemetry", "stale_authoritative_signal"),
+        "E-004": ("contradicting", "human_review", "source_contradiction"),
+        "E-009": ("missing_pending", "verify_telemetry", "missing_authoritative_signal"),
+    }
+    for scenario_id, (state, stage, reason) in source_authority_expectations.items():
+        decision = decide_policy(
+            scenarios[scenario_id]["case"],
+            scenarios[scenario_id]["evidence"],
+            scenarios[scenario_id]["agent_interpretation"],
+        )
+        _add_policy_boundary_check(
+            checks,
+            f"source_authority.{scenario_id}",
+            [scenario_id],
+            "Supporting notes and green business systems do not override authoritative telemetry state.",
+            (
+                not decision["closure_allowed"]
+                and decision["derived_evidence_state"] == state
+                and decision["to_stage"] == stage
+                and reason in decision["reason_codes"]
+            ),
+            {
+                "closure_allowed": decision["closure_allowed"],
+                "derived_evidence_state": decision["derived_evidence_state"],
+                "to_stage": decision["to_stage"],
+                "reason_codes": decision["reason_codes"],
+            },
+        )
+
+    for scenario_id in focused_ids:
+        scenario, transition = _scenario_transition(scenario_id)
+        expected_stage = source_authority_expectations[scenario_id][1]
+        _add_policy_boundary_check(
+            checks,
+            f"override_persistence.{scenario_id}",
+            [scenario_id],
+            "Raw closure recommendation is preserved separately and linked to the policy decision.",
+            (
+                transition["agent_event"]["recommended_next_stage"] == "closure_candidate"
+                and transition["policy_event"]["agent_event_id"] == transition["agent_event"]["event_id"]
+                and transition["policy_event"]["from_recommended_stage"] == "closure_candidate"
+                and transition["policy_event"]["to_stage"] == expected_stage
+                and transition["policy_event"]["decision_policy_version"] == scenario["case"]["decision_policy_version"]
+            ),
+            {
+                "agent_event_id": transition["agent_event"]["event_id"],
+                "agent_recommended_next_stage": transition["agent_event"]["recommended_next_stage"],
+                "policy_agent_event_id": transition["policy_event"]["agent_event_id"],
+                "policy_decision": transition["policy_event"]["decision"],
+                "policy_to_stage": transition["policy_event"]["to_stage"],
+            },
+        )
+
+    high_confidence_stale = copy.deepcopy(scenarios["E-003"])
+    high_confidence_stale["agent_interpretation"]["recommendation_confidence"] = 0.99
+    decision = decide_policy(
+        high_confidence_stale["case"],
+        high_confidence_stale["evidence"],
+        high_confidence_stale["agent_interpretation"],
+    )
+    _add_policy_boundary_check(
+        checks,
+        "confidence_calibration.high_confidence_stale_telemetry",
+        ["E-003"],
+        "High recommendation confidence cannot overcome stale authoritative telemetry.",
+        (
+            not decision["closure_allowed"]
+            and decision["decision"] == "override_recommendation"
+            and decision["to_stage"] == "verify_telemetry"
+            and "stale_authoritative_signal" in decision["reason_codes"]
+        ),
+        {
+            "mutated_recommendation_confidence": high_confidence_stale["agent_interpretation"]["recommendation_confidence"],
+            "closure_allowed": decision["closure_allowed"],
+            "decision": decision["decision"],
+            "to_stage": decision["to_stage"],
+            "reason_codes": decision["reason_codes"],
+        },
+    )
+
+    passed = sum(1 for check in checks if check["passed"])
+    return {
+        "artifact_type": "policy_boundary_eval_report",
+        "artifact_version": "policy-boundary-v1",
+        "focused_scenario_ids": focused_ids,
+        "summary": {
+            "total_checks": len(checks),
+            "passed": passed,
+            "failed": len(checks) - passed,
+            "decision_policy_version": "dp-v1",
+            "interpretation_policy_version": "ip-v1",
+        },
+        "checks": checks,
+    }
+
+
+def _add_policy_boundary_check(
+    checks: list[dict[str, Any]],
+    check_id: str,
+    scenario_ids: list[str],
+    assertion: str,
+    passed: bool,
+    observed: dict[str, Any],
+) -> None:
+    checks.append(
+        {
+            "check_id": check_id,
+            "scenario_ids": scenario_ids,
+            "assertion": assertion,
+            "passed": passed,
+            "observed": observed,
+        }
+    )
+
+
+def _business_green_shared_fields_match(scenarios: dict[str, dict[str, Any]]) -> bool:
+    baseline = _evidence_by_field(scenarios["E-002"]["evidence"])
+    for scenario_id in ("E-003", "E-004", "E-009"):
+        variant = _evidence_by_field(scenarios[scenario_id]["evidence"])
+        for field in ("crm_order_status", "billing_status", "inventory_assignment", "dispatch_status"):
+            if variant[field] != baseline[field]:
+                return False
+    return True
+
+
+def _business_green_telemetry_variants_match(scenarios: dict[str, dict[str, Any]]) -> bool:
+    service_live = {scenario_id: _service_live_signal(scenarios[scenario_id]) for scenario_id in ("E-002", "E-003", "E-004", "E-009")}
+    return (
+        service_live["E-002"] == service_live["E-009"]
+        and service_live["E-002"] == {
+            "source": "support_note",
+            "value": "resolved",
+            "authoritative": False,
+            "freshness_status": "fresh",
+        }
+        and service_live["E-003"] == {
+            "source": "network_telemetry",
+            "value": "live",
+            "authoritative": True,
+            "freshness_status": "stale",
+        }
+        and service_live["E-004"] == {
+            "source": "network_telemetry",
+            "value": "not_live",
+            "authoritative": True,
+            "freshness_status": "fresh",
+        }
+    )
+
+
+def _service_live_signal(scenario: dict[str, Any]) -> dict[str, Any]:
+    return _evidence_by_field(scenario["evidence"])["service_live_status"]
+
+
+def _evidence_by_field(evidence: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    return {
+        signal["field"]: {
+            "source": signal["source"],
+            "value": signal["value"],
+            "authoritative": signal["authoritative"],
+            "freshness_status": signal["freshness_status"],
+        }
+        for signal in evidence
     }
 
 

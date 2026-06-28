@@ -2,6 +2,42 @@
 
 Append one entry per substantial agent run.
 
+### 2026-06-28 16:36 IST - Agent / Policy Boundary Eval Hardening
+
+What changed:
+
+- Added a deterministic `policy_boundary_eval_report` export to `service_recovery_core.evals`.
+- The report hardens local proof for E-002/E-003/E-004/E-009 by checking business-green fixture discipline, source-authority routing, raw-agent-to-policy event linkage, and high-confidence stale-telemetry override behavior.
+- Added unit coverage for the in-process report and CLI JSON export.
+- Wired `scripts/run_submission_check.sh` to generate the report under `/tmp/service_recovery_policy_boundary_report.json` without committing a generated artifact.
+
+Commands run:
+
+- `python -m unittest tests.test_policy_state_eval`
+- `python -m service_recovery_core.evals --policy-boundary-report --output /tmp/service_recovery_policy_boundary_report.json`
+- `python -m unittest discover -s tests`
+- `python -m service_recovery_core.evals --output /tmp/service_recovery_local_baseline.json`
+- `git diff --check`
+- `scripts/run_submission_check.sh`
+
+Validation:
+
+- PASS: targeted policy-state eval tests ran 12 tests.
+- PASS: policy-boundary report generated 11/11 passing checks.
+- PASS: full unit suite ran 51 tests.
+- PASS: local eval suite reported E-001 through E-009 passing 9/9.
+- PASS: `git diff --check`.
+- PASS: `scripts/run_submission_check.sh` verified tests, evals, demo artifacts, submission proof, and wrapper syntax.
+
+Product feedback:
+
+- No new PF entry. This was local eval/dev hardening and did not interact with UiPath product surfaces.
+
+Open risks:
+
+- Existing claim boundaries remain unchanged: no automated Test Cloud execution, no generated Action Center UI final-demo readiness, no native Case history alone as full G-001 proof, no real telecom production integrations, and no LLM/Codex closure authority.
+- Unrelated untracked files exist under `docs/validation/artifacts/2026-06-28/`; this run left them untouched.
+
 ### 2026-06-28 - Agent / Final-Lap Branch Review And Integration
 
 What changed:

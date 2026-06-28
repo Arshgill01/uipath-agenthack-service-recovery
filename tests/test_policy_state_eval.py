@@ -1,6 +1,15 @@
+import json
+import subprocess
+import sys
+import tempfile
 import unittest
+from pathlib import Path
 
-from service_recovery_core.evals import build_policy_improvement_artifact_for_scenario, run_eval_suite
+from service_recovery_core.evals import (
+    build_policy_boundary_report,
+    build_policy_improvement_artifact_for_scenario,
+    run_eval_suite,
+)
 from service_recovery_core.fixtures import scenario
 from service_recovery_core.policy import decide_policy, reconcile_evidence
 from service_recovery_core.state_machine import apply_policy_decision
@@ -135,6 +144,56 @@ class PolicyStateEvalTests(unittest.TestCase):
         self.assertEqual(artifact["proposed_next_version"]["decision_policy_version"], "dp-v1")
         self.assertEqual(artifact["proposed_next_version"]["interpretation_policy_version"], "ip-v2-proposed")
         self.assertIn("auto_promote_policy", artifact["forbidden_actions"])
+
+    def test_policy_boundary_report_proves_focused_guardrails(self):
+        report = build_policy_boundary_report()
+
+        self.assertEqual(report["artifact_type"], "policy_boundary_eval_report")
+        self.assertEqual(report["focused_scenario_ids"], ["E-002", "E-003", "E-004", "E-009"])
+        self.assertEqual(report["summary"]["failed"], 0, report)
+        self.assertEqual(report["summary"]["decision_policy_version"], "dp-v1")
+        check_ids = {check["check_id"] for check in report["checks"]}
+        self.assertIn("fixture_discipline.business_green_shared_fields", check_ids)
+        self.assertIn("fixture_discipline.telemetry_is_only_material_variant", check_ids)
+        self.assertIn("source_authority.E-002", check_ids)
+        self.assertIn("source_authority.E-003", check_ids)
+        self.assertIn("source_authority.E-004", check_ids)
+        self.assertIn("override_persistence.E-009", check_ids)
+        self.assertIn("confidence_calibration.high_confidence_stale_telemetry", check_ids)
+
+        source_e004 = next(check for check in report["checks"] if check["check_id"] == "source_authority.E-004")
+        self.assertEqual(source_e004["observed"]["to_stage"], "human_review")
+        self.assertIn("source_contradiction", source_e004["observed"]["reason_codes"])
+
+        confidence_check = next(
+            check
+            for check in report["checks"]
+            if check["check_id"] == "confidence_calibration.high_confidence_stale_telemetry"
+        )
+        self.assertEqual(confidence_check["observed"]["mutated_recommendation_confidence"], 0.99)
+        self.assertEqual(confidence_check["observed"]["to_stage"], "verify_telemetry")
+
+    def test_policy_boundary_report_cli_exports_json(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            output_path = Path(temp_dir) / "policy_boundary_report.json"
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "service_recovery_core.evals",
+                    "--policy-boundary-report",
+                    "--output",
+                    str(output_path),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            report = json.loads(output_path.read_text(encoding="utf-8"))
+            self.assertEqual(report["summary"]["failed"], 0, result.stdout)
+            self.assertIn("policy_boundary_eval_report", result.stdout)
 
 def _evidence_by_field(evidence):
     return {

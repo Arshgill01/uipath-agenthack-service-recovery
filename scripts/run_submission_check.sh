@@ -38,6 +38,7 @@ fi
 
 python -m unittest discover -s tests
 python -m service_recovery_core.evals --output /tmp/service_recovery_local_baseline.json >/dev/null
+python -m service_recovery_core.evals --policy-boundary-report --output /tmp/service_recovery_policy_boundary_report.json >/dev/null
 python -m service_recovery_core.demo_proof --output-dir "$ARTIFACT_DIR" --verify-only >/dev/null
 python -m service_recovery_core.submission_proof --artifact-dir "$ARTIFACT_DIR" >/dev/null
 
