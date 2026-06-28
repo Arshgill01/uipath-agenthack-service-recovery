@@ -24,6 +24,10 @@ CORE_EXPECTED = {
 }
 
 REQUIRED_ARTIFACTS = (
+    "action_payload_E002.json",
+    "action_payload_E004.json",
+    "service_recovery_audit_bundle_E002.json",
+    "service_recovery_audit_bundle_E004.json",
     "evidence_packet_E002.html",
     "evidence_packet_E002_desktop.png",
     "evidence_packet_E004.html",
@@ -71,6 +75,16 @@ REQUIRED_DOC_CLAIMS = {
         "Do not claim generated Action Center UI is final-demo ready",
         "Do not claim native Case history alone passes",
     ),
+    "docs/validation/ACTION_CENTER_UI_REPAIR_ASSESSMENT.md": (
+        "fresh package `1.0.6` Case Instance then created task `4333536`",
+        "Action Center runtime still rendered `Unnamed String 1:`",
+        "custom evidence packet as the judge-facing surface",
+    ),
+    "docs/validation/artifacts/2026-06-27/product_feedback_action_binding_probe.md": (
+        "Existing read-only evidence confirms the proof-critical fields are present",
+        "fresh runtime recheck task `4333536` used `SystemName`",
+        "custom evidence packet/Data Fabric/bucket audit surfaces",
+    ),
 }
 
 
@@ -82,6 +96,7 @@ def verify_submission_proof(repo_root: Path, artifact_dir: Path | None = None) -
     errors.extend(_verify_required_files(root, artifacts))
     errors.extend(_verify_doc_claims(root))
     errors.extend(_verify_demo_manifest(root, artifacts))
+    errors.extend(_verify_core_demo_artifacts(artifacts))
     errors.extend(_verify_llm_artifact(artifacts / "llm_interpreter_E003_live.json", adversarial=False))
     errors.extend(_verify_llm_artifact(artifacts / "llm_interpreter_E003_adversarial_live.json", adversarial=True))
     errors.extend(_verify_policy_improvement_artifact(artifacts / "policy_improvement_E008.json"))
@@ -186,6 +201,84 @@ def _verify_demo_manifest(repo_root: Path, artifact_dir: Path) -> list[str]:
             if not _manifest_path(repo_root, value).exists():
                 errors.append(f"demo_proof_manifest.json: {scenario_id} missing referenced {path_key}: {value}")
     return errors
+
+
+def _verify_core_demo_artifacts(artifact_dir: Path) -> list[str]:
+    errors: list[str] = []
+    for scenario_id, expected in CORE_EXPECTED.items():
+        compact_id = scenario_id.replace("-", "")
+        payload_path = artifact_dir / f"action_payload_{compact_id}.json"
+        audit_path = artifact_dir / f"service_recovery_audit_bundle_{compact_id}.json"
+        html_path = artifact_dir / f"evidence_packet_{compact_id}.html"
+
+        if payload_path.exists():
+            payload = _read_json(payload_path)
+            errors.extend(_verify_action_payload(payload_path.name, expected, payload))
+        if audit_path.exists():
+            audit_bundle = _read_json(audit_path)
+            errors.extend(_verify_audit_bundle(audit_path.name, expected, audit_bundle))
+        if html_path.exists():
+            html = html_path.read_text(encoding="utf-8")
+            errors.extend(_verify_evidence_packet_html(html_path.name, expected, html))
+    return errors
+
+
+def _verify_action_payload(prefix: str, expected: dict[str, str], payload: dict[str, Any]) -> list[str]:
+    try:
+        raw_agent = json.loads(payload["RawAgentRecommendation"])
+        policy = json.loads(payload["PolicyDecisionJson"])
+    except (KeyError, TypeError, json.JSONDecodeError) as error:
+        return [f"{prefix}: failed to parse Action Center proof payload: {error}"]
+
+    checks = {
+        "raw_agent.case_id": raw_agent.get("case_id") == expected["case_id"],
+        "raw_agent.recommended_next_stage": raw_agent.get("recommended_next_stage")
+        == expected["recommended_next_stage"],
+        "policy.links_to_raw_agent": policy.get("links_to") == raw_agent.get("event_id"),
+        "policy.decision": policy.get("decision") == expected["decision"],
+        "policy.from_recommended_stage": policy.get("from_recommended_stage")
+        == expected["recommended_next_stage"],
+        "policy.to_stage": policy.get("to_stage") == expected["to_stage"],
+        "policy.block_reason": policy.get("block_reason") == expected["block_reason"],
+    }
+    return _failed_checks(prefix, checks)
+
+
+def _verify_audit_bundle(prefix: str, expected: dict[str, str], audit_bundle: dict[str, Any]) -> list[str]:
+    agent = audit_bundle.get("agent_interpretation_event", {})
+    policy = audit_bundle.get("policy_decision_event", {})
+    reviewer_packet = audit_bundle.get("reviewer_packet", {})
+    evidence_state = audit_bundle.get("evidence_state", {})
+    checks = {
+        "case_id": audit_bundle.get("case_id") == expected["case_id"],
+        "audit_contract_version": audit_bundle.get("audit_contract_version") == "service-recovery-audit-v1",
+        "agent.recommended_next_stage": agent.get("recommended_next_stage") == expected["recommended_next_stage"],
+        "policy.links_to_agent": policy.get("links_to") == agent.get("event_id"),
+        "policy.decision": policy.get("decision") == expected["decision"],
+        "policy.to_stage": policy.get("to_stage") == expected["to_stage"],
+        "policy.block_reason": policy.get("block_reason") == expected["block_reason"],
+        "evidence_state.block_reason": evidence_state.get("closure_block_reason") == expected["block_reason"],
+        "reviewer_packet.rendering_status": reviewer_packet.get("rendering_status") == "structured_packet_ready",
+        "reviewer_packet.raw_agent_recommendation": isinstance(
+            reviewer_packet.get("raw_agent_recommendation"), dict
+        ),
+        "reviewer_packet.policy_decision": isinstance(reviewer_packet.get("policy_decision"), dict),
+    }
+    return _failed_checks(prefix, checks)
+
+
+def _verify_evidence_packet_html(prefix: str, expected: dict[str, str], html: str) -> list[str]:
+    required_strings = (
+        "UiPath platform role",
+        "generated Action Center page hid or mislabeled proof-critical fields",
+        "Raw Agent Interpretation Event",
+        "Linked Policy Decision Event",
+        expected["recommended_next_stage"],
+        expected["decision"],
+        expected["to_stage"],
+        expected["block_reason"],
+    )
+    return [f"{prefix}: missing evidence-packet proof string {value!r}" for value in required_strings if value not in html]
 
 
 def _verify_llm_artifact(path: Path, *, adversarial: bool) -> list[str]:

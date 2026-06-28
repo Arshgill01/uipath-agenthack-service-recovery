@@ -2419,3 +2419,83 @@ Product feedback:
 Evidence:
 
 - `docs/validation/artifacts/2026-06-27/data_fabric_readback_diagnostics_probe.md`
+
+## 2026-06-28 - G-003/G-004 Final-Lap Action Center UI Readiness Spike
+
+Scope:
+
+- Determine whether the generated Action Center UI final-demo-readiness non-claim can be reduced without weakening the custom evidence-packet proof path.
+- Start with repo artifacts and read-only CLI/metadata inspection only.
+- Do not start a fresh Case/AppTask or mutate UiPath tenant state without main-thread approval.
+
+Environment:
+
+- Local repo at commit `84823db`.
+- Existing UiPath context from validation docs: org `keepingitlowkey`, tenant `DefaultTenant`, process `9a7eb300-7b16-4856-b14f-d6f2da3dbe61`, folder key `9d7ae568-d60e-4395-94d7-db115bfb25de`, folder ID `7978263`.
+
+Commands:
+
+1. `cat AGENTS.md`
+2. `cat PROJECT_BRIEF.md`
+3. `cat PLAN.md`
+4. `cat .agents/skills/uipath-service-recovery-architect/SKILL.md`
+5. `cat .agents/skills/uipath-service-recovery-builder/SKILL.md`
+6. `cat .agents/skills/uipath-service-recovery-validator/SKILL.md`
+7. `cat docs/validation/ACTION_CENTER_UI_REPAIR_ASSESSMENT.md`
+8. `rg -n "G-003|G-004|Action Center|PolicyDecisionJson|Unnamed" docs/validation/VALIDATION_RESULTS.md`
+9. `cat docs/validation/artifacts/2026-06-27/product_feedback_action_binding_probe.md`
+10. `cat docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`
+11. `sed -n '1,260p' service_recovery_core/uipath_payload.py`
+12. `sed -n '1,783p' service_recovery_core/evidence_packet_view.py`
+13. `uip tasks --help --output json`
+14. `uip tasks assign --help --output json`
+15. `uip tasks complete --help --output json`
+16. `uip or jobs start --help --output json`
+17. `python -m unittest tests.test_submission_proof`
+18. `python -m service_recovery_core.submission_proof --artifact-dir docs/demo/artifacts`
+
+Observed:
+
+- The latest committed repair assessment remains decisive: a Studio Web label-only repair published `SimpleApprovalApp` version `1.0.1`, but fresh runtime task `4333536` still rendered `Unnamed String 1:` / `Unnamed string 1` while `uip tasks get` preserved correct `PolicyDecisionJson`.
+- The 2026-06-27 binding probe explains why the non-claim cannot be safely reduced from read-only evidence: runtime task `4333536` used older deployment system name `ID5c3f0a11590d4fdab3c22de72f4ff443` / `SemVersion: 1.0.0`, while a newer `SemVersion: 1.0.1` deployment existed in another solution folder. No pre-runtime CLI readback was found that proves which Action app deployment a Case package will instantiate.
+- CLI help confirms a fresh runtime validation would require mutating commands: start a new job, inspect/list the created task, optionally assign it, then complete it so a pending scratch task is not left behind.
+- The local proof hardening added parsed verification of `action_payload_E002.json`, `action_payload_E004.json`, `service_recovery_audit_bundle_E002.json`, `service_recovery_audit_bundle_E004.json`, and both custom evidence packets. The verifier now checks the raw AIE recommendation, linked PDE decision, route, block reason, `structured_packet_ready`, and the explicit generated Action Center UI caveat string.
+- `python -m unittest tests.test_submission_proof` passed 5 tests.
+- `python -m service_recovery_core.submission_proof --artifact-dir docs/demo/artifacts` passed, checking 15 artifacts and 8 claim docs.
+
+Result:
+
+- G-003 remains PASS for Action Center lifecycle/assignment/completion/structured return and PARTIAL for generated Action Center UI legibility.
+- G-004 remains PASS through API/task/audit/custom packet persistence and PARTIAL through generated Action Center UI display.
+- Generated Action Center UI final-demo readiness is BLOCKED on fresh runtime proof, not reduced by this read-only spike.
+- PASS for local proof-path hardening: the custom evidence packet and payload verifier now fail if the final proof loses the AIE/PDE boundary or the claim-boundary caveat.
+
+Fresh scratch validation path if approved:
+
+1. `uip login status --output json`
+2. `uip maestro case registry list --output-filter "Resources[?ResourceType=='action-apps' || DeploymentTitle=='SimpleApprovalApp'].{Id:Id,DeploymentTitle:DeploymentTitle,SemVersion:SemVersion,SystemName:SystemName,Folder:DeploymentFolder.FullyQualifiedName,DateDeployed:DateDeployed}" --output json`
+3. `uip or processes get 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --output json --output-filter "{Key:Key,Name:Name,ProcessVersion:ProcessVersion,AutoUpdate:AutoUpdate,FolderKey:FolderKey,FolderPath:FolderPath}"`
+4. `uip or jobs start 9A7EB300-7B16-4856-B14F-D6F2DA3DBE61 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --jobs-count 1 --reference action-ui-runtime-recheck-20260628 --output json`
+5. `uip tasks list --folder-id 7978263 --output json --output-filter "[?CreatorJobKey=='<NEW_CASE_JOB_KEY>']"`
+6. `uip tasks get <NEW_TASK_ID> --folder-id 7978263 --output json`
+7. Open `https://cloud.uipath.com/keepingitlowkey/DefaultTenant/actions_/tasks/<NEW_TASK_ID>` in the logged-in browser and verify runtime rendering.
+8. `uip tasks assign <NEW_TASK_ID> --user arshgill6120@gmail.com --output json`
+9. `uip tasks complete <NEW_TASK_ID> --type AppTask --folder-id 7978263 --action reject --data '{"Comment":"Scratch Action Center UI binding recheck; do not use as submission proof unless documented separately."}' --output json`
+10. `uip maestro case instance get <NEW_CASE_JOB_KEY> --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+
+Fresh pass condition:
+
+- Runtime Action Center task shows proof-critical fields with readable labels and values, especially `Policy Decision Json:` or equivalent readable policy label and the actual linked policy decision JSON/value.
+- `uip tasks get` still returns correct `PolicyDecisionJson`.
+- The scratch task is completed, and the scratch Case Instance does not remain pending solely because of the validation task.
+
+Rollback / non-deletion notes:
+
+- Do not delete existing submission tasks, packages, Action apps, Data Fabric records, Test Manager objects, or bucket artifacts.
+- Scratch job/task creation is additive tenant state. If approved, complete the scratch task and log the new IDs; do not claim it as canonical submission evidence unless the runtime rendering passes the condition above.
+
+Decision impact:
+
+- Continue using Action Center for lifecycle and structured reviewer return.
+- Continue using custom evidence packets plus Data Fabric V2/Orchestrator bucket audit proof as the judge-readable path.
+- Do not claim generated Action Center UI is final-demo ready.

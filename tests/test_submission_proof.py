@@ -52,6 +52,40 @@ class SubmissionProofTests(unittest.TestCase):
                 errors,
             )
 
+    def test_reports_action_payload_policy_link_drift(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            artifact_dir = Path(temp_dir)
+            _copy_required_artifacts(artifact_dir)
+            artifact_path = artifact_dir / "action_payload_E004.json"
+            payload = json.loads(artifact_path.read_text(encoding="utf-8"))
+            policy = json.loads(payload["PolicyDecisionJson"])
+            policy["links_to"] = "AIE-UNLINKED"
+            payload["PolicyDecisionJson"] = json.dumps(policy, sort_keys=True, separators=(",", ":"))
+            artifact_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+            errors = verify_submission_proof(REPO_ROOT, artifact_dir)
+
+            self.assertIn("action_payload_E004.json: failed proof check policy.links_to_raw_agent", errors)
+
+    def test_reports_custom_packet_caveat_drift(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            artifact_dir = Path(temp_dir)
+            _copy_required_artifacts(artifact_dir)
+            artifact_path = artifact_dir / "evidence_packet_E002.html"
+            html = artifact_path.read_text(encoding="utf-8")
+            artifact_path.write_text(
+                html.replace("generated Action Center page hid or mislabeled proof-critical fields", ""),
+                encoding="utf-8",
+            )
+
+            errors = verify_submission_proof(REPO_ROOT, artifact_dir)
+
+            self.assertIn(
+                "evidence_packet_E002.html: missing evidence-packet proof string "
+                "'generated Action Center page hid or mislabeled proof-critical fields'",
+                errors,
+            )
+
 
 def _copy_required_artifacts(target_dir: Path) -> None:
     source_dir = REPO_ROOT / "docs/demo/artifacts"

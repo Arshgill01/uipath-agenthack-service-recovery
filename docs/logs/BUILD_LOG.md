@@ -3655,3 +3655,33 @@ Open risks:
 - Team name and story-sharing preference still need user confirmation before final Devpost/product-feedback submission.
 - Final video still needs a live or logged-in UiPath platform surface on screen; local evidence packets alone are not enough for the strongest Devpost video claim.
 - Do not claim automated Test Cloud execution, generated Action Center UI final-demo readiness, native Case history alone passing G-001, real telecom integrations, or LLM final closure authority.
+
+### 2026-06-28 - Agent / Action Center UI Readiness Spike
+
+What changed:
+
+- Reassessed generated Action Center UI final-demo readiness from committed repo artifacts and read-only CLI help/metadata only.
+- Confirmed the non-claim cannot be reduced without a fresh scratch runtime task: prior evidence shows task `4333536` preserved `PolicyDecisionJson` in API data but still rendered `Unnamed String 1:` after the label-only publish, and the 2026-06-27 probe found no pre-runtime binding/version inspector for the Case-bound Action app.
+- Strengthened `service_recovery_core.submission_proof` so the non-mutating final verifier parses E-002/E-004 Action Center payloads, audit bundles, and custom evidence-packet HTML for raw AIE recommendation, linked PDE decision, route, block reason, `structured_packet_ready`, and the generated Action Center UI caveat.
+- Added regression tests for Action payload link drift and custom packet claim-boundary drift.
+- Updated `docs/validation/VALIDATION_RESULTS.md` with the PASS/PARTIAL/BLOCKED result plus the approval-gated fresh scratch command sequence and pass condition.
+
+Commands:
+
+- `python -m unittest tests.test_submission_proof`
+- `python -m service_recovery_core.submission_proof --artifact-dir docs/demo/artifacts`
+- `uip tasks --help --output json`
+- `uip tasks assign --help --output json`
+- `uip tasks complete --help --output json`
+- `uip or jobs start --help --output json`
+
+Validation:
+
+- PASS: targeted verifier tests ran 5 tests.
+- PASS: parsed submission proof verifier checked 15 artifacts and 8 claim docs.
+- No live UiPath tenant mutation and no Gemini/Vertex rerun were performed.
+
+Open risks:
+
+- Generated Action Center UI remains not final-demo ready. A fresh scratch Case/AppTask runtime recheck is the next proof step, but it mutates the tenant and requires main-thread approval.
+- The custom evidence packet/Data Fabric/bucket proof path remains the final judge-readable path.
