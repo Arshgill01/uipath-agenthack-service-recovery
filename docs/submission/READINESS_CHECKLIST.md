@@ -68,6 +68,48 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 | Governed learning-loop artifact | Ready | `docs/demo/artifacts/policy_improvement_E008.json` |
 | Action Center UI repair assessment | Ready | `docs/validation/ACTION_CENTER_UI_REPAIR_ASSESSMENT.md` |
 
+## Final Pre-Recording Checklist
+
+Use this on June 29, 2026 before recording the Devpost video. The goal is to verify the committed proof set and open the exact screens, not to create fresh live UiPath state.
+
+Run from repo root:
+
+```sh
+git status --short --branch
+scripts/run_submission_check.sh
+git diff --check
+```
+
+If proof artifacts need to be refreshed before recording, run:
+
+```sh
+scripts/run_demo.sh --with-local-checks --no-uipath-next-steps
+```
+
+Then verify the recording files exist:
+
+```sh
+test -s docs/demo/artifacts/evidence_packet_E002.html
+test -s docs/demo/artifacts/evidence_packet_E004.html
+test -s docs/demo/artifacts/evidence_packet_E003_adversarial_live.html
+test -s docs/demo/artifacts/policy_improvement_E008.json
+test -s docs/demo/artifacts/demo_proof_manifest.json
+```
+
+Keep these screens open before pressing record:
+
+| Screen | Purpose |
+| --- | --- |
+| UiPath Automation Cloud Maestro Case / Action Center / Orchestrator / Test Manager tabs | Satisfies the requirement to show UiPath platform surfaces, not just local artifacts. |
+| `docs/demo/artifacts/evidence_packet_E002.html` | Shows missing/stale authoritative evidence route to `verify_telemetry`. |
+| `docs/demo/artifacts/evidence_packet_E004.html` | Shows fresh contradiction route to `human_review`. |
+| `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html` | Shows live LLM interpretation usefulness while preserving policy authority. |
+| `docs/demo/artifacts/policy_improvement_E008.json` | Shows governed learning loop with no auto-promotion. |
+| `README.md` and `docs/submission/CODING_AGENT_PROOF_LOG.md` | Shows coding-agent proof for the bonus. |
+| Terminal with passed `scripts/run_submission_check.sh` output | Shows repeatable validation without live mutation. |
+
+Use `docs/demo/DEMO_STORYBOARD.md` as the recording script and stop by 4:55.
+
 ## Do Not Claim
 
 - Automated Test Cloud execution.

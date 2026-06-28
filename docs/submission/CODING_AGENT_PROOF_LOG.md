@@ -48,6 +48,7 @@ Human role:
 | 2026-06-27 | `codex/pf-evidence-action-binding`, commit `8a72ea1` | Gather Action Center generated-app binding/version evidence. | PF-013 binding probe showing runtime used older app deployment while newer designer version existed. |
 | 2026-06-27 | `codex/pf-evidence-test-manager`, commit `27bb351` | Gather Test Manager eval-import and automation-discovery evidence. | PF-020, PF-021, PF-024 strengthened; terminal manual execution preserved; automated Test Cloud remains unclaimed. |
 | 2026-06-27 | `codex/pf-evidence-data-fabric`, commit `d7a0a5c` | Gather Data Fabric audit-readback diagnostics. | PF-018 improved for current CLI discovery; PF-019/PF-023 strengthened; V2 audit proof path reconfirmed. |
+| 2026-06-28 | `codex/final-demo-devpost-pack` | Prepare final-lap demo and Devpost submission pack. | Timed recording run-of-show, Devpost judging/copy checklist, pre-recording validation checklist, and build-log validation entry. |
 
 ## Demo Beat To Include
 

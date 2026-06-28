@@ -3481,3 +3481,34 @@ Open risks:
 
 - No new scratch resources were created for this workstream; existing scratch coverage from PF-028 was sufficient.
 - Generated Action Center UI remains not final-demo ready; this probe strengthens the product-feedback evidence rather than changing the demo-safe proof path.
+
+### 2026-06-28 - Agent / Final Demo + Devpost Submission Pack
+
+What changed:
+
+- Created the final recording run-of-show in `docs/demo/DEMO_STORYBOARD.md` with sub-five-minute time boxes, exact screens/files to open, narration prompts, and explicit claims to avoid.
+- Added Devpost final copy/checklist blocks to `docs/submission/SUBMISSION_BRIEF.md`, mapped to official judging areas: business impact, platform usage, technical execution, completeness, creativity, presentation, product feedback, and coding-agent bonus.
+- Added a June 29, 2026 pre-recording checklist to `docs/submission/READINESS_CHECKLIST.md` with exact validation commands and recording screens.
+- Updated `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md` with the recording-day screen stack and read-only/live-mutation guardrail.
+- Added this final-pack workstream to `docs/submission/CODING_AGENT_PROOF_LOG.md`.
+- Rechecked current public Devpost/forum positioning against the official Devpost page and AgentHack forum before editing; no submission-claim change was needed beyond turning the existing research into operator-ready copy.
+
+Commands:
+
+- `git status --short --branch`
+- `git rev-parse HEAD master origin/master`
+- `git switch -c codex/final-demo-devpost-pack`
+- `git diff --check`
+- `scripts/run_submission_check.sh`
+
+Validation:
+
+- PASS: current detached worktree commit matched local `master` and `origin/master` before branch creation (`5eb0a85f3a53e761c03985185ae9fbeefc98f93c`).
+- PASS: `git diff --check`.
+- PASS: `scripts/run_submission_check.sh` ran 46 unit tests and verified demo artifacts; output ended with `Submission check passed.`
+
+Open risks:
+
+- Team name and story-sharing preference still need user confirmation before final Devpost/product-feedback submission.
+- Final video still needs a live or logged-in UiPath platform surface on screen; local evidence packets alone are not enough for the strongest Devpost video claim.
+- Do not claim automated Test Cloud execution, generated Action Center UI final-demo readiness, native Case history alone passing G-001, real telecom integrations, or LLM final closure authority.

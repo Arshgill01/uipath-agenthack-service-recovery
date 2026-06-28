@@ -387,6 +387,21 @@ Expected audit fields:
 
 ## Demo Operator Flow
 
+Use [DEMO_STORYBOARD.md](DEMO_STORYBOARD.md) for the sub-five-minute recording script. This runbook is the operational backup for the screens and commands in that script.
+
+For recording day, pre-stage the following and avoid live mutation unless a new proof ID is intentionally needed:
+
+| Stage | Open / verify | Purpose |
+| --- | --- | --- |
+| UiPath platform proof | Maestro Case process/case surface, Action Center tasks `4300080` and `4300219`, Orchestrator bucket/process readback, Test Manager `SREV` | Shows the solution running through UiPath platform surfaces. |
+| 2A proof | `docs/demo/artifacts/evidence_packet_E002.html` | Shows raw `closure_candidate` overridden to `verify_telemetry`. |
+| 2B proof | `docs/demo/artifacts/evidence_packet_E004.html` | Shows same green fixture escalated to `human_review` because authoritative evidence contradicts. |
+| LLM usefulness proof | `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html` | Shows agent interpretation and disagreement as structured policy input, not final authority. |
+| Eval/learning proof | `docs/demo/artifacts/policy_improvement_E008.json` and Test Manager `SREV` | Shows E-001 through E-009 discipline and no auto-promotion. |
+| Coding-agent proof | `README.md`, `docs/submission/CODING_AGENT_PROOF_LOG.md`, terminal validation output | Shows Codex build-time contribution without weakening runtime governance. |
+
+The shortest safe recording path is:
+
 1. Show the canonical green business fixture.
 2. Show 2A local and/or live evidence:
    - business state green,

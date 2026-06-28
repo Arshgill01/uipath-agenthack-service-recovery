@@ -56,6 +56,31 @@ The UiPath implementation uses Maestro Case and Action Center for lifecycle and 
 - Supporting surfaces: Test Manager for eval representation, Data Fabric/Orchestrator for audit proof, Action Center for human review lifecycle.
 - Coding-agent bonus: Codex was used to build and validate the repo; proof is documented in `README.md` and `docs/submission/CODING_AGENT_PROOF_LOG.md`.
 
+## Devpost Final Copy Blocks
+
+Use this section as the final copy/checklist when filling Devpost. Keep field text short enough to scan; link to repo docs for depth.
+
+| Devpost / judging area | Copy or checklist |
+| --- | --- |
+| Project title | Recommended: `Governed Telecom Service Recovery with UiPath Maestro Case`. Fallback if keeping the repo name: `UiPath AgentHack Service Recovery`. |
+| Track | `UiPath Maestro Case`. Do not select Maestro BPMN. Select Test Cloud only as a supporting category if the form allows it without implying automated Test Cloud execution. |
+| Problem | Telecom service recovery often closes cases because CRM/order/billing/support notes look green while authoritative network telemetry is missing, stale, or contradictory. Wrong closure drives repeat contacts, SLA breaches, service credits, churn risk, and weak audit trails. |
+| What it does | The solution runs a service-recovery case through structured agent interpretation, deterministic policy reconciliation, Maestro Case routing, Action Center human review, and durable audit evidence. It proves two high-risk paths: missing/stale authoritative evidence routes to verification, while fresh contradiction escalates to human review. |
+| How it works | The agent emits a schema-validated Agent Interpretation Event, including the raw `closure_candidate` recommendation. Policy then checks source authority, freshness, contradiction, confidence, and pinned policy versions. The final Policy Decision Event is separate, linked to the agent event, and controls the next stage. |
+| UiPath platform use / Platform Usage | Maestro Case is the orchestration boundary; Action Center handles reviewer lifecycle and structured return; Orchestrator stores package/process/version and bucket audit proof; Data Fabric V2 stores queryable full-payload audit evidence; Test Manager represents the E-001 through E-009 eval suite; UiPath CLI provides repeatable validation/readback. |
+| Agentic behavior | The agent interprets messy technician, customer, and support context into structured signals. Optional Gemini/Vertex proof shows live LLM interpretation, including advocate/skeptic disagreement. The LLM never owns closure; deterministic policy does. |
+| Human-in-the-loop | High-impact contradictions route to Action Center human review with structured reviewer action/comment. The final video should show Action Center lifecycle or readback plus the custom evidence packet for readable proof. |
+| Business Impact & Adoption Potential | Impact areas: lower wrongful closure rate, fewer repeat contacts, faster path to correct remediation, SLA breach reduction, lower service-credit exposure, and stronger audit completeness for regulated service operations. |
+| Technical Execution, Feasibility & Versatility | Evidence: 46 unit tests, E-001 through E-009 passing, repeatable `scripts/run_submission_check.sh`, E-002/E-004 proof artifacts, live UiPath task IDs, Data Fabric V2 audit readback, Orchestrator bucket audit artifact, and explicit honest boundaries. |
+| Completeness of Delivery | Public repo has MIT license, README/setup, UiPath component list, coding-agent disclosure, proof logs, demo runbook, submission checklist, product feedback docs, and repeatable local validation scripts. |
+| Creativity & Innovation | The novel boundary is not "AI closes the case"; it is governed service recovery where agents propose, policy decides, Maestro routes, humans own exceptions, and explanations/audit are generated once and reused across proof surfaces. |
+| Presentation | Follow `docs/demo/DEMO_STORYBOARD.md`. Keep the video under five minutes, show the solution running, show UiPath surfaces, show the AIE/PDE boundary, and stop by 4:55. |
+| Product feedback / Best Product Feedback | Mention the strongest recommendation: add a Maestro Case human-review readiness preflight covering tenant services/roles, Action task required fields, generated Action app binding, input/output mappings, package/feed versioning, and audit readiness. Source docs: `docs/product/FEEDBACK_SURVEY_FINAL_DRAFT.md` and `docs/product/FEEDBACK_AWARD_APPENDIX.md`. |
+| Coding-agent bonus | `Codex was used as the coding agent to build the local core, evals, UiPath validation runbooks, evidence packets, product-feedback evidence, and final submission pack. It is documented in README and docs/submission/CODING_AGENT_PROOF_LOG.md. Codex is build-time assistance; UiPath and deterministic policy remain runtime authority.` |
+| Screenshots/images to upload | Prefer: `docs/demo/artifacts/evidence_packet_E002_desktop.png`, `docs/demo/artifacts/evidence_packet_E004_desktop.png`, `docs/demo/artifacts/evidence_packet_E003_adversarial_desktop.png`, plus one UiPath platform screenshot if captured during recording. |
+| Repository link check | Ensure the submitted repository is public, includes `LICENSE` with MIT text, and the README points to setup, UiPath components, coding-agent use, and validation commands. |
+| Presentation deck link check | Upload/share the deck with public or jury-access permissions. The deck should mirror the video: problem, UiPath architecture, 2A/2B contrast, eval/learning loop, product feedback, coding-agent proof, business impact. |
+
 ## Evidence Links
 
 - Repeatable local proof: `scripts/run_demo.sh`
