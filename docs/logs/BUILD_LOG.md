@@ -27,6 +27,7 @@ Commands run:
 - `python -m service_recovery_core.evals --output docs/validation/artifacts/2026-06-28/test-manager-feasibility-spike/local_baseline.json`
 - `python -m service_recovery_core.test_manager_bridge --eval-results docs/validation/artifacts/2026-06-28/test-manager-feasibility-spike/local_baseline.json --junit docs/validation/artifacts/test-manager-results/Service_Recovery_E_001_through_E_009_Baseline___20260626_1017.xml --execution-stats docs/validation/artifacts/2026-06-28/test-manager-feasibility-spike/04-tm-terminal-execution-stats.json --output docs/validation/artifacts/2026-06-28/test-manager-feasibility-spike/test_manager_bridge_report.json`
 - `python -m unittest tests/test_test_manager_bridge.py`
+- `scripts/run_submission_check.sh`
 
 Validation:
 
@@ -34,6 +35,7 @@ Validation:
 - PASS: `SREV:9` read back with latest status `Finished`, and terminal manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` read back as `ExecutionType: Manual`, `IsRunningAutomated: false`, `Status: Finished`, `Passed: 9`.
 - PASS: Test Manager bridge verifier reported `status: passed` with claim boundary `manual_test_manager_execution_only; automated_test_cloud_execution_unclaimed`.
 - PASS: targeted bridge tests ran 3 tests.
+- PASS: `scripts/run_submission_check.sh` ran 58 tests and verified demo artifacts.
 - PARTIAL: automated Test Cloud execution remains unvalidated. `ServiceRecoveryEvalProcessProbe:0.0.3` is package-visible but not Test Manager automation-visible, Shared has no process binding, and `list-automations` returns `Data: []`.
 
 Open risks:

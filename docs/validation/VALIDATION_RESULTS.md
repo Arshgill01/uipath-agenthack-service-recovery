@@ -6,6 +6,66 @@ Use [VALIDATION_GATES.md](VALIDATION_GATES.md) for pass/fail criteria.
 
 The data model and integration map are now grounded in observed platform facts. Remaining partials are explicit: native Case does not provide the full domain audit alone, generated Action Center UI is not demo-legible, legacy snake_case Data Fabric fields are not reliable for audit payloads, and automated Test Cloud execution is not claimed. Data Fabric V2 and terminal manual Test Manager execution are validated.
 
+## 2026-06-28 - G-007 Targeted Test Manager Feasibility Spike
+
+Environment:
+
+- UiPath CLI authenticated for org `keepingitlowkey`, tenant `DefaultTenant`.
+- Test Manager project `SREV`.
+- Test set `SREV:9`.
+- Existing terminal manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11`.
+
+Gate/wave:
+
+- G-007: Test Cloud / Test Manager eval crossover.
+- Wave 39 final validation.
+
+Assumption tested:
+
+- The automated Test Cloud non-claim might be reducible through a targeted read-only discovery pass, or by strengthening the local eval-to-Test Manager evidence bridge without live mutation.
+
+Steps:
+
+1. Re-read the required G-007 orientation docs and validator skill.
+2. Ran read-only CLI discovery for auth, `SREV`, `SREV:9`, terminal execution stats, visible folders, the existing probe package, Shared-folder processes, Test Manager automation discovery, and relevant help surfaces.
+3. Generated a local eval JSON artifact.
+4. Ran the machine-readable bridge verifier comparing local eval results, exported Test Manager JUnit XML, and terminal execution stats.
+
+Observed:
+
+- Auth remained live for org `keepingitlowkey`, tenant `DefaultTenant`.
+- `SREV:9` still reads back with latest execution status `Finished`.
+- Terminal execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` reads back as `ExecutionType: Manual`, `IsRunningAutomated: false`, `Status: Finished`, `Passed: 9`, `Failed: 0`, and `None: 0`.
+- Only Standard folder `Shared` was visible in this read-only session.
+- `ServiceRecoveryEvalProcessProbe:0.0.3` is visible as an Orchestrator package with `PackageType: Process` and `IsActive: false`.
+- Shared folder process listing returned no processes.
+- `uip tm testcases list-automations` for Shared returned `Data: []`.
+- CLI help still exposes `link-automation` and `testsets run --execution-type automated`, but those require a Test Manager-visible package automation.
+- The bridge verifier returned `status: passed` and explicit claim boundary `manual_test_manager_execution_only; automated_test_cloud_execution_unclaimed`.
+- `scripts/run_submission_check.sh` passed after the bridge verifier was wired into the non-mutating local proof path.
+
+Result:
+
+- PASS for read-only SREV/Test Manager state inspection.
+- PASS for strengthened local bridge verification between E-001 through E-009 local evals and the exported Test Manager manual execution/JUnit proof.
+- PASS for final local submission sanity check after the bridge update.
+- PARTIAL for reducing the automated Test Cloud non-claim. No read-only evidence showed a discoverable automation target; no automated execution was run or claimed.
+
+Decision impact:
+
+- Preserve the honest boundary: manual Test Manager representation/execution/report/JUnit is validated; automated Test Cloud execution remains unclaimed.
+- The minimal path that could reduce the non-claim is a mutation and requires approval: create or publish a supported UiPath test automation target in Shared, confirm `list-automations` can see it, link it to a scratch or selected SREV test case, then perform and read back a successful automated execution.
+- `scripts/run_submission_check.sh` verifies the manual Test Manager evidence bridge locally without live UiPath mutation.
+
+Product feedback:
+
+- No new PF ID. This strengthens PF-020/PF-024: package/process visibility and Test Manager automation visibility remain distinct, and local eval/JUnit import still needs custom bridge code.
+
+Evidence:
+
+- `docs/validation/artifacts/2026-06-28/test-manager-feasibility-spike/README.md`
+- `docs/validation/artifacts/2026-06-28/test-manager-feasibility-spike/test_manager_bridge_report.json`
+
 ## 2026-06-28 - Final-Lap Dev/Eval Booster Validation
 
 Scope:
