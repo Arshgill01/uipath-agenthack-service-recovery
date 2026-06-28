@@ -3481,3 +3481,31 @@ Open risks:
 
 - No new scratch resources were created for this workstream; existing scratch coverage from PF-028 was sufficient.
 - Generated Action Center UI remains not final-demo ready; this probe strengthens the product-feedback evidence rather than changing the demo-safe proof path.
+
+### 2026-06-28 - Agent / Final Targeted Development Hardening
+
+What changed:
+
+- Added `service_recovery_core.submission_proof`, a non-mutating parsed verifier for final submission proof artifacts and claim docs.
+- Wired `scripts/run_submission_check.sh` to run the verifier after evals and demo proof artifact verification.
+- Added `tests/test_submission_proof.py` to cover the current proof contract plus failure cases for unsafe policy-improvement promotion and adversarial-route drift.
+
+Commands:
+
+- `python -m unittest tests.test_submission_proof`
+- `python -m service_recovery_core.submission_proof --artifact-dir docs/demo/artifacts`
+- `python -m unittest discover -s tests`
+- `scripts/run_submission_check.sh`
+
+Validation:
+
+- PASS: targeted verifier tests ran 3 tests.
+- PASS: parsed submission proof verifier checked 11 artifacts and 6 claim docs.
+- PASS: full unit suite ran 49 tests.
+- PASS: `scripts/run_submission_check.sh` ran 49 tests and verified demo artifacts.
+- No live UiPath tenant mutation and no Gemini/Vertex rerun were performed.
+
+Open risks:
+
+- Existing Python 3.9 `google-auth` end-of-life warnings still appear during the test suite.
+- Final video still needs to visibly show the coding-agent proof beat; this change only makes the local proof set harder to drift silently.

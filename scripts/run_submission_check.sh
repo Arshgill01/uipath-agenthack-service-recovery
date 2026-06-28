@@ -14,6 +14,7 @@ Runs the non-mutating local submission sanity check:
   - unit tests
   - local eval suite
   - existing E-002/E-004 demo proof artifact verification
+  - parsed final proof index for track, coding-agent, feedback, LLM, and learning-loop artifacts
   - LLM/adversarial proof artifact presence and key-string checks
   - governed learning-loop artifact presence and key-string checks
   - shell syntax checks for demo wrappers
@@ -37,6 +38,7 @@ fi
 python -m unittest discover -s tests
 python -m service_recovery_core.evals --output /tmp/service_recovery_local_baseline.json >/dev/null
 python -m service_recovery_core.demo_proof --output-dir "$ARTIFACT_DIR" --verify-only >/dev/null
+python -m service_recovery_core.submission_proof --artifact-dir "$ARTIFACT_DIR" >/dev/null
 
 bash -n scripts/run_demo.sh
 bash -n scripts/run_llm_demo.sh
