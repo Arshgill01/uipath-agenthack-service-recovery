@@ -39,6 +39,21 @@ class ExternalEvidenceTests(unittest.TestCase):
         self.assertEqual(evidence[3]["field"], "service_live_status")
         self.assertEqual(evidence[3]["value"], "not_live")
 
+    def test_parser_ignores_blank_template_rows(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            path = Path(temp_dir) / "sheet.csv"
+            path.write_text(
+                DEFAULT_SAMPLE_PATH.read_text(encoding="utf-8")
+                + ",,,,FALSE,,,\n"
+                + ",,,,FALSE,,,\n",
+                encoding="utf-8",
+            )
+            source_payload = load_external_source_file(path)
+
+            evidence = parse_external_evidence(source_payload)
+
+            self.assertEqual(len(evidence), 5)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -29,6 +29,11 @@ def main() -> int:
     source = parser.add_mutually_exclusive_group()
     source.add_argument("--source-url", default=None, help="Public read-only CSV or JSON evidence source URL.")
     source.add_argument("--source-file", default=None, help="Local CSV or JSON evidence source file.")
+    parser.add_argument(
+        "--source-ref",
+        default=None,
+        help="Optional display/source reference to record when reading from --source-file.",
+    )
     parser.add_argument("--output-dir", default="docs/demo/artifacts", help="Output artifact directory.")
     parser.add_argument("--verify-only", action="store_true", help="Verify existing external evidence proof artifacts.")
     args = parser.parse_args()
@@ -39,7 +44,7 @@ def main() -> int:
             source_payload = load_external_source_url(args.source_url)
         else:
             source_path = Path(args.source_file) if args.source_file else DEFAULT_SAMPLE_PATH
-            source_payload = load_external_source_file(source_path)
+            source_payload = load_external_source_file(source_path, source_ref=args.source_ref)
         build_external_evidence_artifacts(source_payload, output_dir)
 
     errors = verify_external_evidence_artifacts(output_dir)
@@ -58,9 +63,9 @@ def load_external_source_url(url: str) -> dict[str, Any]:
     return _source_payload(raw, source_ref=url, content_type=content_type)
 
 
-def load_external_source_file(path: Path) -> dict[str, Any]:
+def load_external_source_file(path: Path, *, source_ref: str | None = None) -> dict[str, Any]:
     raw = path.read_text(encoding="utf-8")
-    return _source_payload(raw, source_ref=str(path), content_type=_content_type_for_path(path))
+    return _source_payload(raw, source_ref=source_ref or str(path), content_type=_content_type_for_path(path))
 
 
 def build_external_evidence_artifacts(source_payload: dict[str, Any], output_dir: Path) -> dict[str, Any]:
@@ -143,7 +148,7 @@ def parse_external_evidence(source_payload: dict[str, Any]) -> list[dict[str, An
         rows = _json_rows(raw)
     else:
         rows = list(csv.DictReader(raw.splitlines()))
-    evidence = [_normalize_row(row) for row in rows]
+    evidence = [_normalize_row(row) for row in rows if not _is_blank_template_row(row)]
     for signal in evidence:
         validate_evidence_signal(signal)
     return evidence
@@ -194,6 +199,11 @@ def _normalize_row(row: dict[str, Any]) -> dict[str, Any]:
         "ttl_seconds": int(row["ttl_seconds"]),
         "observed_at": str(row["observed_at"]),
     }
+
+
+def _is_blank_template_row(row: dict[str, Any]) -> bool:
+    identifying_values = [row.get("source"), row.get("case_id"), row.get("field"), row.get("value")]
+    return all(str(value or "").strip() == "" for value in identifying_values)
 
 
 def _parse_bool(value: Any) -> bool:
