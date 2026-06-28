@@ -131,13 +131,13 @@ REQUIRED_DOC_CLAIMS = {
         "UiPath remains the runtime orchestration and governance layer",
     ),
     "docs/product/FEEDBACK_SURVEY_COPY_READY.md": (
-        "Add a Maestro Case human-review readiness and preflight path",
+        "Add a Maestro Case Human-Review Readiness Check",
         "Automated Test Cloud execution",
         "Generated Action Center UI is final-demo ready",
         "Native Case history alone passes the domain audit gate",
     ),
     "docs/product/FEEDBACK_AWARD_APPENDIX.md": (
-        "Maestro Case human-review readiness/preflight",
+        "Maestro Case Human-Review Readiness Check",
         "Do not claim automated Test Cloud execution",
         "Do not claim generated Action Center UI is final-demo ready",
         "Do not claim native Case history alone passes",

@@ -71,23 +71,27 @@ Reviewer-facing evidence summary: these observations came from repeated live bui
 
 ## Q11 - One Thing To Change
 
-Add a Maestro Case human-review readiness and preflight path.
+Add a Maestro Case Human-Review Readiness Check: a preflight and auditability contract for Cases that route work to a human reviewer.
 
-Before a builder publishes or runs a Case with a human review step, UiPath should verify:
+This is not a request for generic validation. Maestro already has validation, simulation, debug, testing, Actions, retry, and migration primitives. The gap we hit is that the proof of "will this human-review Case actually work at runtime?" is split across too many surfaces. Before a builder publishes or starts a Case with a human review step, UiPath should produce one readiness report that verifies:
 
 - tenant services and roles: Actions, Action Center, Orchestrator, Test Manager, Integration Service, Data Service/Data Fabric,
-- required Action task fields such as Title,
+- required Action task fields such as `Title`,
 - schema-to-generated-page binding for every input/output property,
-- Case variable to Action input mapping,
-- Action output to Case variable mapping,
+- Case variable to Action input mapping and Action output to Case variable mapping,
+- whether the reviewer will see proof-critical fields with stable labels, not generated placeholders such as `Unnamed String 1`,
 - package/feed binding and the package version the next process run will use,
 - process `AutoUpdate` and package-version readback,
 - agreement between Case validation, solution dry-run packaging, and Studio Web upload/import,
-- native audit coverage versus required custom audit events.
+- native Case audit coverage versus required custom audit events.
 
-This would have shortened our slowest loops: enabling Actions, diagnosing generated Action page binding, fixing runtime-only task field failures, proving package version pinning, reconciling Case validation versus solution dry-run/upload, and deciding where to store audit evidence. Maestro Case is strongest when it coordinates agents, systems, and people; those workflows need a preflight that proves the reviewer will see the right evidence and that the Case package will instantiate the intended Action app version before a live case starts.
+The report could live in Studio Web as `Run human-review readiness check` and in CLI as a command such as `uip maestro case preflight`. It should return pass/fail findings with fix links, not just a generic runtime incident: for example, "Actions is not enabled for this tenant," "Action task Title is missing," "PolicyDecisionJson has no rendered control in the generated reviewer page," "this Case package will instantiate Action app version 1.0.0, not the repaired 1.0.1 deployment," or "native Case history will not reconstruct the declared agent/policy/human audit contract without a custom event."
 
-Reviewer-facing evidence summary: this recommendation is based on the same readiness problems appearing in several places: tenant service enablement, Action task required fields, generated reviewer-page binding, package/feed version binding, Case validation versus solution packaging, and audit-readiness proof. It also matches the official Maestro Case framing: dynamic, exception-heavy work with people, agents, automations, visibility, and auditability needs a reliable readiness gate.
+The same product primitive should also produce a native Case audit timeline after runtime: linked Agent Interpretation Event, Policy Decision Event, evidence state, block reason, human action/comment, timestamps, package version, and policy versions. That makes this one coherent request: prove the human-review Case is ready before runtime, then prove what happened after runtime.
+
+This would have shortened our slowest loops: enabling Actions, diagnosing generated Action page binding, fixing runtime-only task field failures, proving package version pinning, reconciling Case validation versus solution dry-run/upload, and deciding where to store audit evidence. This is not telecom-specific. Any serious Maestro Case workflow with agents, automations, humans, policy decisions, and audit obligations can fail in the same way if designer validity does not prove runtime reviewer readiness.
+
+Reviewer-facing evidence summary: this recommendation is based on the same readiness problems appearing in several places: tenant service enablement, Action task required fields, generated reviewer-page binding, package/feed version binding, Case validation versus solution packaging, and audit-readiness proof. Public docs show related validation/simulation/testing primitives, but our build needed one cross-surface readiness and auditability contract for human-review Cases.
 
 ## Q12 - What Surprised You / Advice To Another Developer
 

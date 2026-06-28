@@ -2,6 +2,34 @@
 
 Append one entry per substantial agent run.
 
+### 2026-06-29 - Agent / Feedback Thesis Validation
+
+What changed:
+
+- Reviewed the attached ChatGPT feedback analysis against the repo feedback docs and public UiPath/Devpost context.
+- Strengthened the primary feedback thesis from a generic "human-review preflight path" into a Maestro Case Human-Review Readiness Check and auditability contract.
+- Updated the copy-ready survey answer, final survey draft, feedback appendix, product-feedback log, and research log so Q11 is product-spec-like: existing validation/simulation/testing primitives are acknowledged, while the missing cross-surface runtime-readiness and auditability report is stated precisely.
+
+Commands run:
+
+- `cat` on attached analysis files and repo feedback docs.
+- Web/source review of public UiPath Maestro, Actions, testing, and Devpost feedback context.
+- `git diff --check`
+- `python3 -m service_recovery_core.submission_proof --artifact-dir docs/demo/artifacts`
+- `python3 -m unittest tests.test_submission_proof`
+- `scripts/run_submission_check.sh`
+
+Validation:
+
+- PASS: `git diff --check`.
+- PASS: submission-proof verifier checked 16 artifacts, 11 claim-boundary docs, 8 claim docs, and the coding-agent manifest.
+- PASS: targeted submission-proof regression tests ran 9 tests.
+- PASS: `scripts/run_submission_check.sh` ran 62 tests and verified demo artifacts.
+
+Open risks:
+
+- No live UiPath or Gemini operation was run; this was feedback strategy and copy refinement only.
+
 ### 2026-06-29 - Agent / Final-Lap Product Feedback Source Refresh
 
 What changed:

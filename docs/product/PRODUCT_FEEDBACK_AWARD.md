@@ -350,7 +350,7 @@ Workaround:
 
 Suggested improvement:
 
-- Add a shared Maestro Case readiness/preflight contract used by Case authoring, solution dry-run, and Studio Web import. It should check Case entry/completion rules, Action task required fields, Action app binding/version, reviewer visibility where possible, and package/feed selection before runtime.
+- Add a Maestro Case Human-Review Readiness Check and auditability contract used by Case authoring, solution dry-run, Studio Web import, package/process binding, and runtime audit proof. It should check Case entry/completion rules, Action task required fields, Action app binding/version, reviewer visibility where possible, package/feed selection, and declared audit coverage before runtime.
 - When a required Action task field is missing, name the exact field, show the creation/update flag or Studio property path, and include a link to repair the task.
 
 Evidence:
@@ -1564,7 +1564,7 @@ Context:
 
 - ID: PF-026.
 - Status: observed.
-- Goal: test whether current Maestro Case diagnostics make the existing human-review readiness/preflight recommendation product-manager-ready.
+- Goal: test whether current Maestro Case diagnostics make the existing Human-Review Readiness Check recommendation product-manager-ready.
 - Product surface: Maestro Case CLI process summaries, diagnostics, incidents, and error-code readback.
 - Account/tenant: `keepingitlowkey` / `DefaultTenant`, user `arshgill6120@gmail.com`.
 - Wave/gate: Product feedback sprint / G-003.
@@ -1667,7 +1667,7 @@ Observed:
 
 Impact:
 
-- Build impact: medium/high. It does not block the current submission because the workaround is known, but it is exactly the first-time builder gap behind the primary readiness/preflight recommendation.
+- Build impact: medium/high. It does not block the current submission because the workaround is known, but it is exactly the first-time builder gap behind the primary Human-Review Readiness Check recommendation.
 - Demo/submission impact: medium. It strengthens the final product-feedback answer with fresh read-only evidence and does not mutate tenant state.
 - Severity: medium/high.
 
@@ -1678,7 +1678,7 @@ Workaround:
 
 Suggested improvement:
 
-- Add a Maestro Case human-review readiness command or guided checklist that checks tenant services, task reviewer permissions, required task fields, Action app binding/version, package/feed binding, and process package version.
+- Add a Maestro Case Human-Review Readiness Check that verifies tenant services, task reviewer permissions, required task fields, Action app binding/version, package/feed binding, process package version, reviewer visibility, and audit coverage.
 - Harmonize folder arguments across `uip tasks` commands or add aliases so `--folder-id` works consistently.
 
 Evidence:

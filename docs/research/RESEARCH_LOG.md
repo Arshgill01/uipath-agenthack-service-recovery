@@ -82,3 +82,28 @@ Decision impact:
 - Strengthened `docs/product/FEEDBACK_AWARD_APPENDIX.md`, `docs/product/FEEDBACK_SURVEY_COPY_READY.md`, and `docs/product/FEEDBACK_SURVEY_FINAL_DRAFT.md` so the Microsoft Form answers stand alone.
 - Kept three evidence classes separate: reproduced build evidence, official/product context, and recommended product improvements.
 - No new UiPath live operation was run; this was source research plus documentation refinement.
+
+## 2026-06-29 - Human-Review Readiness Check Validation
+
+Sources:
+
+| Source | What it contributed | Confidence |
+| --- | --- | --- |
+| https://docs.uipath.com/maestro/automation-cloud/latest/user-guide/publishing-deploying-and-upgrading-agentic-processes | Confirms Maestro publishing has a validation prerequisite before publishing. This means the feedback must not claim "no validation exists"; the gap is narrower: validation did not give us one cross-surface runtime-readiness contract for human-review tasks, package/feed binding, generated page rendering, and audit reconstruction. | official-docs |
+| https://docs.uipath.com/maestro/automation-cloud/latest/user-guide/simulate | Confirms simulation is intentionally limited: it does not invoke robots, agents, or integrations, and gateway conditions are manually chosen. This supports asking for a readiness check that complements simulation rather than replacing it. | official-docs |
+| https://docs.uipath.com/maestro/automation-cloud/latest/user-guide/testing-maestro-processes | Confirms HITL testing is a hard area because Maestro HITL waits for a real person and there is no built-in stand-in response. This supports the product ask for preflightable human-review readiness and clearer test/eval support for HITL Cases. | official-docs |
+| https://docs.uipath.com/maestro/automation-cloud/latest/user-guide/how-to-complex-process | The official complex-process guide sends the builder to Actions when execution pauses on a HITL step and shows repair/retry/migrate flows after failures. This supports the feedback that runtime human-review readiness is distributed across surfaces today. | official-docs |
+| https://www.uipath.com/product/maestro | UiPath positions Maestro as orchestration across AI agents, robots, and people with visibility into steps, decisions, exceptions, and handoffs. This supports the impact framing: the requested readiness/auditability contract is aligned with Maestro's own product promise. | official |
+| https://uipath-agenthack.devpost.com/rules | Confirms Product Feedback is evaluated on completeness, viability, and potential impact. This supports making Q11 a product-spec-style recommendation rather than a bug list. | official |
+
+Conclusion:
+
+- The primary feedback thesis remains valid, but the best wording is more precise than "add a preflight path."
+- Public docs show existing validation, simulation, testing, Actions, retry, and migration primitives. They do not show a single human-review readiness report that proves, before publish/start, that the reviewer task will render proof-critical fields, task inputs/outputs are mapped, service dependencies are enabled, the intended package/feed/version will run, and the Case can reconstruct the agent/policy/human audit chain.
+- The final form should therefore avoid the weak claim "this does not exist anywhere" and use the stronger claim: "the pieces exist, but first-time builders need one Maestro Case Human-Review Readiness Check and auditability contract across the surfaces that currently have to be inspected separately."
+
+Decision impact:
+
+- Upgrade Q11 wording from "human-review readiness and preflight path" to "Maestro Case Human-Review Readiness Check."
+- Treat native Case audit timeline as part of the same product primitive: preflight before runtime, auditability after runtime.
+- Preserve all existing claim boundaries: generated Action Center UI final-demo readiness remains unclaimed, automated Test Cloud execution remains unclaimed, native Case history alone remains partial for full domain audit, and LLM/Codex closure authority remains out of scope.
