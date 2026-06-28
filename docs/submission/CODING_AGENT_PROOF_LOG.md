@@ -27,6 +27,7 @@ Codex was used as a build-time coding agent for repository implementation, valid
 | --- | --- | --- |
 | README coding-agent section | Judges can find the claim from the GitHub front door. | `README.md` |
 | This proof log | Names Codex, work performed, human boundaries, and proof paths. | `docs/submission/CODING_AGENT_PROOF_LOG.md` |
+| Coding-agent evidence manifest | Short demo-safe JSON manifest of branch/commit evidence, repo-visible outputs, private-chat exclusion, and runtime-authority boundaries. | `docs/submission/coding_agent_evidence_manifest.json` |
 | Build log | Records agent work loops, commands, validation, and risks over time. | `docs/logs/BUILD_LOG.md` |
 | Commit history | Shows a dense sequence of implementation, validation, proof, and workstream checkpoints. Commits use the repository's configured git identity, so use commit messages, branch names, and build-log entries together. | `git log --oneline --decorate --max-count=40` |
 | Codex-prefixed branches/worktrees | Shows parallel coding-agent workstreams for forum research and product-feedback evidence. | `git branch --all --verbose --no-abbrev` |
@@ -89,8 +90,9 @@ Use 10 to 20 seconds in the five-minute video:
 
 1. Show the README coding-agent section.
 2. Show this proof log and the commit/branch evidence table.
-3. Show a terminal running `scripts/run_submission_check.sh` or its final passed output.
-4. Say the boundary sentence above.
+3. Show `docs/submission/coding_agent_evidence_manifest.json` for the compact branch/output/runtime-boundary manifest.
+4. Show a terminal running `scripts/run_submission_check.sh` or its final passed output.
+5. Say the boundary sentence above.
 
 ## Current Validation
 

@@ -4,7 +4,12 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from service_recovery_core.submission_proof import CLAIM_BOUNDARY_DOCS, REQUIRED_DOC_CLAIMS, verify_submission_proof
+from service_recovery_core.submission_proof import (
+    CLAIM_BOUNDARY_DOCS,
+    REQUIRED_DOC_CLAIMS,
+    _verify_coding_agent_manifest,
+    verify_submission_proof,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -147,6 +152,27 @@ class SubmissionProofTests(unittest.TestCase):
 
             self.assertEqual(errors, [])
 
+    def test_reports_coding_agent_runtime_authority_overclaim(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_root = Path(temp_dir)
+            manifest_dir = temp_root / "docs" / "submission"
+            manifest_dir.mkdir(parents=True)
+            source = REPO_ROOT / "docs" / "submission" / "coding_agent_evidence_manifest.json"
+            manifest = json.loads(source.read_text(encoding="utf-8"))
+            manifest["runtime_authority"]["codex_closes_cases"] = True
+            (manifest_dir / "coding_agent_evidence_manifest.json").write_text(
+                json.dumps(manifest, indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+
+            errors = _verify_coding_agent_manifest(temp_root)
+
+            self.assertIn(
+                "docs/submission/coding_agent_evidence_manifest.json: "
+                "failed proof check codex_does_not_close_cases",
+                errors,
+            )
+
 
 def _copy_required_artifacts(target_dir: Path) -> None:
     source_dir = REPO_ROOT / "docs/demo/artifacts"
@@ -170,6 +196,11 @@ def _copy_required_proof_tree(target_root: Path) -> Path:
         target_path = target_root / relative_path
         target_path.parent.mkdir(parents=True, exist_ok=True)
         target_path.write_bytes(source_path.read_bytes())
+
+    manifest_source = REPO_ROOT / "docs/submission/coding_agent_evidence_manifest.json"
+    manifest_target = target_root / "docs/submission/coding_agent_evidence_manifest.json"
+    manifest_target.parent.mkdir(parents=True, exist_ok=True)
+    manifest_target.write_bytes(manifest_source.read_bytes())
 
     return target_root
 

@@ -56,11 +56,11 @@ The UiPath implementation uses Maestro Case and Action Center for lifecycle and 
 - Primary track: UiPath Maestro Case.
 - Reason: the solution is dynamic, exception-heavy casework where routes emerge from evidence freshness and contradiction state, not a predictable BPMN sequence.
 - Supporting surfaces: Test Manager for eval representation, Data Fabric/Orchestrator for audit proof, Action Center for human review lifecycle.
-- Coding-agent bonus: Codex was used to build and validate the repo; proof is documented in `README.md` and `docs/submission/CODING_AGENT_PROOF_LOG.md`.
+- Coding-agent bonus: Codex was used to build and validate the repo; proof is documented in `README.md`, `docs/submission/CODING_AGENT_PROOF_LOG.md`, and `docs/submission/coding_agent_evidence_manifest.json`.
 
 Devpost-ready coding-agent paragraph:
 
-> We used Codex as the coding agent throughout the build: it helped implement the local service-recovery core, deterministic policy tests, eval harness, evidence-packet renderer, UiPath CLI validation loops, product-feedback evidence logs, and final submission docs. The proof is auditable in GitHub through the README coding-agent section, `docs/submission/CODING_AGENT_PROOF_LOG.md`, `docs/logs/BUILD_LOG.md`, Codex-prefixed branches/workstreams, and the non-mutating `scripts/run_submission_check.sh` validation wrapper. Codex was build-time assistance only; it is not part of runtime case closure authority, does not mutate production policy, and does not replace UiPath Maestro Case orchestration, Action Center accountability, deterministic policy, or human review.
+> We used Codex as the coding agent throughout the build: it helped implement the local service-recovery core, deterministic policy tests, eval harness, evidence-packet renderer, UiPath CLI validation loops, product-feedback evidence logs, and final submission docs. The proof is auditable in GitHub through the README coding-agent section, `docs/submission/CODING_AGENT_PROOF_LOG.md`, `docs/submission/coding_agent_evidence_manifest.json`, `docs/logs/BUILD_LOG.md`, Codex-prefixed branches/workstreams, and the non-mutating `scripts/run_submission_check.sh` validation wrapper. Codex was build-time assistance only; it is not part of runtime case closure authority, does not mutate production policy, and does not replace UiPath Maestro Case orchestration, Action Center accountability, deterministic policy, or human review.
 
 ## Devpost Final Copy Blocks
 
@@ -82,7 +82,7 @@ Use this section as the final copy/checklist when filling Devpost. Keep field te
 | Creativity & Innovation | The novel boundary is not "AI closes the case"; it is governed service recovery where agents propose, policy decides, Maestro routes, humans own exceptions, and explanations/audit are generated once and reused across proof surfaces. |
 | Presentation | Follow `docs/demo/DEMO_STORYBOARD.md`. Keep the video under five minutes, show the solution running, show UiPath surfaces, show the AIE/PDE boundary, and stop by 4:55. |
 | Product feedback / Best Product Feedback | Mention the strongest recommendation: add a Maestro Case human-review readiness preflight covering tenant services/roles, Action task required fields, generated Action app binding, input/output mappings, package/feed versioning, and audit readiness. Source docs: `docs/product/FEEDBACK_SURVEY_FINAL_DRAFT.md` and `docs/product/FEEDBACK_AWARD_APPENDIX.md`. |
-| Coding-agent bonus | `Codex was used as the coding agent to build the local core, evals, UiPath validation runbooks, evidence packets, product-feedback evidence, and final submission pack. It is documented in README and docs/submission/CODING_AGENT_PROOF_LOG.md. Codex is build-time assistance; UiPath and deterministic policy remain runtime authority.` |
+| Coding-agent bonus | `Codex was used as the coding agent to build the local core, evals, UiPath validation runbooks, evidence packets, product-feedback evidence, and final submission pack. It is documented in README, docs/submission/CODING_AGENT_PROOF_LOG.md, and docs/submission/coding_agent_evidence_manifest.json. Codex is build-time assistance; UiPath and deterministic policy remain runtime authority.` |
 | Screenshots/images to upload | Prefer: `docs/demo/artifacts/evidence_packet_E002_desktop.png`, `docs/demo/artifacts/evidence_packet_E004_desktop.png`, `docs/demo/artifacts/evidence_packet_E003_adversarial_desktop.png`, plus one UiPath platform screenshot if captured during recording. |
 | Repository link check | Ensure the submitted repository is public, includes `LICENSE` with MIT text, and the README points to setup, UiPath components, coding-agent use, and validation commands. |
 | Presentation deck link check | Upload/share the deck with public or jury-access permissions. The deck should mirror the video: problem, UiPath architecture, 2A/2B contrast, eval/learning loop, product feedback, coding-agent proof, business impact. |
@@ -105,6 +105,8 @@ Use this section as the final copy/checklist when filling Devpost. Keep field te
 - Product feedback answer bank: `docs/product/FEEDBACK_SURVEY_COPY_READY.md`
 - Track decision: `docs/submission/TRACK_SELECTION_DECISION.md`
 - Coding-agent proof log: `docs/submission/CODING_AGENT_PROOF_LOG.md`
+- Coding-agent evidence manifest: `docs/submission/coding_agent_evidence_manifest.json`
+- Coding-agent demo beat checklist: `docs/submission/CODING_AGENT_DEMO_BEAT_CHECKLIST.md`
 - Forum/Devpost research digest: `docs/research/AGENTHACK_FORUM_RESEARCH.md`
 
 ## Honest Boundaries
