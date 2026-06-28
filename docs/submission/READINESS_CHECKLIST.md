@@ -33,7 +33,7 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 | G-005 Distinct 2A/2B routing | PASS | E-002 route `verify_telemetry`; E-004 route `human_review`; live tasks and local artifacts | Keep both beats on same green business fixture with only authoritative signal changed. |
 | G-006 Demo surface visibility | PASS for custom packet; PARTIAL for generated Action Center UI | `evidence_packet_E002_desktop.png`; `evidence_packet_E004_desktop.png`; `evidence_packet_E003_adversarial_desktop.png`; PF-013 | Use custom packet as primary visual surface. |
 | G-007 Test Cloud/Test Manager crossover | PASS for manual Test Manager representation/execution; PARTIAL for automated Test Cloud | Project `SREV`, test set `SREV:9`, terminal manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11`, mapping doc, JUnit export `docs/validation/artifacts/test-manager-results/Service_Recovery_E_001_through_E_009_Baseline___20260626_1017.xml`; automation-discovery and package-probe evidence in `docs/validation/TEST_MANAGER_MAPPING.md` including `ServiceRecoveryEvalProcessProbe:0.0.2/0.0.3` | Do not claim automated Test Cloud execution. |
-| G-008 Coding-agent/CLI bonus | PASS for CLI-assisted lifecycle artifacts | `uip` CLI validation, package/process/task/bucket/test-manager commands in logs, `scripts/run_demo.sh` | If shown live, run readback commands deliberately and log new evidence. |
+| G-008 Coding-agent/CLI bonus | PASS for auditable Codex proof package plus CLI-assisted lifecycle artifacts | `README.md`; `docs/submission/CODING_AGENT_PROOF_LOG.md`; `docs/logs/BUILD_LOG.md`; Codex-prefixed branches/workstreams in git history; `uip` CLI validation commands in logs; `scripts/run_submission_check.sh`; `scripts/run_demo.sh` | Final video should include the 10-20 second proof beat from `docs/demo/DEMO_STORYBOARD.md`. Do not imply Codex is runtime closure authority. |
 
 ## Product Feedback Award
 
@@ -49,9 +49,11 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 | --- | --- | --- |
 | Project brief | Ready | `PROJECT_BRIEF.md` |
 | Submission brief | Ready | `docs/submission/SUBMISSION_BRIEF.md` |
+| Platform integration proof map | Ready | `docs/submission/PLATFORM_INTEGRATION_PROOF_MAP.md` |
 | Feedback answer bank | Ready except user fields | `docs/product/FEEDBACK_SURVEY_COPY_READY.md` |
 | Track selection decision | Ready | `docs/submission/TRACK_SELECTION_DECISION.md` |
-| Coding-agent proof log | Ready | `docs/submission/CODING_AGENT_PROOF_LOG.md` |
+| Coding-agent proof log | Ready as audit artifact | `docs/submission/CODING_AGENT_PROOF_LOG.md` |
+| Devpost-ready coding-agent paragraph | Ready | `docs/submission/SUBMISSION_BRIEF.md` |
 | Forum/Devpost research digest | Ready | `docs/research/AGENTHACK_FORUM_RESEARCH.md` |
 | Demo-safe runbook | Ready | `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md` |
 | Repeatable proof wrapper | Ready | `scripts/run_demo.sh` |
@@ -67,6 +69,48 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 | Live adversarial packet screenshots | Ready | `docs/demo/artifacts/evidence_packet_E003_adversarial_desktop.png`; `docs/demo/artifacts/evidence_packet_E003_adversarial_mobile.png` |
 | Governed learning-loop artifact | Ready | `docs/demo/artifacts/policy_improvement_E008.json` |
 | Action Center UI repair assessment | Ready | `docs/validation/ACTION_CENTER_UI_REPAIR_ASSESSMENT.md` |
+
+## Final Pre-Recording Checklist
+
+Use this on June 29, 2026 before recording the Devpost video. The goal is to verify the committed proof set and open the exact screens, not to create fresh live UiPath state.
+
+Run from repo root:
+
+```sh
+git status --short --branch
+scripts/run_submission_check.sh
+git diff --check
+```
+
+If proof artifacts need to be refreshed before recording, run:
+
+```sh
+scripts/run_demo.sh --with-local-checks --no-uipath-next-steps
+```
+
+Then verify the recording files exist:
+
+```sh
+test -s docs/demo/artifacts/evidence_packet_E002.html
+test -s docs/demo/artifacts/evidence_packet_E004.html
+test -s docs/demo/artifacts/evidence_packet_E003_adversarial_live.html
+test -s docs/demo/artifacts/policy_improvement_E008.json
+test -s docs/demo/artifacts/demo_proof_manifest.json
+```
+
+Keep these screens open before pressing record:
+
+| Screen | Purpose |
+| --- | --- |
+| UiPath Automation Cloud Maestro Case / Action Center / Orchestrator / Test Manager tabs | Satisfies the requirement to show UiPath platform surfaces, not just local artifacts. |
+| `docs/demo/artifacts/evidence_packet_E002.html` | Shows missing/stale authoritative evidence route to `verify_telemetry`. |
+| `docs/demo/artifacts/evidence_packet_E004.html` | Shows fresh contradiction route to `human_review`. |
+| `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html` | Shows live LLM interpretation usefulness while preserving policy authority. |
+| `docs/demo/artifacts/policy_improvement_E008.json` | Shows governed learning loop with no auto-promotion. |
+| `README.md` and `docs/submission/CODING_AGENT_PROOF_LOG.md` | Shows coding-agent proof for the bonus. |
+| Terminal with passed `scripts/run_submission_check.sh` output | Shows repeatable validation without live mutation. |
+
+Use `docs/demo/DEMO_STORYBOARD.md` as the recording script and stop by 4:55.
 
 ## Do Not Claim
 

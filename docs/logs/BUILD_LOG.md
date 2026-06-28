@@ -2,6 +2,104 @@
 
 Append one entry per substantial agent run.
 
+### 2026-06-28 - Agent / Final-Lap Branch Review And Integration
+
+What changed:
+
+- Inspected and integrated useful work from the five final-lap branches: `codex/final-feedback-award-package`, `codex/platform-depth-proof-map`, `codex/final-demo-devpost-pack`, `codex/coding-agent-bonus-proof`, and `codex/final-targeted-hardening`.
+- Preserved the claim-safe feedback, platform-depth, Devpost/demo, coding-agent, and submission-verifier improvements while manually resolving shared documentation conflicts.
+- Added `docs/submission/PLATFORM_INTEGRATION_PROOF_MAP.md` and wired `scripts/run_submission_check.sh` to verify the proof map plus the parsed submission proof contract.
+- Added `service_recovery_core/submission_proof.py` and `tests/test_submission_proof.py`; adjusted verifier claim strings after merge so it checks the merged docs rather than stale branch wording.
+
+Commands run:
+
+- `git fetch --all --prune`
+- `git diff --stat` / `git diff --name-status` against each final-lap branch merge-base
+- `python -m service_recovery_core.submission_proof --artifact-dir docs/demo/artifacts`
+- `python -m unittest tests.test_submission_proof`
+- `git diff --check`
+- `rg -n "^(<<<<<<<|=======|>>>>>>>)" . -g '!docs/research/artifacts/**' -g '!docs/validation/artifacts/**' -g '!eval_results/local_baseline.json'`
+- `scripts/run_submission_check.sh`
+
+Validation:
+
+- PASS: parsed submission proof verifier checked 11 artifacts and 6 claim docs.
+- PASS: targeted submission-proof tests ran 3 tests.
+- PASS: `git diff --check`.
+- PASS: conflict-marker scan returned no markers.
+- PASS: `scripts/run_submission_check.sh` ran 49 tests and verified demo artifacts.
+
+Open risks:
+
+- Team name and story-sharing preference remain user-owned final survey/submission fields.
+- Final video still needs a logged-in/live or readback UiPath platform surface on screen; local packets alone are not the strongest video proof.
+- Existing claim boundaries remain: no automated Test Cloud execution, no generated Action Center UI final-demo readiness, no native Case history alone as full G-001 proof, no real telecom production integrations, and no LLM/Codex final closure authority.
+
+### 2026-06-28 15:10 IST - Agent / Coding-Agent Bonus Proof Package
+
+What changed:
+
+- Reworked `docs/submission/CODING_AGENT_PROOF_LOG.md` into an audit-friendly bonus artifact with the Codex claim, human/Codex responsibility split, evidence inventory, representative commits/branches, Devpost/video safety boundaries, and reproduce commands.
+- Updated `README.md` so judges can find the coding-agent proof package and fast audit commands from the GitHub front door.
+- Added Devpost-ready coding-agent wording to `docs/submission/SUBMISSION_BRIEF.md`.
+- Updated `docs/submission/READINESS_CHECKLIST.md` so G-008 tracks the auditable Codex proof package plus CLI-assisted lifecycle artifacts.
+
+Commands run:
+
+- `git status --short --branch`
+- `git fetch origin master`
+- `git switch -c codex/coding-agent-bonus-proof origin/master`
+- `sed -n ...` / `tail ...` reads of required orientation docs including `AGENTS.md`, `PROJECT_BRIEF.md`, `PLAN.md`, forum research, README, coding-agent proof log, build log, product-feedback workstream plan, readiness checklist, demo storyboard, validation gates, eval plan, and Wave 39.
+- `git log --oneline --decorate --max-count=40`
+- `git branch --all --verbose --no-abbrev`
+- `git diff --check`
+- `scripts/run_submission_check.sh`
+
+Validation:
+
+- PASS: `git diff --check`.
+- PASS: `scripts/run_submission_check.sh` completed successfully, ran 46 unit tests, and verified demo artifacts in `docs/demo/artifacts`.
+
+Product feedback:
+
+- No new PF entry. This was coding-agent/submission evidence packaging, not a new UiPath product interaction.
+
+Open risks:
+
+- Final video still needs to show the coding-agent proof beat for strongest bonus visibility.
+- Git commits use the repository's configured human git identity, so the proof package intentionally ties commit history to Codex-prefixed branches, build-log entries, docs, and validation artifacts rather than relying on git author metadata alone.
+- Codex remains build-time assistance only; do not imply runtime case closure authority or production policy mutation.
+
+### 2026-06-28 15:10 IST - Agent / Final Product Feedback Award Package
+
+What changed:
+
+- Started from `master`/`origin/master` commit `5eb0a85` and created branch `codex/final-feedback-award-package`.
+- Re-read the required orientation set: repo control docs, track/coding-agent/forum research, product-feedback source docs, readiness checklist, build log entries, and validation/workstream artifacts.
+- Consolidated the newly merged Product Feedback Workstreams A-D into a ranked top-7 thesis in `docs/product/FEEDBACK_AWARD_APPENDIX.md`.
+- Added a claim boundary map so the award package distinguishes reproduced evidence from forum context and explicit non-claims.
+- Tightened `docs/product/FEEDBACK_SURVEY_FINAL_DRAFT.md` around the primary Maestro Case human-review readiness/preflight recommendation while preserving positive platform findings and cross-product integration friction.
+
+Commands run:
+
+- `git diff --check`
+- `scripts/run_submission_check.sh`
+
+Validation:
+
+- PASS: `git diff --check`.
+- PASS: `scripts/run_submission_check.sh` ran 46 tests and verified demo artifacts.
+
+Product feedback:
+
+- No new PF ID. This is award-package synthesis of existing reproduced PF-001 through PF-028 evidence, with current emphasis on PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-019, PF-020, PF-021, PF-022, PF-023, PF-024, and PF-026 through PF-028.
+
+Open risks:
+
+- Team name and story-sharing preference remain user-owned final survey fields.
+- Forum participant reports remain supporting context only, not reproduced PF evidence.
+- Guardrails remain unchanged: no automated Test Cloud execution claim, no generated Action Center UI final-demo readiness claim, no native Case history alone as G-001 proof, no legacy snake_case Data Fabric full-audit proof, no real telecom production integration, and no LLM final closure authority.
+
 ### 2026-06-28 - Agent / Product Feedback Worktree Review And Merge
 
 What changed:
@@ -3481,3 +3579,79 @@ Open risks:
 
 - No new scratch resources were created for this workstream; existing scratch coverage from PF-028 was sufficient.
 - Generated Action Center UI remains not final-demo ready; this probe strengthens the product-feedback evidence rather than changing the demo-safe proof path.
+
+### 2026-06-28 - Agent / Final Targeted Development Hardening
+
+What changed:
+
+- Added `service_recovery_core.submission_proof`, a non-mutating parsed verifier for final submission proof artifacts and claim docs.
+- Wired `scripts/run_submission_check.sh` to run the verifier after evals and demo proof artifact verification.
+- Added `tests/test_submission_proof.py` to cover the current proof contract plus failure cases for unsafe policy-improvement promotion and adversarial-route drift.
+
+Commands:
+
+- `python -m unittest tests.test_submission_proof`
+- `python -m service_recovery_core.submission_proof --artifact-dir docs/demo/artifacts`
+- `python -m unittest discover -s tests`
+- `scripts/run_submission_check.sh`
+
+Validation:
+
+- PASS: targeted verifier tests ran 3 tests.
+- PASS: parsed submission proof verifier checked 11 artifacts and 6 claim docs.
+- PASS: full unit suite ran 49 tests.
+- PASS: `scripts/run_submission_check.sh` ran 49 tests and verified demo artifacts.
+- No live UiPath tenant mutation and no Gemini/Vertex rerun were performed.
+
+Open risks:
+
+- Existing Python 3.9 `google-auth` end-of-life warnings still appear during the test suite.
+- Final video still needs to visibly show the coding-agent proof beat; this change only makes the local proof set harder to drift silently.
+
+### 2026-06-28 - Platform Integration Depth Proof Map
+
+What changed:
+
+- Added `docs/submission/PLATFORM_INTEGRATION_PROOF_MAP.md` as a judge/reviewer index connecting Maestro Case, Action Center, Orchestrator, Data Fabric, Test Manager, UiPath CLI, custom evidence packets, and local deterministic policy proof.
+- Updated `README.md`, `docs/submission/SUBMISSION_BRIEF.md`, `docs/submission/READINESS_CHECKLIST.md`, and `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md` to point reviewers to the map.
+- Updated `scripts/run_submission_check.sh` so the non-mutating final sanity check verifies the new proof-map file and key claim-boundary strings.
+
+Validation:
+
+- PASS: `git diff --check`.
+- PASS: `scripts/run_submission_check.sh` ran 46 tests, verified demo artifacts in `docs/demo/artifacts`, and verified the new platform proof-map strings. The command emitted Python 3.9 end-of-life warnings from `google-auth`, but exited 0.
+
+Open risks:
+
+- No fresh live UiPath or Gemini operations were run in this pass. The map intentionally indexes existing validated artifacts and keeps existing caveats: generated Action Center UI is not final-demo ready, native Case history alone is not the full domain audit, and automated Test Cloud execution is not claimed.
+
+### 2026-06-28 - Agent / Final Demo + Devpost Submission Pack
+
+What changed:
+
+- Created the final recording run-of-show in `docs/demo/DEMO_STORYBOARD.md` with sub-five-minute time boxes, exact screens/files to open, narration prompts, and explicit claims to avoid.
+- Added Devpost final copy/checklist blocks to `docs/submission/SUBMISSION_BRIEF.md`, mapped to official judging areas: business impact, platform usage, technical execution, completeness, creativity, presentation, product feedback, and coding-agent bonus.
+- Added a June 29, 2026 pre-recording checklist to `docs/submission/READINESS_CHECKLIST.md` with exact validation commands and recording screens.
+- Updated `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md` with the recording-day screen stack and read-only/live-mutation guardrail.
+- Added this final-pack workstream to `docs/submission/CODING_AGENT_PROOF_LOG.md`.
+- Rechecked current public Devpost/forum positioning against the official Devpost page and AgentHack forum before editing; no submission-claim change was needed beyond turning the existing research into operator-ready copy.
+
+Commands:
+
+- `git status --short --branch`
+- `git rev-parse HEAD master origin/master`
+- `git switch -c codex/final-demo-devpost-pack`
+- `git diff --check`
+- `scripts/run_submission_check.sh`
+
+Validation:
+
+- PASS: current detached worktree commit matched local `master` and `origin/master` before branch creation (`5eb0a85f3a53e761c03985185ae9fbeefc98f93c`).
+- PASS: `git diff --check`.
+- PASS: `scripts/run_submission_check.sh` ran 46 unit tests and verified demo artifacts; output ended with `Submission check passed.`
+
+Open risks:
+
+- Team name and story-sharing preference still need user confirmation before final Devpost/product-feedback submission.
+- Final video still needs a live or logged-in UiPath platform surface on screen; local evidence packets alone are not enough for the strongest Devpost video claim.
+- Do not claim automated Test Cloud execution, generated Action Center UI final-demo readiness, native Case history alone passing G-001, real telecom integrations, or LLM final closure authority.
