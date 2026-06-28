@@ -8,6 +8,8 @@ Track decision: [TRACK_SELECTION_DECISION.md](TRACK_SELECTION_DECISION.md).
 
 Coding-agent proof: [CODING_AGENT_PROOF_LOG.md](CODING_AGENT_PROOF_LOG.md).
 
+Platform integration proof map: [PLATFORM_INTEGRATION_PROOF_MAP.md](PLATFORM_INTEGRATION_PROOF_MAP.md).
+
 ## One-Line Pitch
 
 UiPath Maestro Case for telecom service recovery: agents interpret messy evidence, deterministic policy decides whether closure is safe, and human reviewers handle high-impact exceptions with an auditable evidence packet.
@@ -60,6 +62,7 @@ The UiPath implementation uses Maestro Case and Action Center for lifecycle and 
 
 - Repeatable local proof: `scripts/run_demo.sh`
 - Non-mutating submission check: `scripts/run_submission_check.sh`
+- Platform integration proof map: `docs/submission/PLATFORM_INTEGRATION_PROOF_MAP.md`
 - Demo runbook: `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`
 - E-002 packet: `docs/demo/artifacts/evidence_packet_E002.html`
 - E-004 packet: `docs/demo/artifacts/evidence_packet_E004.html`

@@ -11,6 +11,7 @@ Start here:
 5. [docs/validation/VALIDATION_GATES.md](docs/validation/VALIDATION_GATES.md)
 6. [docs/product/PRODUCT_FEEDBACK_AWARD.md](docs/product/PRODUCT_FEEDBACK_AWARD.md)
 7. [docs/submission/SUBMISSION_BRIEF.md](docs/submission/SUBMISSION_BRIEF.md)
+8. [docs/submission/PLATFORM_INTEGRATION_PROOF_MAP.md](docs/submission/PLATFORM_INTEGRATION_PROOF_MAP.md)
 
 Current project direction:
 
@@ -46,6 +47,8 @@ UiPath component summary:
 - Data Fabric: validated full-payload audit readback path for E-004.
 - Test Manager: manual representation and terminal execution evidence for E-001 through E-009.
 - UiPath CLI: repeatable packaging, readback, validation, task, Test Manager, and Data Fabric evidence collection.
+
+The connected platform-depth proof map is maintained in [docs/submission/PLATFORM_INTEGRATION_PROOF_MAP.md](docs/submission/PLATFORM_INTEGRATION_PROOF_MAP.md). It separates native UiPath proof, custom judge-readable evidence packets, and local deterministic policy proof.
 
 Validation status:
 

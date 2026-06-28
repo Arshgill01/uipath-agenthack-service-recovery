@@ -49,6 +49,7 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 | --- | --- | --- |
 | Project brief | Ready | `PROJECT_BRIEF.md` |
 | Submission brief | Ready | `docs/submission/SUBMISSION_BRIEF.md` |
+| Platform integration proof map | Ready | `docs/submission/PLATFORM_INTEGRATION_PROOF_MAP.md` |
 | Feedback answer bank | Ready except user fields | `docs/product/FEEDBACK_SURVEY_COPY_READY.md` |
 | Track selection decision | Ready | `docs/submission/TRACK_SELECTION_DECISION.md` |
 | Coding-agent proof log | Ready | `docs/submission/CODING_AGENT_PROOF_LOG.md` |

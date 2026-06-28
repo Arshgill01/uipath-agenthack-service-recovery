@@ -16,6 +16,7 @@ Runs the non-mutating local submission sanity check:
   - existing E-002/E-004 demo proof artifact verification
   - LLM/adversarial proof artifact presence and key-string checks
   - governed learning-loop artifact presence and key-string checks
+  - platform integration proof-map presence and key-string checks
   - shell syntax checks for demo wrappers
 
 This command does not start live UiPath cases, complete Action Center tasks, or
@@ -51,6 +52,7 @@ test -f "$ARTIFACT_DIR/evidence_packet_E003_adversarial_live.html"
 test -f "$ARTIFACT_DIR/evidence_packet_E003_adversarial_desktop.png"
 test -f "$ARTIFACT_DIR/evidence_packet_E003_adversarial_mobile.png"
 test -f "$ARTIFACT_DIR/policy_improvement_E008.json"
+test -f docs/submission/PLATFORM_INTEGRATION_PROOF_MAP.md
 
 rg "closure_candidate -> verify_telemetry|missing_authoritative_signal|Raw agent interpretation|Final policy decision" \
   "$ARTIFACT_DIR/evidence_packet_E002.html" >/dev/null
@@ -60,6 +62,21 @@ rg "Adversarial dual interpretation|Resolution advocate|Closure skeptic|closure_
   "$ARTIFACT_DIR/evidence_packet_E003_adversarial_live.html" >/dev/null
 rg "policy_improvement_case|pending_human_approval|not_promoted|active_cases_remain_pinned_until_explicit_migration_event|ip-v2-proposed" \
   "$ARTIFACT_DIR/policy_improvement_E008.json" >/dev/null
+
+required_proof_map_strings=(
+  "Native UiPath proof"
+  "Custom judge-readable proof"
+  "Local deterministic policy proof"
+  "ServiceRecoveryAuditBundleV2"
+  "SREV:9"
+  "4300080"
+  "4300219"
+  "automated Test Cloud execution"
+)
+
+for required in "${required_proof_map_strings[@]}"; do
+  rg "$required" docs/submission/PLATFORM_INTEGRATION_PROOF_MAP.md >/dev/null
+done
 
 cat <<EOF
 Submission check passed.

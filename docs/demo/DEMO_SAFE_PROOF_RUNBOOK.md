@@ -9,6 +9,8 @@ It is intentionally conservative:
 - Orchestrator bucket audit bundle proves durable UiPath-hosted one-object audit reconstruction.
 - Generated Action Center UI is not used as the final evidence-packet surface unless repaired and revalidated.
 
+For a single judge/reviewer index across Maestro Case, Action Center, Orchestrator, Data Fabric, Test Manager, CLI, custom packets, and local policy proof, use [PLATFORM_INTEGRATION_PROOF_MAP.md](../submission/PLATFORM_INTEGRATION_PROOF_MAP.md).
+
 ## Current Live References
 
 UiPath context:

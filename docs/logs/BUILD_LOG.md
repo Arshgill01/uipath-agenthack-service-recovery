@@ -3481,3 +3481,20 @@ Open risks:
 
 - No new scratch resources were created for this workstream; existing scratch coverage from PF-028 was sufficient.
 - Generated Action Center UI remains not final-demo ready; this probe strengthens the product-feedback evidence rather than changing the demo-safe proof path.
+
+### 2026-06-28 - Platform Integration Depth Proof Map
+
+What changed:
+
+- Added `docs/submission/PLATFORM_INTEGRATION_PROOF_MAP.md` as a judge/reviewer index connecting Maestro Case, Action Center, Orchestrator, Data Fabric, Test Manager, UiPath CLI, custom evidence packets, and local deterministic policy proof.
+- Updated `README.md`, `docs/submission/SUBMISSION_BRIEF.md`, `docs/submission/READINESS_CHECKLIST.md`, and `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md` to point reviewers to the map.
+- Updated `scripts/run_submission_check.sh` so the non-mutating final sanity check verifies the new proof-map file and key claim-boundary strings.
+
+Validation:
+
+- PASS: `git diff --check`.
+- PASS: `scripts/run_submission_check.sh` ran 46 tests, verified demo artifacts in `docs/demo/artifacts`, and verified the new platform proof-map strings. The command emitted Python 3.9 end-of-life warnings from `google-auth`, but exited 0.
+
+Open risks:
+
+- No fresh live UiPath or Gemini operations were run in this pass. The map intentionally indexes existing validated artifacts and keeps existing caveats: generated Action Center UI is not final-demo ready, native Case history alone is not the full domain audit, and automated Test Cloud execution is not claimed.
