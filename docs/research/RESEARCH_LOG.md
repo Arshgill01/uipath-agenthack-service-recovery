@@ -59,3 +59,26 @@ Decision impact:
 - Added `docs/submission/TRACK_SELECTION_DECISION.md`.
 - Added README and `docs/submission/CODING_AGENT_PROOF_LOG.md` for coding-agent bonus proof.
 - Added demo beat to show coding-agent usage without weakening the runtime governance boundary.
+
+## 2026-06-29 - Final-Lap Product Feedback Source Refresh
+
+Sources:
+
+| Source | What it contributed | Confidence |
+| --- | --- | --- |
+| https://uipath-agenthack.devpost.com/rules | Confirms Best Product Feedback eligibility requires a complete online form with actionable comments UiPath can use, such as bug reports, UI improvements, suggested integrations, or documentation improvements. Also confirms Track 1 Maestro Case is for dynamic, exception-heavy work with stages, handoffs between agents/robots/people, and humans in charge at key decision points. | official |
+| https://uipath-agenthack.devpost.com/details/tracks | Confirms strong Maestro Case submissions should show dynamic exception workflows, human-in-the-loop decisions, long-running business processes, visibility, auditability, and collaboration between humans, agents, and automations. | official |
+| https://docs.uipath.com/maestro/automation-cloud/latest/user-guide/overview | Defines Maestro as cloud-native orchestration that unifies automation, AI agents, and human interactions. Supports the submission thesis that UiPath is the orchestration boundary. | official-docs |
+| https://docs.uipath.com/maestro/automation-cloud/latest/user-guide/value-proposition | Describes Maestro as human-aware orchestration where AI agents can escalate to human-in-the-loop decisions, and Case Management supports long-running, exception-heavy work where the path evolves as new information appears. | official-docs |
+| https://docs.uipath.com/action-center/automation-cloud/latest/user-guide/about-actions | Documents tenant-level Actions enablement through Admin > Tenants > Edit Services > Actions. This supports PF-003 as an observed readiness gap, while keeping the expected enablement path grounded in official docs. | official-docs |
+| https://docs.uipath.com/action-center/automation-cloud/latest/user-guide/create-user-action | Documents App tasks in Action Center, Action controls defining input fields, and Apps as the visual task interface. Supports the Action app field-binding feedback without inventing product behavior. | official-docs |
+| https://docs.uipath.com/test-manager/automation-cloud/latest/user-guide/executing-tests | Confirms Test Manager supports manual and automated executions, and that test sets are the execution unit. Supports the honest claim that our validated path is manual Test Manager execution. | official-docs |
+| https://docs.uipath.com/test-manager/automation-cloud/latest/user-guide/selecting-automation | Confirms linking automations to Test Manager relies on automations published to Orchestrator and feed selection. Supports the package/feed automation-discovery feedback while preserving the non-claim around automated Test Cloud execution. | official-docs |
+| https://docs.uipath.com/data-service/automation-cloud/latest/user-guide/introduction | Confirms Data Fabric/Data Service is persistent no-code data storage for RPA projects and long-running business processes. Supports the audit-storage recommendation while keeping the snake_case behavior as reproduced build evidence only. | official-docs |
+| https://docs.uipath.com/orchestrator/automation-cloud/latest/user-guide/managing-packages | Confirms Orchestrator package upload, version visibility, process upgrade, and package/version inspection concepts. Supports package/feed/process readback recommendations. | official-docs |
+
+Decision impact:
+
+- Strengthened `docs/product/FEEDBACK_AWARD_APPENDIX.md`, `docs/product/FEEDBACK_SURVEY_COPY_READY.md`, and `docs/product/FEEDBACK_SURVEY_FINAL_DRAFT.md` so the Microsoft Form answers stand alone.
+- Kept three evidence classes separate: reproduced build evidence, official/product context, and recommended product improvements.
+- No new UiPath live operation was run; this was source research plus documentation refinement.

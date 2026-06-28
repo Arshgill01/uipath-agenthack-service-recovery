@@ -8,6 +8,8 @@ Copy-ready survey answer bank: [FEEDBACK_SURVEY_COPY_READY.md](FEEDBACK_SURVEY_C
 
 Near-final survey draft: [FEEDBACK_SURVEY_FINAL_DRAFT.md](FEEDBACK_SURVEY_FINAL_DRAFT.md).
 
+Final-lap official source refresh: [RESEARCH_LOG.md](../research/RESEARCH_LOG.md#2026-06-29---final-lap-product-feedback-source-refresh).
+
 ## Feedback Principles
 
 Good feedback is:

@@ -14,6 +14,21 @@ The feedback should not read as a complaint list. It should read as:
 
 Forum and winner research are supporting context only. The award claims below are based on our reproduced PF evidence; public participant reports are useful because they show the same classes of friction around Actions enablement, Maestro publishing/package blockers, and Labs access, but they should not be treated as our reproduction evidence.
 
+## Official Context Added On 2026-06-29
+
+This source refresh strengthens the framing without changing the evidence boundary:
+
+| Official source | Why it matters for the feedback form |
+| --- | --- |
+| Devpost rules: `https://uipath-agenthack.devpost.com/rules` | Best Product Feedback asks for actionable comments UiPath can use. The final form should therefore read as concrete workflow evidence plus product fixes, not as an internal bug list. |
+| Devpost track guidance: `https://uipath-agenthack.devpost.com/details/tracks` | Track 1 emphasizes dynamic exception work, human-in-the-loop decisions, visibility, auditability, and collaboration between humans, agents, and automations. That matches our Maestro Case readiness/preflight thesis. |
+| Maestro docs: `https://docs.uipath.com/maestro/automation-cloud/latest/user-guide/overview` and `https://docs.uipath.com/maestro/automation-cloud/latest/user-guide/value-proposition` | Official docs frame Maestro as orchestration across automation, AI agents, and humans, including long-running exception-heavy Case Management. This supports praising the primitive while asking for stronger readiness diagnostics. |
+| Action Center docs: `https://docs.uipath.com/action-center/automation-cloud/latest/user-guide/about-actions` and `https://docs.uipath.com/action-center/automation-cloud/latest/user-guide/create-user-action` | Official docs show Actions is a tenant service and App tasks render Action app inputs in Action Center. This supports the service-readiness and generated-field-binding recommendations. |
+| Test Manager docs: `https://docs.uipath.com/test-manager/automation-cloud/latest/user-guide/executing-tests` and `https://docs.uipath.com/test-manager/automation-cloud/latest/user-guide/selecting-automation` | Official docs distinguish manual and automated executions and describe Orchestrator-published automation selection. This supports claiming manual eval representation while explicitly not claiming automated Test Cloud execution. |
+| Data Fabric and Orchestrator docs: `https://docs.uipath.com/data-service/automation-cloud/latest/user-guide/introduction` and `https://docs.uipath.com/orchestrator/automation-cloud/latest/user-guide/managing-packages` | Official docs support using Data Fabric for persistent process data and Orchestrator for package/version lifecycle. Our reproduced feedback is about diagnostics and consistency around those intended roles. |
+
+Do not paste this table into the Microsoft Form. Use it to keep the final form self-contained and fair: official context explains why the workflows matter; reproduced PF evidence explains what happened in our build; recommendations explain what UiPath could improve.
+
 ## Best Final Answer Shape
 
 ### Overall Satisfaction
@@ -125,11 +140,11 @@ The optional live Gemini/Vertex path deepens the same thesis without weakening t
 
 ### Challenges
 
-The hardest part was not the local policy model. It was turning a first-time Maestro Case build into a repeatable, observable runtime proof. We had to validate tenant service readiness, generated Action app bindings, required Action task fields, package/feed resolution, process version pinning, Action Center task return, Test Manager mapping, audit storage, and whether Case validation agreed with solution dry-run/upload. The strongest pattern is that UiPath exposed the needed primitives, but the product needs more preflight and diagnostic guidance for a new builder doing agent + policy + human orchestration.
+The hardest part was not the local policy model. It was turning a first-time Maestro Case build into a repeatable, observable runtime proof. Official docs and Devpost guidance make this the right target for long-running exception work with humans in the loop, but in practice we had to validate tenant service readiness, generated Action app bindings, required Action task fields, package/feed resolution, process version pinning, Action Center task return, Test Manager mapping, audit storage, and whether Case validation agreed with solution dry-run/upload. The strongest pattern is that UiPath exposed the needed primitives, but the product needs more shared preflight and diagnostic guidance for a new builder doing agent + policy + human orchestration.
 
 ### One Thing To Change
 
-Add a Maestro Case human-review readiness/preflight wizard. It should verify services, roles, task required fields, Action app schema binding, input/output mappings, package/feed binding, package version pinning, audit-readiness, and agreement between Case validation, solution dry-run, and Studio Web upload/import before the builder starts a live case. This would turn hours of runtime recovery into a short checklist.
+Add a Maestro Case human-review readiness/preflight wizard. It should verify services, roles, task required fields, Action app schema binding, input/output mappings, package/feed binding, package version pinning, audit-readiness, and agreement between Case validation, solution dry-run, and Studio Web upload/import before the builder starts a live case. This would turn hours of runtime recovery into a short checklist and would align with Maestro Case's official role as the coordination layer for agents, automations, and people.
 
 ### What Surprised Us
 

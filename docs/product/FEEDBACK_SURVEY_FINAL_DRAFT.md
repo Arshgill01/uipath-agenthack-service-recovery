@@ -10,6 +10,7 @@ Source of truth:
 - `docs/product/FEEDBACK_AWARD_APPENDIX.md`
 - `docs/product/FEEDBACK_SURVEY_COPY_READY.md`
 - `docs/validation/VALIDATION_RESULTS.md`
+- `docs/research/RESEARCH_LOG.md`
 
 Use `FEEDBACK_AWARD_APPENDIX.md` as the ranked internal evidence source when checking the final form. The submitted survey should lead with the Maestro Case human-review readiness/preflight recommendation, then explain Action Center binding, native audit, package/feed, Data Fabric, and Test Manager examples in plain language.
 
@@ -85,7 +86,11 @@ The major challenge classes were:
 - Package/feed/process binding: a package uploaded to the solution feed and could be read with `--feed-id`, while default lookup and direct process creation could not bind the same version.
 - Audit reconstruction: native Case/task history plus APIs can reconstruct operational flow, but a clean domain audit for evidence state, policy versions, raw recommendation, policy decision, block reason, human action, and timestamps still required explicit custom audit artifacts.
 - Data Fabric persistence: entity create/readback worked, snake_case JSON insert/update could not map required custom fields despite valid-looking payloads, and the later CSV-created row could not expose custom payload fields through CLI readback. A PascalCase V2 schema then solved the full-payload storage/readback path and gave us a useful product-feedback insight: field names accepted at schema creation should work consistently across insert/update/query/get or be rejected up front.
-- Test Manager eval mapping: project, cases, test set, and manual pass logs worked, but E-001 through E-009 had to be represented manually. A first execution stayed `Running` after direct child-log finishes; a later explicit start-then-finish lifecycle reached terminal `Status: Finished` with 9/9 passed logs and JUnit export. Automated Test Cloud execution remained unclaimable after a concrete package probe: Orchestrator accepted `ServiceRecoveryEvalProcessProbe:0.0.2/0.0.3` and exposed an entry point, but Test Manager discovery returned no automations and direct linking failed with `Test ... not found in package`.
+- Test Manager eval mapping: project, cases, test set, and manual pass logs worked, but E-001 through E-009 had to be represented manually. A first execution stayed `Running` after direct child-log finishes; a later explicit start-then-finish lifecycle reached terminal `Status: Finished` with 9/9 passed logs and JUnit export. Automated Test Cloud execution remained unclaimable after a concrete package probe: Orchestrator accepted the package and exposed an entry point, but Test Manager discovery returned no automations and direct linking could not find a test in the package.
+
+Expected behavior: before a builder publishes or starts a human-review Case, UiPath should make it clear whether the required services, reviewer visibility, Action task fields, generated Action app bindings, package/feed version, and audit path are ready.
+
+Workaround used: we enabled Actions manually, ran Case validation separately from solution packaging, repaired or bypassed task-field problems, used CLI/API readbacks for task and package state, used custom evidence packets for readable policy proof, stored audit payloads through validated Data Fabric V2 and Orchestrator artifact paths, and kept Test Manager claims manual-only.
 
 These were reproduced during the actual build across Maestro Case, Action Center, Orchestrator, Data Fabric, Test Manager, and the UiPath CLI. The strongest examples were not abstract: Actions tenant enablement blocked human review at first, a required task `Title` failed only at runtime, a proof-critical generated Action Center field rendered as `Unnamed String 1`, a package version was visible only with the feed specified, Data Fabric field naming/readback behavior required a V2 schema, and Test Manager could represent our evals manually but not as a discoverable automated Test Cloud execution.
 
@@ -97,7 +102,7 @@ Before a builder publishes or starts a Case with a human review step, UiPath sho
 
 This one improvement would have shortened our slowest loops: enabling Actions, diagnosing generated Action page binding, fixing runtime-only required-field failures, proving package version pinning, reconciling inconsistent readiness signals, and deciding where to store audit evidence. Maestro Case is most valuable when it coordinates agents, systems, and people; those workflows need a preflight that proves the reviewer will see the right evidence and that the Case package will instantiate the intended app version before a live case starts.
 
-This recommendation comes from multiple reproduced loops, not a single bug: service enablement, Action field requirements, generated page binding, package version binding, validation/package/upload agreement, and audit-readiness proof all needed separate investigation.
+This recommendation comes from multiple reproduced loops, not a single bug: service enablement, Action field requirements, generated page binding, package version binding, validation/package/upload agreement, and audit-readiness proof all needed separate investigation. It also aligns with the official Maestro Case positioning: long-running, exception-heavy work with people, agents, automations, visibility, and auditability needs a readiness gate before runtime.
 
 ## 12. What surprised you the most? What would you tell another developer?
 

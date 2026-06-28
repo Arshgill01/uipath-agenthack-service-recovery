@@ -2,6 +2,36 @@
 
 Append one entry per substantial agent run.
 
+### 2026-06-29 - Agent / Final-Lap Product Feedback Source Refresh
+
+What changed:
+
+- Added a final-lap official source refresh to `docs/research/RESEARCH_LOG.md`.
+- Added a central pointer from `docs/product/PRODUCT_FEEDBACK_AWARD.md` to the final-lap source refresh.
+- Strengthened the product-feedback appendix with official context for Devpost feedback expectations, Maestro Case, Action Center, Test Manager, Data Fabric, and Orchestrator.
+- Reworked the Microsoft Form copy so it stands alone for a reviewer: observed workflow, expected behavior, workaround, impact, and product fix are clearer, with internal PF IDs kept out of form-facing prose.
+- Preserved claim boundaries: forum anecdotes are supporting context only, generated Action Center UI is not claimed as final-demo ready, Data Fabric proof uses PascalCase V2, and Test Manager remains manual unless automated execution is separately validated.
+
+Commands run:
+
+- Fresh web research against Devpost, UiPath forum, and official UiPath docs.
+- `git diff --check`
+- `rg -n "^(<<<<<<<|=======|>>>>>>>)" . -g '!docs/research/artifacts/**' -g '!docs/validation/artifacts/**' -g '!eval_results/local_baseline.json'`
+- `scripts/run_submission_check.sh`
+
+Validation:
+
+- PASS: `git diff --check`.
+- PASS: conflict-marker scan returned no markers.
+- PASS: form-facing survey scan found internal PF IDs only in source/traceability/do-not-claim sections, not in the main answer prose.
+- PASS: `PATH="/tmp/codex-python-shim:$PATH" scripts/run_submission_check.sh` ran 58 tests and verified the local proof set.
+- NOTE: worker shell needed a temporary `python` shim; integrated wrapper now resolves `python` or `python3`.
+
+Open risks:
+
+- Team name and story-sharing preference remain user-owned final form fields.
+- No new live UiPath or Gemini run was performed; this was documentation/source strengthening only.
+
 ### 2026-06-29 01:04 IST - Agent / Final-Lap Core Simplification
 
 What changed:
