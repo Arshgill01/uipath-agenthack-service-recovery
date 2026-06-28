@@ -17,6 +17,7 @@ Runs the non-mutating local submission sanity check:
   - Test Manager manual-evidence bridge verifier
   - existing E-002/E-004 demo proof artifact verification
   - generated proof index verification
+  - coding-agent evidence manifest and runtime-authority boundary checks
   - parsed final proof index for track, coding-agent, feedback, LLM, and learning-loop artifacts
   - LLM/adversarial proof artifact presence and key-string checks
   - governed learning-loop artifact presence and key-string checks

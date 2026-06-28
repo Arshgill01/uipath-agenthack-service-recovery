@@ -61,6 +61,7 @@ REQUIRED_DOC_CLAIMS = {
     ),
     "docs/submission/CODING_AGENT_PROOF_LOG.md": (
         "Coding agent used: Codex",
+        "coding_agent_evidence_manifest.json",
         "scripts/run_submission_check.sh",
         "UiPath remains the runtime orchestration and governance layer",
     ),
@@ -88,6 +89,8 @@ REQUIRED_DOC_CLAIMS = {
     ),
 }
 
+CODING_AGENT_MANIFEST = Path("docs/submission/coding_agent_evidence_manifest.json")
+
 
 def verify_submission_proof(repo_root: Path, artifact_dir: Path | None = None) -> list[str]:
     root = repo_root.resolve()
@@ -96,6 +99,7 @@ def verify_submission_proof(repo_root: Path, artifact_dir: Path | None = None) -
     errors: list[str] = []
     errors.extend(_verify_required_files(root, artifacts))
     errors.extend(_verify_doc_claims(root))
+    errors.extend(_verify_coding_agent_manifest(root))
     errors.extend(_verify_demo_manifest(root, artifacts))
     errors.extend(_verify_core_demo_artifacts(artifacts))
     errors.extend(_verify_proof_index_html(artifacts / "proof_index.html"))
@@ -128,6 +132,7 @@ def main() -> int:
                 "status": "passed",
                 "artifact_dir": str(_resolve_path(repo_root.resolve(), artifact_dir)),
                 "checked_artifacts": len(REQUIRED_ARTIFACTS),
+                "checked_coding_agent_manifest": True,
                 "checked_claim_docs": len(REQUIRED_DOC_CLAIMS),
             },
             indent=2,
@@ -139,6 +144,9 @@ def main() -> int:
 
 def _verify_required_files(repo_root: Path, artifact_dir: Path) -> list[str]:
     errors: list[str] = []
+    manifest_path = repo_root / CODING_AGENT_MANIFEST
+    if not manifest_path.exists():
+        errors.append(f"missing required coding-agent manifest: {CODING_AGENT_MANIFEST}")
     for relative_path in REQUIRED_DOC_CLAIMS:
         path = repo_root / relative_path
         if not path.exists():
@@ -163,6 +171,47 @@ def _verify_doc_claims(repo_root: Path) -> list[str]:
             if required not in content:
                 errors.append(f"{relative_path}: missing required claim string {required!r}")
     return errors
+
+
+def _verify_coding_agent_manifest(repo_root: Path) -> list[str]:
+    path = repo_root / CODING_AGENT_MANIFEST
+    if not path.exists():
+        return []
+
+    manifest = _read_json(path)
+    runtime = manifest.get("runtime_authority", {})
+    branches = manifest.get("representative_codex_branches", [])
+    outputs = manifest.get("repo_visible_outputs", [])
+    beat = manifest.get("demo_beat", [])
+
+    branch_names = {branch.get("branch") for branch in branches if isinstance(branch, dict)}
+    output_paths = {output.get("path") for output in outputs if isinstance(output, dict)}
+    manifest_text = json.dumps(manifest, sort_keys=True)
+    checks = {
+        "artifact_type": manifest.get("artifact_type") == "coding-agent-evidence-manifest-v1",
+        "coding_agent": manifest.get("coding_agent") == "Codex",
+        "public_evidence_only": manifest.get("public_evidence_only") is True,
+        "private_chat_logs_not_committed": manifest.get("private_chat_logs_committed") is False,
+        "codex_does_not_close_cases": runtime.get("codex_closes_cases") is False,
+        "codex_does_not_mutate_policy": runtime.get("codex_mutates_production_policy") is False,
+        "codex_does_not_override_policy": runtime.get("codex_overrides_deterministic_policy") is False,
+        "uipath_routes_cases": runtime.get("uipath_maestro_case_routes_cases") is True,
+        "deterministic_policy_owns_closure": runtime.get("deterministic_policy_owns_closure_decisions")
+        is True,
+        "humans_own_exceptions": runtime.get("humans_own_high_impact_exceptions") is True,
+        "has_coding_agent_branch": "codex/coding-agent-bonus-proof" in branch_names,
+        "has_final_verifier_branch": "codex/final-targeted-hardening" in branch_names,
+        "has_proof_index_branch": "codex/judge-proof-index" in branch_names,
+        "has_feedback_probe_branch": "codex/pf-evidence-action-binding" in branch_names,
+        "has_submission_check_output": "scripts/run_submission_check.sh" in output_paths,
+        "has_proof_log_output": "docs/submission/CODING_AGENT_PROOF_LOG.md" in output_paths,
+        "demo_beat_mentions_submission_check": any("scripts/run_submission_check.sh" in item for item in beat),
+        "demo_beat_mentions_uipath_boundary": any("UiPath remains the runtime orchestration" in item for item in beat),
+        "no_runtime_authority_overclaim": "Codex closes cases" not in manifest_text
+        and "Codex mutates production policy" not in manifest_text
+        and "Codex overrides deterministic policy" not in manifest_text,
+    }
+    return _failed_checks(str(CODING_AGENT_MANIFEST), checks)
 
 
 def _verify_demo_manifest(repo_root: Path, artifact_dir: Path) -> list[str]:

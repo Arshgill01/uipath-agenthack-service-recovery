@@ -1,0 +1,102 @@
+{
+  "artifact_type": "coding-agent-evidence-manifest-v1",
+  "status": "demo-short audit manifest",
+  "coding_agent": "Codex",
+  "claim": "Codex materially helped build, test, validate, and document this UiPath AgentHack service-recovery project.",
+  "public_evidence_only": true,
+  "private_chat_logs_committed": false,
+  "private_chat_log_note": "Local Codex thread/session metadata was inspected only as needed. Chat logs and shell snapshots are not committed or quoted because they may contain private unrelated context. The public evidence uses git branches, commits, repository docs, build-log entries, generated artifacts, and validation commands.",
+  "runtime_authority": {
+    "codex_closes_cases": false,
+    "codex_mutates_production_policy": false,
+    "codex_overrides_deterministic_policy": false,
+    "uipath_maestro_case_routes_cases": true,
+    "deterministic_policy_owns_closure_decisions": true,
+    "humans_own_high_impact_exceptions": true
+  },
+  "representative_codex_branches": [
+    {
+      "branch": "codex/coding-agent-bonus-proof",
+      "tip": "8ba7faa",
+      "proof": "Document coding-agent bonus proof"
+    },
+    {
+      "branch": "codex/final-targeted-hardening",
+      "tip": "69ba0f7",
+      "proof": "Add final submission proof verifier"
+    },
+    {
+      "branch": "codex/final-demo-devpost-pack",
+      "tip": "54f3723",
+      "proof": "Prepare final demo and Devpost submission pack"
+    },
+    {
+      "branch": "codex/judge-proof-index",
+      "tip": "958109f",
+      "proof": "Add judge-facing proof index artifact"
+    },
+    {
+      "branch": "codex/platform-depth-proof-map",
+      "tip": "784b489",
+      "proof": "Add platform integration proof map"
+    },
+    {
+      "branch": "codex/policy-boundary-eval-hardening",
+      "tip": "f302dea",
+      "proof": "Record G-007 feasibility spike outcome"
+    },
+    {
+      "branch": "codex/pf-evidence-action-binding",
+      "tip": "1dcd990",
+      "proof": "Capture Action Center binding feedback evidence"
+    },
+    {
+      "branch": "codex/pf-evidence-data-fabric",
+      "tip": "78ff641",
+      "proof": "Capture Data Fabric feedback diagnostics"
+    },
+    {
+      "branch": "codex/pf-evidence-test-manager",
+      "tip": "9ce9fd4",
+      "proof": "Capture Test Manager feedback probe evidence"
+    }
+  ],
+  "repo_visible_outputs": [
+    {
+      "path": "service_recovery_core/",
+      "evidence": "local service-recovery core, policy, eval, proof, and verifier modules"
+    },
+    {
+      "path": "tests/",
+      "evidence": "unit tests and proof-drift tests run by scripts/run_submission_check.sh"
+    },
+    {
+      "path": "docs/demo/artifacts/proof_index.html",
+      "evidence": "generated judge-facing proof index from committed demo artifacts"
+    },
+    {
+      "path": "docs/submission/CODING_AGENT_PROOF_LOG.md",
+      "evidence": "human/Codex responsibility split, branch inventory, and boundary language"
+    },
+    {
+      "path": "docs/logs/BUILD_LOG.md",
+      "evidence": "agent work loops, commands, validation results, and open risks over time"
+    },
+    {
+      "path": "scripts/run_submission_check.sh",
+      "evidence": "non-mutating local verifier for tests, evals, proof artifacts, and claim boundaries"
+    }
+  ],
+  "demo_beat": [
+    "Show README coding-agent section.",
+    "Show docs/submission/CODING_AGENT_PROOF_LOG.md.",
+    "Show this manifest for branch/commit evidence and runtime-authority boundary.",
+    "Show terminal output from scripts/run_submission_check.sh.",
+    "Say: Codex helped build, test, validate, and document the solution. UiPath remains the runtime orchestration and governance layer, and deterministic policy owns closure decisions."
+  ],
+  "verification_commands": [
+    "python -m service_recovery_core.submission_proof --artifact-dir docs/demo/artifacts",
+    "scripts/run_submission_check.sh",
+    "git diff --check"
+  ]
+}

@@ -5,6 +5,7 @@ import unittest
 from pathlib import Path
 
 from service_recovery_core.submission_proof import verify_submission_proof
+from service_recovery_core.submission_proof import _verify_coding_agent_manifest
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -83,6 +84,27 @@ class SubmissionProofTests(unittest.TestCase):
             self.assertIn(
                 "evidence_packet_E002.html: missing evidence-packet proof string "
                 "'generated Action Center page hid or mislabeled proof-critical fields'",
+                errors,
+            )
+
+    def test_reports_coding_agent_runtime_authority_overclaim(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_root = Path(temp_dir)
+            manifest_dir = temp_root / "docs" / "submission"
+            manifest_dir.mkdir(parents=True)
+            source = REPO_ROOT / "docs" / "submission" / "coding_agent_evidence_manifest.json"
+            manifest = json.loads(source.read_text(encoding="utf-8"))
+            manifest["runtime_authority"]["codex_closes_cases"] = True
+            (manifest_dir / "coding_agent_evidence_manifest.json").write_text(
+                json.dumps(manifest, indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+
+            errors = _verify_coding_agent_manifest(temp_root)
+
+            self.assertIn(
+                "docs/submission/coding_agent_evidence_manifest.json: "
+                "failed proof check codex_does_not_close_cases",
                 errors,
             )
 

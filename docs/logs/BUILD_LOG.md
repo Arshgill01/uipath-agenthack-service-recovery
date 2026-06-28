@@ -2,6 +2,37 @@
 
 Append one entry per substantial agent run.
 
+### 2026-06-29 - Agent / Final-Lap Coding-Agent Evidence Manifest
+
+What changed:
+
+- Added `docs/submission/coding_agent_evidence_manifest.json` as a short demo-safe manifest for Codex/coding-agent proof: representative Codex branches, repo-visible outputs, public-evidence-only stance, and explicit runtime-authority flags.
+- Added `docs/submission/CODING_AGENT_DEMO_BEAT_CHECKLIST.md` for the 10-20 second final-video coding-agent proof beat.
+- Updated coding-agent proof docs, readiness checklist, submission brief, and demo storyboard to reference the manifest without implying Codex has runtime case authority.
+- Extended `service_recovery_core.submission_proof` and `tests/test_submission_proof.py` so `scripts/run_submission_check.sh` verifies the manifest and fails if it drifts into Codex runtime closure/policy authority.
+
+Commands run:
+
+- `git diff --check`
+- `python -m unittest tests.test_submission_proof` (failed: `python` not found in this shell)
+- `python -m service_recovery_core.submission_proof --artifact-dir docs/demo/artifacts` (failed: `python` not found in this shell)
+- `python3 -m unittest tests.test_submission_proof`
+- `python3 -m service_recovery_core.submission_proof --artifact-dir docs/demo/artifacts`
+- `PATH="/tmp/codex-python-bin:$PATH" scripts/run_submission_check.sh` after creating a temporary `/tmp/codex-python-bin/python` symlink to `python3`
+
+Validation:
+
+- PASS: `git diff --check`.
+- PASS: targeted submission-proof tests ran 6 tests.
+- PASS: parsed submission proof verifier checked 16 artifacts and 8 claim docs plus the coding-agent manifest.
+- PASS: `scripts/run_submission_check.sh` ran 59 tests and verified demo artifacts using the temporary `python` shim.
+
+Open risks:
+
+- This pass did not add or quote private Codex chat logs; the public proof remains git branches, commits, repo docs, build logs, artifacts, and validation output.
+- The shell used for this run has `python3` but no `python`; the repo wrapper still expects `python`, so final operators may need an environment where `python` resolves or the same temporary shim.
+- Final video still needs to show the coding-agent proof beat visibly.
+
 ### 2026-06-28 - Agent / Final-Lap Worker Doc Reconciliation
 
 What changed:
