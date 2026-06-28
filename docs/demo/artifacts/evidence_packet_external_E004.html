@@ -1,0 +1,758 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evidence Packet - CASE-BG-CONTRA</title>
+<style>
+:root {
+  color-scheme: light;
+  --bg: #fbfaf5;
+  --surface: #ffffff;
+  --ink: #252826;
+  --muted: #62675f;
+  --line: #d5c8b8;
+  --line-soft: #e8e0d6;
+  --strong: #17385f;
+  --warn: #aa522f;
+  --danger: #b42318;
+  --blue: #2556a3;
+  --controlled: #227268;
+  --escalated: #b42318;
+  --shadow: 0 1px 2px rgba(35, 38, 34, 0.06), 0 12px 36px rgba(35, 38, 34, 0.05);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  background-image:
+    linear-gradient(rgba(213, 200, 184, 0.16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(213, 200, 184, 0.12) 1px, transparent 1px);
+  background-size: 44px 44px;
+  color: var(--ink);
+  font: 14.5px/1.58 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(250px, 0.75fr) minmax(660px, 1.65fr);
+  align-items: center;
+  gap: 24px;
+  border-bottom: 2px double var(--line);
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+}
+
+.topbar.controlled {
+  border-top: 4px solid var(--controlled);
+  padding-top: 16px;
+}
+
+.topbar.escalated {
+  border-top: 4px solid var(--escalated);
+  padding-top: 16px;
+}
+
+.proof-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.proof-strip div {
+  background: var(--strong);
+  color: var(--bg);
+  border: 1px solid rgba(23, 56, 95, 0.12);
+  border-radius: 6px;
+  padding: 14px;
+  min-height: 84px;
+  box-shadow: var(--shadow);
+}
+
+.proof-strip span {
+  display: block;
+  color: rgba(251, 250, 245, 0.74);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.proof-strip strong {
+  display: block;
+  font-size: 15px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.decision-compare {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
+  margin-bottom: 24px;
+}
+
+.decision-compare article,
+.route-banner {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+
+.decision-compare.controlled article:first-child {
+  border-left: 4px solid var(--warn);
+}
+
+.decision-compare.controlled article:nth-of-type(2),
+.decision-compare.controlled .route-banner {
+  border-left: 4px solid var(--controlled);
+}
+
+.decision-compare.escalated article:first-child {
+  border-left: 4px solid var(--warn);
+}
+
+.decision-compare.escalated article:nth-of-type(2),
+.decision-compare.escalated .route-banner {
+  border-left: 4px solid var(--escalated);
+}
+
+.decision-compare h2 {
+  font-size: 24px;
+  line-height: 1.15;
+  margin-bottom: 16px;
+  overflow-wrap: break-word;
+}
+
+.eyebrow {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.override-arrow {
+  align-self: center;
+  color: var(--muted);
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.route-banner {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr) minmax(240px, auto);
+  gap: 16px;
+  align-items: center;
+}
+
+.route-banner span {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.route-banner strong,
+.route-banner em {
+  overflow-wrap: break-word;
+}
+
+.route-banner em {
+  color: var(--danger);
+  font-style: normal;
+  font-weight: 700;
+  background: rgba(180, 35, 24, 0.08);
+  border: 1px solid rgba(180, 35, 24, 0.16);
+  border-radius: 6px;
+  padding: 4px 10px;
+}
+
+h1, h2, h3, p { margin-top: 0; }
+h1 { color: var(--strong); font-size: 28px; line-height: 1.16; margin-bottom: 6px; }
+h2 { color: var(--strong); font-size: 17px; margin-bottom: 14px; }
+h3 { color: var(--strong); font-size: 14px; margin-bottom: 10px; }
+p { color: var(--muted); }
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(190px, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+
+.summary div {
+  display: block;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  box-shadow: var(--shadow);
+  padding: 12px 14px;
+}
+
+.summary dt {
+  margin-bottom: 6px;
+}
+
+.summary dd {
+  line-height: 1.35;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+  gap: 16px;
+  min-width: 0;
+}
+
+.primary, .side {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+  min-width: 0;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  min-width: 0;
+}
+
+.platform-note {
+  border-left: 4px solid var(--blue);
+  background: linear-gradient(90deg, rgba(37, 86, 163, 0.04), var(--surface) 40%);
+}
+
+.boundary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.boundary article {
+  border: 1px solid var(--line-soft);
+  background: rgba(251, 250, 245, 0.54);
+  border-radius: 6px;
+  padding: 14px;
+}
+
+.triage-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.triage-grid article {
+  border: 1px solid var(--line-soft);
+  background: rgba(251, 250, 245, 0.54);
+  border-radius: 6px;
+  padding: 14px;
+}
+
+.adversarial {
+  border-left: 4px solid var(--danger);
+  background: linear-gradient(90deg, rgba(180, 35, 24, 0.035), var(--surface) 34%);
+}
+
+.adversarial-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 14px 0;
+}
+
+.adversarial-grid article {
+  border: 1px solid var(--line-soft);
+  background: rgba(251, 250, 245, 0.54);
+  border-radius: 6px;
+  padding: 14px;
+}
+
+.disagreement-score {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr) minmax(140px, auto);
+  gap: 12px;
+  align-items: center;
+  background: #fff7ed;
+  border: 1px solid #f7c9a7;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.disagreement-score span,
+.disagreement-score em {
+  color: var(--muted);
+  font-style: normal;
+}
+
+.disagreement-score strong {
+  color: var(--danger);
+  font-size: 22px;
+}
+
+dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+dl div {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr);
+  gap: 12px;
+  border-bottom: 1px dotted var(--line-soft);
+  padding-bottom: 4px;
+}
+
+dl div:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+dt {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+dd {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+  margin-top: 8px;
+}
+
+th, td {
+  border-bottom: 1px solid var(--line-soft);
+  padding: 11px 9px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  color: var(--strong);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.actions {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.closure-checklist {
+  display: grid;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.closure-checklist li {
+  border: 1px solid var(--line-soft);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.closure-checklist li.blocked {
+  border-color: rgba(180, 35, 24, 0.22);
+  background: rgba(180, 35, 24, 0.05);
+}
+
+.closure-checklist li.satisfied {
+  border-color: rgba(34, 114, 104, 0.22);
+  background: rgba(34, 114, 104, 0.05);
+}
+
+.closure-checklist strong,
+.closure-checklist span {
+  display: block;
+}
+
+.closure-checklist span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-top: 4px;
+  text-transform: uppercase;
+}
+
+.closure-checklist p {
+  margin: 6px 0 0;
+}
+
+.guardrail {
+  margin: 16px 0 0;
+  color: var(--danger);
+  font-weight: 700;
+  background: rgba(180, 35, 24, 0.08);
+  border: 1px solid rgba(180, 35, 24, 0.16);
+  border-radius: 6px;
+  padding: 10px 12px;
+}
+
+.status,
+.authority {
+  display: inline-block;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.status {
+  background: rgba(34, 114, 104, 0.10);
+  color: var(--strong);
+}
+
+.authority {
+  background: rgba(37, 86, 163, 0.08);
+  color: var(--blue);
+}
+
+.timeline {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timeline li {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: 8px 12px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 10px;
+}
+
+.timeline span {
+  grid-row: span 2;
+  color: var(--strong);
+  font-weight: 700;
+}
+
+code {
+  color: var(--muted);
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 900px) {
+  .topbar, .layout, .boundary-grid, .summary, .proof-strip, .decision-compare, .route-banner, .triage-grid, .adversarial-grid, .disagreement-score {
+    display: block;
+  }
+
+  .summary, .side, .proof-strip div + div, .decision-compare article + article, .route-banner strong, .route-banner em {
+    margin-top: 16px;
+  }
+
+  .override-arrow {
+    margin: 10px 0;
+  }
+
+  .panel + .panel,
+  .primary + .side,
+  .triage-grid article + article,
+  .adversarial-grid article + article {
+    margin-top: 16px;
+  }
+}
+</style>
+</head>
+<body>
+<main class="page">
+<header class="topbar escalated">
+  <div>
+    <h1>Review service recovery evidence</h1>
+    <p>CASE-BG-CONTRA / SVC-BG-1</p>
+  </div>
+  <dl class="summary">
+    <div><dt>Business state</dt><dd>green</dd></div>
+    <div><dt>Evidence state</dt><dd>contradicting</dd></div>
+    <div><dt>Block reason</dt><dd>source_contradiction</dd></div>
+    </dl>
+</header>
+<section class="proof-strip" aria-label="Demo proof summary">
+  <div>
+    <span>Raw agent recommendation</span>
+    <strong>closure_candidate</strong>
+  </div>
+  <div>
+    <span>Policy decision</span>
+    <strong>require_human_review</strong>
+  </div>
+  <div>
+    <span>Final route</span>
+    <strong>human_review</strong>
+  </div>
+  <div>
+    <span>Closure guard</span>
+    <strong>source_contradiction</strong>
+  </div>
+  <div>
+    <span>Policy versions</span>
+    <strong>ip-v1 / dp-v1</strong>
+  </div>
+</section>
+<section class="decision-compare escalated" aria-label="Agent recommendation and final policy decision">
+  <article>
+    <span class="eyebrow">Raw Agent Interpretation Event</span>
+    <h2>closure_candidate</h2>
+    <dl>
+      <div><dt>AIE ID</dt><dd>AIE-E004</dd></div>
+      <div><dt>Confidence</dt><dd>0.82</dd></div>
+      <div><dt>Failure category</dt><dd>activation_failure</dd></div>
+    </dl>
+  </article>
+  <div class="override-arrow" aria-hidden="true">-></div>
+  <article>
+    <span class="eyebrow">Linked Policy Decision Event</span>
+    <h2>require_human_review</h2>
+    <dl>
+      <div><dt>PDE ID</dt><dd>PDE-EXT-E004</dd></div>
+      <div><dt>Links to</dt><dd>AIE-E004</dd></div>
+      <div><dt>Route</dt><dd>human_review</dd></div>
+    </dl>
+  </article>
+  <div class="route-banner">
+    <span>Escalated exception review</span>
+    <strong>closure_candidate -> human_review</strong>
+    <em>source_contradiction</em>
+  </div>
+</section>
+<section class="layout">
+<div class="primary">
+<section class="panel platform-note">
+  <h2>UiPath platform role</h2>
+  <p>Maestro Case and Action Center own lifecycle, assignment, completion, and reviewer return. This custom packet is the legible audit/evidence surface because the generated Action Center page hid or mislabeled proof-critical fields during validation.</p>
+</section>
+<section class="panel external-source">
+  <h2>External evidence source</h2>
+  <p>This packet was generated from a live-style external systems-of-record simulator, not a production telecom OSS/BSS integration.</p>
+  <dl>
+    <div><dt>Source ref</dt><dd>fixtures/external_evidence_CASE_BG_CONTRA.csv</dd></div>
+    <div><dt>Signals</dt><dd>5</dd></div>
+    <div><dt>Systems represented</dt><dd>billing, crm, dispatch, inventory, network_telemetry</dd></div>
+    <div><dt>Fetched at</dt><dd>2026-06-28T20:59:02Z</dd></div>
+    <div><dt>SHA-256</dt><dd>14cfd74f4373892072a448837b190f29a7d7a51130ded524359058aa0bf62df2</dd></div>
+  </dl>
+</section>
+<section class="panel boundary">
+  <h2>Agent and policy boundary</h2>
+  <div class="boundary-grid">
+    <article>
+      <h3>Raw agent interpretation</h3>
+      <dl>
+        <div><dt>Event</dt><dd>AIE-E004</dd></div>
+        <div><dt>Recommendation</dt><dd>closure_candidate</dd></div>
+        <div><dt>Failure category</dt><dd>activation_failure</dd></div>
+        <div><dt>Confidence</dt><dd>0.82</dd></div>
+        <div><dt>Policy version</dt><dd>ip-v1</dd></div>
+      </dl>
+      <p>Business systems look complete, so the agent recommends closure pending policy review.</p>
+    </article>
+    <article>
+      <h3>Final policy decision</h3>
+      <dl>
+        <div><dt>Event</dt><dd>PDE-EXT-E004</dd></div>
+        <div><dt>Links to</dt><dd>AIE-E004</dd></div>
+        <div><dt>Decision</dt><dd>require_human_review</dd></div>
+        <div><dt>Block reason</dt><dd>source_contradiction</dd></div>
+        <div><dt>Reason codes</dt><dd>source_contradiction</dd></div>
+        <div><dt>From</dt><dd>closure_candidate</dd></div>
+        <div><dt>To</dt><dd>human_review</dd></div>
+        <div><dt>Policy version</dt><dd>dp-v1</dd></div>
+      </dl>
+    </article>
+  </div>
+</section>
+
+
+<section class="panel">
+  <h2>Evidence table</h2>
+  <div class="table-scroll">
+  <table>
+    <thead>
+      <tr>
+        <th>Field</th>
+        <th>Source</th>
+        <th>Value</th>
+        <th>Freshness</th>
+        <th>Authoritative</th>
+        <th>TTL seconds</th>
+      </tr>
+    </thead>
+    <tbody>
+
+        <tr>
+          <td>crm_order_status</td>
+          <td>crm</td>
+          <td>active</td>
+          <td><span class="status">fresh</span></td>
+          <td><span class="authority">authoritative</span></td>
+          <td>86400</td>
+        </tr>
+
+        <tr>
+          <td>billing_status</td>
+          <td>billing</td>
+          <td>clear</td>
+          <td><span class="status">fresh</span></td>
+          <td><span class="authority">authoritative</span></td>
+          <td>86400</td>
+        </tr>
+
+        <tr>
+          <td>inventory_assignment</td>
+          <td>inventory</td>
+          <td>assigned_match</td>
+          <td><span class="status">fresh</span></td>
+          <td><span class="authority">authoritative</span></td>
+          <td>86400</td>
+        </tr>
+
+        <tr>
+          <td>service_live_status</td>
+          <td>network_telemetry</td>
+          <td>not_live</td>
+          <td><span class="status">fresh</span></td>
+          <td><span class="authority">authoritative</span></td>
+          <td>300</td>
+        </tr>
+
+        <tr>
+          <td>dispatch_status</td>
+          <td>dispatch</td>
+          <td>complete</td>
+          <td><span class="status">fresh</span></td>
+          <td><span class="authority">authoritative</span></td>
+          <td>86400</td>
+        </tr>
+    </tbody>
+  </table>
+  </div>
+</section>
+</div>
+<aside class="side">
+<section class="panel">
+  <h2>Reviewer packet</h2>
+  <p>Service recovery exception review required: CRM/order/billing/support notes are green, but fresh authoritative telemetry contradicts the business state. Do not close; open human exception review.</p>
+  <dl>
+    <div><dt>Block reason</dt><dd>source_contradiction</dd></div>
+    <div><dt>Rendering status</dt><dd>structured_packet_ready</dd></div>
+  </dl>
+  <h3>Recommended options</h3>
+  <ul class="actions"><li>human_review</li>
+<li>request_evidence</li>
+<li>open_investigation</li></ul>
+  <h3>Closure readiness checklist</h3>
+  <ol class="closure-checklist">
+
+        <li class="blocked">
+          <strong>Fresh authoritative telemetry confirms service is live</strong>
+          <span>blocked</span>
+          <p>network_telemetry service_live_status=not_live freshness=fresh observed_at=2026-06-18T10:03:00Z</p>
+        </li>
+
+        <li class="blocked">
+          <strong>No unresolved source contradiction remains</strong>
+          <span>blocked</span>
+          <p>Policy reason source_contradiction is present.</p>
+        </li>
+
+        <li class="satisfied">
+          <strong>Billing has no active hold</strong>
+          <span>satisfied</span>
+          <p>billing billing_status=clear freshness=fresh observed_at=2026-06-18T10:01:00Z</p>
+        </li>
+
+        <li class="satisfied">
+          <strong>Inventory assignment matches the order</strong>
+          <span>satisfied</span>
+          <p>inventory inventory_assignment=assigned_match freshness=fresh observed_at=2026-06-18T10:02:00Z</p>
+        </li>
+
+        <li class="blocked">
+          <strong>Required human review has resolved the exception</strong>
+          <span>blocked</span>
+          <p>Case is routed to human_review for source_contradiction.</p>
+        </li>
+  </ol>
+  <article><h3>Reviewer questions</h3><ul class="actions"><li>Why do business systems show active while fresh authoritative service evidence disagrees?</li>
+<li>Which blocked closure criteria now have fresh authoritative evidence?</li></ul></article>
+  <p class="guardrail">Closure is not available until fresh authoritative service evidence confirms recovery.</p>
+</section>
+<section class="panel">
+  <h2>Audit order</h2>
+  <ol class="timeline">
+
+        <li>
+          <span>10</span>
+          <strong>EvidenceStateEvent</strong>
+          <code>ESE-CASE-BG-CONTRA</code>
+        </li>
+
+        <li>
+          <span>20</span>
+          <strong>AgentInterpretationEvent</strong>
+          <code>AIE-E004</code>
+        </li>
+
+        <li>
+          <span>30</span>
+          <strong>PolicyDecisionEvent</strong>
+          <code>PDE-EXT-E004</code>
+        </li>
+
+        <li>
+          <span>40</span>
+          <strong>HumanReviewEvent</strong>
+          <code>HRE-CASE-BG-CONTRA-PENDING</code>
+        </li>
+  </ol>
+</section>
+</aside>
+</section>
+</main>
+</body>
+</html>

@@ -400,6 +400,7 @@ For recording day, pre-stage the following and avoid live mutation unless a new 
 | UiPath platform proof | Maestro Case process/case surface, Action Center tasks `4300080` and `4300219`, Orchestrator bucket/process readback, Test Manager `SREV` | Shows the solution running through UiPath platform surfaces. |
 | 2A proof | `docs/demo/artifacts/evidence_packet_E002.html` | Shows raw `closure_candidate` overridden to `verify_telemetry`. |
 | 2B proof | `docs/demo/artifacts/evidence_packet_E004.html` | Shows same green fixture escalated to `human_review` because authoritative evidence contradicts. |
+| Optional external source proof | `docs/demo/artifacts/evidence_packet_external_E004.html` | Shows the E-004 contradiction path sourced from an external systems-of-record simulator, not production telecom OSS/BSS. |
 | LLM usefulness proof | `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html` | Shows agent interpretation and disagreement as structured policy input, not final authority. |
 | Eval/learning proof | `docs/demo/artifacts/policy_improvement_E008.json` and Test Manager `SREV` | Shows E-001 through E-009 discipline and no auto-promotion. |
 | Coding-agent proof | `README.md`, `docs/submission/CODING_AGENT_PROOF_LOG.md`, terminal validation output | Shows Codex build-time contribution without weakening runtime governance. |
@@ -442,6 +443,17 @@ python -m unittest discover -s tests
 python -m service_recovery_core.evals --output eval_results/local_baseline.json
 python -m service_recovery_core.evals --evidence-packet-html-scenario E-002 --output docs/demo/artifacts/evidence_packet_E002.html
 python -m service_recovery_core.evals --evidence-packet-html-scenario E-004 --output docs/demo/artifacts/evidence_packet_E004.html
+
+# Optional external evidence-source proof from local sample CSV.
+python -m service_recovery_core.external_evidence \
+  --source-file fixtures/external_evidence_CASE_BG_CONTRA.csv \
+  --output-dir docs/demo/artifacts
+
+# Optional live refresh from a public read-only CSV/JSON URL.
+# Do not use credentials or tokens in the URL, and do not claim real telecom production integration.
+python -m service_recovery_core.external_evidence \
+  --source-url "$EXTERNAL_EVIDENCE_SOURCE_URL" \
+  --output-dir docs/demo/artifacts
 python -m service_recovery_core.evals --audit-bundle-scenario E-004 --output docs/demo/artifacts/service_recovery_audit_bundle_E004.json
 ```
 

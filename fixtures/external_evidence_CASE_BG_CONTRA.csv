@@ -1,0 +1,6 @@
+source,case_id,field,value,authoritative,freshness_status,ttl_seconds,observed_at
+crm,CASE-BG-CONTRA,crm_order_status,active,true,fresh,86400,2026-06-18T10:00:00Z
+billing,CASE-BG-CONTRA,billing_status,clear,true,fresh,86400,2026-06-18T10:01:00Z
+inventory,CASE-BG-CONTRA,inventory_assignment,assigned_match,true,fresh,86400,2026-06-18T10:02:00Z
+network_telemetry,CASE-BG-CONTRA,service_live_status,not_live,true,fresh,300,2026-06-18T10:03:00Z
+dispatch,CASE-BG-CONTRA,dispatch_status,complete,true,fresh,86400,2026-06-18T10:04:00Z

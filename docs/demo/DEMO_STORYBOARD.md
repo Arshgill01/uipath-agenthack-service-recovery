@@ -11,9 +11,10 @@ Open these before recording, in this order:
 3. `docs/demo/artifacts/evidence_packet_E002.html`.
 4. `docs/demo/artifacts/evidence_packet_E004.html`.
 5. `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html`.
-6. `docs/demo/artifacts/policy_improvement_E008.json`.
-7. `README.md` at the coding-agent section, `docs/submission/CODING_AGENT_PROOF_LOG.md`, and `docs/submission/coding_agent_evidence_manifest.json`.
-8. Terminal at repo root with the final `scripts/run_submission_check.sh` output still visible.
+6. Optional if time allows: `docs/demo/artifacts/evidence_packet_external_E004.html`.
+7. `docs/demo/artifacts/policy_improvement_E008.json`.
+8. `README.md` at the coding-agent section, `docs/submission/CODING_AGENT_PROOF_LOG.md`, and `docs/submission/coding_agent_evidence_manifest.json`.
+9. Terminal at repo root with the final `scripts/run_submission_check.sh` output still visible.
 
 If a browser login expires during recording, switch to the terminal readback output from `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`. Do not start a fresh live case during the recording unless new IDs are intentionally needed and logged.
 
@@ -25,6 +26,7 @@ If a browser login expires during recording, switch to the terminal readback out
 | 0:20-0:50 | UiPath Automation Cloud surfaces: Maestro Case, Action Center, Orchestrator, Test Manager | "UiPath is the orchestration boundary: Maestro Case owns case routing, Action Center owns the human task lifecycle, Orchestrator/Data Fabric own audit/version proof, and Test Manager represents the eval suite." | Do not imply the custom HTML packet replaces UiPath orchestration. It is the judge-readable proof surface for the same case data. |
 | 0:50-1:45 | `docs/demo/artifacts/evidence_packet_E002.html` | "In 2A, CRM, order, billing, and support note all look green. The agent emits a raw `closure_candidate` recommendation, but authoritative telemetry is missing or stale. Policy overrides closure to `verify_telemetry` and keeps the SLA clock alive." | Do not rely on narration only. Point at `Agent Interpretation Event`, `Policy Decision Event`, `from_recommended_stage`, `to_stage`, and `missing_authoritative_signal` or `stale_authoritative_signal`. |
 | 1:45-2:35 | `docs/demo/artifacts/evidence_packet_E004.html` | "In 2B, the business fixture is intentionally the same. The only meaningful change is fresh authoritative telemetry or inventory contradiction. That routes to `human_review`, not a retry, because this is a higher-risk exception." | Do not make 2A and 2B sound like unrelated scenarios. Do not claim old E-002/E-004 jobs reached terminal case completion. |
+| Optional 0:10 | `docs/demo/artifacts/evidence_packet_external_E004.html` | "The telecom systems are synthetic, but this optional proof reads the same contradiction pattern from an external systems-of-record simulator: CRM, billing, inventory, network telemetry, and dispatch." | Do not claim real telecom OSS/BSS integration. Skip this beat if time is tight. |
 | 2:35-3:10 | `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html` | "The LLM is useful as an interpreter, not as the final authority. In the adversarial run, one interpretation pressed for closure, another found unresolved risk, and structured disagreement became policy input for escalation." | Do not say Gemini, Codex, or any LLM closes the case or overrides policy. |
 | 3:10-3:45 | `docs/demo/artifacts/policy_improvement_E008.json` and Test Manager `SREV` | "The eval layer guards usefulness and safety. E-001 through E-009 cover aligned closure, missing/stale evidence, contradiction, adversarial pressure, invalid output, override persistence, and a learning-loop artifact. Proposed policy changes remain pending human approval and are not auto-promoted." | Do not claim automated Test Cloud execution. Say Test Manager manual representation/execution. |
 | 3:45-4:15 | Product feedback doc or appendix section on Maestro Case preflight | "We also produced concrete product feedback: the strongest request is a Maestro Case human-review readiness preflight that checks services, roles, Action task fields, binding, package/feed versioning, and audit readiness before live runtime." | Do not turn forum reports into our own reproduced defects. Our PF entries are based on observed evidence. |

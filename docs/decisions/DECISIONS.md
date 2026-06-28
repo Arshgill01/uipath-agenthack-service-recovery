@@ -149,3 +149,11 @@ Decision: Human-review and blocked-closure packets carry a deterministic closure
 Rationale: The reviewer should see exactly what must be true before closure without trusting LLM prose. This deepens the Maestro/policy workflow by turning missing, stale, contradictory, invalid, and high-disagreement states into concrete human questions while preserving the boundary that policy owns closure and agents only interpret evidence.
 
 Status: Accepted.
+
+## D-018: Optional External Evidence Source Proof
+
+Decision: Add an optional external evidence-source proof for the E-004 contradiction path using a live-style CRM/billing/inventory/network/dispatch evidence table. The proof may be generated from a public read-only CSV/JSON URL, but the committed baseline uses a local sample CSV and must remain labeled as an external systems-of-record simulator, not a real telecom production integration.
+
+Rationale: This makes the evidence-source angle more real without adding late-stage connector risk or weakening the architecture boundary. The core UiPath proof remains Maestro Case, Action Center, Orchestrator/Data Fabric audit, Test Manager manual eval representation, and deterministic policy. The optional source proof only shows that the same contradiction route can be sourced from an external tabular evidence source.
+
+Status: Accepted with claim boundary. Do not describe this as production OSS/BSS access or real telecom integration.

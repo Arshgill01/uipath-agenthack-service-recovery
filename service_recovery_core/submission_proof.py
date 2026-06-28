@@ -105,6 +105,9 @@ REQUIRED_ARTIFACTS = (
     "evidence_packet_E003_adversarial_desktop.png",
     "evidence_packet_E003_adversarial_mobile.png",
     "policy_improvement_E008.json",
+    "external_evidence_source_proof.json",
+    "service_recovery_audit_bundle_external_E004.json",
+    "evidence_packet_external_E004.html",
 )
 
 REQUIRED_DOC_CLAIMS = {
@@ -172,6 +175,7 @@ def verify_submission_proof(repo_root: Path, artifact_dir: Path | None = None) -
     errors.extend(_verify_llm_artifact(artifacts / "llm_interpreter_E003_live.json", adversarial=False))
     errors.extend(_verify_llm_artifact(artifacts / "llm_interpreter_E003_adversarial_live.json", adversarial=True))
     errors.extend(_verify_policy_improvement_artifact(artifacts / "policy_improvement_E008.json"))
+    errors.extend(_verify_external_evidence_artifact(artifacts / "external_evidence_source_proof.json"))
     return errors
 
 
@@ -505,6 +509,26 @@ def _verify_policy_improvement_artifact(path: Path) -> list[str]:
         "decision_policy_not_promoted": artifact.get("proposed_next_version", {}).get("decision_policy_version")
         == "dp-v1",
         "forbids_auto_promote": "auto_promote_policy" in artifact.get("forbidden_actions", []),
+    }
+    return _failed_checks(path.name, checks)
+
+
+def _verify_external_evidence_artifact(path: Path) -> list[str]:
+    if not path.exists():
+        return []
+
+    artifact = _read_json(path)
+    claim_boundary = artifact.get("claim_boundary", "")
+    checks = {
+        "artifact_type": artifact.get("artifact_type") == "external-evidence-source-proof-v1",
+        "scenario_id": artifact.get("scenario_id") == "E-004",
+        "case_id": artifact.get("case_id") == "CASE-BG-CONTRA",
+        "policy_decision": artifact.get("policy_decision") == "require_human_review",
+        "route": artifact.get("route") == "human_review",
+        "source_contradiction": "source_contradiction" in artifact.get("reason_codes", []),
+        "claim_boundary": "not a production telecom OSS/BSS integration" in claim_boundary,
+        "source_role": artifact.get("source", {}).get("proof_role") == "live-style external systems-of-record simulator",
+        "signal_count": artifact.get("source", {}).get("signal_count") == 5,
     }
     return _failed_checks(path.name, checks)
 

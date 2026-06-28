@@ -2,6 +2,37 @@
 
 Append one entry per substantial agent run.
 
+### 2026-06-29 - Agent / Optional External Evidence Source Proof
+
+What changed:
+
+- Added an optional external evidence-source adapter that reads CSV/JSON from a local file or public read-only URL with no secrets.
+- Added a committed sample CRM/billing/inventory/network/dispatch evidence table for `CASE-BG-CONTRA`.
+- Generated optional proof artifacts: `external_evidence_source_proof.json`, `service_recovery_audit_bundle_external_E004.json`, and `evidence_packet_external_E004.html`.
+- Updated the proof index, submission proof verifier, demo storyboard, runbook, platform proof map, submission brief, and decision log to keep the claim boundary explicit: external systems-of-record simulator, not production telecom OSS/BSS integration.
+
+Commands run:
+
+- `python3 -m service_recovery_core.external_evidence --source-file fixtures/external_evidence_CASE_BG_CONTRA.csv --output-dir docs/demo/artifacts`
+- `python3 -m service_recovery_core.proof_index --artifact-dir docs/demo/artifacts`
+- `python3 -m unittest tests.test_external_evidence tests.test_proof_index tests.test_submission_proof`
+- `python3 -m service_recovery_core.external_evidence --output-dir docs/demo/artifacts --verify-only`
+- `python3 -m service_recovery_core.proof_index --artifact-dir docs/demo/artifacts --verify-only`
+- `git diff --check`
+- `scripts/run_submission_check.sh`
+
+Validation:
+
+- PASS: targeted external evidence, proof-index, and submission-proof tests ran 14 tests.
+- PASS: external evidence artifact verifier.
+- PASS: proof index verifier, including optional external beat.
+- PASS: `git diff --check`.
+- PASS: `scripts/run_submission_check.sh` ran 65 tests and verified demo artifacts.
+
+Open risks:
+
+- No live external URL was used yet. To refresh from Google Sheets or another source, provide a public read-only CSV/JSON URL with no credentials or tokens in the URL.
+
 ### 2026-06-29 - Agent / Feedback Thesis Validation
 
 What changed:

@@ -1,0 +1,31 @@
+{
+  "artifact_type": "external-evidence-source-proof-v1",
+  "audit_bundle_path": "docs/demo/artifacts/service_recovery_audit_bundle_external_E004.json",
+  "case_id": "CASE-BG-CONTRA",
+  "claim_boundary": "External source is a live-style systems-of-record simulator, not a production telecom OSS/BSS integration.",
+  "evidence_packet_html_path": "docs/demo/artifacts/evidence_packet_external_E004.html",
+  "policy_decision": "require_human_review",
+  "reason_codes": [
+    "source_contradiction"
+  ],
+  "route": "human_review",
+  "scenario_id": "E-004",
+  "source": {
+    "case_ids": [
+      "CASE-BG-CONTRA"
+    ],
+    "content_type": "text/csv",
+    "fetched_at": "2026-06-28T20:59:02Z",
+    "proof_role": "live-style external systems-of-record simulator",
+    "sha256": "14cfd74f4373892072a448837b190f29a7d7a51130ded524359058aa0bf62df2",
+    "signal_count": 5,
+    "source_ref": "fixtures/external_evidence_CASE_BG_CONTRA.csv",
+    "sources": [
+      "billing",
+      "crm",
+      "dispatch",
+      "inventory",
+      "network_telemetry"
+    ]
+  }
+}

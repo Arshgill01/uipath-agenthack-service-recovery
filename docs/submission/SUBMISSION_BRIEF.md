@@ -107,11 +107,12 @@ Use this section as the final copy/checklist when filling Devpost. Keep field te
 - Coding-agent proof log: `docs/submission/CODING_AGENT_PROOF_LOG.md`
 - Coding-agent evidence manifest: `docs/submission/coding_agent_evidence_manifest.json`
 - Coding-agent demo beat checklist: `docs/submission/CODING_AGENT_DEMO_BEAT_CHECKLIST.md`
+- Optional external evidence-source proof: `docs/demo/artifacts/external_evidence_source_proof.json`
 - Forum/Devpost research digest: `docs/research/AGENTHACK_FORUM_RESEARCH.md`
 
 ## Honest Boundaries
 
-- The telecom systems are simulated fixtures, not production integrations.
+- The telecom systems are simulated fixtures, not production integrations. The optional external evidence-source proof uses a live-style CRM/billing/inventory/network/dispatch evidence simulator and must not be described as production telecom OSS/BSS access.
 - Native Maestro Case history is not claimed as a complete domain audit by itself.
 - Generated Action Center UI is not the final judge-facing evidence surface because it hid or mislabeled proof-critical fields during validation.
 - Data Fabric V2 full-payload persistence is validated for E-004 through JSON insert/query/readback using PascalCase fields. The legacy snake_case `ServiceRecoveryAuditBundle` entity remains a product-feedback finding because its custom fields did not populate or read back correctly.

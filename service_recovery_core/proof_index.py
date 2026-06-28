@@ -70,7 +70,13 @@ def verify_proof_index(artifact_dir: Path, *, output_path: Path | None = None) -
     if not errors:
         index = _build_index_payload(artifact_dir)
         scenario_ids = [beat["scenario_id"] for beat in index["beats"]]
-        if scenario_ids != ["E-002", "E-004", "E-003", "E-008"]:
+        expected_ids = ["E-002", "E-004", "E-003", "E-008"]
+        if (artifact_dir / "external_evidence_source_proof.json").exists():
+            expected_ids.append("EXT-E-004")
+            for value in ("External evidence source proof", "not a production telecom OSS/BSS integration"):
+                if value not in html:
+                    errors.append(f"{output_path.name}: missing required external-source string {value!r}")
+        if scenario_ids != expected_ids:
             errors.append(f"{output_path.name}: unexpected beat order {scenario_ids}")
     return errors
 
@@ -161,6 +167,8 @@ def _build_index_payload(artifact_dir: Path) -> dict[str, Any]:
     beats = [_core_beat(artifact_dir, scenario) for scenario in manifest["scenarios"]]
     beats.append(_llm_beat(artifact_dir))
     beats.append(_learning_loop_beat(artifact_dir))
+    if (artifact_dir / "external_evidence_source_proof.json").exists():
+        beats.append(_external_evidence_beat(artifact_dir))
     return {
         "artifact_type": "service-recovery-proof-index",
         "source_artifact_dir": str(artifact_dir),
@@ -229,6 +237,27 @@ def _learning_loop_beat(artifact_dir: Path) -> dict[str, Any]:
         "reason": artifact["active_case_policy_version_action"],
         "boundary": "Policy stays pending human approval and is not_promoted; active cases remain pinned until explicit migration.",
         "links": [("Policy improvement JSON", artifact_name)],
+    }
+
+
+def _external_evidence_beat(artifact_dir: Path) -> dict[str, Any]:
+    artifact_name = "external_evidence_source_proof.json"
+    artifact = _read_json(artifact_dir / artifact_name)
+    source = artifact["source"]
+    return {
+        "scenario_id": "EXT-E-004",
+        "title": "External evidence source proof",
+        "claim": "Same contradiction path sourced from a live-style external systems-of-record simulator.",
+        "agent_recommendation": "closure_candidate",
+        "policy_decision": artifact["policy_decision"],
+        "route": artifact["route"],
+        "reason": ", ".join(artifact.get("reason_codes", [])),
+        "boundary": f"{artifact['claim_boundary']} Source hash {source['sha256']}.",
+        "links": [
+            ("External source proof JSON", artifact_name),
+            ("External source packet", "evidence_packet_external_E004.html"),
+            ("External source audit bundle", "service_recovery_audit_bundle_external_E004.json"),
+        ],
     }
 
 

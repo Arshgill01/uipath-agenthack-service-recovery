@@ -31,6 +31,7 @@ def render_evidence_packet_html(audit_bundle: dict[str, Any]) -> str:
             '<section class="layout">',
             '<div class="primary">',
             _platform_note(),
+            _external_evidence_source(audit_bundle),
             _policy_boundary(agent, policy),
             _adversarial_interpretation(agent),
             _llm_recommendation_package(agent),
@@ -132,6 +133,25 @@ def _platform_note() -> str:
 <section class="panel platform-note">
   <h2>UiPath platform role</h2>
   <p>Maestro Case and Action Center own lifecycle, assignment, completion, and reviewer return. This custom packet is the legible audit/evidence surface because the generated Action Center page hid or mislabeled proof-critical fields during validation.</p>
+</section>""".strip()
+
+
+def _external_evidence_source(audit_bundle: dict[str, Any]) -> str:
+    source = audit_bundle.get("external_evidence_source")
+    if not isinstance(source, dict):
+        return ""
+    sources = ", ".join(source.get("sources", []))
+    return f"""
+<section class="panel external-source">
+  <h2>External evidence source</h2>
+  <p>This packet was generated from a live-style external systems-of-record simulator, not a production telecom OSS/BSS integration.</p>
+  <dl>
+    <div><dt>Source ref</dt><dd>{escape(str(source.get("source_ref", "")))}</dd></div>
+    <div><dt>Signals</dt><dd>{escape(str(source.get("signal_count", "")))}</dd></div>
+    <div><dt>Systems represented</dt><dd>{escape(sources)}</dd></div>
+    <div><dt>Fetched at</dt><dd>{escape(str(source.get("fetched_at", "")))}</dd></div>
+    <div><dt>SHA-256</dt><dd>{escape(str(source.get("sha256", "")))}</dd></div>
+  </dl>
 </section>""".strip()
 
 

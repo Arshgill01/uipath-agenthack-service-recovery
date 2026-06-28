@@ -5,6 +5,7 @@ from pathlib import Path
 
 from service_recovery_core.demo_proof import build_demo_proof_artifacts
 from service_recovery_core.evals import build_policy_improvement_artifact_for_scenario
+from service_recovery_core.external_evidence import DEFAULT_SAMPLE_PATH, build_external_evidence_artifacts, load_external_source_file
 from service_recovery_core.proof_index import build_proof_index, verify_proof_index
 
 
@@ -46,6 +47,25 @@ class ProofIndexTests(unittest.TestCase):
 
             self.assertIn("missing source artifact", errors[0])
             self.assertIn("policy_improvement_E008.json", errors[0])
+
+    def test_optional_external_evidence_source_appears_when_artifact_exists(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            artifact_dir = Path(temp_dir)
+            build_demo_proof_artifacts(artifact_dir)
+            _write_required_support_artifacts(artifact_dir)
+            build_external_evidence_artifacts(load_external_source_file(DEFAULT_SAMPLE_PATH), artifact_dir)
+
+            index = build_proof_index(artifact_dir)
+            errors = verify_proof_index(artifact_dir)
+            html = (artifact_dir / "proof_index.html").read_text(encoding="utf-8")
+
+            self.assertEqual(errors, [])
+            self.assertEqual(
+                [beat["scenario_id"] for beat in index["beats"]],
+                ["E-002", "E-004", "E-003", "E-008", "EXT-E-004"],
+            )
+            self.assertIn("External evidence source proof", html)
+            self.assertIn("not a production telecom OSS/BSS integration", html)
 
 
 def _write_required_support_artifacts(artifact_dir: Path) -> None:
