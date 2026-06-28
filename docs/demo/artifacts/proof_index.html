@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Judge-facing proof index</title>
+<style>
+
+:root {
+  color-scheme: light;
+  --bg: #f7f8f3;
+  --surface: #ffffff;
+  --ink: #202522;
+  --muted: #5f6861;
+  --line: #cfd7ce;
+  --accent: #245a4f;
+  --warn: #9b3f2f;
+  --blue: #284f93;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 14.5px/1.55 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px;
+}
+
+header {
+  border-bottom: 2px solid var(--line);
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+}
+
+header p {
+  max-width: 780px;
+}
+
+h1, h2, h3, p {
+  margin-top: 0;
+}
+
+h1 {
+  color: var(--accent);
+  font-size: 30px;
+  line-height: 1.12;
+  margin-bottom: 8px;
+}
+
+h2 {
+  color: var(--accent);
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+p, li, dt {
+  color: var(--muted);
+}
+
+.claim-boundary,
+.platform-map,
+.beat {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 18px;
+}
+
+.claim-boundary {
+  border-left: 4px solid var(--warn);
+  margin-bottom: 18px;
+}
+
+.proof-chain {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.proof-chain h2 {
+  grid-column: 1 / -1;
+  margin-bottom: 0;
+}
+
+.beat {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.beat-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.beat-head span {
+  background: var(--accent);
+  border-radius: 6px;
+  color: #fff;
+  display: inline-block;
+  font-weight: 700;
+  padding: 3px 8px;
+}
+
+dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+dl div {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 12px;
+  border-bottom: 1px dotted var(--line);
+  padding-bottom: 5px;
+}
+
+dd {
+  margin: 0;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.boundary {
+  background: #fff8ed;
+  border: 1px solid #f0d0a9;
+  border-radius: 6px;
+  color: var(--warn);
+  font-weight: 700;
+  padding: 10px 12px;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.links a {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--blue);
+  display: inline-block;
+  font-weight: 700;
+  padding: 5px 9px;
+  text-decoration: none;
+}
+
+@media (max-width: 780px) {
+  .page {
+    padding: 16px;
+  }
+
+  .proof-chain {
+    grid-template-columns: 1fr;
+  }
+
+  dl div {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
+
+</style>
+</head>
+<body>
+<main class="page">
+<header>
+<p>UiPath AgentHack service recovery</p>
+<h1>Judge-facing proof index</h1>
+<p>This generated page links the demo proof artifacts and makes the claim boundary inspectable before recording.</p>
+</header>
+<section class="claim-boundary">
+<h2>Claim boundaries</h2>
+<p>This is a judge-readable support surface generated from existing proof artifacts. It is not a replacement for UiPath Maestro Case, Action Center, Data Fabric V2, Orchestrator, or Test Manager manual execution proof.</p>
+<ul>
+<li>Agents produce structured recommendations; deterministic policy decides the route.</li>
+<li>Action Center lifecycle proves human task handling; custom packets make proof-critical fields readable.</li>
+<li>No automated Test Cloud execution, generated Action Center UI readiness, real telecom integration, or LLM/Codex final-closure authority is claimed.</li>
+</ul>
+</section>
+<section class="proof-chain">
+<h2>Demo proof chain</h2>
+<article class="beat">
+  <div class="beat-head">
+    <span>E-002</span>
+    <h3>2A missing or stale authoritative evidence</h3>
+  </div>
+  <p>Same green business fixture; missing authoritative telemetry overrides closure to verification.</p>
+  <dl>
+    <div><dt>Raw agent / trigger</dt><dd>closure_candidate</dd></div>
+    <div><dt>Policy decision</dt><dd>override_recommendation</dd></div>
+    <div><dt>Route / status</dt><dd>verify_telemetry</dd></div>
+    <div><dt>Reason</dt><dd>missing_authoritative_signal</dd></div>
+  </dl>
+  <p class="boundary">Custom packet supports UiPath runtime proof; policy, not the agent, controls routing.</p>
+  <ul class="links"><li><a href="evidence_packet_E002.html">Evidence packet</a></li>
+<li><a href="service_recovery_audit_bundle_E002.json">Audit bundle</a></li>
+<li><a href="action_payload_E002.json">Action Center payload</a></li></ul>
+</article>
+<article class="beat">
+  <div class="beat-head">
+    <span>E-004</span>
+    <h3>2B fresh authoritative contradiction</h3>
+  </div>
+  <p>Same green business fixture; fresh authoritative contradiction escalates to human review.</p>
+  <dl>
+    <div><dt>Raw agent / trigger</dt><dd>closure_candidate</dd></div>
+    <div><dt>Policy decision</dt><dd>require_human_review</dd></div>
+    <div><dt>Route / status</dt><dd>human_review</dd></div>
+    <div><dt>Reason</dt><dd>source_contradiction</dd></div>
+  </dl>
+  <p class="boundary">Custom packet supports UiPath runtime proof; policy, not the agent, controls routing.</p>
+  <ul class="links"><li><a href="evidence_packet_E004.html">Evidence packet</a></li>
+<li><a href="service_recovery_audit_bundle_E004.json">Audit bundle</a></li>
+<li><a href="action_payload_E004.json">Action Center payload</a></li></ul>
+</article>
+<article class="beat">
+  <div class="beat-head">
+    <span>E-003</span>
+    <h3>Live adversarial LLM interpretation</h3>
+  </div>
+  <p>LLM output remains advisory and schema-validated; disagreement becomes structured policy input.</p>
+  <dl>
+    <div><dt>Raw agent / trigger</dt><dd>closure_candidate</dd></div>
+    <div><dt>Policy decision</dt><dd>require_human_review</dd></div>
+    <div><dt>Route / status</dt><dd>human_review</dd></div>
+    <div><dt>Reason</dt><dd>stale_authoritative_signal, high_interpretation_disagreement</dd></div>
+  </dl>
+  <p class="boundary">Disagreement score 0.712 crosses threshold 0.6; the LLM still does not close the case.</p>
+  <ul class="links"><li><a href="evidence_packet_E003_adversarial_live.html">Adversarial packet</a></li>
+<li><a href="llm_interpreter_E003_adversarial_live.json">LLM JSON</a></li>
+<li><a href="evidence_packet_E003_adversarial_desktop.png">Desktop screenshot</a></li>
+<li><a href="evidence_packet_E003_adversarial_mobile.png">Mobile screenshot</a></li></ul>
+</article>
+<article class="beat">
+  <div class="beat-head">
+    <span>E-008</span>
+    <h3>Governed learning-loop artifact</h3>
+  </div>
+  <p>Usefulness degradation creates a proposal-only policy improvement case.</p>
+  <dl>
+    <div><dt>Raw agent / trigger</dt><dd>low_confidence_despite_sufficient_signal</dd></div>
+    <div><dt>Policy decision</dt><dd>pending_human_approval</dd></div>
+    <div><dt>Route / status</dt><dd>not_promoted</dd></div>
+    <div><dt>Reason</dt><dd>active_cases_remain_pinned_until_explicit_migration_event</dd></div>
+  </dl>
+  <p class="boundary">Policy stays pending human approval and is not_promoted; active cases remain pinned until explicit migration.</p>
+  <ul class="links"><li><a href="policy_improvement_E008.json">Policy improvement JSON</a></li></ul>
+</article>
+</section>
+<section class="platform-map">
+<h2>Platform proof anchors</h2>
+<dl>
+<div><dt>Maestro Case / Action Center lifecycle</dt><dd>Validated case and task IDs are documented in the runbook and proof map; this page links the generated local payloads that fed those proof beats.</dd></div>
+<div><dt>Data Fabric V2 / Orchestrator audit</dt><dd>The E-004 audit bundle is the full-payload proof shape used for UiPath-hosted audit readback.</dd></div>
+<div><dt>Test Manager manual execution</dt><dd>E-001 through E-009 are represented by the SREV:9 manual execution, not automated Test Cloud execution.</dd></div>
+</dl>
+</section>
+</main>
+</body>
+</html>

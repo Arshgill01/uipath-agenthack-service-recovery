@@ -54,6 +54,7 @@ fi
 
 python -m service_recovery_core.demo_proof --output-dir "$OUTPUT_DIR" >/dev/null
 python -m service_recovery_core.demo_proof --output-dir "$OUTPUT_DIR" --verify-only
+python -m service_recovery_core.proof_index --artifact-dir "$OUTPUT_DIR" >/dev/null
 
 cat <<EOF
 
@@ -65,8 +66,10 @@ Demo proof artifacts refreshed in $OUTPUT_DIR:
   - evidence_packet_E002.html
   - evidence_packet_E004.html
   - demo_proof_manifest.json
+  - proof_index.html
 
 Open the judge-facing packets:
+  open "$ROOT_DIR/$OUTPUT_DIR/proof_index.html"
   open "$ROOT_DIR/$OUTPUT_DIR/evidence_packet_E002.html"
   open "$ROOT_DIR/$OUTPUT_DIR/evidence_packet_E004.html"
 EOF

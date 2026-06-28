@@ -120,6 +120,8 @@ The demo proof helper generates and verifies:
 - `docs/demo/artifacts/evidence_packet_E004.html`
 - `docs/demo/artifacts/demo_proof_manifest.json`
 
+It also refreshes `docs/demo/artifacts/proof_index.html`, a generated judge-facing index over the E-002/E-004 packets, live E-003 adversarial artifact, and E-008 learning-loop artifact. The index is a readable support surface for inspection and recording prep; it does not replace the UiPath runtime, Action Center, Data Fabric, Orchestrator, or Test Manager proof.
+
 Generate the governed learning-loop artifact:
 
 ```sh

@@ -2,6 +2,38 @@
 
 Append one entry per substantial agent run.
 
+### 2026-06-28 - Agent / Judge-Facing Proof Index Artifact
+
+What changed:
+
+- Added `service_recovery_core.proof_index`, a generated single-page proof index built from existing E-002/E-004 audit and packet artifacts, the live E-003 adversarial LLM artifact, and the E-008 policy-improvement artifact.
+- Generated `docs/demo/artifacts/proof_index.html` as the judge-facing proof booster with visible claim boundaries and links to the underlying proof artifacts.
+- Wired `scripts/run_demo.sh` to refresh the proof index and `scripts/run_submission_check.sh` plus `service_recovery_core.submission_proof` to verify it.
+- Added focused tests in `tests/test_proof_index.py` and updated demo/submission docs so the index is discoverable without claiming it replaces UiPath runtime proof.
+
+Commands run:
+
+- `python -m unittest tests.test_proof_index tests.test_submission_proof tests.test_demo_proof` - initial FAIL before `proof_index.html` was generated; PASS after regeneration.
+- `scripts/run_demo.sh --no-uipath-next-steps`
+- `python -m service_recovery_core.proof_index --artifact-dir docs/demo/artifacts --verify-only`
+- `scripts/run_submission_check.sh`
+- `git diff --check`
+- `python -m service_recovery_core.submission_proof --artifact-dir docs/demo/artifacts`
+
+Validation:
+
+- PASS: `scripts/run_demo.sh --no-uipath-next-steps` regenerated E-002/E-004 proof artifacts and `proof_index.html` without live UiPath mutation.
+- PASS: targeted proof-index/submission/demo tests ran 7 tests.
+- PASS: proof-index verifier checked `docs/demo/artifacts/proof_index.html`.
+- PASS: `scripts/run_submission_check.sh` ran 51 tests and verified demo artifacts.
+- PASS: `git diff --check`.
+- PASS: parsed submission proof verifier checked 12 artifacts and 6 claim docs.
+
+Open risks:
+
+- `proof_index.html` is a judge-readable support surface only. It does not replace Maestro Case, Action Center, Data Fabric V2, Orchestrator bucket, Test Manager, or CLI readback proof.
+- Existing claim boundaries remain: no automated Test Cloud execution, no generated Action Center UI final-demo readiness, no native Case history alone as full G-001 proof, no real telecom production integrations, and no LLM/Codex final closure authority.
+
 ### 2026-06-28 - Agent / Final-Lap Branch Review And Integration
 
 What changed:

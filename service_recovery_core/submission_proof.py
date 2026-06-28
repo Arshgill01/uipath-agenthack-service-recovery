@@ -29,6 +29,7 @@ REQUIRED_ARTIFACTS = (
     "evidence_packet_E004.html",
     "evidence_packet_E004_desktop.png",
     "demo_proof_manifest.json",
+    "proof_index.html",
     "llm_interpreter_E003_live.json",
     "llm_interpreter_E003_adversarial_live.json",
     "evidence_packet_E003_adversarial_live.html",
@@ -82,6 +83,7 @@ def verify_submission_proof(repo_root: Path, artifact_dir: Path | None = None) -
     errors.extend(_verify_required_files(root, artifacts))
     errors.extend(_verify_doc_claims(root))
     errors.extend(_verify_demo_manifest(root, artifacts))
+    errors.extend(_verify_proof_index_html(artifacts / "proof_index.html"))
     errors.extend(_verify_llm_artifact(artifacts / "llm_interpreter_E003_live.json", adversarial=False))
     errors.extend(_verify_llm_artifact(artifacts / "llm_interpreter_E003_adversarial_live.json", adversarial=True))
     errors.extend(_verify_policy_improvement_artifact(artifacts / "policy_improvement_E008.json"))
@@ -254,6 +256,23 @@ def _verify_policy_improvement_artifact(path: Path) -> list[str]:
         "decision_policy_not_promoted": artifact.get("proposed_next_version", {}).get("decision_policy_version")
         == "dp-v1",
         "forbids_auto_promote": "auto_promote_policy" in artifact.get("forbidden_actions", []),
+    }
+    return _failed_checks(path.name, checks)
+
+
+def _verify_proof_index_html(path: Path) -> list[str]:
+    if not path.exists():
+        return []
+
+    content = path.read_text(encoding="utf-8")
+    checks = {
+        "title": "Judge-facing proof index" in content,
+        "claim_boundary": "Claim boundaries" in content,
+        "support_not_replacement": "not a replacement for UiPath Maestro Case" in content,
+        "missing_telemetry": "E-002" in content and "missing_authoritative_signal" in content,
+        "contradiction": "E-004" in content and "source_contradiction" in content,
+        "llm_adversarial": "E-003" in content and "high_interpretation_disagreement" in content,
+        "learning_loop": "E-008" in content and "pending_human_approval" in content and "not_promoted" in content,
     }
     return _failed_checks(path.name, checks)
 
