@@ -2,6 +2,37 @@
 
 Append one entry per substantial agent run.
 
+### 2026-06-29 - Agent / Final Feedback Scannability Pass
+
+What changed:
+
+- Reviewed the latest external feedback critique against the current Microsoft Form draft and copy-ready answer bank.
+- Kept the stronger Maestro Case Human-Review Readiness Check and auditability-contract thesis intact.
+- Reworked Q10 in both feedback survey files into three groups: readiness gaps before runtime, runtime binding/rendering/version gaps, and audit/eval reconstruction gaps.
+- Added explicit paste-discipline guidance so internal labels, recommended-choice notes, and do-not-claim guardrails are not accidentally pasted into the Microsoft Form.
+
+Commands run:
+
+- `sed -n '1,260p' docs/product/FEEDBACK_SURVEY_FINAL_DRAFT.md`
+- `sed -n '1,260p' docs/product/FEEDBACK_SURVEY_COPY_READY.md`
+- `rg -n "automated Test Cloud|real telecom|final-demo ready|native Case history alone|LLM.*close|Codex.*close|PF-[0-9]" docs/product/FEEDBACK_SURVEY_FINAL_DRAFT.md docs/product/FEEDBACK_SURVEY_COPY_READY.md`
+- `git diff --check`
+- `python3 -m unittest tests.test_submission_proof`
+- `python3 -m service_recovery_core.submission_proof --artifact-dir docs/demo/artifacts`
+- `scripts/run_submission_check.sh`
+
+Validation:
+
+- PASS: `git diff --check`.
+- PASS: targeted submission-proof tests ran 9 tests.
+- PASS: submission-proof verifier checked 19 artifacts, 11 claim-boundary docs, 8 claim docs, and the coding-agent manifest.
+- PASS: `scripts/run_submission_check.sh` ran 67 tests and verified demo artifacts.
+
+Open risks:
+
+- Team name, story-sharing preference, and whether to select the Test Cloud category remain user-owned final form choices.
+- No new live UiPath or Gemini operation was run; this pass only changes submission copy and form hygiene.
+
 ### 2026-06-29 - Agent / Optional External Evidence Source Proof
 
 What changed:

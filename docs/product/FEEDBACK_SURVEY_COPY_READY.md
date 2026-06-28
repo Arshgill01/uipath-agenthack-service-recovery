@@ -4,6 +4,8 @@ Status: copy-ready answer bank for the final UiPath product feedback form. Fill 
 
 Use this file as the form-facing source. Do not paste internal PF IDs into the Microsoft Form unless UiPath explicitly asks for evidence references. The answers below should stand alone for a reviewer who never opens the repo.
 
+Paste only the answer prose for each Microsoft Form field. Do not paste section labels such as "Recommended Choices", "Internal Traceability", or "Do Not Claim" into the form unless there is a matching field. Resolve team name, story-sharing preference, and whether to select the Test Cloud category at submission time.
+
 Source files:
 
 - `docs/product/PRODUCT_FEEDBACK_AWARD.md`
@@ -52,13 +54,22 @@ The hardest part was turning a first-time Maestro Case build into a repeatable, 
 
 The main gap was not one isolated bug. It was that readiness checks were split across product surfaces at exactly the point where a builder needs confidence before starting a live case.
 
-Observed workflow and impact:
+Observed workflow and impact, grouped by product gap:
+
+**1. Readiness gaps before runtime**
 
 - Actions/Action Center was required for human review but was not enabled for the tenant at first. The disabled-service page did not show the exact admin enablement path we later used.
 - Human-review authoring exposed the right primitives, but the generated Action app flow did not make schema-to-page binding, required task fields, or structured return mapping obvious. A required Action task `Title` field passed deployment and failed only at live runtime.
 - A scratch Case probe showed inconsistent readiness signals: Case validation caught missing rules and a required field, while solution dry-run packaging reported valid and upload accepted the same invalid scratch solution with no errors.
+
+**2. Runtime binding, rendering, and version gaps**
+
 - The generated reviewer page hid or mislabeled a proof-critical field. The policy decision persisted correctly in task/API data, but the Action Center page rendered it as `Unnamed String 1`, so the UI did not reliably show the governing policy decision next to the raw agent recommendation.
+- Runtime diagnostics were too late and too generic for the failure family. Deployment succeeded despite the missing required task `Title`, then process diagnosis failed with an internal `summaries.find is not a function` error instead of repair guidance.
 - Package/feed/process diagnostics required extra readbacks. A package could be read when the solution feed was specified, while default lookup and direct process creation could not bind the same version.
+
+**3. Audit and eval reconstruction gaps**
+
 - Native Case history and task APIs reconstructed operational flow, but the full domain audit for evidence state, raw recommendation, policy decision, policy versions, block reason, human action, and timestamps still required explicit custom audit artifacts.
 - Data Fabric became useful after a PascalCase V2 schema, but the first snake_case entity accepted schema creation and then failed or hid custom-field write/readback in confusing ways.
 - Test Manager represented our E-001 through E-009 eval suite as manual cases and a terminal manual execution with 9/9 passed logs, but it was not a one-step import from a local eval result. Automated Test Cloud execution remained unclaimed because a concrete Orchestrator package probe did not become Test Manager-discoverable/linkable automation.

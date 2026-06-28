@@ -4,6 +4,8 @@ Status: near-final answer draft. User-owned identity fields still need confirmat
 
 This is the cleaner one-form draft for the Microsoft Form. It should be copied as prose, not as an evidence index. Internal PF labels are kept only in the traceability section at the bottom and should not be pasted into the form unless UiPath asks for proof references.
 
+Paste discipline: paste only the answer text for each Microsoft Form field. Do not paste "Recommended choice", "Needs user confirmation", "Internal Traceability", or "Claims To Avoid" unless the form explicitly asks for that kind of evidence. Resolve team name, story-sharing permission, and the Test Manager/Test Cloud category choice at submission time.
+
 Source of truth:
 
 - `docs/product/PRODUCT_FEEDBACK_AWARD.md`
@@ -77,13 +79,22 @@ The hardest part was not the service-recovery policy model. It was turning a fir
 
 The main pattern was clear: UiPath exposed the right primitives, but we had to discover readiness and binding gaps by combining Studio Web, Maestro Case, Action Center, Orchestrator, Data Fabric, Test Manager, and CLI readbacks instead of running one shared preflight.
 
-The major challenge classes were:
+The challenge pattern is easiest to understand in three groups:
+
+**1. Readiness gaps before runtime**
 
 - Tenant and service readiness: Actions was required for human review but was not enabled for the tenant initially. The disabled-service page did not show the exact admin path we later used to enable it.
-- Human-review authoring and preflight: Studio Web exposed the right Case and Action primitives, but the Human action flow did not clearly guide evidence-packet input mapping, output mapping, reviewer return, required `Title`, or rule readiness. A PFPROBE scratch Case showed `uip maestro case validate` catching missing rules and a required field while `uip solution pack --dry-run` returned `Status: Valid` and `uip solution upload` accepted the same invalid scratch solution with `ErrorList: []`.
+- Human-review authoring and preflight: Studio Web exposed the right Case and Action primitives, but the Human action flow did not clearly guide evidence-packet input mapping, output mapping, reviewer return, required `Title`, or rule readiness.
+- Cross-surface validation consistency: a PFPROBE scratch Case showed `uip maestro case validate` catching missing rules and a required field while `uip solution pack --dry-run` returned `Status: Valid` and `uip solution upload` accepted the same invalid scratch solution with `ErrorList: []`.
+
+**2. Runtime binding, rendering, and version gaps**
+
 - Generated reviewer UI and binding/version visibility: `PolicyDecisionJson` persisted correctly through task/API data, but the generated Action Center page rendered that proof-critical field as `Unnamed String 1`. A later label-only Studio publish did not fix the Case-bound runtime task; read-only registry probes showed the task used an older Action app deployment while a newer deployment existed elsewhere.
 - Runtime and process diagnostics: deployment succeeded even when a required Action task `Title` was missing, and `uip maestro case processes diagnose` later failed with `summaries.find is not a function` instead of producing repair guidance for the AppTasks failure family.
 - Package/feed/process binding: a package uploaded to the solution feed and could be read with `--feed-id`, while default lookup and direct process creation could not bind the same version.
+
+**3. Audit and eval reconstruction gaps**
+
 - Audit reconstruction: native Case/task history plus APIs can reconstruct operational flow, but a clean domain audit for evidence state, policy versions, raw recommendation, policy decision, block reason, human action, and timestamps still required explicit custom audit artifacts.
 - Data Fabric persistence: entity create/readback worked, snake_case JSON insert/update could not map required custom fields despite valid-looking payloads, and the later CSV-created row could not expose custom payload fields through CLI readback. A PascalCase V2 schema then solved the full-payload storage/readback path and gave us a useful product-feedback insight: field names accepted at schema creation should work consistently across insert/update/query/get or be rejected up front.
 - Test Manager eval mapping: project, cases, test set, and manual pass logs worked, but E-001 through E-009 had to be represented manually. A first execution stayed `Running` after direct child-log finishes; a later explicit start-then-finish lifecycle reached terminal `Status: Finished` with 9/9 passed logs and JUnit export. Automated Test Cloud execution remained unclaimable after a concrete package probe: Orchestrator accepted the package and exposed an entry point, but Test Manager discovery returned no automations and direct linking could not find a test in the package.
