@@ -6,28 +6,11 @@ from pathlib import Path
 from typing import Any
 
 from service_recovery_core.evals import build_audit_bundle, build_evidence_packet_html, build_uipath_payload
+from service_recovery_core.proof_contract import CORE_DEMO_EXPECTED_PROOF, CORE_DEMO_SCENARIOS
 
 
-CORE_SCENARIOS = ("E-002", "E-004")
-
-EXPECTED_PROOF = {
-    "E-002": {
-        "case_id": "CASE-BG-MISSING",
-        "recommended_next_stage": "closure_candidate",
-        "decision": "override_recommendation",
-        "to_stage": "verify_telemetry",
-        "block_reason": "missing_authoritative_signal",
-        "agent_event_id": "AIE-E002",
-    },
-    "E-004": {
-        "case_id": "CASE-BG-CONTRA",
-        "recommended_next_stage": "closure_candidate",
-        "decision": "require_human_review",
-        "to_stage": "human_review",
-        "block_reason": "source_contradiction",
-        "agent_event_id": "AIE-E004",
-    },
-}
+CORE_SCENARIOS = CORE_DEMO_SCENARIOS
+EXPECTED_PROOF = CORE_DEMO_EXPECTED_PROOF
 
 
 def build_demo_proof_artifacts(

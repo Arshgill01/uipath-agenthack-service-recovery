@@ -2,6 +2,33 @@
 
 Append one entry per substantial agent run.
 
+### 2026-06-29 01:04 IST - Agent / Final-Lap Core Simplification
+
+What changed:
+
+- Centralized the E-002/E-004 demo proof expectations in `service_recovery_core.proof_contract` so demo and submission verifiers share one contract for raw agent recommendation, policy decision, route, block reason, and agent event ID.
+- Renamed the eval transition helper to public `build_scenario_transition` and updated the LLM demo path to stop importing a private eval helper.
+- Made `scripts/run_submission_check.sh` honor `PYTHON` and fall back to `python3` when `python` is absent, preserving the direct submission-check command in shells without a `python` shim.
+
+Commands run:
+
+- `python3 -m unittest tests.test_demo_proof tests.test_submission_proof tests.test_llm_interpreter tests.test_policy_state_eval`
+- `bash -n scripts/run_submission_check.sh`
+- `python3 -m compileall -q service_recovery_core tests`
+- `scripts/run_submission_check.sh`
+
+Validation:
+
+- PASS: targeted proof/eval/LLM tests ran 31 tests.
+- PASS: `bash -n scripts/run_submission_check.sh`.
+- PASS: `python3 -m compileall -q service_recovery_core tests`.
+- PASS: `scripts/run_submission_check.sh` ran 58 tests and verified the local proof set.
+
+Open risks:
+
+- No live UiPath or Gemini operation was run; this was a local, non-mutating simplification pass.
+- Existing demo risks remain unchanged: generated Action Center UI is still not the judge-facing proof surface, automated Test Cloud execution remains unclaimed, and native Case history alone remains partial for G-001.
+
 ### 2026-06-28 - Agent / Final-Lap Worker Doc Reconciliation
 
 What changed:

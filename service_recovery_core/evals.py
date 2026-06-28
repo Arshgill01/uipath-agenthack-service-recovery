@@ -218,12 +218,12 @@ def main() -> int:
 
 
 def build_uipath_payload(scenario_id: str) -> dict[str, str]:
-    scenario, transition = _scenario_transition(scenario_id)
+    scenario, transition = build_scenario_transition(scenario_id)
     return build_action_center_payload(scenario["case"], scenario["evidence"], transition)
 
 
 def build_audit_bundle(scenario_id: str) -> dict[str, Any]:
-    scenario, transition = _scenario_transition(scenario_id)
+    scenario, transition = build_scenario_transition(scenario_id)
     return build_case_audit_bundle(scenario["case"], scenario["evidence"], transition)
 
 
@@ -396,7 +396,7 @@ def build_policy_boundary_report() -> dict[str, Any]:
         )
 
     for scenario_id in focused_ids:
-        scenario, transition = _scenario_transition(scenario_id)
+        scenario, transition = build_scenario_transition(scenario_id)
         expected_stage = source_authority_expectations[scenario_id][1]
         _add_policy_boundary_check(
             checks,
@@ -532,7 +532,7 @@ def _evidence_by_field(evidence: list[dict[str, Any]]) -> dict[str, dict[str, An
     }
 
 
-def _scenario_transition(scenario_id: str) -> tuple[dict[str, Any], dict[str, Any]]:
+def build_scenario_transition(scenario_id: str) -> tuple[dict[str, Any], dict[str, Any]]:
     scenarios = load_scenarios()
     if scenario_id not in scenarios:
         raise KeyError(f"unknown scenario_id: {scenario_id}")

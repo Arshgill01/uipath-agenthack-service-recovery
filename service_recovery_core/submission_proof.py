@@ -5,23 +5,10 @@ import json
 from pathlib import Path
 from typing import Any
 
+from service_recovery_core.proof_contract import CORE_DEMO_EXPECTED_PROOF
 
-CORE_EXPECTED = {
-    "E-002": {
-        "case_id": "CASE-BG-MISSING",
-        "recommended_next_stage": "closure_candidate",
-        "decision": "override_recommendation",
-        "to_stage": "verify_telemetry",
-        "block_reason": "missing_authoritative_signal",
-    },
-    "E-004": {
-        "case_id": "CASE-BG-CONTRA",
-        "recommended_next_stage": "closure_candidate",
-        "decision": "require_human_review",
-        "to_stage": "human_review",
-        "block_reason": "source_contradiction",
-    },
-}
+
+CORE_EXPECTED = CORE_DEMO_EXPECTED_PROOF
 
 REQUIRED_ARTIFACTS = (
     "action_payload_E002.json",
@@ -189,7 +176,8 @@ def _verify_demo_manifest(repo_root: Path, artifact_dir: Path) -> list[str]:
         expected = CORE_EXPECTED.get(scenario_id)
         if not expected:
             continue
-        for key, expected_value in expected.items():
+        for key in ("case_id", "recommended_next_stage", "decision", "to_stage", "block_reason"):
+            expected_value = expected[key]
             observed = scenario.get(key)
             if observed != expected_value:
                 errors.append(
