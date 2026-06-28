@@ -2,6 +2,30 @@
 
 Append one entry per substantial agent run.
 
+### 2026-06-28 - Agent / Final-Lap Worker Doc Reconciliation
+
+What changed:
+
+- Reconciled useful worker-branch documentation after the main dev/eval booster merge.
+- Added `proof_index.html` to the demo screen setup, demo-safe runbook, and platform proof map.
+- Added the Action Center UI approval-gated scratch validation path and pass condition to `VALIDATION_RESULTS.md`.
+
+Commands run:
+
+- `git diff master..origin/codex/judge-proof-index -- docs/demo/DEMO_STORYBOARD.md docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md docs/submission/PLATFORM_INTEGRATION_PROOF_MAP.md`
+- `git diff master..origin/codex/action-center-ui-readiness-spike -- docs/validation/VALIDATION_RESULTS.md docs/logs/BUILD_LOG.md service_recovery_core/submission_proof.py tests/test_submission_proof.py`
+- `git diff --check`
+- `scripts/run_submission_check.sh`
+
+Validation:
+
+- PASS: `git diff --check`.
+- PASS: `scripts/run_submission_check.sh` ran 58 tests and verified the local proof set.
+
+Open risks:
+
+- Generated Action Center UI remains partial until a fresh runtime task proves readable labels and values.
+
 ### 2026-06-28 16:38 IST - Agent / G-007 Test Manager Feasibility Spike
 
 What changed:

@@ -7,12 +7,13 @@ Recording target: June 29, 2026. Devpost maximum: five minutes. Aim for 4:45 to 
 Open these before recording, in this order:
 
 1. UiPath Automation Cloud tabs: Maestro Case process/case surface, Action Center task list or completed task details for tasks `4300080` and `4300219`, Orchestrator bucket or process readback surface, and Test Manager project `SREV`.
-2. `docs/demo/artifacts/evidence_packet_E002.html`.
-3. `docs/demo/artifacts/evidence_packet_E004.html`.
-4. `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html`.
-5. `docs/demo/artifacts/policy_improvement_E008.json`.
-6. `README.md` at the coding-agent section and `docs/submission/CODING_AGENT_PROOF_LOG.md`.
-7. Terminal at repo root with the final `scripts/run_submission_check.sh` output still visible.
+2. `docs/demo/artifacts/proof_index.html`.
+3. `docs/demo/artifacts/evidence_packet_E002.html`.
+4. `docs/demo/artifacts/evidence_packet_E004.html`.
+5. `docs/demo/artifacts/evidence_packet_E003_adversarial_live.html`.
+6. `docs/demo/artifacts/policy_improvement_E008.json`.
+7. `README.md` at the coding-agent section and `docs/submission/CODING_AGENT_PROOF_LOG.md`.
+8. Terminal at repo root with the final `scripts/run_submission_check.sh` output still visible.
 
 If a browser login expires during recording, switch to the terminal readback output from `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`. Do not start a fresh live case during the recording unless new IDs are intentionally needed and logged.
 

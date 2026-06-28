@@ -98,6 +98,50 @@ Evidence:
 - `docs/demo/artifacts/proof_index.html`
 - `docs/validation/artifacts/2026-06-28/test-manager-feasibility-spike/`
 
+## 2026-06-28 - G-003/G-004 Action Center UI Readiness Boundary
+
+Scope:
+
+- Determine whether the generated Action Center UI final-demo-readiness non-claim can be reduced without mutating the UiPath tenant.
+- Preserve the custom evidence-packet proof path if runtime generated UI readiness cannot be freshly proven.
+
+Observed:
+
+- Existing read-only evidence remains decisive: after the Studio Web label-only repair, fresh runtime task `4333536` still rendered `Unnamed String 1:` / `Unnamed string 1` while `uip tasks get` preserved correct `PolicyDecisionJson`.
+- The 2026-06-27 binding probe found the runtime task used an older Action app deployment while a newer `SemVersion: 1.0.1` deployment existed elsewhere. No pre-runtime CLI readback currently proves which Action app deployment a Case package will instantiate.
+- The local submission verifier now parses E-002/E-004 Action payloads, audit bundles, and custom evidence packets for raw AIE recommendation, linked PDE decision, route, block reason, `structured_packet_ready`, and the generated Action Center UI caveat.
+
+Result:
+
+- PASS for Action Center lifecycle/assignment/completion/structured return remains.
+- PASS for custom proof-path hardening.
+- PARTIAL/BLOCKED for generated Action Center UI final-demo readiness. Do not claim it unless a fresh runtime task proves readable labels and values.
+
+Fresh scratch validation path if approved:
+
+1. `uip login status --output json`
+2. `uip maestro case registry list --output-filter "Resources[?ResourceType=='action-apps' || DeploymentTitle=='SimpleApprovalApp'].{Id:Id,DeploymentTitle:DeploymentTitle,SemVersion:SemVersion,SystemName:SystemName,Folder:DeploymentFolder.FullyQualifiedName,DateDeployed:DateDeployed}" --output json`
+3. `uip or processes get 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --output json --output-filter "{Key:Key,Name:Name,ProcessVersion:ProcessVersion,AutoUpdate:AutoUpdate,FolderKey:FolderKey,FolderPath:FolderPath}"`
+4. `uip or jobs start 9A7EB300-7B16-4856-B14F-D6F2DA3DBE61 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --jobs-count 1 --reference action-ui-runtime-recheck-20260628 --output json`
+5. `uip tasks list --folder-id 7978263 --output json --output-filter "[?CreatorJobKey=='<NEW_CASE_JOB_KEY>']"`
+6. `uip tasks get <NEW_TASK_ID> --folder-id 7978263 --output json`
+7. Open `https://cloud.uipath.com/keepingitlowkey/DefaultTenant/actions_/tasks/<NEW_TASK_ID>` in the logged-in browser and verify runtime rendering.
+8. `uip tasks assign <NEW_TASK_ID> --user arshgill6120@gmail.com --output json`
+9. `uip tasks complete <NEW_TASK_ID> --type AppTask --folder-id 7978263 --action reject --data '{"Comment":"Scratch Action Center UI binding recheck; do not use as submission proof unless documented separately."}' --output json`
+10. `uip maestro case instance get <NEW_CASE_JOB_KEY> --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+
+Fresh pass condition:
+
+- Runtime Action Center task shows proof-critical fields with readable labels and values, especially `Policy Decision Json:` or equivalent readable policy label and the actual linked policy decision JSON/value.
+- `uip tasks get` still returns correct `PolicyDecisionJson`.
+- The scratch task is completed, and the scratch Case Instance does not remain pending solely because of the validation task.
+
+Decision impact:
+
+- Continue using Action Center for lifecycle and structured reviewer return.
+- Continue using custom evidence packets plus Data Fabric V2/Orchestrator bucket audit proof as the judge-readable path.
+- Do not claim generated Action Center UI is final-demo ready.
+
 ## 2026-06-18 - Local Provisional Core Baseline
 
 Environment:
