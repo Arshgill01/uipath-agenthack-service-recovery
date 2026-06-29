@@ -117,5 +117,6 @@ Use this section as the final copy/checklist when filling Devpost. Keep field te
 - Generated Action Center UI is not the final judge-facing evidence surface because it hid or mislabeled proof-critical fields during validation.
 - Data Fabric V2 full-payload persistence is validated for E-004 through JSON insert/query/readback using PascalCase fields. The legacy snake_case `ServiceRecoveryAuditBundle` entity remains a product-feedback finding because its custom fields did not populate or read back correctly.
 - Test Manager validation is manual execution/report/export, not automated Test Cloud execution.
-- A fresh Case Instance on package `1.0.6` reached terminal lifecycle completion (`LatestRunStatus: Completed`) after the unbound placeholder task was made optional. Do not generalize this to older E-002/E-004 jobs.
+- Fresh Wave 42 readback shows the older E-002/E-004 case instances and a fresh package `1.0.6` Case Instance reached terminal lifecycle completion (`LatestRunStatus: Completed`). Do not treat completion status as a substitute for the Data Fabric V2/custom audit proof.
+- The optional external evidence-source proof uses a public CSV/simulator path. Integration Service connectors were discovered, but no real connector connection was configured or exercised.
 - Coding-agent usage is build-time assistance and documentation/validation support, not runtime case authority.

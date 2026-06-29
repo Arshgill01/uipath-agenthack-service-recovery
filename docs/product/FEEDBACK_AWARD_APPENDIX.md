@@ -29,6 +29,16 @@ This source refresh strengthens the framing without changing the evidence bounda
 
 Do not paste this table into the Microsoft Form. Use it to keep the final form self-contained and fair: official context explains why the workflows matter; reproduced PF evidence explains what happened in our build; recommendations explain what UiPath could improve.
 
+## Wave 42 Live Readback Update On 2026-06-29
+
+Final live/read-only CLI research confirmed the feedback thesis and narrowed a few claim boundaries:
+
+- Data Fabric V2 remains the right queryable audit proof. Record `F9D838CE-4671-F111-AC9A-0022489A9A06` read back full custom fields for `CaseId: CASE-BG-CONTRA`, including raw agent, policy decision, reviewer packet, and audit bundle JSON. The legacy snake_case entity remains product-feedback evidence only.
+- Action schema/task metadata still expose `PolicyDecisionJson`, but completed task readback mainly exposes reviewer output/comment and metadata. Use Action Center for lifecycle and reviewer action; use Data Fabric V2/custom evidence packets for durable full-payload proof.
+- The known runtime task still used the older `SimpleApprovalApp` deployment while a newer deployment existed. The readiness-check ask should explicitly include Case-bound Action app deployment/version, not only schema presence.
+- Integration Service connector catalogs and activities were discoverable for optional external-evidence sources, but no connections were configured and connector metadata did not provide enough ready-to-use docs/deep-link guidance. Do not claim real Integration Service integration; use this as PF-029 readiness feedback.
+- Fresh Wave 42 readback showed older E-002/E-004 case instances now completed. This removes the old `still Running` caution, but completion status still does not replace the Data Fabric/custom domain audit proof.
+
 ## Best Final Answer Shape
 
 ### Overall Satisfaction
@@ -43,7 +53,7 @@ Reason:
 Evidence:
 
 - Positive: PF-013, PF-015, PF-017, PF-020.
-- Friction: PF-003, PF-006, PF-007, PF-017, PF-019, PF-022, PF-026, PF-027, PF-028.
+- Friction: PF-003, PF-006, PF-007, PF-017, PF-019, PF-022, PF-026, PF-027, PF-028, PF-029.
 
 ### Ease Of Build
 
@@ -56,25 +66,25 @@ Reason:
 
 Evidence:
 
-- PF-003, PF-006, PF-007, PF-013, PF-017, PF-019, PF-022, PF-026, PF-027, PF-028.
+- PF-003, PF-006, PF-007, PF-013, PF-017, PF-019, PF-022, PF-026, PF-027, PF-028, PF-029.
 
 ## Ranked Feedback Thesis
 
 | Rank | Thesis and PF IDs | Severity | Reproduced evidence | Workaround used | UiPath improvement recommendation | What not to claim |
 | --- | --- | --- | --- | --- | --- | --- |
-| 1 | Add a Maestro Case Human-Review Readiness Check and auditability contract. PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-026, PF-027, PF-028. | High. This was the slowest build loop because it spans setup, authoring, deployment, runtime, task visibility, package/feed binding, and audit proof. | `docs/validation/artifacts/2026-06-27/product_feedback_readiness_probe.md`; `docs/validation/artifacts/2026-06-27/product_feedback_phase2_scratch_case_probe.md`; `docs/validation/artifacts/2026-06-27/product_feedback_workstream_a_maestro_authoring_repair_probe.md`; `docs/validation/artifacts/2026-06-27/product_feedback_action_binding_probe.md`; PF-003/PF-006/PF-007/PF-013/PF-026/PF-027/PF-028 in `PRODUCT_FEEDBACK_AWARD.md`. | Manually enabled Actions; ran `uip maestro case validate`; repaired scratch Action task by remove/re-add with `--task-title`; used process/task/API readbacks; used custom packet/Data Fabric/bucket proof for legibility. | One readiness report across Case validate, solution dry-run, Studio Web upload/import, package/process binding, generated Action app binding, and runtime audit: check services/roles, reviewer visibility, required Action fields, Action schema bindings, package/feed version, process version, and declared audit coverage. Follow with a native Case timeline linking agent interpretation, policy decision, evidence state, human action, timestamps, and versions. | Do not claim generated Action Center UI is final-demo ready or that native Case history alone passes G-001. |
+| 1 | Add a Maestro Case Human-Review Readiness Check and auditability contract. PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-026, PF-027, PF-028, with PF-029 as optional external-evidence support. | High. This was the slowest build loop because it spans setup, authoring, deployment, runtime, task visibility, package/feed binding, optional external connector readiness, and audit proof. | `docs/validation/artifacts/2026-06-27/product_feedback_readiness_probe.md`; `docs/validation/artifacts/2026-06-27/product_feedback_phase2_scratch_case_probe.md`; `docs/validation/artifacts/2026-06-27/product_feedback_workstream_a_maestro_authoring_repair_probe.md`; `docs/validation/artifacts/2026-06-27/product_feedback_action_binding_probe.md`; `docs/validation/artifacts/2026-06-29/wave42/maestro_action_solution_probe.md`; `docs/validation/artifacts/2026-06-29/wave42/integration_data_test_probe.md`; PF-003/PF-006/PF-007/PF-013/PF-026/PF-027/PF-028/PF-029 in `PRODUCT_FEEDBACK_AWARD.md`. | Manually enabled Actions; ran `uip maestro case validate`; repaired scratch Action task by remove/re-add with `--task-title`; used process/task/API readbacks; kept Integration Service as discovered-not-configured; used custom packet/Data Fabric/bucket proof for legibility. | One readiness report across Case validate, solution dry-run, Studio Web upload/import, package/process binding, generated Action app binding, connector readiness when external evidence is used, and runtime audit: check services/roles, reviewer visibility, required Action fields, Action schema bindings, Case-bound app deployment/version, package/feed version, process version, configured connector/OAuth state, and declared audit coverage. Follow with a native Case timeline linking agent interpretation, policy decision, evidence state, human action, timestamps, and versions. | Do not claim generated Action Center UI is final-demo ready, native Case history alone passes G-001, or Integration Service external evidence is configured. |
 | 2 | Add generated Action app field-binding and version inspectors. PF-006, PF-013. | High for G-003/G-004. The platform preserved proof-critical data, but the generated reviewer UI hid or mislabeled it. | `docs/validation/ACTION_CENTER_UI_REPAIR_ASSESSMENT.md`; `docs/validation/artifacts/2026-06-27/product_feedback_action_binding_probe.md`; screenshots `docs/validation/artifacts/2026-06-25/g004-action-center-policy-field-mislabeled-task-4295299.png` and `docs/validation/artifacts/2026-06-25/g003-action-center-e004-completed-generated-ui-empty-fields.png`; task `4333536`. | Kept Action Center for assignment/completion/comment/structured return; used `uip tasks get` and custom evidence packets for readable policy decision proof; did not rely on label-only Studio publish after runtime recheck failed. | Show schema field -> generated control -> label -> binding -> runtime app deployment/version -> Case package/task binding before runtime; fail or repair fields that would render as `Unnamed String 1`. | Do not claim the Studio Web label-only repair fixed runtime Action Center rendering. |
 | 3 | Add native Case domain audit/event reconstruction for agent + policy + human workflows. PF-015, with PF-019/PF-023 as storage-related support. | High for regulated Case adoption and G-001. | G-001/G-004 entries in `docs/validation/VALIDATION_RESULTS.md`; `service_recovery_core/audit_bundle.py`; `docs/demo/artifacts/demo_proof_manifest.json`; Data Fabric V2 record `F9D838CE-4671-F111-AC9A-0022489A9A06`; Orchestrator bucket artifact `audit/service_recovery_audit_bundle_E004.json`. | Created explicit `service-recovery-audit-v1` bundles; stored/read full payload through Data Fabric V2 and Orchestrator bucket; kept native Case history as operational trace, not full domain audit. | Let builders declare and query linked Agent Interpretation, Policy Decision, Evidence State, and Human Review events in one Case timeline/query with package/policy versions and block reasons. | Do not claim native Case history alone reconstructs the full domain audit. |
 | 4 | Make package/feed/process binding diagnostics consistent and Case-aware. PF-017, PF-010, PF-011, PF-012, PF-026. | High during CLI recovery and version-pinning work. | `docs/validation/VALIDATION_RESULTS.md` Wave 07 entries; `docs/validation/artifacts/2026-06-27/product_feedback_readiness_probe.md`; package `Solution.caseManagement.Maestro.Case:1.0.4`; process `9a7eb300-7b16-4856-b14f-d6f2da3dbe61`. | Verified uploaded package with `--feed-id`; updated an existing process version; read back process/version history before live runs. | Add feed-aware `processes create`, show resolved feed/package/version in every bind path, and make Case diagnostics tie AppTasks errors to required fields, app binding/version, package/feed version, and repair links. | Do not imply every successful CLI response changed runtime state without readback. |
 | 5 | Add schema-aware Data Fabric insert/import/update/readback diagnostics. PF-019, PF-023, with PF-018 now improved for CLI discovery. | High for audit storage before mitigation; medium after validated V2 workaround. | `docs/validation/artifacts/2026-06-27/data_fabric_readback_diagnostics_probe.md`; legacy record `DA42769C-33B7-4701-A266-019F032AF376`; V2 entity `ServiceRecoveryAuditBundleV2`; V2 record `F9D838CE-4671-F111-AC9A-0022489A9A06`. | Used PascalCase `ServiceRecoveryAuditBundleV2` for final audit proof; kept legacy snake_case entity as product-feedback evidence only; verified writes through field filters and parseable JSON readback. | Echo recognized/unrecognized fields during insert/import/update, document field-naming constraints if any, reject unsupported names at schema creation, and provide write/readback self-test examples for custom required fields. | Do not use the legacy snake_case entity as proof of full Data Fabric audit persistence. |
 | 6 | Support eval-suite import into Test Manager and make automation discovery diagnostics actionable. PF-020, PF-021, PF-024. | Medium/high as cross-product eval feedback; less central than Maestro Case. | `docs/validation/TEST_MANAGER_MAPPING.md`; `docs/validation/artifacts/2026-06-27/pf-workstream-c/README.md`; terminal manual execution `40a1b334-5df8-1100-0a4b-0b49d0564f11`; package probe `ServiceRecoveryEvalProcessProbe:0.0.2/0.0.3`. | Created project `SREV`, nine manual cases, test set `SREV:9`; used explicit start-then-finish manual lifecycle; kept local evals as source of truth. | Add JSON/JUnit/agent-eval import with scenario preview, expected/actual policy fields, artifact attachment, and a package automation preflight that explains why an Orchestrator-visible package is not Test Manager-visible. | Do not claim automated Test Cloud execution. |
-| 7 | Clarify Case job/task lifecycle readback for operators. PF-022, with PF-016 as UI stale-state support. | Medium. It protects repeatable demo operations and honest status claims. | `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`; `docs/validation/VALIDATION_RESULTS.md` 2026-06-26 demo live-ops readback; tasks `4300080` and `4300219`. | Correlated process, job, task, and audit readbacks manually; refreshed Action Center after external completion; avoided terminal completion claims for older E-002/E-004 jobs. | Add CaseManagement-aware states such as `waiting_for_human_task`, `human_task_completed_continuing`, `case_completed`, or `blocked`, with linked task IDs and current stage in job readback. | Do not claim terminal completion for older E-002/E-004 jobs while they still read `Running`. |
+| 7 | Clarify Case job/task lifecycle readback for operators. PF-022, with PF-016 as UI stale-state support. | Medium. It protects repeatable demo operations and honest status claims. | `docs/demo/DEMO_SAFE_PROOF_RUNBOOK.md`; `docs/validation/VALIDATION_RESULTS.md` 2026-06-26 demo live-ops readback; Wave 42 claim audit; tasks `4300080` and `4300219`. | Correlated process, job, task, and audit readbacks manually; refreshed Action Center after external completion; revised the old caution after Wave 42 showed E-002/E-004 instances completed. | Add CaseManagement-aware states such as `waiting_for_human_task`, `human_task_completed_continuing`, `case_completed`, or `blocked`, with linked task IDs and current stage in job readback. | Do not use native completion status as full domain audit proof. |
 
 ## Claim Boundary Map
 
 | Major feedback claim | Reproduced evidence package | Supporting context only | Caveat / not claimed |
 | --- | --- | --- | --- |
-| Maestro Case is the right primary product surface and the feedback should focus on a Human-Review Readiness Check plus native auditability. | PF-003/PF-006/PF-007/PF-013/PF-015/PF-026/PF-027/PF-028; `TRACK_SELECTION_DECISION.md`; Workstreams A and B artifacts. | `docs/research/AGENTHACK_FORUM_RESEARCH.md` shows other builders reported Actions, Maestro publishing, and Labs friction. | Forum reports support prioritization only; they are not our PF reproduction evidence. |
+| Maestro Case is the right primary product surface and the feedback should focus on a Human-Review Readiness Check plus native auditability. | PF-003/PF-006/PF-007/PF-013/PF-015/PF-026/PF-027/PF-028/PF-029; `TRACK_SELECTION_DECISION.md`; Workstreams A and B artifacts; Wave 42 artifacts. | `docs/research/AGENTHACK_FORUM_RESEARCH.md` shows other builders reported Actions, Maestro publishing, and Labs friction. | Forum reports support prioritization only; they are not our PF reproduction evidence. |
 | Action Center lifecycle works, but generated reviewer UI is not safe as the final proof surface. | PF-013; `ACTION_CENTER_UI_REPAIR_ASSESSMENT.md`; tasks `4295299`, `4300080`, `4300219`, `4333536`; Workstream B. | None needed. | Action Center is validated for lifecycle/structured return, not generated UI legibility. |
 | The full domain audit requires explicit custom audit storage/readback. | PF-015; Data Fabric V2 record; Orchestrator bucket artifact; `service_recovery_core/audit_bundle.py`. | None needed. | Native Case history is PARTIAL, not all-native G-001 PASS. |
 | Data Fabric is a viable audit path only on the validated PascalCase V2 schema. | PF-019/PF-023; Workstream D artifact; V2 record `F9D838CE-4671-F111-AC9A-0022489A9A06`. | None needed. | Legacy snake_case record behavior is feedback evidence, not final proof. |
@@ -111,8 +121,10 @@ It should check:
 - case variable to Action input mapping,
 - Action output to Case variable mapping,
 - reviewer visibility for proof-critical fields and stable generated labels,
+- Case-bound Action app deployment/version,
 - package/feed binding and package version to be used by the next run,
 - process `AutoUpdate` and package version readback,
+- optional external-evidence connector readiness: connector exists, connection configured, OAuth complete, activity available, and docs/deep links available,
 - agreement between Case validation, solution dry-run packaging, and Studio Web upload/import,
 - native audit coverage versus required custom audit events.
 
@@ -120,7 +132,7 @@ It should produce concrete pass/fail findings with repair links, not just a runt
 
 Why:
 
-- It would have prevented or shortened PF-003, PF-006, PF-007, PF-008, PF-013, PF-017, PF-026, PF-027, and PF-028.
+- It would have prevented or shortened PF-003, PF-006, PF-007, PF-008, PF-013, PF-017, PF-026, PF-027, PF-028, and PF-029.
 - It should surface when native Case history is not enough for the required domain audit, then guide builders toward validated custom audit storage/readback patterns; PF-015, PF-019, and PF-023 show why this matters for governed human-review workflows.
 - It aligns with Maestro Case's target use: end-to-end orchestration across agents, APIs, RPA, and people.
 
@@ -148,11 +160,11 @@ The hardest part was not the local policy model. It was turning a first-time Mae
 
 ### One Thing To Change
 
-Add a Maestro Case Human-Review Readiness Check: a preflight and auditability contract for Cases with human review. It should verify services, roles, task required fields, Action app schema binding, input/output mappings, generated reviewer visibility, package/feed binding, package version pinning, audit-readiness, and agreement between Case validation, solution dry-run, and Studio Web upload/import before the builder starts a live case. After runtime, the same contract should support a native Case audit timeline linking agent interpretation, policy decision, evidence state, human action, timestamps, package version, and policy versions. This would turn hours of runtime recovery into a short readiness report and would align with Maestro Case's official role as the coordination layer for agents, automations, and people.
+Add a Maestro Case Human-Review Readiness Check: a preflight and auditability contract for Cases with human review. It should verify services, roles, task required fields, Action app schema binding, Case-bound app deployment/version, input/output mappings, generated reviewer visibility, package/feed binding, package version pinning, optional external-evidence connector readiness, audit-readiness, and agreement between Case validation, solution dry-run, and Studio Web upload/import before the builder starts a live case. After runtime, the same contract should support a native Case audit timeline linking agent interpretation, policy decision, evidence state, human action, timestamps, package version, and policy versions. This would turn hours of runtime recovery into a short readiness report and would align with Maestro Case's official role as the coordination layer for agents, automations, and people.
 
 ### What Surprised Us
 
-The positive surprise was that the platform persisted the governance boundary better than the generated UI showed. The raw agent recommendation and policy decision were available through task/API/audit data even when the generated reviewer page mislabeled or hid a proof-critical field. The adoption advice is to validate hard gates early with API readback, not only with the designer or generated UI.
+The positive surprise was that the platform persisted the governance boundary better than the generated UI showed. The raw agent recommendation and policy decision were available through schema/task metadata and explicit audit data even when the generated reviewer page mislabeled or hid a proof-critical field. The adoption advice is to validate hard gates early with API and audit readback, not only with the designer or generated UI.
 
 ### What Maestro Simplified
 
@@ -165,7 +177,7 @@ Without Maestro, we would have had to stitch together case state, task lifecycle
 - Do not claim generated Action Center UI is final-demo ready.
 - Do not claim native Case history alone passes the domain audit gate.
 - Do not pitch the project as a generic governance platform.
-- Do not imply terminal Case job completion while E-002/E-004 jobs still read back as `Running`.
+- Do not use native Case completion status as full domain audit proof; Wave 42 shows the older E-002/E-004 instances completed, but completion is still not the domain audit.
 
 ## Evidence Index
 
@@ -186,3 +198,6 @@ Without Maestro, we would have had to stitch together case state, task lifecycle
 | `docs/validation/artifacts/2026-06-26/evidence_packet_E003_adversarial_desktop_1440x1100.png` | Refreshed 1440x1100 adversarial packet screenshot used for final visual review. |
 | `docs/validation/artifacts/2026-06-26/evidence_packet_E003_adversarial_mobile_390x900.png` | Refreshed mobile adversarial packet screenshot proving long fields remain legible. |
 | `docs/validation/TEST_MANAGER_MAPPING.md` | Test Manager eval mapping and manual execution evidence. |
+| `docs/validation/artifacts/2026-06-29/wave42/claim_audit.md` | Final claim-confirm/downgrade matrix for the feedback form. |
+| `docs/validation/artifacts/2026-06-29/wave42/maestro_action_solution_probe.md` | Final Maestro/Action/Solution readiness probe. |
+| `docs/validation/artifacts/2026-06-29/wave42/integration_data_test_probe.md` | Final Integration Service/Data Fabric/Test Manager probe. |

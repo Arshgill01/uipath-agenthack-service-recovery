@@ -163,7 +163,7 @@ Evidence:
 
 Draft:
 
-The positive surprise was that the platform primitives are closer to the architecture than expected. Maestro Case gave us a real case runtime, Orchestrator gave package/process/job controls, Action Center gave a real human task lifecycle, and task APIs preserved structured payloads well enough to prove the separation between raw agent recommendation and final policy decision.
+The positive surprise was that the platform primitives are closer to the architecture than expected. Maestro Case gave us a real case runtime, Orchestrator/Data Fabric gave package, process, job, and audit proof, and Action Center gave a real human task lifecycle. Schema/task metadata plus explicit audit artifacts preserved enough structure to prove the separation between raw agent recommendation and final policy decision, even though completed task readback was not the durable full-payload audit surface.
 
 The practical warning for another developer is: validate the hard gates before building the polished app. Confirm tenant services, publish/deploy/version behavior, Action Center rendering, task return shape, and package readback early. Do not assume a generated human review page is demo-ready just because the schema fields exist. Also, read back the runtime state from APIs; the UI and the persisted task data can tell different stories during development.
 

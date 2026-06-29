@@ -2,6 +2,43 @@
 
 Append one entry per substantial agent run.
 
+### 2026-06-29 - Agent / Wave 42 Live Feedback Research Integration
+
+What changed:
+
+- Integrated the final live/read-only UiPath research pass from the claim audit, Maestro/Action/Solution, and Integration/Data/Test worker lanes.
+- Added PF-029 for Integration Service connector readiness around optional external evidence sources.
+- Tightened survey prose around completed task readback: Action Center proves lifecycle/comment/metadata, while Data Fabric V2/custom evidence packets are the durable full-payload proof.
+- Updated old E-002/E-004 completion cautions after fresh Wave 42 readback showed those case instances completed, while preserving the rule that native completion status is not full domain audit proof.
+- Added Wave 42 validation/artifact references to feedback and submission docs.
+
+Commands reviewed or integrated:
+
+- `uip login status --output json`
+- `uip tools list --output json`
+- `uip maestro case tasks describe --type action ... --output json`
+- `uip tasks get 4333536 --folder-id 7978263 --output json`
+- `uip maestro case processes diagnose ... --output json`
+- `uip df records get 35e8f6c7-4671-f111-ac9a-002248a16d28 F9D838CE-4671-F111-AC9A-0022489A9A06 --output json`
+- `uip tm executions get-stats --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --output json`
+- `uip is connectors list --output json`
+- `uip is connections list --output json`
+- `uip is activities list uipath-google-sheets --output json`
+- `uip is activities list uipath-uipath-http --output json`
+
+Validation:
+
+- PASS: `git diff --check`.
+- PASS: `python3 -m service_recovery_core.submission_proof --artifact-dir docs/demo/artifacts`.
+- PASS: `python3 -m unittest tests.test_submission_proof` ran 9 tests.
+- PASS: `scripts/run_submission_check.sh` ran 67 tests and verified demo artifacts.
+
+Open risks:
+
+- No real Integration Service connection was configured or exercised; PF-029 is readiness feedback only.
+- Generated Action Center UI remains unsuitable as the judge-facing proof surface.
+- Automated Test Cloud execution remains unclaimed.
+
 ### 2026-06-29 - Agent / Final Feedback Scannability Pass
 
 What changed:

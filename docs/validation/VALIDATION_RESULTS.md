@@ -6,6 +6,43 @@ Use [VALIDATION_GATES.md](VALIDATION_GATES.md) for pass/fail criteria.
 
 The data model and integration map are now grounded in observed platform facts. Remaining partials are explicit: native Case does not provide the full domain audit alone, generated Action Center UI is not demo-legible, legacy snake_case Data Fabric fields are not reliable for audit payloads, and automated Test Cloud execution is not claimed. Data Fabric V2 and terminal manual Test Manager execution are validated.
 
+## 2026-06-29 IST - Wave 42 Live Feedback Research Integration
+
+Scope:
+
+- Run a final strict UiPath platform research pass focused on product-feedback accuracy, not smoke testing or speculative feature work.
+- Review three worker lanes: claim audit, Maestro/Action/Solution readiness, and Integration Service/Data Fabric/Test Manager readiness.
+- Accept only findings backed by live/read-only CLI commands or concrete artifact validation.
+
+Observed:
+
+- The primary Maestro Case Human-Review Readiness Check thesis remains accurate and stronger after live readback. Readiness spans tenant services, reviewer visibility, Action schema binding, Case-bound app deployment/version, package/feed/process versioning, diagnostics, connector readiness when external evidence is used, and audit reconstruction.
+- Action schema/task metadata still expose `PolicyDecisionJson`, but completed task readback mainly exposes reviewer output/comment and task metadata. Use Action Center for lifecycle; use Data Fabric V2/custom packets for durable full-payload proof.
+- Data Fabric V2 record `F9D838CE-4671-F111-AC9A-0022489A9A06` read back full custom fields for `CaseId: CASE-BG-CONTRA`. Legacy snake_case Data Fabric behavior remains feedback evidence only.
+- Test Manager manual proof remains strong: terminal execution `40a1b334-5df8-1100-0a4b-0b49d0564f11` reports 9/9 passed and manual `Status: Finished`; automated Test Cloud execution remains unclaimed.
+- Integration Service connectors and activities were discoverable for Google Sheets, HTTP, Data Fabric, Orchestrator, Gmail, Slack, ServiceNow, Jira, and Salesforce, but no connections were configured. This created PF-029 for connector readiness and did not justify a real Integration Service integration claim.
+- Fresh readback showed older E-002/E-004 case instances now completed. The old `still Running` caution was updated, but native completion status is still not a full domain audit proof.
+
+Result:
+
+- PASS for feedback-claim accuracy hardening.
+- PASS for adding PF-029 as a narrow, live-observed readiness finding.
+- PASS for downgrading broad completed-task-payload wording.
+- NOT CLAIMED: automated Test Cloud execution, generated Action Center UI final-demo readiness, native Case history alone as G-001 proof, real telecom integrations, real Integration Service external-evidence integration, or LLM/Codex runtime closure authority.
+
+Evidence:
+
+- `docs/validation/artifacts/2026-06-29/wave42/claim_audit.md`
+- `docs/validation/artifacts/2026-06-29/wave42/maestro_action_solution_probe.md`
+- `docs/validation/artifacts/2026-06-29/wave42/integration_data_test_probe.md`
+- `docs/product/PRODUCT_FEEDBACK_AWARD.md` PF-029
+
+Decision impact:
+
+- Keep the feedback award narrative centered on a Maestro Case Human-Review Readiness Check and auditability contract.
+- Add optional external-evidence connector readiness to the preflight ask.
+- Keep the external-evidence demo honest as public CSV/simulator proof unless a real Integration Service connection is configured and exercised later.
+
 ## 2026-06-29 IST - Final-Lap Claim Boundary Proof Hardening
 
 Scope:

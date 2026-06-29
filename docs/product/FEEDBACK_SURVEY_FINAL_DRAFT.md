@@ -89,7 +89,7 @@ The challenge pattern is easiest to understand in three groups:
 
 **2. Runtime binding, rendering, and version gaps**
 
-- Generated reviewer UI and binding/version visibility: `PolicyDecisionJson` persisted correctly through task/API data, but the generated Action Center page rendered that proof-critical field as `Unnamed String 1`. A later label-only Studio publish did not fix the Case-bound runtime task; read-only registry probes showed the task used an older Action app deployment while a newer deployment existed elsewhere.
+- Generated reviewer UI and binding/version visibility: `PolicyDecisionJson` existed in the Action schema and task metadata, but the generated Action Center page rendered that proof-critical field as `Unnamed String 1`. A later label-only Studio publish did not fix the Case-bound runtime task; read-only registry probes showed the task used an older Action app deployment while a newer deployment existed elsewhere. Completed task readback mainly exposed reviewer output/comment and metadata, so custom evidence packets and Data Fabric V2 remained the durable full-payload proof surfaces.
 - Runtime and process diagnostics: deployment succeeded even when a required Action task `Title` was missing, and `uip maestro case processes diagnose` later failed with `summaries.find is not a function` instead of producing repair guidance for the AppTasks failure family.
 - Package/feed/process binding: a package uploaded to the solution feed and could be read with `--feed-id`, while default lookup and direct process creation could not bind the same version.
 
@@ -98,6 +98,7 @@ The challenge pattern is easiest to understand in three groups:
 - Audit reconstruction: native Case/task history plus APIs can reconstruct operational flow, but a clean domain audit for evidence state, policy versions, raw recommendation, policy decision, block reason, human action, and timestamps still required explicit custom audit artifacts.
 - Data Fabric persistence: entity create/readback worked, snake_case JSON insert/update could not map required custom fields despite valid-looking payloads, and the later CSV-created row could not expose custom payload fields through CLI readback. A PascalCase V2 schema then solved the full-payload storage/readback path and gave us a useful product-feedback insight: field names accepted at schema creation should work consistently across insert/update/query/get or be rejected up front.
 - Test Manager eval mapping: project, cases, test set, and manual pass logs worked, but E-001 through E-009 had to be represented manually. A first execution stayed `Running` after direct child-log finishes; a later explicit start-then-finish lifecycle reached terminal `Status: Finished` with 9/9 passed logs and JUnit export. Automated Test Cloud execution remained unclaimable after a concrete package probe: Orchestrator accepted the package and exposed an entry point, but Test Manager discovery returned no automations and direct linking could not find a test in the package.
+- Integration Service connector readiness: connector catalog and activity discovery worked for surfaces such as Google Sheets, HTTP, Data Fabric, Orchestrator, Gmail, Slack, ServiceNow, Jira, and Salesforce, but the tenant had no configured connections and connector metadata did not give enough ready-to-use docs/deep-link guidance. We kept the external-evidence source as an honest public CSV/simulator proof instead of claiming a real Integration Service integration.
 
 Expected behavior: before a builder publishes or starts a human-review Case, UiPath should make it clear whether the required services, reviewer visibility, Action task fields, generated Action app bindings, package/feed version, and audit path are ready.
 
@@ -109,9 +110,9 @@ These were reproduced during the actual build across Maestro Case, Action Center
 
 Add a Maestro Case Human-Review Readiness Check: a preflight and auditability contract for Cases that route work to a human reviewer. This is the top feedback thesis from the reproduced build evidence, not a generic "add more validation" request.
 
-UiPath already has validation, simulation, debug, testing, Actions, retry, and migration primitives. The missing layer we felt was one cross-surface report that answers: "Will this human-review Case actually work when it starts?" Before a builder publishes or starts a Case with a human review step, the readiness check should verify tenant services and roles, Actions/Action Center availability, required Action task fields such as `Title`, schema-to-page binding for every input/output property, Case variable to Action input mapping, Action output to Case variable mapping, reviewer visibility for proof-critical fields, package/feed binding, package version readback, audit readiness, and agreement between Case validation, solution dry-run packaging, and Studio Web upload/import.
+UiPath already has validation, simulation, debug, testing, Actions, retry, and migration primitives. The missing layer we felt was one cross-surface report that answers: "Will this human-review Case actually work when it starts?" Before a builder publishes or starts a Case with a human review step, the readiness check should verify tenant services and roles, Actions/Action Center availability, required Action task fields such as `Title`, schema-to-page binding for every input/output property, Case variable to Action input mapping, Action output to Case variable mapping, reviewer visibility for proof-critical fields, Case-bound Action app deployment/version, package/feed binding, package version readback, optional external-evidence connector readiness, audit readiness, and agreement between Case validation, solution dry-run packaging, and Studio Web upload/import.
 
-The report could appear in Studio Web as `Run human-review readiness check` and in CLI as a command such as `uip maestro case preflight`. It should return specific pass/fail findings with fix links: Actions not enabled for this tenant, Action task `Title` missing, generated reviewer page has no rendered control for `PolicyDecisionJson`, the Case will instantiate an older Action app deployment than the one just repaired, package/feed lookup is resolving a different version than expected, or native Case history will not reconstruct the declared domain audit without a custom event.
+The report could appear in Studio Web as `Run human-review readiness check` and in CLI as a command such as `uip maestro case preflight`. It should return specific pass/fail findings with fix links: Actions not enabled for this tenant, Action task `Title` missing, generated reviewer page has no rendered control for `PolicyDecisionJson`, the Case will instantiate an older Action app deployment than the one just repaired, Google Sheets/HTTP connector exists but no connection is configured, package/feed lookup is resolving a different version than expected, or native Case history will not reconstruct the declared domain audit without a custom event.
 
 The same product primitive should produce a native Case audit timeline after runtime: linked Agent Interpretation Event, Policy Decision Event, evidence state, block reason, human action/comment, timestamps, package version, and policy versions. That makes the ask one coherent contract: prove the human-review Case is ready before runtime, then prove what happened after runtime.
 
@@ -121,9 +122,9 @@ This recommendation comes from multiple reproduced loops, not a single bug: serv
 
 ## 12. What surprised you the most? What would you tell another developer?
 
-The positive surprise was that the UiPath primitives were closer to our target architecture than expected. Maestro Case gave the long-running case shell, Action Center gave real human task lifecycle, Orchestrator gave package/process/job and audit artifact operations, and task APIs preserved structured payloads well enough to prove the boundary between raw agent recommendation and final policy decision.
+The positive surprise was that the UiPath primitives were closer to our target architecture than expected. Maestro Case gave the long-running case shell, Action Center gave real human task lifecycle, and Orchestrator/Data Fabric gave package, process, job, and audit artifact operations. The task schema/readback artifacts plus explicit audit stores preserved enough structure to prove the boundary between raw agent recommendation and final policy decision, even when completed task readback was not the durable full-payload audit surface.
 
-The advice to another developer is to validate hard gates early with API readback and committed proof artifacts, not only with the designer or generated UI. Confirm tenant services, Action Center rendering, task return shape, package version readback, audit reconstruction, and any live LLM proof path before polishing the app. In our build, the backend task data preserved the policy payload correctly even when the generated reviewer UI hid it, so API readback and repeatable local checks were essential.
+The advice to another developer is to validate hard gates early with API readback and committed proof artifacts, not only with the designer or generated UI. Confirm tenant services, Action Center rendering, task return shape, package version readback, audit reconstruction, and any live LLM proof path before polishing the app. In our build, schema/task metadata and audit artifacts preserved the policy boundary even when the generated reviewer UI hid it, so API readback, audit readback, and repeatable local checks were essential.
 
 In practice, the best developer habit was to keep a repeatable local submission check and then confirm the important boundaries with live API readback.
 
@@ -143,11 +144,11 @@ These labels map the final-form prose back to the detailed evidence log in `docs
 
 | Form area | Internal evidence labels |
 | --- | --- |
-| Satisfaction rating | PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-019, PF-022, PF-026, PF-027, PF-028 |
+| Satisfaction rating | PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-019, PF-022, PF-026, PF-027, PF-028, PF-029 |
 | Use case | PF-015 plus demo evidence packets and live E-002/E-004 tasks |
-| Ease of build | PF-003, PF-006, PF-007, PF-013, PF-017, PF-019, PF-022, PF-023, PF-026, PF-027, PF-028 |
-| Challenges | PF-003, PF-004, PF-006, PF-007, PF-013, PF-015, PF-017, PF-019, PF-020, PF-021, PF-022, PF-023, PF-024, PF-025, PF-026, PF-027, PF-028 |
-| One change | PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-026, PF-027, PF-028; secondary support from PF-019 and PF-023 |
+| Ease of build | PF-003, PF-006, PF-007, PF-013, PF-017, PF-019, PF-022, PF-023, PF-026, PF-027, PF-028, PF-029 |
+| Challenges | PF-003, PF-004, PF-006, PF-007, PF-013, PF-015, PF-017, PF-019, PF-020, PF-021, PF-022, PF-023, PF-024, PF-025, PF-026, PF-027, PF-028, PF-029 |
+| One change | PF-003, PF-006, PF-007, PF-013, PF-015, PF-017, PF-026, PF-027, PF-028; secondary support from PF-019, PF-023, and PF-029 |
 | Surprise/advice | PF-013, PF-015, PF-016, PF-017, PF-022 plus `scripts/run_submission_check.sh` |
 | Maestro value | PF-015, PF-022 plus live E-002/E-004 task and audit-bundle artifacts |
 
@@ -168,5 +169,5 @@ Options:
 - Claim Data Fabric full-payload persistence only for the validated PascalCase V2 path; do not use the legacy snake_case entity as proof.
 - Do not claim generated Action Center UI is final-demo ready.
 - Do not claim native Case history alone passes G-001.
-- Do not claim terminal completion for older E-002/E-004 jobs while their job readback remains `Running`; claim only the fresh package `1.0.6` Case Instance completion if cited.
+- Do not use native Case completion status as full domain audit proof. Fresh Wave 42 readback shows E-002/E-004 case instances completed, but completion status does not replace the Data Fabric V2/custom audit proof.
 - Do not frame the project as a generic agent governance platform.

@@ -59,7 +59,7 @@ Supporting:
 - Test Manager manual eval representation proves regression discipline.
 - Orchestrator/Data Fabric prove audit/version evidence.
 - Codex/coding-agent logs prove the coding-agent bonus.
-- Best Product Feedback is supported by PF-001 through PF-028 and forum-aligned product insights.
+- Best Product Feedback is supported by PF-001 through PF-029 and forum-aligned product insights.
 
 ## Submission Copy Guardrails
 

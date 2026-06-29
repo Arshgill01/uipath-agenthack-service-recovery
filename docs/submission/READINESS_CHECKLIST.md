@@ -39,7 +39,7 @@ Objective-level audit: [OBJECTIVE_COMPLETION_AUDIT.md](../validation/OBJECTIVE_C
 
 | Requirement | Status | Evidence | Remaining caution |
 | --- | --- | --- | --- |
-| Product feedback captured during UiPath interactions. | PASS | PF-001 through PF-028 in `docs/product/PRODUCT_FEEDBACK_AWARD.md`. | Add new PF entries only for newly observed UiPath behavior. |
+| Product feedback captured during UiPath interactions. | PASS | PF-001 through PF-029 in `docs/product/PRODUCT_FEEDBACK_AWARD.md`. | Add new PF entries only for newly observed UiPath behavior. |
 | Feedback is curated into final answer material. | PASS | `docs/product/FEEDBACK_AWARD_APPENDIX.md`; `docs/product/FEEDBACK_SURVEY_COPY_READY.md`. | Team name and story-sharing preference still need user confirmation. |
 | Feedback separates user/access/docs/product defects. | PASS | Feedback matrix classifications and confidence fields. | Keep fair language; do not turn workarounds into unsupported defect claims. |
 
@@ -117,8 +117,9 @@ Use `docs/demo/DEMO_STORYBOARD.md` as the recording script and stop by 4:55.
 - Automated Test Cloud execution.
 - Generated Action Center UI is final-demo ready.
 - Native Case history alone passes G-001.
-- Terminal completion for older E-002/E-004 jobs; only the fresh package `1.0.6` Case Instance completion is claimed.
+- Native Case completion status as full domain audit proof. Fresh Wave 42 readback shows older E-002/E-004 case instances completed, but completion status does not replace the Data Fabric V2/custom audit proof.
 - Real telecom production integrations.
+- Real Integration Service external-evidence integration.
 - LLM final closure authority.
 - Generic agent governance platform positioning.
 

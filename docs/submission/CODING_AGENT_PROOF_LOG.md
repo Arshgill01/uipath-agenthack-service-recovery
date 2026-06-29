@@ -55,6 +55,7 @@ These are representative local checkpoints visible in git history. They are not 
 | 2026-06-27 | `codex/pf-evidence-data-fabric`, `d7a0a5c` | Data Fabric audit-readback diagnostics. | PF-018/PF-019/PF-023 updates, V2 readback reconfirmed |
 | 2026-06-28 | `5eb0a85` | Integrated parallel evidence workstreams into `master`. | Current proof baseline before this final-lap pass |
 | 2026-06-28 | `codex/final-demo-devpost-pack` | Prepare final-lap demo and Devpost submission pack. | Timed recording run-of-show, Devpost judging/copy checklist, pre-recording validation checklist, and build-log validation entry. |
+| 2026-06-29 | Wave 42 worker lanes | Final live feedback research and claim audit. | PF-029, completed-task readback boundary, E-002/E-004 completion nuance |
 
 Reproduce the local view:
 
@@ -69,7 +70,7 @@ git branch --all --verbose --no-abbrev
 - Evals and tests: E-001 through E-009, hardening tests, invalid-output checks, override-persistence checks, and proof artifact verification.
 - UiPath validation loops: Maestro Case, Action Center, Orchestrator bucket audit, Data Fabric V2 readback, Test Manager manual eval representation, and CLI diagnostics.
 - Demo/submission artifacts: `scripts/run_demo.sh`, `scripts/run_submission_check.sh`, evidence packets, readiness checklist, submission brief, demo storyboard, and product-feedback answer material.
-- Product-feedback evidence: PF-001 through PF-028, including parallel Codex worktrees for Maestro authoring, Action binding, Test Manager, and Data Fabric.
+- Product-feedback evidence: PF-001 through PF-029, including parallel Codex worktrees for Maestro authoring, Action binding, Test Manager, Data Fabric, and Integration Service readiness.
 
 ## Safety Boundaries For Devpost And Video
 

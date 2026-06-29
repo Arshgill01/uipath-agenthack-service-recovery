@@ -329,7 +329,7 @@ Observed readback on 2026-06-26:
 - Current process readback: `ProcessVersion: 1.0.5`, `AutoUpdate: false`, `IsLatestVersion: false`.
 - Version history shows `1.0.3`, `1.0.4`, and `1.0.5`.
 - E-002 task `4300080` and E-004 task `4300219` read back as completed `AppTask` records with `Action: reject`, reviewer comments, `FolderId: 7978263`, and `TaskSource.SourceName: CaseManagement`.
-- E-002 and E-004 jobs still read back as `State: Running` after task completion; use task completion plus audit bundle as proof of reviewer action, and do not claim terminal case-job completion unless a fresh job reaches a terminal state.
+- Wave 42 readback later showed the E-002 and E-004 case instances completed; use task completion plus audit bundle as proof of reviewer action and Data Fabric/custom audit as proof of the domain decision trail. Do not use native completion status as the full domain audit proof.
 
 Expected proof fields in task or payload readback:
 

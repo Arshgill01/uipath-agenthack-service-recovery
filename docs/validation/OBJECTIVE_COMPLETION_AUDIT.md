@@ -55,8 +55,9 @@ This file is an evidence map, not permission to overclaim. The active goal remai
 - Do not claim generated Action Center UI is final-demo ready.
 - Use Data Fabric V2 for full-payload audit persistence; do not use the legacy snake_case Data Fabric entity for final proof.
 - Do not claim automated Test Cloud execution.
-- Do not claim older E-002/E-004 Case jobs reached terminal completion while their job readback remains `Running`; claim terminal completion only for the fresh package `1.0.6` Case Instance.
+- Do not use native Case completion status as full domain audit proof. Fresh Wave 42 readback shows older E-002/E-004 case instances completed, but completion status does not replace the Data Fabric V2/custom audit proof.
 - Do not claim real production telecom integrations.
+- Do not claim real Integration Service external-evidence integration.
 - Do not claim the LLM is the final closure or routing authority.
 
 ## Recommended Next Wave
