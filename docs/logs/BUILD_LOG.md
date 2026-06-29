@@ -3985,6 +3985,42 @@ Open risks:
 - Existing Python 3.9 `google-auth` end-of-life warnings still appear during the test suite.
 - Final video still needs to visibly show the coding-agent proof beat; this change only makes the local proof set harder to drift silently.
 
+### 2026-06-29 - Wave 42 Worker A Feedback Claim Audit
+
+What changed:
+
+- Added `docs/validation/artifacts/2026-06-29/wave42/claim_audit.md` with a read-only live CLI audit matrix for the strongest product-feedback claims.
+- Confirmed the main feedback thesis remains accurate: human-review readiness still spans services, reviewer visibility, Action app binding/versioning, package/feed/process readback, Case diagnostics, Data Fabric audit proof, and Test Manager manual evidence.
+- Identified two wording adjustments for later survey/docs work: completed `uip tasks get` should not be described as durable full-input-payload proof, and old E-002/E-004 "still running" caution is stale because fresh Case instance readbacks now show `LatestRunStatus: Completed`.
+
+Commands:
+
+- `uip login status --output json`
+- `uip tasks get 4300080 --output json`
+- `uip tasks get 4300219 --output json`
+- `uip tasks get 4333536 --output json`
+- `uip or processes get 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --output json`
+- `uip or packages get Solution.caseManagement.Maestro.Case:1.0.4 --output json`
+- `uip or packages get Solution.caseManagement.Maestro.Case:1.0.4 --feed-id 831bf59a-a3f1-4aa8-8890-f01b857c18f3 --output json`
+- `uip df records get 35e8f6c7-4671-f111-ac9a-002248a16d28 F9D838CE-4671-F111-AC9A-0022489A9A06 --output json`
+- `uip tm executions get-stats --project-key SREV --execution-id 40a1b334-5df8-1100-0a4b-0b49d0564f11 --output json`
+- `uip maestro case instance get 3af41e1d-8b04-4eba-aa5e-a95c5c673730 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip maestro case instance get 60e52ca5-6891-45b4-9e98-e1b08a984f06 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+- `uip maestro case processes diagnose 9a7eb300-7b16-4856-b14f-d6f2da3dbe61 --folder-key 9d7ae568-d60e-4395-94d7-db115bfb25de --output json`
+
+Validation:
+
+- PASS: live/read-only UiPath CLI probes completed without tenant mutation, except expected diagnostic failures that are recorded as product-feedback evidence.
+- PASS: Data Fabric V2 E-004 record still returns first-class fields and non-empty AIE/PDE/audit JSON payloads.
+- PASS: Test Manager terminal manual execution still reads `Status: Finished`, `Passed: 9`, `ExecutionType: Manual`, and `IsRunningAutomated: false`.
+- PASS: `git diff --check`.
+
+Open risks:
+
+- This worker did not edit final survey copy directly. Apply the wording changes from the audit in a separate orchestrator/reviewer pass.
+- Automated Test Cloud execution remains unclaimed.
+- Generated Action Center UI remains unsuitable as final-demo proof unless a fresh runtime UI task is visibly repaired and revalidated.
+
 ### 2026-06-28 - Platform Integration Depth Proof Map
 
 What changed:
