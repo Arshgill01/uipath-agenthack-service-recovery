@@ -2,6 +2,28 @@
 
 Append one entry per substantial agent run.
 
+### 2026-06-30 - Agent / README and Devpost Story Polish
+
+What changed:
+
+- Rewrote `README.md` as the public project front door with problem framing, proof beats, architecture, UiPath platform usage, repository map, setup commands, validation status, honest boundaries, coding-agent disclosure, and product-feedback pointer.
+- Reworked `docs/submission/DEVPOST_PROJECT_STORY.md` into a polished paste-ready Devpost story with tighter structure, clearer same-fixture E-002/E-004 contrast, concise UiPath platform integration, validation evidence, product-feedback thesis, and coding-agent proof.
+- Replaced the congested six-column Devpost "What it does" table with two stacked path summaries so the section is readable in Devpost's content column and on mobile.
+- Preserved explicit claim boundaries around simulated telecom systems, manual Test Manager proof, generated Action Center UI limitations, native Case audit limits, and no LLM/Codex closure authority.
+
+Validation:
+
+- PASS: `git diff --check`.
+- PASS: overclaim scan found only explicit negative claim-boundary language in README/story.
+- PASS: `python3 -m service_recovery_core.evals --output eval_results/local_baseline.json` completed E-001 through E-009 with 9/9 passing.
+- PASS: `python3 -m unittest discover -s tests` ran 67 tests.
+- PASS: `scripts/run_submission_check.sh` ran 67 tests and verified demo artifacts.
+- NOTE: `python -m unittest discover -s tests` and `python -m service_recovery_core.evals --output eval_results/local_baseline.json` failed because `python` is not installed in this shell; reran successfully with `python3`.
+
+Open risks:
+
+- No fresh live UiPath or Gemini run is planned; this pass only improves submission documentation around the existing validated proof set.
+
 ### 2026-06-30 - Agent / Final Video Main Script
 
 What changed:
