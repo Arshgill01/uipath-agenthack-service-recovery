@@ -2,6 +2,26 @@
 
 Append one entry per substantial agent run.
 
+### 2026-06-30 - Agent / Final Video Main Script
+
+What changed:
+
+- Added `docs/plans/2026-06-30-final-video-script.md` for the execution plan and verification loop.
+- Added `docs/demo/FINAL_VIDEO_MAIN_SCRIPT.md` with a word-for-word, timestamped final recording script, screen/deck direction, emergency cut, claim boundaries, and verification-pass notes.
+- Anchored the script to the current 13-page deck, E-002/E-004 proof packets, E-003 adversarial LLM proof, E-008 learning-loop artifact, product-feedback appendix, coding-agent proof docs, and non-mutating submission check.
+
+Validation:
+
+- PASS: script required-phrase and risky-claim scans found all required proof phrases and no positive overclaim in the main script.
+- PASS: `git diff --check`.
+- PASS: conflict-marker scan returned no matches.
+- PASS: `scripts/run_submission_check.sh` ran 67 tests and verified demo artifacts.
+
+Open risks:
+
+- No fresh live UiPath or Gemini run was performed; the script uses the validated proof set and existing artifacts.
+- Final recording still depends on browser/login readiness for any live UiPath tabs; the script includes a fallback to non-mutating proof surfaces.
+
 ### 2026-06-29 - Agent / Submitted Feedback Draft Capture
 
 What changed:
