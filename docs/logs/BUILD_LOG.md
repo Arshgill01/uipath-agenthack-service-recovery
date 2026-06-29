@@ -2,6 +2,20 @@
 
 Append one entry per substantial agent run.
 
+### 2026-06-29 - Agent / Submitted Feedback Draft Capture
+
+What changed:
+
+- Replaced `docs/product/FEEDBACK_SURVEY_FINAL_DRAFT.md` with the final pasted feedback version the user submitted to the Microsoft Form.
+- Preserved the submitted narrative structure: builder-question grouping in Q10, the named Human-Review Readiness Check in Q11, and explicit non-claims around automated Test Cloud execution and real Integration Service integration.
+
+Validation:
+
+- PASS: `git diff --check`.
+- PASS: `python3 -m service_recovery_core.submission_proof --artifact-dir docs/demo/artifacts`.
+- PASS: `python3 -m unittest tests.test_submission_proof` ran 9 tests.
+- PASS: `scripts/run_submission_check.sh` ran 67 tests and verified demo artifacts.
+
 ### 2026-06-29 - Agent / Wave 42 Live Feedback Research Integration
 
 What changed:
