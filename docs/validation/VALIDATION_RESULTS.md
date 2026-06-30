@@ -2662,3 +2662,46 @@ Product feedback:
 Evidence:
 
 - `docs/validation/artifacts/2026-06-27/data_fabric_readback_diagnostics_probe.md`
+
+## 2026-06-30 - Final Local Submission Readiness Check
+
+Environment:
+
+- Local repository: `/Users/arshdeepsingh/Developer/uipath-agenthack-service-recovery`
+- Live UiPath/Gemini mutation: none
+
+Steps:
+
+1. Checked diff whitespace.
+2. Ran the focused evidence-packet renderer unit tests.
+3. Checked local README links.
+4. Ran the full unit test suite.
+5. Ran the non-mutating submission sanity check.
+
+Commands:
+
+1. `git diff --check`
+2. `python3 -m unittest tests.test_evidence_packet_view`
+3. README local-link check with `python3`
+4. `python3 -m unittest discover -s tests`
+5. `scripts/run_submission_check.sh`
+
+Observed:
+
+- Focused evidence-packet tests ran 2 tests and passed.
+- README local-link check reported `README links OK`.
+- The first full-suite/submission-check attempt failed because the rewritten README omitted exact submission-proof contract strings: `UiPath AgentHack Maestro Case` and `Codex as the coding agent`.
+- After repairing those strings, the full unit suite ran 67 tests and passed.
+- `scripts/run_submission_check.sh` ran 67 tests, verified artifacts in `docs/demo/artifacts`, and ended with `Submission check passed.`
+
+Result:
+
+- PASS for local final-submission readiness after README contract-string repair.
+
+Decision impact:
+
+- README and artifact cleanup preserve the demo-safe proof path: custom evidence packets remain the judge-readable surface; UiPath platform proof remains documented in the validation and submission proof maps.
+
+Product feedback:
+
+- None observed in this local-only pass.

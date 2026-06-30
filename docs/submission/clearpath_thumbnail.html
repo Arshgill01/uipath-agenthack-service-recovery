@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ClearPath Devpost Thumbnail</title>
+  <meta name="description" content="ClearPath 3:2 thumbnail for the UiPath AgentHack Devpost submission.">
+  <style>
+    @page {
+      size: 1536px 1024px;
+      margin: 0;
+      background: #f5f4ed;
+    }
+
+    :root {
+      --paper: #f5f4ed;
+      --ivory: #faf9f5;
+      --ink: #141413;
+      --muted: #504e49;
+      --stone: #6b6a64;
+      --rule: #ded9c9;
+      --brand: #1B365D;
+      --brand-2: #2D5A8A;
+      --tag: #E4ECF5;
+      --warm: #c78a47;
+      --warm-soft: #f0e0d8;
+      --mono: "JetBrains Mono", "SF Mono", Consolas, Monaco, monospace;
+      --serif: Charter, Georgia, Palatino, "Times New Roman", serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 1536px;
+      height: 1024px;
+      margin: 0;
+      overflow: hidden;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--serif);
+    }
+
+    .thumb {
+      position: relative;
+      width: 1536px;
+      height: 1024px;
+      overflow: hidden;
+      padding: 72px 78px 66px;
+      background: var(--paper);
+    }
+
+    .grid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1008px;
+      height: 1024px;
+      opacity: 0.38;
+      background-image:
+        linear-gradient(90deg, #e6e1d0 1px, transparent 1px),
+        linear-gradient(#e6e1d0 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    .panel {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 528px;
+      height: 1024px;
+      background: var(--brand);
+    }
+
+    .badge {
+      position: relative;
+      display: inline-block;
+      padding: 11px 19px 10px 42px;
+      border: 1px solid var(--rule);
+      border-radius: 999px;
+      background: var(--ivory);
+      color: var(--brand);
+      font-family: var(--mono);
+      font-size: 20px;
+      letter-spacing: 2.4px;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    .badge::before {
+      content: "";
+      position: absolute;
+      left: 19px;
+      top: 17px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: var(--brand);
+    }
+
+    .track {
+      position: absolute;
+      top: 72px;
+      right: 80px;
+      z-index: 2;
+      color: #faf9f5;
+      font-family: var(--mono);
+      font-size: 25px;
+      letter-spacing: 3.4px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      position: relative;
+      z-index: 2;
+      margin: 104px 0 0;
+      width: 820px;
+      color: var(--ink);
+      font-size: 156px;
+      line-height: 0.9;
+      font-weight: 500;
+      letter-spacing: 0;
+    }
+
+    .pitch {
+      position: relative;
+      z-index: 2;
+      margin-top: 42px;
+      width: 780px;
+      color: var(--muted);
+      font-size: 46px;
+      line-height: 1.16;
+      font-weight: 400;
+    }
+
+    .pitch strong {
+      color: var(--brand);
+      font-weight: 500;
+    }
+
+    .flow {
+      position: absolute;
+      left: 78px;
+      bottom: 76px;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: repeat(4, 206px);
+      gap: 16px;
+    }
+
+    .step {
+      position: relative;
+      height: 124px;
+      padding: 26px 24px 18px;
+      border: 1px solid var(--rule);
+      border-radius: 22px;
+      background: var(--ivory);
+    }
+
+    .step::after {
+      content: "→";
+      position: absolute;
+      top: 44px;
+      right: -24px;
+      color: var(--brand);
+      font-family: var(--mono);
+      font-size: 38px;
+      z-index: 5;
+    }
+
+    .step:last-child::after {
+      content: "";
+    }
+
+    .step b {
+      display: block;
+      color: var(--brand);
+      font-size: 30px;
+      line-height: 0.98;
+      font-weight: 500;
+    }
+
+    .step span {
+      display: none;
+    }
+
+    .diagram {
+      position: absolute;
+      right: 70px;
+      top: 184px;
+      z-index: 3;
+      width: 478px;
+      height: 632px;
+    }
+
+    .line {
+      position: absolute;
+      height: 5px;
+      background: #faf9f5;
+      border-radius: 99px;
+      transform-origin: left center;
+    }
+
+    .l1 {
+      left: 152px;
+      top: 114px;
+      width: 174px;
+    }
+
+    .l2 {
+      left: 214px;
+      top: 358px;
+      width: 176px;
+      transform: rotate(56deg);
+    }
+
+    .card {
+      position: absolute;
+      width: 232px;
+      min-height: 136px;
+      padding: 20px 21px;
+      border: 1px solid #e8e6dc;
+      border-radius: 24px;
+      background: #faf9f5;
+      color: var(--ink);
+    }
+
+    .card.agent {
+      top: 0;
+      left: 0;
+    }
+
+    .card.human {
+      top: 0;
+      right: 0;
+    }
+
+    .card.policy {
+      top: 248px;
+      left: 76px;
+      width: 326px;
+      min-height: 158px;
+      border: 5px solid var(--warm);
+      transform: rotate(-1.7deg);
+    }
+
+    .card.audit {
+      right: 26px;
+      bottom: 0;
+      width: 312px;
+      min-height: 126px;
+    }
+
+    .k {
+      display: block;
+      color: var(--stone);
+      font-family: var(--mono);
+      font-size: 16px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .v {
+      display: block;
+      margin-top: 14px;
+      color: var(--brand);
+      font-size: 35px;
+      line-height: 1;
+      font-weight: 500;
+    }
+
+    .micro {
+      margin-top: 12px;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 15px;
+      line-height: 1.34;
+    }
+
+    .policy .v {
+      font-size: 43px;
+    }
+
+    .tag {
+      position: absolute;
+      z-index: 4;
+      padding: 13px 17px;
+      border-radius: 12px;
+      font-family: var(--mono);
+      font-size: 19px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .blocked {
+      left: 38px;
+      top: 178px;
+      background: var(--warm-soft);
+      color: #8b4513;
+      transform: rotate(-4deg);
+    }
+
+    .review {
+      right: 0;
+      top: 178px;
+      background: var(--tag);
+      color: var(--brand);
+      transform: rotate(3deg);
+    }
+
+    .footer {
+      position: absolute;
+      right: 82px;
+      bottom: 64px;
+      z-index: 3;
+      width: 364px;
+      color: #faf9f5;
+      font-family: var(--mono);
+      font-size: 22px;
+      line-height: 1.35;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+    }
+  </style>
+</head>
+<body>
+  <main class="thumb" aria-label="ClearPath Devpost thumbnail">
+    <div class="grid"></div>
+    <div class="panel"></div>
+
+    <div class="badge">AgentHack Submission</div>
+    <div class="track">UiPath Maestro Case</div>
+
+    <h1>ClearPath</h1>
+    <p class="pitch">
+      Agents interpret evidence. <strong>Policy decides.</strong>
+      Humans close the hard cases with proof.
+    </p>
+
+    <section class="flow" aria-label="ClearPath service recovery path">
+      <div class="step">
+        <b>Interpret evidence</b>
+        <span>structured signals</span>
+      </div>
+      <div class="step">
+        <b>Enforce policy</b>
+        <span>freshness checks</span>
+      </div>
+      <div class="step">
+        <b>Escalate exceptions</b>
+        <span>stale vs conflict</span>
+      </div>
+      <div class="step">
+        <b>Close with proof</b>
+        <span>audit packet</span>
+      </div>
+    </section>
+
+    <section class="diagram" aria-label="Policy blocks unsafe closure">
+      <div class="line l1"></div>
+      <div class="line l2"></div>
+      <div class="card agent">
+        <span class="k">Agent says</span>
+        <span class="v">close</span>
+        <div class="micro">business systems look green</div>
+      </div>
+      <div class="card human">
+        <span class="k">Human owns</span>
+        <span class="v">exception</span>
+        <div class="micro">fresh contradiction escalates</div>
+      </div>
+      <div class="tag blocked">closure blocked</div>
+      <div class="tag review">human review</div>
+      <div class="card policy">
+        <span class="k">Policy decides</span>
+        <span class="v">route</span>
+        <div class="micro">telemetry missing, stale, or conflicting</div>
+      </div>
+      <div class="card audit">
+        <span class="k">Evidence packet</span>
+        <span class="v">proof trail</span>
+      </div>
+    </section>
+
+    <div class="footer">Governed telecom recovery for service activation failures</div>
+  </main>
+</body>
+</html>

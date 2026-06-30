@@ -1,5 +1,6 @@
 __pycache__/
 *.py[cod]
+.DS_Store
 .pytest_cache/
 .mypy_cache/
 .venv/
@@ -12,3 +13,6 @@ tmp/
 docs/validation/artifacts/**/current-safari-*.png
 eval_results/*.json
 !eval_results/.gitkeep
+video_edit_work/
+docs/submission/devpost_upload_bundle/
+docs/submission/*.zip

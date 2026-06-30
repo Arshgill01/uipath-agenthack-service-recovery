@@ -4177,3 +4177,33 @@ Validation:
 Open risks:
 
 - Team name and story-sharing preference still need user confirmation before the final feedback form is submitted.
+
+### 2026-06-30 - Final Repository Cleanup And README Upgrade
+
+What changed:
+
+- Reworked `README.md` into a higher-signal final-submission entry point with fewer cramped tables, clickable proof artifact links, repository backlinks, and Mermaid diagrams for the core proof route and runtime architecture.
+- Kept final submission assets under `docs/submission/`: architecture flow image/SVG, thumbnail assets, presentation deck source/rendered PDFs/PNGs, and the deck builder script.
+- Removed disposable local scratch from the worktree: `video_edit_work/`, `docs/.DS_Store`, the duplicated `docs/submission/devpost_upload_bundle/`, and `docs/submission/clearpath_devpost_judge_packet.zip`.
+- Added ignore rules for OS scratch, local video editing output, duplicated upload bundles, and generated submission zips.
+- Preserved the updated evidence-packet renderer styling and refreshed generated demo artifacts in `docs/demo/artifacts/`.
+
+Commands:
+
+- `git diff --check`
+- `python3 -m unittest tests.test_evidence_packet_view`
+- README local-link check with `python3`
+- `python3 -m unittest discover -s tests`
+- `scripts/run_submission_check.sh`
+
+Validation:
+
+- PASS: `git diff --check`.
+- PASS: `python3 -m unittest tests.test_evidence_packet_view` ran 2 tests.
+- PASS: README local-link check reported `README links OK`.
+- PASS after README contract-string repair: `python3 -m unittest discover -s tests` ran 67 tests.
+- PASS after README contract-string repair: `scripts/run_submission_check.sh` ran 67 tests and ended with `Submission check passed.`
+
+Open risks:
+
+- No fresh live UiPath or Gemini operations were run. This pass preserves the existing validated demo-safe proof path and does not change platform claims.

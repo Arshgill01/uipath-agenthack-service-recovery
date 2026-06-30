@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Governed Service Recovery</title>
+<style>
+@page { size: 280mm 158mm; margin: 0; background: #f5f4ed; }
+* { box-sizing: border-box; }
+:root { --parchment:#f5f4ed; --ivory:#faf9f5; --brand:#1B365D; --near:#141413; --warm:#3d3d3a; --olive:#504e49; --stone:#6b6a64; --border:#e8e6dc; --red:#b82217; --green:#1d6b57; }
+body { margin:0; color:var(--near); font-family: Charter, Georgia, Palatino, serif; background:var(--parchment); }
+.slide { width:280mm; height:158mm; padding:16mm 20mm; break-after:page; position:relative; background:var(--parchment); overflow:hidden; }
+.cover { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+.cover h1 { font-size:38pt; line-height:1.06; font-weight:500; margin:0 0 12pt; letter-spacing:-0.5pt; }
+.cover .sub { font-size:14pt; color:var(--olive); max-width:54ch; line-height:1.45; }
+.meta,.eyebrow,.foot,.num { font-family: Menlo, Consolas, monospace; color:var(--stone); letter-spacing:1.5pt; text-transform:uppercase; font-size:9pt; }
+.eyebrow { margin-bottom:2pt; }
+h2 { font-size:24pt; line-height:1.16; font-weight:500; margin:0 0 11pt; max-width:920px; }
+.lead { color:var(--olive); font-size:12pt; line-height:1.5; max-width:860px; margin-bottom:14pt; }
+.cards { display:grid; grid-template-columns:repeat(3,1fr); gap:14pt; margin-top:18pt; }
+.card { background:var(--ivory); border:0.5pt solid var(--border); border-radius:7pt; padding:13pt 15pt; min-height:37mm; }
+.card h3 { color:var(--brand); font-size:15pt; margin:0 0 7pt; font-weight:500; }
+.card p,.row p,.point { color:var(--warm); font-size:11pt; line-height:1.48; margin:0; }
+.co { position:absolute; left:20mm; right:20mm; bottom:12mm; color:var(--brand); font-size:11.5pt; line-height:1.5; font-weight:500; }
+.foot { position:absolute; left:20mm; bottom:10mm; }
+.num { position:absolute; right:20mm; bottom:10mm; }
+.steps { display:grid; grid-template-columns:repeat(5,1fr); gap:12pt; margin-top:23pt; }
+.step .n { color:var(--brand); font-size:24pt; }
+.step h3 { font-size:15pt; margin:7pt 0; font-weight:500; }
+.rows { margin-top:12pt; }
+.row { display:grid; grid-template-columns:44mm 1fr; border-bottom:0.3pt solid var(--border); padding:7pt 0; }
+.row b { color:var(--brand); font-size:12pt; font-weight:500; }
+.evidence { display:grid; grid-template-columns: 1.65fr 1fr; gap:18pt; margin-top:10pt; align-items:start; }
+.evidence img { width:100%; border:0.5pt solid var(--border); border-radius:6pt; }
+.caption { color:var(--olive); font-size:11pt; line-height:1.45; margin-bottom:12pt; }
+.compare { display:grid; grid-template-columns:1fr 1fr; gap:22pt; margin-top:18pt; }
+.compare .left h3 { color:var(--green); } .compare .right h3 { color:var(--red); }
+.metric-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:15pt; margin-top:32pt; text-align:center; }
+.metric .big { color:var(--brand); font-size:34pt; line-height:1; }
+.metric p { color:var(--warm); font-size:11pt; line-height:1.4; }
+ul { margin:0; padding-left:16pt; } li { color:var(--warm); font-size:11pt; margin:0 0 8pt; line-height:1.4; }
+</style></head><body>
+
+<section class="slide cover"><h1>ClearPath Recovery</h1><div class="sub">No service case closes until authoritative evidence proves the customer is actually restored</div><div style="height:18pt"></div><div class="meta">UiPath AgentHack 2026 · Maestro Case · Governed Telecom Recovery</div></section>
+<section class="slide"><div class="eyebrow">01 · BUSINESS PROBLEM</div><h2>The riskiest case is the one that looks resolved everywhere except the customer’s service.</h2>
+<p class="lead">CRM, orders, billing, and support notes can all look green while authoritative service evidence is missing, stale, or contradictory.</p>
+<div class="cards">
+<div class="card"><h3>Wrongful closure</h3><p>The customer still has no service, but the case is marked resolved.</p></div>
+<div class="card"><h3>Repeat contact</h3><p>The next call reopens the same work with worse SLA pressure.</p></div>
+<div class="card"><h3>Audit gap</h3><p>Reviewers cannot reconstruct why the case was closed.</p></div>
+</div>
+<div class="co">The project is not a generic governance platform. It is a concrete telecom exception workflow.</div>
+<div class="foot">SERVICE RECOVERY</div><div class="num">02</div></section>
+<section class="slide"><div class="eyebrow">02 · ARCHITECTURE THESIS</div><h2>Agents interpret. Policy decides. Maestro routes. Humans own exceptions.</h2>
+<div class="steps">
+<div class="step"><div class="n">01</div><h3>Evidence</h3><p class="point">CRM, billing, telemetry, inventory, dispatch, notes</p></div>
+<div class="step"><div class="n">02</div><h3>Agent</h3><p class="point">Turns ambiguous text into structured signals</p></div>
+<div class="step"><div class="n">03</div><h3>Policy</h3><p class="point">Blocks unsafe closure and chooses the allowed route</p></div>
+<div class="step"><div class="n">04</div><h3>Maestro Case</h3><p class="point">Carries stages, tasks, incidents, and lifecycle</p></div>
+<div class="step"><div class="n">05</div><h3>Human review</h3><p class="point">Owns high-impact contradictions and remediation</p></div>
+</div>
+<div class="co">The LLM never closes cases, overrides policy, or mutates production rules.</div>
+<div class="foot">SERVICE RECOVERY</div><div class="num">03</div></section>
+<section class="slide"><div class="eyebrow">03 · WHY MAESTRO CASE</div><h2>This is Case work because the route emerges as evidence changes.</h2>
+<p class="lead">The workflow is not a fixed BPMN-style happy path. It is long-running exception handling with changing evidence, SLA pressure, human accountability, and audit requirements.</p>
+<div class="cards">
+<div class="card"><h3>Unpredictable path</h3><p>Missing telemetry, stale signals, contradiction, and human review are decided after evidence arrives.</p></div>
+<div class="card"><h3>Human-owned risk</h3><p>High-impact contradictions become reviewer tasks with structured return, not silent automation.</p></div>
+<div class="card"><h3>Durable audit</h3><p>The case must preserve raw agent recommendation, final policy route, reviewer action, and policy versions.</p></div>
+</div>
+<div class="co">ClearPath Recovery fits Track 1: dynamic exception-heavy casework with agents, automation, and humans in charge at key decision points.</div>
+<div class="foot">SERVICE RECOVERY</div><div class="num">04</div></section>
+<section class="slide"><div class="eyebrow">04 · UIPATH PLATFORM MAP</div><h2>UiPath is the orchestration and governance boundary.</h2>
+<div class="rows">
+<div class="row"><b>Maestro Case</b><p>Dynamic exception-heavy case lifecycle, stage routing, incidents, recovery path.</p></div>
+<div class="row"><b>Action Center</b><p>Human task lifecycle, assignment, completion, reviewer action/comment.</p></div>
+<div class="row"><b>Data Fabric / Orchestrator</b><p>Durable audit bundle, package/process/version readback, full payload proof.</p></div>
+<div class="row"><b>Test Manager</b><p>Manual execution evidence for E-001 through E-009 eval coverage.</p></div>
+<div class="row"><b>UiPath CLI</b><p>Repeatable package, task, Data Fabric, Test Manager, and validation readback.</p></div>
+</div>
+<div class="co">Custom evidence packets make the proof readable; they do not replace UiPath orchestration.</div>
+<div class="foot">SERVICE RECOVERY</div><div class="num">05</div></section>
+<section class="slide"><div class="eyebrow">05 · SCENARIO 2A</div><h2>Same green business systems. Missing signal means verify, not close.</h2>
+<div class="evidence"><img src="../../demo/artifacts/evidence_packet_E002_desktop.png"><div><p class="caption">The agent recommends closure. Policy preserves that recommendation, links it to the final decision, and routes the case to telemetry verification.</p><ul>
+<li>Business state stays green.</li>
+<li>Closure is blocked by missing authoritative service evidence.</li>
+<li>The SLA clock stays alive until telemetry is fresh.</li>
+</ul></div></div>
+<div class="foot">SERVICE RECOVERY</div><div class="num">06</div></section>
+<section class="slide"><div class="eyebrow">06 · SCENARIO 2B</div><h2>Same green business systems. Contradiction means human review.</h2>
+<div class="evidence"><img src="../../demo/artifacts/evidence_packet_E004_desktop.png"><div><p class="caption">The business fixture is intentionally the same. Fresh authoritative telemetry says the service is not live, so the route escalates.</p><ul>
+<li>Only the authoritative evidence condition changes.</li>
+<li>Policy rejects closure and opens human review.</li>
+<li>The reviewer sees the contradiction and closure guard.</li>
+</ul></div></div>
+<div class="foot">SERVICE RECOVERY</div><div class="num">07</div></section>
+<section class="slide"><div class="eyebrow">07 · ONE VARIABLE, DIFFERENT ROUTE</div><h2>Missing evidence and contradicting evidence are different operational problems.</h2>
+<div class="compare">
+<div class="card left"><h3>Missing or stale</h3><ul>
+<li>Business systems are green</li>
+<li>Authoritative telemetry is absent or too old</li>
+<li>Allowed route: verify telemetry</li>
+<li>Operational posture: controlled retry</li>
+</ul></div>
+<div class="card right"><h3>Contradicting</h3><ul>
+<li>Business systems are green</li>
+<li>Fresh authoritative telemetry says not live</li>
+<li>Allowed route: human review</li>
+<li>Operational posture: exception handling</li>
+</ul></div>
+</div>
+<div class="co">This is the central proof: same business-green fixture, different authoritative signal, different route.</div>
+<div class="foot">SERVICE RECOVERY</div><div class="num">08</div></section>
+<section class="slide"><div class="eyebrow">08 · AGENT USEFULNESS BOUNDARY</div><h2>The LLM contributes structured interpretation, not final authority.</h2>
+<div class="evidence"><img src="../../demo/artifacts/evidence_packet_E003_adversarial_desktop.png"><div><p class="caption">An adversarial interpretation run turns closure pressure and unresolved risk into structured disagreement for policy.</p><ul>
+<li>Advocate and skeptic outputs validate against the same schema.</li>
+<li>Disagreement is policy input, not prose parsing.</li>
+<li>Policy still owns closure eligibility.</li>
+</ul></div></div>
+<div class="foot">SERVICE RECOVERY</div><div class="num">09</div></section>
+<section class="slide"><div class="eyebrow">09 · EVAL AND LEARNING LOOP</div><h2>The eval suite keeps the agent useful without weakening closure policy.</h2>
+<div class="rows">
+<div class="row"><b>E-001</b><p>Aligned closure accepted</p></div>
+<div class="row"><b>E-002/E-003</b><p>Missing or stale evidence blocks closure</p></div>
+<div class="row"><b>E-004</b><p>Source contradiction escalates</p></div>
+<div class="row"><b>E-005/E-006</b><p>Notes and pressure influence routing without overriding truth</p></div>
+<div class="row"><b>E-007/E-009</b><p>Invalid output and override persistence are tested</p></div>
+<div class="row"><b>E-008</b><p>Policy improvement remains pending human approval</p></div>
+</div>
+<div class="co">Validated path: local tests plus Test Manager manual representation, not claimed automated Test Cloud execution.</div>
+<div class="foot">SERVICE RECOVERY</div><div class="num">10</div></section>
+<section class="slide"><div class="eyebrow">10 · PRODUCT FEEDBACK AWARD</div><h2>The strongest product ask is a Maestro Case Human-Review Readiness Check.</h2>
+<p class="lead">The pieces exist across Maestro, Actions, packages, Data Fabric, and Test Manager. Builders need one preflight and auditability contract that proves the human-review path will work before runtime.</p>
+<div class="cards">
+<div class="card"><h3>Before runtime</h3><p>Check services, roles, Actions, package/feed version, task bindings, and evidence fields.</p></div>
+<div class="card"><h3>During runtime</h3><p>Expose reviewer field rendering, task lifecycle, and structured return status.</p></div>
+<div class="card"><h3>After runtime</h3><p>Reconstruct agent event, policy decision, human action, versions, and audit payload in one view.</p></div>
+</div>
+<div class="co">This is framed as actionable product feedback, not a complaint list.</div>
+<div class="foot">SERVICE RECOVERY</div><div class="num">11</div></section>
+<section class="slide"><div class="eyebrow">11 · CODING AGENT CONTRIBUTION</div><h2>Codex helped build and verify the submission pack.</h2>
+<div class="rows">
+<div class="row"><b>Built</b><p>Python core, schemas, policy engine, evidence packets, audit bundles.</p></div>
+<div class="row"><b>Validated</b><p>Unit tests, eval harness, UiPath CLI runbooks, submission sanity check.</p></div>
+<div class="row"><b>Documented</b><p>Platform proof map, product feedback, demo storyboard, coding-agent manifest.</p></div>
+<div class="row"><b>Boundary</b><p>Codex is build-time assistance, not runtime case authority.</p></div>
+</div>
+<div class="co">Runtime authority remains: deterministic policy, UiPath orchestration, and human review.</div>
+<div class="foot">SERVICE RECOVERY</div><div class="num">12</div></section>
+<section class="slide"><div class="eyebrow">12 · IMPACT</div><h2>ClearPath Recovery makes agentic service recovery safer without making it toothless.</h2>
+<div class="metric-grid">
+<div class="metric"><div class="big">0</div><p>closures without fresh authoritative service evidence</p></div>
+<div class="metric"><div class="big">2</div><p>exception paths proven visibly</p></div>
+<div class="metric"><div class="big">9/9</div><p>eval scenarios represented in Test Manager</p></div>
+<div class="metric"><div class="big">67</div><p>local tests passing in submission check</p></div>
+</div>
+<div class="co">Agents interpret. Policy decides. Maestro routes. Humans own exceptions.</div>
+<div class="foot">SERVICE RECOVERY</div><div class="num">13</div></section>
+</body></html>
