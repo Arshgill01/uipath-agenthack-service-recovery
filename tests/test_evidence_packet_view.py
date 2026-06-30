@@ -47,7 +47,7 @@ class EvidencePacketViewTests(unittest.TestCase):
         self.assertIn("fresh authoritative telemetry contradicts", html)
         self.assertIn("Why do business systems show active while fresh authoritative service evidence disagrees?", html)
         self.assertIn("Required human review has resolved the exception", html)
-        self.assertIn("background-image:", html)
+        self.assertIn("--parchment: #f5f4ed", html)
 
 
 if __name__ == "__main__":
